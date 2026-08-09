@@ -47,6 +47,10 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 .wrow { display: flex; align-items: center; gap: 8px; margin: 2px 0 8px; font-size: 14px; }
 .wrow select { padding: 6px 9px; border: 1px solid #ccc; border-radius: 4px; font-size: 13.5px; min-width: 130px; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
+.latrow { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 3px 2px; font-size: 13px; }
+.latrow .lname { flex: 1; }
+.lat { display: inline-flex; align-items: center; gap: 3px; margin-left: 8px; font-weight: bold; color: #1B3A6B; cursor: pointer; font-size: 12px; }
+.lat input[type=checkbox] { width: 16px; height: 16px; accent-color: #1B3A6B; }
 .chip { display: inline-flex; align-items: center; gap: 6px; background: #E8F0FB; border: 1px solid #1B3A6B; color: #1B3A6B; border-radius: 14px; padding: 4px 10px; font-size: 13.5px; }
 .chip .cin { width: 74px; border: 1px solid #ccc; border-radius: 3px; font-size: 12px; padding: 1px 4px; }
 .chip .x { cursor: pointer; font-weight: bold; color: #C62828; font-size: 14px; line-height: 1; }
@@ -287,7 +291,21 @@ function isSided(sec,i){ return !!sec.lat && (sec.nSided===undefined || i<sec.nS
 function tokenIndex(sec,token){ for(var k=0;k<sec.items.length;k++){ if(sec.items[k][0]===token) return k; } return -1; }
 
 function renderSection(sec){
-  var h='<div class="sec"><div class="sec-head"><span class="sec-title">'+esc(sec.title)+(sec.lat?' <small style="font-weight:normal;color:#888">(R/L/B per tag)</small>':'')+'</span>';
+  var h='<div class="sec"><div class="sec-head"><span class="sec-title">'+esc(sec.title)+(sec.lat?' <small style="font-weight:normal;color:#888">(R/L/B per tag)</small>':'')+(sec.latRows?' <small style="font-weight:normal;color:#888">(check R / L / B)</small>':'')+'</span>';
+  if(sec.latRows){
+    h+='</div>';
+    sec.items.forEach(function(item,i){
+      h+='<div class="latrow"><span class="lname">'+esc(labelFor(item));
+      h+='</span>';
+      if(item[2]){ h+='<input class="cin"'+(item[2]==='date'?' type="date"':'')+' id="ci_'+sec.key+'_'+i+'" placeholder="'+esc(item[2])+'">'; }
+      h+='<span class="latboxes">'+
+         '<label class="lat"><input type="checkbox" id="lr_'+sec.key+'_'+i+'_R" onchange="latSide(\''+sec.key+'\','+i+',\'R\')">R</label>'+
+         '<label class="lat"><input type="checkbox" id="lr_'+sec.key+'_'+i+'_L" onchange="latSide(\''+sec.key+'\','+i+',\'L\')">L</label>'+
+         '<label class="lat"><input type="checkbox" id="lr_'+sec.key+'_'+i+'_B" onchange="latSide(\''+sec.key+'\','+i+',\'B\')">B</label></span></div>';
+    });
+    h+='</div>';
+    return h;
+  }
   if(sec.drop){
     h+='<span class="picker"><select onchange="addChip(\''+sec.key+'\',this)"><option value="">+ add…</option>';
     if(sec.groups){
@@ -341,12 +359,27 @@ function renderForm(){
 function addChip(key, sel){
   var i=sel.value; sel.value=''; if(i==='') return; i=parseInt(i,10);
   if(!chips[key]) chips[key]=[];
-  if(chips[key].some(function(e){return e.i===i;})) return;
   var sec=SEC_BY_KEY[key];
+  var existing=null;
+  chips[key].forEach(function(e){ if(e.i===i) existing=e; });
+  if(existing){
+    // Re-selecting a sided item: combine sides (e.g. right + second pick = bilateral)
+    if(existing.side!==null && existing.side!==undefined && existing.side!=='bilateral'){
+      existing.side='bilateral';
+      renderChips(key);
+    }
+    return;
+  }
   chips[key].push({i:i, v:'', side: isSided(sec,i)?(val('global-side')||'right'):null});
   renderChips(key);
 }
 function removeChip(key,pos){ chips[key].splice(pos,1); renderChips(key); }
+// B is exclusive: checking B clears R/L, and checking R or L clears B
+function latSide(key,i,w){
+  var r=document.getElementById('lr_'+key+'_'+i+'_R'), l=document.getElementById('lr_'+key+'_'+i+'_L'), bi=document.getElementById('lr_'+key+'_'+i+'_B');
+  if(w==='B' && bi.checked){ r.checked=false; l.checked=false; }
+  else if((w==='R'&&r.checked)||(w==='L'&&l.checked)){ bi.checked=false; }
+}
 function setChipVal(key,pos,v){ if(chips[key]&&chips[key][pos]) chips[key][pos].v=v; }
 function cycleSide(key,pos){ var e=chips[key][pos]; if(e.side===null) return; e.side=SIDE_ORDER[(SIDE_ORDER.indexOf(e.side)+1)%3]; renderChips(key); }
 function renderChips(key){
@@ -373,6 +406,10 @@ function applyPicks(picks, note){
       if(!chips[key]) chips[key]=[];
       if(chips[key].some(function(e){return e.i===i;})) return;
       chips[key].push({i:i, v:value, side: isSided(sec,i)?gs:null});
+    } else if(sec.latRows){
+      var w = gs==='bilateral' ? 'B' : (gs==='left' ? 'L' : 'R');
+      var lcb=document.getElementById('lr_'+key+'_'+i+'_'+w); if(lcb) lcb.checked=true;
+      if(value){ var lci=document.getElementById('ci_'+key+'_'+i); if(lci) lci.value=value; }
     } else if(sec.weightDrop && i<sec.weightDrop){
       // weight limits live in the dropdown, not checkboxes
       var ws=document.getElementById('weight-limit'); if(ws) ws.value=String(i);
@@ -454,13 +491,23 @@ function fmtDate(s){ var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s); return m ? (+m[2
 function expandItem(sec,e){ var item=sec.items[e.i]; var x=cleanX(item[1]); if(item[2]){ var vv=(item[2]==='date')?fmtDate(e.v):e.v; x = x.indexOf('{}')>=0 ? x.replace('{}', vv||'___') : (x+(vv?' '+vv:'')); } return x; }
 function collect(sec){
   if(sec.drop) return chips[sec.key]||[];
+  if(sec.latRows){
+    var la=[];
+    sec.items.forEach(function(item,i){
+      var r=document.getElementById('lr_'+sec.key+'_'+i+'_R'), l=document.getElementById('lr_'+sec.key+'_'+i+'_L'), bi=document.getElementById('lr_'+sec.key+'_'+i+'_B');
+      var rc=r&&r.checked, lc=l&&l.checked, bc=bi&&bi.checked;
+      if(!(rc||lc||bc)) return;
+      la.push({i:i, v:val('ci_'+sec.key+'_'+i), side:(bc||(rc&&lc))?'bilateral':(rc?'right':'left')});
+    });
+    return la;
+  }
   var arr=[];
   if(sec.weightDrop){ var wv=val('weight-limit'); if(wv!==''){ arr.push({i:parseInt(wv,10), v:'', side:null}); } }
   sec.items.forEach(function(item,i){ var cb=document.getElementById('c_'+sec.key+'_'+i); if(cb&&cb.checked){ arr.push({i:i, v:val('ci_'+sec.key+'_'+i), side:null}); } }); return arr;
 }
 function sectionText(sec){
   var arr=collect(sec); if(!arr.length) return '';
-  if(sec.lat){ var groups={}, order=[]; arr.forEach(function(e){ var s=e.side||''; if(!groups[s]){groups[s]=[];order.push(s);} groups[s].push(expandItem(sec,e)); }); return order.map(function(s){ return (s?cap(s)+' — ':'')+groups[s].join(', '); }).join('; '); }
+  if(sec.lat || sec.latRows){ var groups={}, order=[]; arr.forEach(function(e){ var s=e.side||''; if(!groups[s]){groups[s]=[];order.push(s);} groups[s].push(expandItem(sec,e)); }); return order.map(function(s){ return (s?cap(s)+' — ':'')+groups[s].join(', '); }).join('; '); }
   var picked=arr.map(function(e){ return expandItem(sec,e); });
   return (sec.prefix?picked.map(function(p){return sec.prefix+p;}):picked).join(', ');
 }

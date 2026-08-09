@@ -178,7 +178,7 @@ var SECTIONS = [
     ['inj_bt','Biceps sheath cortisone injection'],['inj_ssn','Suprascapular nerve block'],['inj_st','Scapulothoracic injection']
   ]},
   { key:'img', title:'Imaging ordered', col:'L', items:[
-    ['img_xray','X-ray'],['img_cspine','Cervical spine X-ray'],['img_mri','MRI'],['img_mra','MR arthrogram'],['img_ct','CT'],['img_cta','CT arthrogram'],['img_us','Ultrasound'],['img_emg','EMG']
+    ['img_xray','X-ray'],['img_cspine','Cervical spine X-ray'],['img_mri','MRI'],['img_mra','MR arthrogram'],['img_ct','CT'],['img_cta','CT arthrogram'],['img_us','Ultrasound'],['img_emg','EMG'],['img_other','Other','specify']
   ]},
   { key:'condition', title:'Condition handout (info guide)', col:'L', multi:true, items:[
     ['c_gh','Glenohumeral arthritis information guide'],['c_rca','Rotator cuff arthropathy information guide'],
@@ -187,11 +187,11 @@ var SECTIONS = [
     ['c_calc','Calcific tendinitis information guide'],['c_fx','Fracture information guide'],['c_db','Distal biceps information guide']
   ]},
   { key:'dme', title:'Brace / immobilizer', col:'L', items:[
-    ['dme_sling','Sling'],['dme_simple','Simple sling'],['dme_cuff','Cuff-and-collar']
+    ['dme_sling','Sling'],['dme_simple','Simple sling'],['dme_cuff','Cuff-and-collar'],['dme_other','Other','specify']
   ]},
   { key:'surg', title:'Surgery', col:'L', items:[
     ['s_think','Considering surgery'],['s_ready','Ready to schedule surgery'],
-    ['s_heart','Cardiac clearance'],['s_pcp','PCP clearance']
+    ['s_heart','Cardiac clearance'],['s_pcp','PCP clearance'],['s_other','Other','specify']
   ]},
   { key:'shandout', title:'Surgical handout', col:'L', multi:true, items:[
     ['sh_tsa','Total shoulder arthroplasty handout'],['sh_rsa','Reverse total shoulder arthroplasty handout'],['sh_rcr','Rotator cuff repair handout'],
@@ -200,18 +200,19 @@ var SECTIONS = [
   ]},
   { key:'pt', title:'Physical therapy', col:'R', items:[
     ['pt_start','Physical therapy 1×/week for 4 weeks'],['pt_cont','Continue physical therapy'],['pt_home','Home exercise program'],['pt_trans','Transition from PT to home program'],
-    ['pt_2x6','Physical therapy 2×/week for 6 weeks'],['pt_aaos','AAOS exercise handout given'],['pt_sleeper','Sleeper stretch handout given']
+    ['pt_2x6','Physical therapy 2×/week for 6 weeks'],['pt_aaos','AAOS exercise handout given'],['pt_sleeper','Sleeper stretch handout given'],
+    ['pt_set1','1st set of exercises handout given (reverse shoulder)'],['pt_set2','2nd set of exercises handout given (reverse shoulder)'],['pt_other','Other','specify']
   ]},
   { key:'meds', title:'Medications / treatment', col:'R', items:[
     ['md_asa','Aspirin 81 mg twice daily'],['md_tyl','Acetaminophen 1000 mg up to 3–4×/day'],['md_melox','Meloxicam'],['md_ibu','Ibuprofen'],['md_diclo','Diclofenac'],
-    ['md_cele','Celecoxib'],['md_voltaren','Diclofenac (Voltaren) gel'],['md_medrol','Medrol dose pack'],['md_jour','Journavx (suzetrigine)'],['md_ice','Ice']
+    ['md_cele','Celecoxib'],['md_voltaren','Diclofenac (Voltaren) gel'],['md_medrol','Medrol dose pack'],['md_jour','Journavx (suzetrigine)'],['md_ice','Ice'],['md_other','Other','specify']
   ]},
   { key:'restrict', title:'Restrictions', col:'R', weightDrop:5, items:[
     ['r5','No lifting greater than 5 lb'],['r10','No lifting greater than 10 lb'],['r15','No lifting greater than 15 lb'],['r30','No lifting greater than 30 lb'],['rno','No lifting restrictions'],
-    ['rppl','No pushing, pulling, or lifting'],['rovh','No overhead reaching'],['rrep','No repetitive motion'],['rdrive','No driving'],['rwork','Work note provided'],['rschool','School note provided'],['ratc','Note for athletic trainer'],['rtw','Return to work','date']
+    ['rppl','No pushing, pulling, or lifting'],['rovh','No overhead reaching'],['rrep','No repetitive motion'],['rdrive','No driving'],['rwork','Work note provided'],['rschool','School note provided'],['ratc','Note for athletic trainer'],['rtw','Return to work','date'],['r_other','Other','specify']
   ]},
   { key:'fu', title:'Follow-up', col:'R', dropdown:true, items:[
-    ['fu_1wk','Return in 1 week'],['fu_2wk','Return in 2 weeks'],['fu_6wk','Return in 6 weeks'],['fu_1012','Return in 10–12 weeks'],['fu_3mo','Return in 3 months'],['fu_6mo','Return in 6 months'],['fu_prn','Return as needed']
+    ['fu_1wk','Return in 1 week'],['fu_2wk','Return in 2 weeks'],['fu_6wk','Return in 6 weeks'],['fu_1012','Return in 10–12 weeks'],['fu_3mo','Return in 3 months'],['fu_6mo','Return in 6 months'],['fu_prn','Return as needed'],['fu_other','Other']
   ]}
 ];
 var SEC_BY_KEY = {}; SECTIONS.forEach(function(s){ SEC_BY_KEY[s.key] = s; });
@@ -272,6 +273,14 @@ function renderMulti(key){
     return '<span class="mchip">'+esc(it?it[1]:id)+' <span class="x" onclick="multiRemove(\''+key+'\','+i+')">×</span></span>';
   }).join('');
 }
+// Show the "specify" box when a dropdown's Other option is selected
+function ddOther(key){
+  var sel=document.getElementById('dd_'+key), inp=document.getElementById('dd_'+key+'_other');
+  if(!sel||!inp) return;
+  var it=(SEC_BY_KEY[key].items||[]).filter(function(x){ return x[0]===sel.value; })[0];
+  inp.style.display = (it && it[1]==='Other') ? '' : 'none';
+  if(!(it && it[1]==='Other')) inp.value='';
+}
 // B is exclusive: checking B clears R/L, and checking R or L clears B
 function latSide(base, w){
   var r=document.getElementById('chk_'+base+'_R'), l=document.getElementById('chk_'+base+'_L'), bi=document.getElementById('chk_'+base+'_B');
@@ -285,7 +294,9 @@ function pickedLabels(key){
   if(sec.dropdown){
     var sel=v('dd_'+key); if(!sel) return [];
     var it=sec.items.filter(function(x){ return x[0]===sel; })[0];
-    return it ? [it[1]] : [];
+    if(!it) return [];
+    if(it[1]==='Other'){ var ov=v('dd_'+key+'_other'); return [ov||'Other: ______']; }
+    return [it[1]];
   }
   if(sec.multi){
     return (multiSel[key]||[]).map(function(id){ var it=sec.items.filter(function(x){ return x[0]===id; })[0]; return it?it[1]:id; });
@@ -295,7 +306,7 @@ function pickedLabels(key){
     if(wv){ var wit=sec.items.filter(function(x){ return x[0]===wv; })[0]; if(wit) out2.push(wit[1]); }
     sec.items.forEach(function(it,i){
       if(i<sec.weightDrop) return;
-      if(ck('chk_'+it[0])){ var t=it[1]; if(it[2]){ var iv=v(it[0]+'_val'); if(it[2]==='date') iv=fmtDate(iv); t+=' '+(iv||'______'); } out2.push(t); }
+      if(ck('chk_'+it[0])){ var t=it[1]; if(it[2]){ var iv=v(it[0]+'_val'); if(it[2]==='date') iv=fmtDate(iv); t = (it[1]==='Other') ? (iv||'Other: ______') : t+' '+(iv||'______'); } out2.push(t); }
     });
     return out2;
   }
@@ -310,7 +321,11 @@ function pickedLabels(key){
     });
     return out;
   }
-  return sec.items.filter(function(it){ var c=document.getElementById('chk_'+it[0]); return c&&c.checked; }).map(function(it){ return it[1]; });
+  return sec.items.filter(function(it){ var c=document.getElementById('chk_'+it[0]); return c&&c.checked; }).map(function(it){
+    var t=it[1];
+    if(it[2]){ var iv=v(it[0]+'_val'); if(it[2]==='date') iv=fmtDate(iv); t = (it[1]==='Other') ? (iv||'Other: ______') : t+' '+(iv||'______'); }
+    return t;
+  });
 }
 
 // ---------- render ----------
@@ -319,9 +334,10 @@ function renderForm(){
   SECTIONS.forEach(function(sec){
     var s='<div class="formsec"><div class="section-title">'+esc(sec.title)+(sec.lat?' <small>(check R / L / B per injection)</small>':'')+'</div>';
     if(sec.dropdown){
-      s+='<select class="dd" id="dd_'+sec.key+'"><option value="">— none —</option>';
+      s+='<select class="dd" id="dd_'+sec.key+'" onchange="ddOther(\''+sec.key+'\')"><option value="">— none —</option>';
       sec.items.forEach(function(it){ s+='<option value="'+it[0]+'">'+esc(it[1])+'</option>'; });
-      s+='</select></div>';
+      s+='</select><input class="mini" id="dd_'+sec.key+'_other" placeholder="specify" style="display:none;margin-top:4px;width:100%">';
+      s+='</div>';
       if(sec.col==='R') R+=s; else L+=s;
       return;
     }
