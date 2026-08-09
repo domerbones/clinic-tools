@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1B3A6B">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Billing">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+
+<title>Billing Coder - Dr. Rolf</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; font-size: 14px; -webkit-text-size-adjust: 100%; }
+.header { background: #1B3A6B; color: white; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 50; }
+.header h1 { font-size: 17px; }
+.header span { color: #E8A838; font-size: 11px; }
+.container { max-width: 700px; margin: 0 auto; padding: 8px; }
+.section { background: white; border-radius: 6px; padding: 12px; margin-bottom: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+.section-title { font-size: 13px; font-weight: bold; color: white; background: #1B3A6B; padding: 6px 10px; border-radius: 4px; margin-bottom: 8px; }
+.section-title.gold { background: #E8A838; color: #1B3A6B; }
+.section-title.green { background: #2E7D32; }
+.section-title.red { background: #C62828; }
+.section-title.purple { background: #6B21A8; }
+
+/* Form controls */
+.form-row { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; align-items: center; }
+.form-row label { font-size: 12px; font-weight: bold; color: #1B3A6B; min-width: 55px; }
+.form-row input[type="date"],
+.form-row input[type="text"] { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; min-width: 0; }
+.form-row select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; background: white; }
+
+/* Toggle buttons for Side and Visit Type */
+.toggle-group { display: flex; gap: 0; }
+.toggle-btn { padding: 8px 14px; border: 1px solid #1B3A6B; background: white; color: #1B3A6B; font-size: 13px; font-weight: bold; cursor: pointer; transition: all 0.15s; }
+.toggle-btn:first-child { border-radius: 4px 0 0 4px; }
+.toggle-btn:last-child { border-radius: 0 4px 4px 0; }
+.toggle-btn.active { background: #1B3A6B; color: white; }
+
+/* Checkbox items */
+.dx-category { font-size: 12px; font-weight: bold; color: #1B3A6B; margin: 10px 0 4px 0; padding-bottom: 2px; border-bottom: 1px solid #e0e0e0; }
+.dx-category:first-child { margin-top: 0; }
+.chk-item { display: flex; align-items: center; padding: 6px 4px; border-bottom: 1px solid #f0f0f0; cursor: pointer; -webkit-tap-highlight-color: rgba(27,58,107,0.1); }
+.chk-item:active { background: #f0f4f8; }
+.chk-item input[type="checkbox"] { width: 20px; height: 20px; margin-right: 8px; flex-shrink: 0; accent-color: #1B3A6B; }
+.chk-item .chk-label { flex: 1; font-size: 13px; }
+.chk-item .chk-code { font-family: monospace; font-size: 11px; color: #6B21A8; font-weight: bold; margin-left: 4px; flex-shrink: 0; }
+
+/* Per-diagnosis side toggle (shown when a diagnosis is checked) */
+.dx-side { display: none; gap: 0; margin: 0 6px 0 4px; flex-shrink: 0; }
+.dx-side.visible { display: inline-flex; }
+.side-mini { width: 26px; padding: 4px 0; border: 1px solid #1B3A6B; background: white; color: #1B3A6B; font-size: 12px; font-weight: bold; cursor: pointer; line-height: 1; }
+.side-mini:first-child { border-radius: 4px 0 0 4px; }
+.side-mini:last-child { border-radius: 0 4px 4px 0; }
+.side-mini + .side-mini { border-left: none; }
+.side-mini.active { background: #1B3A6B; color: white; }
+.side-hint { font-size: 11px; color: #666; margin: 2px 0 0 55px; }
+
+/* Fracture dropdown row */
+.fracture-select-row { display: flex; align-items: center; padding: 4px; gap: 8px; }
+.fracture-select-row select { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; background: white; }
+
+/* Injection medication sub-select */
+.med-select { margin: 0 0 4px 28px; padding: 6px; border: 1px solid #E8A838; border-radius: 4px; font-size: 13px; background: #FFF8E1; width: calc(100% - 32px); display: none; }
+.med-select.visible { display: block; }
+
+/* E/M helper */
+.em-helper { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 4px; padding: 10px; margin-bottom: 8px; }
+.em-helper label { display: block; font-size: 12px; font-weight: bold; color: #1B3A6B; margin-bottom: 4px; }
+.em-helper select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; background: white; margin-bottom: 8px; }
+.em-result { background: #1B3A6B; color: white; padding: 10px; border-radius: 4px; text-align: center; font-size: 18px; font-weight: bold; margin-top: 4px; }
+.em-result .em-desc { font-size: 12px; font-weight: normal; color: #E8A838; margin-top: 2px; }
+
+/* E/M data checkboxes */
+#emDataChecks { margin-bottom: 8px; }
+#emDataChecks .chk-item { padding: 4px 4px; border-bottom: 1px solid #eee; }
+#emDataChecks .chk-item input[type="checkbox"] { width: 18px; height: 18px; }
+#emDataChecks .chk-item .chk-label { font-size: 12px; }
+
+/* Collapsible sections */
+.collapsible-header { font-size: 12px; font-weight: bold; color: #1B3A6B; margin: 10px 0 0 0; padding: 8px 4px; border-bottom: 1px solid #e0e0e0; cursor: pointer; -webkit-tap-highlight-color: rgba(27,58,107,0.1); -webkit-user-select: none; user-select: none; }
+.collapsible-header:active { background: #f0f4f8; }
+.collapse-arrow { display: inline-block; font-size: 10px; margin-right: 4px; }
+.count-badge { background: #E8A838; color: #1B3A6B; font-size: 11px; font-weight: bold; padding: 1px 6px; border-radius: 10px; margin-left: 6px; display: none; }
+.count-badge.visible { display: inline; }
+.collapsible-content { display: none; }
+.collapsible-content.expanded { display: block; }
+
+/* Workers comp */
+.wc-check { display: flex; align-items: center; gap: 6px; margin-left: 8px; }
+.wc-check input { width: 18px; height: 18px; accent-color: #C62828; }
+.wc-check label { font-size: 12px; font-weight: bold; color: #C62828; }
+
+/* Smart alerts */
+.alert-box { padding: 8px 10px; border-radius: 4px; margin-bottom: 6px; font-size: 12px; display: none; }
+.alert-box.warning { background: #FFF3E0; border-left: 4px solid #E8A838; }
+.alert-box.danger { background: #FFEBEE; border-left: 4px solid #C62828; }
+.alert-box.info { background: #E3F2FD; border-left: 4px solid #1B3A6B; }
+.alert-box.visible { display: block; }
+.alert-box strong { display: block; margin-bottom: 2px; }
+
+/* Output */
+.output-box { background: #f8f9fa; border: 2px solid #1B3A6B; border-radius: 6px; padding: 12px; font-family: monospace; font-size: 12px; white-space: pre-wrap; word-wrap: break-word; min-height: 100px; line-height: 1.5; }
+
+/* Action buttons */
+.btn-row { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.btn { padding: 10px 18px; border: none; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer; flex: 1; min-width: 90px; text-align: center; }
+.btn-copy { background: #1B3A6B; color: white; }
+.btn-copy:active { background: #153058; }
+.btn-copy.copied { background: #2E7D32; }
+.btn-print { background: #E8A838; color: #1B3A6B; }
+.btn-print:active { background: #d4952e; }
+.btn-clear { background: #C62828; color: white; }
+.btn-clear:active { background: #a51e1e; }
+
+/* Free text row */
+.other-row { display: flex; gap: 6px; align-items: center; padding: 4px; }
+.other-row input { flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
+.other-row button { padding: 6px 12px; background: #1B3A6B; color: white; border: none; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer; }
+
+/* Note-only items */
+.note-item { color: #666; font-style: italic; }
+
+@media print {
+  body { background: white; font-size: 11px; }
+  .header { position: static; padding: 8px 12px; }
+  .container { max-width: 100%; }
+  .section { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+  .no-print { display: none !important; }
+  .output-box { border: 1px solid #333; }
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Billing Coder</h1>
+  <span>Robert H. Rolf, MD | Beacon Orthopaedics</span>
+</div>
+<div class="container">
+
+<!-- VISIT INFO -->
+<div class="section">
+  <div class="section-title">Visit Information</div>
+  <div class="form-row">
+    <label>Date</label>
+    <input type="date" id="visitDate">
+    <div class="wc-check">
+      <input type="checkbox" id="wcCheck">
+      <label for="wcCheck">WC</label>
+    </div>
+  </div>
+  <div class="form-row">
+    <label>Patient</label>
+    <input type="text" id="patientName" placeholder="Optional">
+  </div>
+  <div class="form-row">
+    <label>Side</label>
+    <div class="toggle-group" id="sideGroup">
+      <button type="button" class="toggle-btn active" data-val="right" onclick="setSide(this)">Right</button>
+      <button type="button" class="toggle-btn" data-val="left" onclick="setSide(this)">Left</button>
+      <button type="button" class="toggle-btn" data-val="bilateral" onclick="setSide(this)">Bilateral</button>
+    </div>
+  </div>
+  <div class="side-hint">Sets the default side for all diagnoses and injections. Once a diagnosis is checked, use its R/L/B buttons to set that diagnosis individually (e.g. right shoulder + left elbow).</div>
+  <div class="form-row">
+    <label>Type</label>
+    <div class="toggle-group" id="visitTypeGroup">
+      <button type="button" class="toggle-btn active" data-val="established" onclick="setVisitType(this)">Established</button>
+      <button type="button" class="toggle-btn" data-val="new" onclick="setVisitType(this)">New Patient</button>
+    </div>
+  </div>
+  <div class="form-row">
+    <label>Follow-Up Type</label>
+    <div class="toggle-group" id="followupTypeGroup">
+      <button type="button" class="toggle-btn active" data-val="routine" onclick="setFollowupType(this)">Routine</button>
+      <button type="button" class="toggle-btn" data-val="postop" onclick="setFollowupType(this)">Post-Op</button>
+      <button type="button" class="toggle-btn" data-val="newproblem" onclick="setFollowupType(this)">New Problem</button>
+    </div>
+  </div>
+  <div id="postop-details" style="display:none;margin-top:6px;">
+    <div class="form-row">
+      <label>Surgery Date</label>
+      <input type="date" id="surgery-date">
+    </div>
+    <div class="form-row">
+      <label>Procedure</label>
+      <select id="postop-procedure">
+        <option value="">-- Select --</option>
+        <option value="TSA">Total Shoulder Arthroplasty (90-day global)</option>
+        <option value="rTSA">Reverse Total Shoulder Arthroplasty (90-day global)</option>
+        <option value="RCR">Rotator Cuff Repair (90-day global)</option>
+        <option value="Bankart">Bankart Repair (90-day global)</option>
+        <option value="ORIF-Clav">ORIF Clavicle (90-day global)</option>
+        <option value="ORIF-Hum">ORIF Proximal Humerus (90-day global)</option>
+        <option value="SCR">Superior Capsular Reconstruction (90-day global)</option>
+        <option value="Latarjet">Latarjet (90-day global)</option>
+        <option value="Scope">Arthroscopic Debridement (10-day global)</option>
+        <option value="MUA">MUA (10-day global)</option>
+        <option value="Injection">Injection (10-day global)</option>
+        <option value="HW-Removal">Hardware Removal (90-day global)</option>
+        <option value="Biceps-Tenodesis">Biceps Tenodesis (90-day global)</option>
+        <option value="Other-90">Other - 90-day global</option>
+        <option value="Other-10">Other - 10-day global</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 1: DIAGNOSES -->
+<div class="section">
+  <div class="section-title green">What did you see? (Diagnoses)</div>
+  <div id="dxList"></div>
+  <div class="other-row" style="margin-top:8px;">
+    <input type="text" id="otherICD" placeholder="ICD-10 code">
+    <input type="text" id="otherDesc" placeholder="Description">
+    <button type="button" onclick="addOtherDx()">Add</button>
+  </div>
+  <div id="otherDxList"></div>
+</div>
+
+<!-- SECTION 2: PROCEDURES -->
+<div class="section">
+  <div class="section-title gold">What did you do? (Procedures)</div>
+
+  <!-- E/M Helper -->
+  <div class="em-helper">
+    <label>How many problems?</label>
+    <select id="emProblems" onchange="calcEM()">
+      <option value="">-- Select --</option>
+      <option value="1stable">1 stable chronic problem</option>
+      <option value="1worsen">1 worsening or new problem</option>
+      <option value="2plus">2+ problems</option>
+      <option value="surgical">Surgical decision / high risk</option>
+      <option value="drug">Drug management / severe</option>
+    </select>
+    <div class="collapsible-header" onclick="toggleSection('emData')" style="margin:0;border-bottom:none;">
+      <span class="collapse-arrow" id="emDataArrow">&#9654;</span> New data reviewed? <span class="count-badge" id="emDataBadge"></span>
+    </div>
+    <div class="collapsible-content" id="emDataContent">
+      <div id="emDataChecks"></div>
+    </div>
+    <div class="em-result" id="emResult" style="display:none;">
+      <span id="emCode"></span>
+      <div class="em-desc" id="emDesc"></div>
+    </div>
+  </div>
+
+  <!-- Injections (collapsible) -->
+  <div class="collapsible-header" onclick="toggleSection('inj')">
+    <span class="collapse-arrow" id="injArrow">&#9654;</span> Injections <span class="count-badge" id="injBadge"></span>
+  </div>
+  <div class="collapsible-content" id="injContent">
+    <div id="injList"></div>
+  </div>
+
+  <!-- Other Office Procedures (collapsible) -->
+  <div class="collapsible-header" onclick="toggleSection('oproc')">
+    <span class="collapse-arrow" id="oprocArrow">&#9654;</span> Other Office Procedures <span class="count-badge" id="oprocBadge"></span>
+  </div>
+  <div class="collapsible-content" id="oprocContent">
+    <div id="otherProcList"></div>
+  </div>
+</div>
+
+<!-- SECTION 3: SMART ALERTS -->
+<div class="section" id="alertSection">
+  <div class="section-title red">Smart Alerts</div>
+  <div class="alert-box warning" id="alertMod25">
+    <strong>Modifier -25 Required</strong>
+    E/M billed on same day as injection: modifier -25 must be appended to the E/M code. Document a separately identifiable problem or decision beyond the injection.
+  </div>
+  <div class="alert-box danger" id="alertNCCI">
+    <strong>NCCI Bundle Warning</strong>
+    GH joint + subacromial bursa on the same shoulder = 1 unit of 20610, NOT two. These are bundled by NCCI.
+  </div>
+  <div class="alert-box warning" id="alertBilateral">
+    <strong>Bilateral Injection</strong>
+    Use modifier -50 or bill -RT and -LT on separate lines (check payer preference).
+  </div>
+  <div class="alert-box info" id="alertGlobal">
+    <strong>Global Period Check</strong>
+    Post-surgical follow-up selected. Verify whether visit falls within the 90-day global period for major surgery. Use modifier -24 (unrelated E/M) or -58 (staged procedure) if needed.
+  </div>
+  <div class="alert-box warning" id="alertUS">
+    <strong>Ultrasound Image Required</strong>
+    US-guided injection (20611) requires permanent storage of the ultrasound image for documentation.
+  </div>
+  <div class="alert-box danger" id="alertWC">
+    <strong>Workers Compensation</strong>
+    Document mechanism of injury, employer name, and date of injury. May require a different fee schedule.
+  </div>
+  <div id="noAlerts" class="alert-box info visible" style="display:block;">No alerts at this time. Alerts appear automatically based on your selections.</div>
+</div>
+
+<!-- SECTION 4: BILLING SUMMARY -->
+<div class="section">
+  <div class="section-title purple">Generated Billing Summary</div>
+  <div class="output-box" id="outputBox">Select diagnoses and procedures above, then tap "Generate" to build billing summary.</div>
+  <div class="btn-row no-print">
+    <button type="button" class="btn btn-copy" id="genBtn" onclick="generateSummary()">Generate</button>
+    <button type="button" class="btn btn-copy" id="copyBtn" onclick="copySummary()">Copy</button>
+    <button type="button" class="btn btn-print" onclick="window.print()">Print</button>
+    <button type="button" class="btn btn-clear" onclick="clearAll()">Clear</button>
+  </div>
+</div>
+
+<div style="height:60px;"></div>
+</div>
+
+<script>
+/* ========== STATE ========== */
+var selectedSide = 'right';
+var visitType = 'established';
+var followupType = 'routine';
+var otherDxItems = [];
+/* Per-diagnosis laterality override. Key = 'cat_idx'; value = 'right'|'left'|'bilateral'.
+   If an item has no entry, it follows the global selectedSide. */
+var dxSide = {};
+var currentEMCode = '';
+var currentEMDesc = '';
+
+/* ========== DIAGNOSIS DATA ========== */
+var dxData = [
+  { cat: 'Shoulder - Degenerative', items: [
+    { label: 'Primary OA', r: 'M19.011', l: 'M19.012', desc: 'Primary osteoarthritis, {side} shoulder' },
+    { label: 'Rotator Cuff Tear - Complete', r: 'M75.101', l: 'M75.102', desc: 'Complete rotator cuff tear, {side} shoulder' },
+    { label: 'Rotator Cuff Tear - Incomplete/Partial', r: 'M75.111', l: 'M75.112', desc: 'Incomplete rotator cuff tear, {side} shoulder' },
+    { label: 'Adhesive Capsulitis', r: 'M75.01', l: 'M75.02', desc: 'Adhesive capsulitis, {side} shoulder' },
+    { label: 'Bicipital Tendinitis', r: 'M75.21', l: 'M75.22', desc: 'Bicipital tendinitis, {side} shoulder' },
+    { label: 'Impingement Syndrome', r: 'M75.41', l: 'M75.42', desc: 'Impingement syndrome, {side} shoulder' },
+    { label: 'Rotator Cuff Arthropathy', r: 'M19.011', l: 'M19.012', desc: 'Rotator cuff arthropathy, {side} shoulder' }
+  ]},
+  { cat: 'Shoulder - Instability', items: [
+    { label: 'Recurrent Dislocation', r: 'M24.411', l: 'M24.412', desc: 'Recurrent dislocation, {side} shoulder' },
+    { label: 'Anterior Dislocation - Initial', r: 'S43.001A', l: 'S43.002A', desc: 'Anterior dislocation, {side} shoulder, initial encounter' },
+    { label: 'AC Joint Dislocation', r: 'S43.101A', l: 'S43.102A', desc: 'AC joint dislocation, {side}, initial encounter' },
+    { label: 'SLAP Lesion', r: 'M67.811', l: 'M67.812', desc: 'SLAP lesion, {side} shoulder' },
+    { label: 'Loose Body', r: 'M24.11', l: 'M24.12', desc: 'Loose body, {side} shoulder' }
+  ]},
+  { cat: 'Shoulder - Post-Surgical', items: [
+    { label: 'Presence of Artificial Shoulder - Right', r: 'Z96.611', l: null, desc: 'Presence of right artificial shoulder joint', noLat: true, fixedCode: 'Z96.611' },
+    { label: 'Presence of Artificial Shoulder - Left', r: null, l: 'Z96.612', desc: 'Presence of left artificial shoulder joint', noLat: true, fixedCode: 'Z96.612' },
+    { label: 'Postop follow-up, rotator cuff repair', r: 'Z09', l: 'Z09', desc: 'Postop follow-up, rotator cuff repair', noLat: true, fixedCode: 'Z09', isPostSurg: true },
+    { label: 'Postop follow-up, other', r: 'Z09', l: 'Z09', desc: 'Postop follow-up, other', noLat: true, fixedCode: 'Z09', isPostSurg: true }
+  ]},
+  { cat: 'Fractures - Proximal Humerus', items: [
+    { label: 'Displaced fx surgical neck', r: 'S42.211A', l: 'S42.212A', desc: 'Displaced fracture surgical neck of {side} humerus, initial' },
+    { label: 'Nondisplaced fx surgical neck', r: 'S42.214A', l: 'S42.215A', desc: 'Nondisplaced fracture surgical neck of {side} humerus, initial' },
+    { label: '2-part fx surgical neck', r: 'S42.221A', l: 'S42.222A', desc: '2-part fracture surgical neck of {side} humerus, initial' },
+    { label: '3-part fx surgical neck', r: 'S42.231A', l: 'S42.232A', desc: '3-part fracture surgical neck of {side} humerus, initial' },
+    { label: '4-part fx surgical neck', r: 'S42.241A', l: 'S42.242A', desc: '4-part fracture surgical neck of {side} humerus, initial' },
+    { label: 'Displaced fx greater tuberosity', r: 'S42.251A', l: 'S42.252A', desc: 'Displaced fracture greater tuberosity of {side} humerus, initial' },
+    { label: 'Nondisplaced fx greater tuberosity', r: 'S42.254A', l: 'S42.255A', desc: 'Nondisplaced fracture greater tuberosity of {side} humerus, initial' }
+  ]},
+  { cat: 'Fractures - Clavicle', items: [
+    { label: 'Displaced fx shaft', r: 'S42.021A', l: 'S42.022A', desc: 'Displaced fracture shaft of {side} clavicle, initial' },
+    { label: 'Nondisplaced fx shaft', r: 'S42.024A', l: 'S42.025A', desc: 'Nondisplaced fracture shaft of {side} clavicle, initial' },
+    { label: 'Displaced fx lateral end', r: 'S42.031A', l: 'S42.032A', desc: 'Displaced fracture lateral end of {side} clavicle, initial' },
+    { label: 'Nondisplaced fx lateral end', r: 'S42.034A', l: 'S42.035A', desc: 'Nondisplaced fracture lateral end of {side} clavicle, initial' }
+  ]},
+  { cat: 'Elbow', items: [
+    { label: 'Elbow Pain', r: 'M25.521', l: 'M25.522', desc: 'Pain in {side} elbow' },
+    { label: 'Lateral Epicondylitis', r: 'M77.11', l: 'M77.12', desc: 'Lateral epicondylitis, {side} elbow' },
+    { label: 'Medial Epicondylitis', r: 'M77.01', l: 'M77.02', desc: 'Medial epicondylitis, {side} elbow' },
+    { label: 'Distal Biceps Tear', r: 'S46.111A', l: 'S46.112A', desc: 'Distal biceps tear, {side}, initial encounter' }
+  ]},
+  { cat: 'Other', items: [
+    { label: 'Shoulder Pain', r: 'M25.511', l: 'M25.512', desc: 'Pain in {side} shoulder' }
+  ]}
+];
+
+/* ========== FRACTURE CATEGORY INDICES ========== */
+var collapsibleCatIndices = [0, 1, 2, 3, 4, 5]; // Shoulder-Degenerative, Shoulder-Instability, Post-Surgical, Fractures-Prox Humerus, Fractures-Clavicle, Elbow
+
+function isCollapsibleCategory(catIdx) {
+  for (var i = 0; i < collapsibleCatIndices.length; i++) {
+    if (collapsibleCatIndices[i] === catIdx) return true;
+  }
+  return false;
+}
+
+/* ========== E/M DATA ITEMS ========== */
+var emDataItems = [
+  { id: 'emData_xrays', label: 'Reviewed X-rays', level: 'ordered' },
+  { id: 'emData_mri', label: 'Reviewed MRI', level: 'ordered' },
+  { id: 'emData_ct', label: 'Reviewed CT', level: 'ordered' },
+  { id: 'emData_outside', label: 'Reviewed outside records', level: 'ordered' },
+  { id: 'emData_labs', label: 'Reviewed labs', level: 'ordered' },
+  { id: 'emData_ordimg', label: 'Ordered imaging', level: 'ordered' },
+  { id: 'emData_ordlabs', label: 'Ordered labs', level: 'ordered' },
+  { id: 'emData_independent', label: 'Independent interpretation of imaging', level: 'independent' },
+  { id: 'emData_none', label: 'None', level: 'none' }
+];
+
+/* ========== INJECTION DATA ========== */
+var injData = [
+  { label: 'Glenohumeral injection - without US', cpt: '20610', tag: 'gh' },
+  { label: 'Glenohumeral injection - with US', cpt: '20611', tag: 'gh', usGuided: true },
+  { label: 'Subacromial injection - without US', cpt: '20610', tag: 'subac' },
+  { label: 'Subacromial injection - with US', cpt: '20611', tag: 'subac', usGuided: true },
+  { label: 'AC joint injection', cpt: '20610', tag: 'ac' },
+  { label: 'Small joint injection', cpt: '20604', tag: 'small' },
+  { label: 'Intermediate joint injection', cpt: '20605', tag: 'intermediate' }
+];
+
+var medOptions = [
+  { label: '-- Select medication --', jcode: '', desc: '' },
+  { label: 'Depo-Medrol 40mg', jcode: 'J1030', desc: 'Depo-Medrol 40mg' },
+  { label: 'Depo-Medrol 80mg', jcode: 'J1040', desc: 'Depo-Medrol 80mg' },
+  { label: 'Kenalog', jcode: 'J3301', desc: 'Triamcinolone (Kenalog)' },
+  { label: 'Hyalgan', jcode: 'J7321', desc: 'Hyalgan' },
+  { label: 'Synvisc / Synvisc-One', jcode: 'J7322', desc: 'Synvisc / Synvisc-One' },
+  { label: 'Euflexxa', jcode: 'J7323', desc: 'Euflexxa' },
+  { label: 'Gel-One / Gel-Syn', jcode: 'J7325', desc: 'Gel-One / Gel-Syn' }
+];
+
+var otherProcs = [
+  { label: 'X-rays ordered', noteOnly: true },
+  { label: 'MRI ordered', noteOnly: true },
+  { label: 'CT ordered', noteOnly: true },
+  { label: 'Brace / DME provided', noteOnly: true },
+  { label: 'Casting / splinting', noteOnly: true }
+];
+
+/* ========== RENDER FUNCTIONS ========== */
+/* Build a single diagnosis row. Lateralizable items get a hidden R/L/B
+   toggle that appears once the diagnosis is checked. */
+function buildDxRow(c, i, item) {
+  var code = getCodeForItem(item, getItemSide(c, i));
+  var h = '';
+  h += '<div class="chk-item" onclick="toggleCheckbox(\'dx_' + c + '_' + i + '\')">';
+  h += '<input type="checkbox" id="dx_' + c + '_' + i + '" data-cat="' + c + '" data-idx="' + i + '" onchange="onDxCheck(' + c + ',' + i + ')" onclick="event.stopPropagation()">';
+  h += '<span class="chk-label">' + item.label + '</span>';
+  if (!item.noLat) {
+    h += '<span class="dx-side" id="dxside_' + c + '_' + i + '">';
+    h += '<button type="button" class="side-mini" id="dxsb_' + c + '_' + i + '_right" onclick="setDxSide(event,' + c + ',' + i + ',\'right\')">R</button>';
+    h += '<button type="button" class="side-mini" id="dxsb_' + c + '_' + i + '_left" onclick="setDxSide(event,' + c + ',' + i + ',\'left\')">L</button>';
+    h += '<button type="button" class="side-mini" id="dxsb_' + c + '_' + i + '_bilateral" onclick="setDxSide(event,' + c + ',' + i + ',\'bilateral\')">B</button>';
+    h += '</span>';
+  }
+  h += '<span class="chk-code" id="dxcode_' + c + '_' + i + '">' + code + '</span>';
+  h += '</div>';
+  return h;
+}
+
+function renderDxList() {
+  var container = document.getElementById('dxList');
+  var html = '';
+  for (var c = 0; c < dxData.length; c++) {
+    var cat = dxData[c];
+    if (isCollapsibleCategory(c)) {
+      /* Render as collapsible section with checkboxes inside */
+      html += '<div class="collapsible-header" onclick="toggleDxCollapse(' + c + ')">';
+      html += '<span class="collapse-arrow" id="dxArrow_' + c + '">&#9654;</span>' + cat.cat;
+      html += '<span class="count-badge" id="dxBadge_' + c + '"></span>';
+      html += '</div>';
+      html += '<div class="collapsible-content" id="dxCollapse_' + c + '">';
+      for (var i = 0; i < cat.items.length; i++) {
+        html += buildDxRow(c, i, cat.items[i]);
+      }
+      html += '</div>';
+    } else {
+      /* Render as always-visible checkboxes */
+      html += '<div class="dx-category">' + cat.cat + '</div>';
+      for (var i = 0; i < cat.items.length; i++) {
+        html += buildDxRow(c, i, cat.items[i]);
+      }
+    }
+  }
+  container.innerHTML = html;
+}
+
+/* Called when a diagnosis checkbox is toggled: reveal/hide its side toggle,
+   default it to the global side, then refresh code/badge/alerts. */
+function onDxCheck(c, i) {
+  var cb = document.getElementById('dx_' + c + '_' + i);
+  var sideEl = document.getElementById('dxside_' + c + '_' + i);
+  if (cb && cb.checked) {
+    if (!dxSide[c + '_' + i]) dxSide[c + '_' + i] = selectedSide;
+    if (sideEl) { sideEl.className = 'dx-side visible'; renderDxSideButtons(c, i); }
+  } else if (sideEl) {
+    sideEl.className = 'dx-side';
+  }
+  updateDxCodeCell(c, i);
+  if (isCollapsibleCategory(c)) updateDxBadge(c);
+  updateAlerts();
+}
+
+/* Set the side for one diagnosis (individual override). */
+function setDxSide(ev, c, i, side) {
+  if (ev && ev.stopPropagation) ev.stopPropagation();
+  dxSide[c + '_' + i] = side;
+  renderDxSideButtons(c, i);
+  updateDxCodeCell(c, i);
+  updateAlerts();
+}
+
+/* Highlight the active R/L/B button for a diagnosis. */
+function renderDxSideButtons(c, i) {
+  var s = getItemSide(c, i);
+  var sides = ['right', 'left', 'bilateral'];
+  for (var k = 0; k < sides.length; k++) {
+    var b = document.getElementById('dxsb_' + c + '_' + i + '_' + sides[k]);
+    if (b) b.className = 'side-mini' + (sides[k] === s ? ' active' : '');
+  }
+}
+
+/* Update just the ICD code shown for one diagnosis. */
+function updateDxCodeCell(c, i) {
+  var el = document.getElementById('dxcode_' + c + '_' + i);
+  if (el) el.textContent = getCodeForItem(dxData[c].items[i], getItemSide(c, i));
+}
+
+function toggleDxCollapse(catIdx) {
+  var content = document.getElementById('dxCollapse_' + catIdx);
+  var arrow = document.getElementById('dxArrow_' + catIdx);
+  if (content.className.indexOf('expanded') >= 0) {
+    content.className = 'collapsible-content';
+    arrow.innerHTML = '&#9654;';
+  } else {
+    content.className = 'collapsible-content expanded';
+    arrow.innerHTML = '&#9660;';
+  }
+}
+
+function updateDxBadge(catIdx) {
+  var cat = dxData[catIdx];
+  var count = 0;
+  for (var i = 0; i < cat.items.length; i++) {
+    var el = document.getElementById('dx_' + catIdx + '_' + i);
+    if (el && el.checked) count++;
+  }
+  var badge = document.getElementById('dxBadge_' + catIdx);
+  if (count > 0) {
+    badge.textContent = '(' + count + ')';
+    badge.className = 'count-badge visible';
+  } else {
+    badge.className = 'count-badge';
+  }
+}
+
+function renderEmDataChecks() {
+  var container = document.getElementById('emDataChecks');
+  var html = '';
+  for (var i = 0; i < emDataItems.length; i++) {
+    var item = emDataItems[i];
+    html += '<div class="chk-item" onclick="toggleCheckbox(\'' + item.id + '\')">';
+    html += '<input type="checkbox" id="' + item.id + '" onchange="handleDataCheckbox(this); calcEM(); updateEmDataBadge()" onclick="event.stopPropagation()">';
+    html += '<span class="chk-label">' + item.label + '</span>';
+    html += '</div>';
+  }
+  container.innerHTML = html;
+}
+
+function updateEmDataBadge() {
+  var count = 0;
+  for (var i = 0; i < emDataItems.length; i++) {
+    if (emDataItems[i].level !== 'none') {
+      var el = document.getElementById(emDataItems[i].id);
+      if (el && el.checked) count++;
+    }
+  }
+  var badge = document.getElementById('emDataBadge');
+  if (count > 0) {
+    badge.textContent = '(' + count + ')';
+    badge.className = 'count-badge visible';
+  } else {
+    badge.className = 'count-badge';
+  }
+}
+
+function renderInjList() {
+  var container = document.getElementById('injList');
+  var html = '';
+  for (var i = 0; i < injData.length; i++) {
+    var inj = injData[i];
+    html += '<div class="chk-item" onclick="toggleCheckbox(\'inj_' + i + '\')">';
+    html += '<input type="checkbox" id="inj_' + i + '" data-inj="' + i + '" onchange="toggleMedSelect(' + i + '); updateAlerts()" onclick="event.stopPropagation()">';
+    html += '<span class="chk-label">' + inj.label + '</span>';
+    html += '<span class="chk-code">' + inj.cpt + '</span>';
+    html += '</div>';
+    html += '<select class="med-select" id="med_' + i + '" onchange="updateAlerts()">';
+    for (var m = 0; m < medOptions.length; m++) {
+      html += '<option value="' + m + '">' + medOptions[m].label + '</option>';
+    }
+    html += '</select>';
+  }
+  container.innerHTML = html;
+}
+
+function renderOtherProcs() {
+  var container = document.getElementById('otherProcList');
+  var html = '';
+  for (var i = 0; i < otherProcs.length; i++) {
+    var proc = otherProcs[i];
+    html += '<div class="chk-item" onclick="toggleCheckbox(\'oproc_' + i + '\')">';
+    html += '<input type="checkbox" id="oproc_' + i + '" onchange="updateAlerts()" onclick="event.stopPropagation()">';
+    html += '<span class="chk-label' + (proc.noteOnly ? ' note-item' : '') + '">' + proc.label + (proc.noteOnly ? ' (note only)' : '') + '</span>';
+    html += '</div>';
+  }
+  container.innerHTML = html;
+}
+
+/* ========== SIDE / LATERALITY ========== */
+function getCodeForItem(item, side) {
+  side = side || selectedSide;
+  if (item.noLat) return item.fixedCode;
+  if (side === 'right') return item.r;
+  if (side === 'left') return item.l;
+  return item.r + ' / ' + item.l;
+}
+
+/* Effective side for a diagnosis: its individual override, or the global side. */
+function getItemSide(c, i) {
+  return dxSide[c + '_' + i] || selectedSide;
+}
+
+function getSideLabel() {
+  if (selectedSide === 'right') return 'right';
+  if (selectedSide === 'left') return 'left';
+  return 'bilateral';
+}
+
+function getSideModifier() {
+  if (selectedSide === 'right') return '-RT';
+  if (selectedSide === 'left') return '-LT';
+  return '';
+}
+
+function setSide(btn) {
+  var btns = document.querySelectorAll('#sideGroup .toggle-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].className = 'toggle-btn';
+  btn.className = 'toggle-btn active';
+  selectedSide = btn.getAttribute('data-val');
+  /* Changing the global side resets all diagnoses to follow it (acts as "set all"). */
+  dxSide = {};
+  updateDxCodes();
+  updateAlerts();
+}
+
+function setVisitType(btn) {
+  var btns = document.querySelectorAll('#visitTypeGroup .toggle-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].className = 'toggle-btn';
+  btn.className = 'toggle-btn active';
+  visitType = btn.getAttribute('data-val');
+  calcEM();
+}
+
+function setFollowupType(btn) {
+  var btns = document.querySelectorAll('#followupTypeGroup .toggle-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].className = 'toggle-btn';
+  btn.className = 'toggle-btn active';
+  followupType = btn.getAttribute('data-val');
+  document.getElementById('postop-details').style.display = followupType === 'postop' ? 'block' : 'none';
+  calcEM();
+}
+
+function getGlobalDays() {
+  var surgDate = document.getElementById('surgery-date').value;
+  var proc = document.getElementById('postop-procedure').value;
+  if (!surgDate || !proc) return null;
+  var globalDays = 90;
+  if (proc === 'Scope' || proc === 'MUA' || proc === 'Injection' || proc === 'Other-10') globalDays = 10;
+  var surgery = new Date(surgDate);
+  var today = new Date();
+  var diffDays = Math.floor((today - surgery) / (1000 * 60 * 60 * 24));
+  return { globalDays: globalDays, daysSince: diffDays, withinGlobal: diffDays <= globalDays, procedure: proc };
+}
+
+function updateDxCodes() {
+  for (var c = 0; c < dxData.length; c++) {
+    for (var i = 0; i < dxData[c].items.length; i++) {
+      updateDxCodeCell(c, i);
+      if (!dxData[c].items[i].noLat) renderDxSideButtons(c, i);
+    }
+  }
+}
+
+/* ========== CHECKBOX TOGGLE ========== */
+function toggleCheckbox(id) {
+  var cb = document.getElementById(id);
+  if (cb) {
+    cb.checked = !cb.checked;
+    var evt = document.createEvent('Event');
+    evt.initEvent('change', true, true);
+    cb.dispatchEvent(evt);
+  }
+}
+
+function toggleMedSelect(idx) {
+  var cb = document.getElementById('inj_' + idx);
+  var sel = document.getElementById('med_' + idx);
+  if (cb.checked) {
+    sel.className = 'med-select visible';
+  } else {
+    sel.className = 'med-select';
+    sel.selectedIndex = 0;
+  }
+}
+
+/* ========== E/M DATA CHECKBOX LOGIC ========== */
+function handleDataCheckbox(cb) {
+  if (cb.id === 'emData_none' && cb.checked) {
+    /* Uncheck all others */
+    for (var i = 0; i < emDataItems.length; i++) {
+      if (emDataItems[i].id !== 'emData_none') {
+        document.getElementById(emDataItems[i].id).checked = false;
+      }
+    }
+  } else if (cb.id !== 'emData_none' && cb.checked) {
+    /* Uncheck None */
+    document.getElementById('emData_none').checked = false;
+  }
+}
+
+function getDataLevel() {
+  var indCb = document.getElementById('emData_independent');
+  if (indCb && indCb.checked) return 'independent';
+  for (var i = 0; i < emDataItems.length; i++) {
+    if (emDataItems[i].level === 'ordered') {
+      var cb = document.getElementById(emDataItems[i].id);
+      if (cb && cb.checked) return 'ordered';
+    }
+  }
+  return '';
+}
+
+/* ========== COLLAPSIBLE SECTIONS ========== */
+function toggleSection(prefix) {
+  var content = document.getElementById(prefix + 'Content');
+  var arrow = document.getElementById(prefix + 'Arrow');
+  if (!content || !arrow) return;
+  var isExpanded = content.className.indexOf('expanded') !== -1;
+  if (isExpanded) {
+    content.className = 'collapsible-content';
+    arrow.innerHTML = '&#9654;';
+  } else {
+    content.className = 'collapsible-content expanded';
+    arrow.innerHTML = '&#9660;';
+  }
+}
+
+function collapseSection(prefix) {
+  var content = document.getElementById(prefix + 'Content');
+  var arrow = document.getElementById(prefix + 'Arrow');
+  if (content) content.className = 'collapsible-content';
+  if (arrow) arrow.innerHTML = '&#9654;';
+}
+
+function updateCollapsibleBadges() {
+  /* Injection count */
+  var injCount = 0;
+  for (var i = 0; i < injData.length; i++) {
+    var cb = document.getElementById('inj_' + i);
+    if (cb && cb.checked) injCount++;
+  }
+  var injBadge = document.getElementById('injBadge');
+  if (injBadge) {
+    if (injCount > 0) {
+      injBadge.textContent = '(' + injCount + ')';
+      injBadge.className = 'count-badge visible';
+    } else {
+      injBadge.textContent = '';
+      injBadge.className = 'count-badge';
+    }
+  }
+
+  /* Other proc count */
+  var oprocCount = 0;
+  for (var i = 0; i < otherProcs.length; i++) {
+    var cb = document.getElementById('oproc_' + i);
+    if (cb && cb.checked) oprocCount++;
+  }
+  var oprocBadge = document.getElementById('oprocBadge');
+  if (oprocBadge) {
+    if (oprocCount > 0) {
+      oprocBadge.textContent = '(' + oprocCount + ')';
+      oprocBadge.className = 'count-badge visible';
+    } else {
+      oprocBadge.textContent = '';
+      oprocBadge.className = 'count-badge';
+    }
+  }
+}
+
+/* ========== OTHER DX ========== */
+function addOtherDx() {
+  var codeInput = document.getElementById('otherICD');
+  var descInput = document.getElementById('otherDesc');
+  var code = codeInput.value.trim();
+  var desc = descInput.value.trim();
+  if (!code) return;
+  otherDxItems.push({ code: code, desc: desc || code });
+  codeInput.value = '';
+  descInput.value = '';
+  renderOtherDxList();
+}
+
+function removeOtherDx(idx) {
+  otherDxItems.splice(idx, 1);
+  renderOtherDxList();
+}
+
+function renderOtherDxList() {
+  var container = document.getElementById('otherDxList');
+  var html = '';
+  for (var i = 0; i < otherDxItems.length; i++) {
+    html += '<div class="chk-item">';
+    html += '<input type="checkbox" checked disabled style="width:20px;height:20px;margin-right:8px;">';
+    html += '<span class="chk-label">' + otherDxItems[i].desc + '</span>';
+    html += '<span class="chk-code">' + otherDxItems[i].code + '</span>';
+    html += '<button type="button" onclick="removeOtherDx(' + i + ')" style="margin-left:6px;background:#C62828;color:white;border:none;border-radius:3px;padding:2px 8px;font-size:11px;cursor:pointer;">X</button>';
+    html += '</div>';
+  }
+  container.innerHTML = html;
+}
+
+/* ========== E/M CALCULATION ========== */
+function calcEM() {
+  var prob = document.getElementById('emProblems').value;
+  var data = getDataLevel();
+  var resultDiv = document.getElementById('emResult');
+  var codeEl = document.getElementById('emCode');
+  var descEl = document.getElementById('emDesc');
+
+  if (!prob) {
+    resultDiv.style.display = 'none';
+    currentEMCode = '';
+    currentEMDesc = '';
+    updateAlerts();
+    return;
+  }
+
+  var level = 3; // default
+  var desc = '';
+
+  if (prob === '1stable' && (data === 'none' || data === '')) {
+    level = 3;
+  } else if (prob === '1stable' && (data === 'ordered' || data === 'independent')) {
+    level = 3;
+  } else if (prob === '1worsen' || prob === '2plus') {
+    level = 4;
+  } else if (prob === 'surgical') {
+    level = 4;
+  } else if (prob === 'drug') {
+    level = 5;
+  }
+
+  // Data can bump from 3 to 4 in some cases
+  if (level === 3 && data === 'independent') {
+    level = 4;
+  }
+
+  var emCode = '';
+  if (visitType === 'established') {
+    if (level === 3) { emCode = '99213'; desc = 'Established, Low MDM'; }
+    else if (level === 4) { emCode = '99214'; desc = 'Established, Moderate MDM'; }
+    else if (level === 5) { emCode = '99215'; desc = 'Established, High MDM'; }
+  } else {
+    if (level === 3) { emCode = '99203'; desc = 'New Patient, Low MDM'; }
+    else if (level === 4) { emCode = '99204'; desc = 'New Patient, Moderate MDM'; }
+    else if (level === 5) { emCode = '99205'; desc = 'New Patient, High MDM'; }
+  }
+
+  currentEMCode = emCode;
+  currentEMDesc = desc;
+
+  codeEl.textContent = emCode;
+  descEl.textContent = desc;
+  resultDiv.style.display = 'block';
+  updateAlerts();
+}
+
+/* ========== SMART ALERTS ========== */
+function updateAlerts() {
+  var hasInjection = false;
+  var hasGH = false;
+  var hasSubac = false;
+  var hasUSGuided = false;
+  var hasPostSurg = false;
+  var hasWC = document.getElementById('wcCheck').checked;
+  var anyAlert = false;
+
+  for (var i = 0; i < injData.length; i++) {
+    var cb = document.getElementById('inj_' + i);
+    if (cb && cb.checked) {
+      hasInjection = true;
+      if (injData[i].tag === 'gh') hasGH = true;
+      if (injData[i].tag === 'subac') hasSubac = true;
+      if (injData[i].usGuided) hasUSGuided = true;
+    }
+  }
+
+  // Check post-surgical (only non-fracture categories have checkboxes)
+  for (var c = 0; c < dxData.length; c++) {
+    if (isCollapsibleCategory(c)) continue;
+    for (var j = 0; j < dxData[c].items.length; j++) {
+      var dcb = document.getElementById('dx_' + c + '_' + j);
+      if (dcb && dcb.checked && dxData[c].items[j].isPostSurg) {
+        hasPostSurg = true;
+      }
+    }
+  }
+
+  // Modifier -25 alert
+  var show25 = (hasInjection && currentEMCode !== '');
+  setAlert('alertMod25', show25);
+  if (show25) anyAlert = true;
+
+  // NCCI bundle
+  var showNCCI = (hasGH && hasSubac);
+  setAlert('alertNCCI', showNCCI);
+  if (showNCCI) anyAlert = true;
+
+  // Bilateral
+  var showBilateral = (hasInjection && selectedSide === 'bilateral');
+  setAlert('alertBilateral', showBilateral);
+  if (showBilateral) anyAlert = true;
+
+  // Global period
+  setAlert('alertGlobal', hasPostSurg);
+  if (hasPostSurg) anyAlert = true;
+
+  // US guided
+  setAlert('alertUS', hasUSGuided);
+  if (hasUSGuided) anyAlert = true;
+
+  // Workers comp
+  setAlert('alertWC', hasWC);
+  if (hasWC) anyAlert = true;
+
+  document.getElementById('noAlerts').style.display = anyAlert ? 'none' : 'block';
+
+  // Update collapsible badges
+  updateCollapsibleBadges();
+}
+
+function setAlert(id, show) {
+  var el = document.getElementById(id);
+  if (show) {
+    el.className = el.className.replace(' visible', '') + ' visible';
+    el.style.display = 'block';
+  } else {
+    el.className = el.className.replace(' visible', '');
+    el.style.display = 'none';
+  }
+}
+
+/* ========== GENERATE SUMMARY ========== */
+function generateSummary() {
+  var date = document.getElementById('visitDate').value;
+  var patient = document.getElementById('patientName').value || '[Not specified]';
+  var sideLabel = selectedSide.charAt(0).toUpperCase() + selectedSide.slice(1);
+  var hasWC = document.getElementById('wcCheck').checked;
+
+  var lines = [];
+  lines.push('BILLING SUMMARY');
+  lines.push('========================================');
+  lines.push('Date: ' + formatDate(date));
+  lines.push('Patient: ' + patient);
+  lines.push('Default/Injection Side: ' + sideLabel + '  (each diagnosis shows its own side below)');
+  lines.push('Type: ' + (visitType === 'established' ? 'Established Patient' : 'New Patient'));
+  if (followupType === 'postop') {
+    var gp = getGlobalDays();
+    if (gp) {
+      lines.push('Follow-Up: Post-Op (' + gp.daysSince + ' days since surgery)');
+      lines.push('Procedure: ' + gp.procedure + ' (' + gp.globalDays + '-day global period)');
+      if (gp.withinGlobal) {
+        lines.push('*** WITHIN ' + gp.globalDays + '-DAY GLOBAL PERIOD -- Review if E/M is billable ***');
+      } else {
+        lines.push('Outside global period -- E/M billable');
+      }
+    } else {
+      lines.push('Follow-Up: Post-Op (surgery date or procedure not specified)');
+    }
+  } else if (followupType === 'newproblem') {
+    lines.push('Follow-Up: New Problem');
+  } else {
+    lines.push('Follow-Up: Routine');
+  }
+  if (hasWC) lines.push('** WORKERS COMPENSATION **');
+  lines.push('');
+
+  // E/M
+  if (currentEMCode) {
+    var hasInj = hasAnyInjection();
+    var emDisplay = currentEMCode;
+    if (hasInj) emDisplay += '-25';
+    lines.push('E/M: ' + emDisplay + ' (' + currentEMDesc + ')');
+
+    // List data reviewed items
+    var dataItems = [];
+    for (var di = 0; di < emDataItems.length; di++) {
+      if (emDataItems[di].level !== 'none') {
+        var dcb = document.getElementById(emDataItems[di].id);
+        if (dcb && dcb.checked) {
+          dataItems.push(emDataItems[di].label);
+        }
+      }
+    }
+    if (dataItems.length > 0) {
+      lines.push('Data: ' + dataItems.join(', '));
+    }
+    lines.push('');
+  }
+
+  // Diagnoses (all categories now use checkboxes)
+  var dxLines = [];
+  for (var c = 0; c < dxData.length; c++) {
+    for (var i = 0; i < dxData[c].items.length; i++) {
+      var cb = document.getElementById('dx_' + c + '_' + i);
+      if (cb && cb.checked) {
+        var item = dxData[c].items[i];
+        var itemSide = getItemSide(c, i);
+        if (item.noLat) {
+          dxLines.push(item.fixedCode + ' - ' + item.desc);
+        } else if (itemSide === 'bilateral') {
+          dxLines.push(item.r + ' - ' + item.desc.replace('{side}', 'right'));
+          dxLines.push(item.l + ' - ' + item.desc.replace('{side}', 'left'));
+        } else {
+          var code = (itemSide === 'right') ? item.r : item.l;
+          dxLines.push(code + ' - ' + item.desc.replace('{side}', itemSide));
+        }
+      }
+    }
+  }
+  // Other DX
+  for (var o = 0; o < otherDxItems.length; o++) {
+    dxLines.push(otherDxItems[o].code + ' - ' + otherDxItems[o].desc);
+  }
+
+  if (dxLines.length > 0) {
+    lines.push('DIAGNOSES:');
+    for (var d = 0; d < dxLines.length; d++) {
+      lines.push((d + 1) + '. ' + dxLines[d]);
+    }
+    lines.push('');
+  }
+
+  // Procedures
+  var procLines = [];
+  var modifiers = [];
+  var hasInj = hasAnyInjection();
+
+  // Injections
+  var ghSameSubac = false;
+  var hasGH = false;
+  var hasSubac = false;
+
+  for (var i = 0; i < injData.length; i++) {
+    var cb = document.getElementById('inj_' + i);
+    if (cb && cb.checked) {
+      if (injData[i].tag === 'gh') hasGH = true;
+      if (injData[i].tag === 'subac') hasSubac = true;
+    }
+  }
+  ghSameSubac = hasGH && hasSubac;
+
+  for (var i = 0; i < injData.length; i++) {
+    var cb = document.getElementById('inj_' + i);
+    if (cb && cb.checked) {
+      var inj = injData[i];
+      var cptStr = inj.cpt;
+      var sideMod = getSideModifier();
+      if (sideMod) cptStr += sideMod;
+
+      var procDesc = inj.label;
+      if (ghSameSubac && inj.tag === 'subac') {
+        procDesc += ' [BUNDLED with GH - see NCCI alert]';
+      }
+
+      var procLine = cptStr + ' - ' + procDesc;
+
+      // Add medication
+      var medSel = document.getElementById('med_' + i);
+      if (medSel && medSel.selectedIndex > 0) {
+        var med = medOptions[medSel.selectedIndex];
+        procLine += '\n   ' + med.jcode + ' - ' + med.desc;
+      }
+
+      procLines.push(procLine);
+    }
+  }
+
+  // Other procedures (note-only items)
+  var noteLines = [];
+  for (var i = 0; i < otherProcs.length; i++) {
+    var cb = document.getElementById('oproc_' + i);
+    if (cb && cb.checked) {
+      noteLines.push(otherProcs[i].label);
+    }
+  }
+
+  if (procLines.length > 0) {
+    lines.push('PROCEDURES:');
+    for (var p = 0; p < procLines.length; p++) {
+      lines.push((p + 1) + '. ' + procLines[p]);
+    }
+    lines.push('');
+  }
+
+  if (noteLines.length > 0) {
+    lines.push('ORDERS / NOTES:');
+    for (var n = 0; n < noteLines.length; n++) {
+      lines.push('- ' + noteLines[n]);
+    }
+    lines.push('');
+  }
+
+  // Modifiers Applied
+  var modLines = [];
+  if (hasInj && currentEMCode) {
+    modLines.push('-25 on E/M (procedure billed same day)');
+  }
+  if (hasInj && selectedSide === 'right') {
+    modLines.push('-RT on injection(s) (right side)');
+  } else if (hasInj && selectedSide === 'left') {
+    modLines.push('-LT on injection(s) (left side)');
+  } else if (hasInj && selectedSide === 'bilateral') {
+    modLines.push('-50 or -RT/-LT on injection(s) (bilateral)');
+  }
+  if (modLines.length > 0) {
+    lines.push('MODIFIERS APPLIED:');
+    for (var m = 0; m < modLines.length; m++) {
+      lines.push('- ' + modLines[m]);
+    }
+    lines.push('');
+  }
+
+  // Alerts
+  var alertLines = [];
+  if (hasInj && currentEMCode) {
+    alertLines.push('Modifier -25 required on E/M when billing injection same day');
+  }
+  if (ghSameSubac) {
+    alertLines.push('NCCI BUNDLE: GH + subacromial same shoulder = 1 unit of 20610');
+  }
+  if (hasInj && selectedSide === 'bilateral') {
+    alertLines.push('Bilateral injection: use -50 or bill -RT/-LT on separate lines');
+  }
+  if (hasAnyPostSurg()) {
+    if (followupType === 'postop') {
+      var gpAlert = getGlobalDays();
+      if (gpAlert && gpAlert.withinGlobal) {
+        alertLines.push('WITHIN ' + gpAlert.globalDays + '-DAY GLOBAL PERIOD (' + gpAlert.daysSince + ' days post-op). E/M not separately billable unless modifier -24 (unrelated E/M) or -79 (unrelated procedure) applies.');
+      } else if (gpAlert && !gpAlert.withinGlobal) {
+        alertLines.push('Outside global period (' + gpAlert.daysSince + ' days post-op). E/M is billable.');
+      } else {
+        alertLines.push('Post-op visit: enter surgery date to check global period');
+      }
+    } else {
+      alertLines.push('Verify if within 90-day global period for major surgery');
+    }
+  }
+  if (hasAnyUSGuided()) {
+    alertLines.push('US-guided injection: store permanent ultrasound image');
+  }
+  if (hasWC) {
+    alertLines.push('Workers Comp: document mechanism of injury, employer, date of injury');
+  }
+  if (alertLines.length > 0) {
+    lines.push('ALERTS:');
+    for (var a = 0; a < alertLines.length; a++) {
+      lines.push('! ' + alertLines[a]);
+    }
+  }
+
+  document.getElementById('outputBox').textContent = lines.join('\n');
+}
+
+function hasAnyInjection() {
+  for (var i = 0; i < injData.length; i++) {
+    var cb = document.getElementById('inj_' + i);
+    if (cb && cb.checked) return true;
+  }
+  return false;
+}
+
+function hasAnyPostSurg() {
+  for (var c = 0; c < dxData.length; c++) {
+    if (isCollapsibleCategory(c)) continue;
+    for (var i = 0; i < dxData[c].items.length; i++) {
+      if (dxData[c].items[i].isPostSurg) {
+        var cb = document.getElementById('dx_' + c + '_' + i);
+        if (cb && cb.checked) return true;
+      }
+    }
+  }
+  return false;
+}
+
+function hasAnyUSGuided() {
+  for (var i = 0; i < injData.length; i++) {
+    if (injData[i].usGuided) {
+      var cb = document.getElementById('inj_' + i);
+      if (cb && cb.checked) return true;
+    }
+  }
+  return false;
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  var parts = dateStr.split('-');
+  if (parts.length === 3) {
+    return parts[1] + '/' + parts[2] + '/' + parts[0];
+  }
+  return dateStr;
+}
+
+/* ========== COPY (iOS-compatible) ========== */
+function copySummary() {
+  var text = document.getElementById('outputBox').textContent;
+  if (!text) return;
+
+  var copyBtn = document.getElementById('copyBtn');
+
+  // Try modern clipboard API first
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function() {
+      showCopied(copyBtn);
+    }, function() {
+      fallbackCopy(text, copyBtn);
+    });
+  } else {
+    fallbackCopy(text, copyBtn);
+  }
+}
+
+function fallbackCopy(text, btn) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  ta.style.top = '0';
+  ta.style.opacity = '0';
+  ta.setAttribute('readonly', '');
+  document.body.appendChild(ta);
+
+  // iOS-specific: select range approach
+  var range = document.createRange();
+  var sel = window.getSelection();
+  sel.removeAllRanges();
+  ta.contentEditable = 'true';
+  ta.readOnly = false;
+  range.selectNodeContents(ta);
+  sel.addRange(range);
+  ta.setSelectionRange(0, 999999);
+
+  try {
+    document.execCommand('copy');
+    showCopied(btn);
+  } catch (e) {
+    // If all else fails, select the output box text
+    selectOutputText();
+  }
+
+  document.body.removeChild(ta);
+}
+
+function selectOutputText() {
+  var outputBox = document.getElementById('outputBox');
+  var range = document.createRange();
+  range.selectNodeContents(outputBox);
+  var sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+
+function showCopied(btn) {
+  var orig = btn.textContent;
+  btn.textContent = 'Copied!';
+  btn.className = 'btn btn-copy copied';
+  setTimeout(function() {
+    btn.textContent = orig;
+    btn.className = 'btn btn-copy';
+  }, 1500);
+}
+
+/* ========== CLEAR ========== */
+function clearAll() {
+  // Reset side
+  var sideBtns = document.querySelectorAll('#sideGroup .toggle-btn');
+  for (var i = 0; i < sideBtns.length; i++) {
+    sideBtns[i].className = 'toggle-btn';
+  }
+  sideBtns[0].className = 'toggle-btn active';
+  selectedSide = 'right';
+
+  // Reset visit type
+  var vtBtns = document.querySelectorAll('#visitTypeGroup .toggle-btn');
+  for (var i = 0; i < vtBtns.length; i++) {
+    vtBtns[i].className = 'toggle-btn';
+  }
+  vtBtns[0].className = 'toggle-btn active';
+  visitType = 'established';
+  followupType = 'routine';
+  var fuBtns = document.querySelectorAll('#followupTypeGroup .toggle-btn');
+  for (var f = 0; f < fuBtns.length; f++) {
+    fuBtns[f].className = fuBtns[f].getAttribute('data-val') === 'routine' ? 'toggle-btn active' : 'toggle-btn';
+  }
+  document.getElementById('postop-details').style.display = 'none';
+  document.getElementById('surgery-date').value = '';
+  document.getElementById('postop-procedure').value = '';
+
+  // Reset form
+  document.getElementById('patientName').value = '';
+  document.getElementById('wcCheck').checked = false;
+  setTodayDate();
+
+  // Reset E/M
+  document.getElementById('emProblems').selectedIndex = 0;
+  document.getElementById('emResult').style.display = 'none';
+  currentEMCode = '';
+  currentEMDesc = '';
+
+  // Reset E/M data checkboxes
+  for (var d = 0; d < emDataItems.length; d++) {
+    var dcb = document.getElementById(emDataItems[d].id);
+    if (dcb) dcb.checked = false;
+  }
+
+  // Uncheck all diagnoses, clear per-item side overrides, reset badges
+  dxSide = {};
+  for (var c = 0; c < dxData.length; c++) {
+    for (var i = 0; i < dxData[c].items.length; i++) {
+      var cb = document.getElementById('dx_' + c + '_' + i);
+      if (cb) cb.checked = false;
+      var sideEl = document.getElementById('dxside_' + c + '_' + i);
+      if (sideEl) sideEl.className = 'dx-side';
+    }
+    if (isCollapsibleCategory(c)) {
+      var badge = document.getElementById('dxBadge_' + c);
+      if (badge) badge.className = 'count-badge';
+      var content = document.getElementById('dxCollapse_' + c);
+      if (content) content.className = 'collapsible-content';
+      var arrow = document.getElementById('dxArrow_' + c);
+      if (arrow) arrow.innerHTML = '&#9654;';
+    }
+  }
+
+  // Uncheck all injections and hide med selects
+  for (var i = 0; i < injData.length; i++) {
+    var cb = document.getElementById('inj_' + i);
+    if (cb) cb.checked = false;
+    var sel = document.getElementById('med_' + i);
+    if (sel) { sel.className = 'med-select'; sel.selectedIndex = 0; }
+  }
+
+  // Uncheck other procs
+  for (var i = 0; i < otherProcs.length; i++) {
+    var cb = document.getElementById('oproc_' + i);
+    if (cb) cb.checked = false;
+  }
+
+  // Clear other DX
+  otherDxItems = [];
+  renderOtherDxList();
+
+  // Clear other inputs
+  document.getElementById('otherICD').value = '';
+  document.getElementById('otherDesc').value = '';
+
+  // Collapse collapsible sections
+  collapseSection('inj');
+  collapseSection('oproc');
+
+  // Reset output
+  document.getElementById('outputBox').textContent = 'Select diagnoses and procedures above, then tap "Generate" to build billing summary.';
+
+  // Update codes and alerts
+  updateDxCodes();
+  updateAlerts();
+}
+
+/* ========== DATE HELPER ========== */
+function setTodayDate() {
+  var today = new Date();
+  var yyyy = today.getFullYear();
+  var mm = String(today.getMonth() + 1);
+  var dd = String(today.getDate());
+  if (mm.length < 2) mm = '0' + mm;
+  if (dd.length < 2) dd = '0' + dd;
+  document.getElementById('visitDate').value = yyyy + '-' + mm + '-' + dd;
+}
+
+/* ========== INIT ========== */
+function init() {
+  setTodayDate();
+  renderDxList();
+  renderEmDataChecks();
+  renderInjList();
+  renderOtherProcs();
+  updateAlerts();
+
+  // WC checkbox listener
+  document.getElementById('wcCheck').addEventListener('change', function() {
+    updateAlerts();
+  });
+}
+
+init();
+</script>
+</body>
+</html>

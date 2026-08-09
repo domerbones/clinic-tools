@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1B3A6B">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Checkout">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+
+<title>Patient Checkout Sheet - Dr. Rolf</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
+.header { background: #1B3A6B; color: #fff; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+.header h1 { font-size: 20px; }
+.header span { color: #E8A838; font-size: 13px; }
+.container { max-width: 900px; margin: 18px auto; padding: 0 16px; }
+.panel { background: #fff; border-radius: 8px; padding: 22px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.section-title { font-size: 15px; font-weight: bold; color: #1B3A6B; border-bottom: 2px solid #E8A838; padding-bottom: 4px; margin: 18px 0 8px; }
+.section-title small { font-weight: normal; color: #888; font-size: 12px; }
+.section-title:first-child { margin-top: 0; }
+.row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
+.field { flex: 1; min-width: 150px; }
+.field label { display: block; font-size: 12px; color: #666; font-weight: bold; margin-bottom: 3px; }
+.field input, .field select { width: 100%; padding: 7px 9px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+.chk { display: flex; align-items: center; gap: 8px; padding: 4px 2px; font-size: 14px; }
+.chk input[type=checkbox] { width: 17px; height: 17px; accent-color: #1B3A6B; flex-shrink: 0; }
+.chk .mini { width: 60px; padding: 2px 5px; border: 1px solid #ccc; border-radius: 3px; font-size: 13px; margin: 0 2px; }
+.chk .mini.date { width: 110px; }
+.btn-row { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.btn { padding: 11px 22px; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; }
+.btn-primary { background: #1B3A6B; color: #fff; }
+.btn-secondary { background: #E8A838; color: #1B3A6B; }
+.btn-outline { background: #fff; color: #1B3A6B; border: 2px solid #1B3A6B; }
+.copied-msg { display: none; color: #2E7D32; font-weight: bold; font-size: 14px; margin-left: 6px; }
+.output-panel { display: none; background: #fff; border-radius: 8px; padding: 22px; margin-top: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.output-panel.active { display: block; }
+
+/* Printable handout document */
+.handout { background: #fff; color: #222; }
+.doc-header { text-align: center; border-bottom: 3px solid #1B3A6B; padding-bottom: 8px; margin-bottom: 12px; }
+.doc-practice { font-size: 20px; font-weight: bold; color: #1B3A6B; }
+.doc-title { font-size: 15px; font-weight: bold; color: #333; margin-top: 2px; }
+.doc-sub { font-size: 12px; color: #666; margin-top: 2px; }
+.doc-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+.doc-table td { border: 1px solid #d0d7e2; padding: 4px 8px; font-size: 12.5px; }
+.doc-table td.k { background: #f0f4f8; color: #1B3A6B; font-weight: bold; width: 130px; }
+.doc-sec { margin-bottom: 10px; }
+.doc-sec h3 { font-size: 13px; color: #1B3A6B; border-bottom: 1px solid #E8A838; padding-bottom: 2px; margin-bottom: 4px; }
+.doc-sec ul { margin: 0; padding-left: 20px; }
+.doc-sec li { font-size: 12.5px; margin-bottom: 2px; }
+.doc-warn h3 { color: #C62828; border-bottom-color: #C62828; }
+.doc-warn p { font-size: 12.5px; }
+.doc-footer { margin-top: 16px; padding-top: 8px; border-top: 1px solid #ccc; font-size: 12px; color: #555; }
+.doc-contact { text-align: center; margin-top: 8px; padding-top: 8px; border-top: 2px solid #1B3A6B; font-size: 13px; font-weight: bold; color: #1B3A6B; }
+.doc-contact .lbl { color: #555; font-weight: normal; }
+
+@media print {
+  body { background: #fff; }
+  body * { visibility: hidden; }
+  #handout, #handout * { visibility: visible; }
+  #handout { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; }
+}
+</style>
+</head>
+<body>
+<div class="header"><h1>Patient Checkout Sheet</h1><span>Robert H. Rolf, MD | Beacon Orthopaedics</span></div>
+<div class="container">
+  <div class="panel">
+    <div class="section-title">Patient &amp; Encounter</div>
+    <div class="row">
+      <div class="field"><label>Patient Name</label><input id="p-name"></div>
+      <div class="field"><label>DOB</label><input id="p-dob" placeholder="mm/dd/yyyy"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Date of Surgery</label><input id="p-dos" placeholder="mm/dd/yyyy"></div>
+      <div class="field"><label>Today's Date</label><input id="p-date" type="date"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Procedure</label>
+        <select id="p-proc-sel" onchange="onProcChange()"></select>
+        <input id="p-proc" style="display:none;margin-top:6px" placeholder="Type the procedure"></div>
+      <div class="field" style="max-width:160px"><label>Side</label><select id="p-side"><option>Right</option><option>Left</option><option>Bilateral</option></select></div>
+    </div>
+    <div class="row">
+      <div class="field" style="max-width:220px"><label>Office Phone</label><input id="p-phone" placeholder="(   )    -    "></div>
+    </div>
+
+    <div class="section-title">Post-op visit auto-fill</div>
+    <div class="row"><div class="field" style="max-width:360px"><select id="co-preset-select" onchange="if(this.value!==''){applyPresetCO(parseInt(this.value,10)); this.value='';}"></select></div></div>
+
+    <div id="form-root"></div>
+
+    <div class="section-title">Follow-Up</div>
+    <div class="row">
+      <div class="field"><label>Scheduled appointment (date / time)</label><input id="fu-when" placeholder="optional"></div>
+      <div class="field"><label>Visit is for</label><input id="fu-for" placeholder="suture check, X-ray, etc."></div>
+    </div>
+    <div id="fu-intervals"></div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="generate()">Generate Checkout Sheet</button>
+      <button class="btn btn-outline" onclick="clearAll()">Clear</button>
+    </div>
+  </div>
+
+  <div class="output-panel" id="output-panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+      <h2 style="color:#1B3A6B;">Patient Checkout Sheet</h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" onclick="copyDoc()">Copy</button>
+        <button class="btn btn-outline" onclick="printDoc()">Print</button>
+        <button class="btn btn-outline" onclick="document.getElementById('output-panel').classList.remove('active')">Close</button>
+      </div>
+    </div>
+    <span class="copied-msg" id="copy-msg">Copied to clipboard!</span>
+    <div class="handout" id="handout"></div>
+  </div>
+</div>
+
+<script>
+// ---------- data ----------
+var SECTIONS = [
+  { title: 'Sling / Immobilizer', note: 'choose one', chooseOne: true, items: [
+    { id: 'sl1', tpl: 'Continue sling at all times' },
+    { id: 'sl2', tpl: 'Continue sling until {w} weeks from surgery', inputs: [{ k: 'w', size: 3 }] },
+    { id: 'sl3', tpl: 'Sling for comfort only' },
+    { id: 'sl4', tpl: 'Discontinue sling' }
+  ]},
+  { title: 'Range of Motion / Activity', items: [
+    { id: 'rom1', tpl: 'Pendulum exercises only' },
+    { id: 'rom2', tpl: 'Passive range of motion only (no active motion)' },
+    { id: 'rom3', tpl: 'No active or resisted motion until {w} weeks', inputs: [{ k: 'w', size: 3 }] },
+    { id: 'rom4', tpl: 'No external rotation past {d}°', inputs: [{ k: 'd', size: 3 }] },
+    { id: 'rom5', tpl: 'Begin active range of motion' },
+    { id: 'rom6', tpl: 'No pushing, pulling, or overhead reaching' },
+    { id: 'rom7', tpl: 'Progress activity as tolerated' }
+  ]},
+  { title: 'Lifting', note: 'choose one', chooseOne: true, items: [
+    { id: 'lf1', tpl: 'No lifting greater than {lbs} lbs for {w} weeks', inputs: [{ k: 'lbs', size: 3 }, { k: 'w', size: 3 }] }
+  ]},
+  { title: 'Physical Therapy', items: [
+    { id: 'pt1', tpl: 'Continue physical therapy' },
+    { id: 'pt2', tpl: 'Start physical therapy on {date}', inputs: [{ k: 'date', size: 10, date: true }] },
+    { id: 'pt3', tpl: 'Transition from physical therapy to a home exercise program' },
+    { id: 'pt4', tpl: 'Home exercise program / full protocol at doctorrolf.com' }
+  ]},
+  { title: 'Wound / Incision Care', items: [
+    { id: 'wc1', tpl: 'Keep the dressing clean and dry' },
+    { id: 'wc2', tpl: 'Remove the outer dressing on {date}', inputs: [{ k: 'date', size: 10, date: true }] },
+    { id: 'wc3', tpl: 'Leave steri-strips in place; remove if still present at 2 weeks' },
+    { id: 'wc4', tpl: 'OK to shower on {d1}; no soaking or submerging until {d2}', inputs: [{ k: 'd1', size: 10, date: true }, { k: 'd2', size: 10, date: true }] },
+    { id: 'wc5', tpl: 'Do not apply creams or ointments to the incision' }
+  ]},
+  { title: 'Ice / Swelling', items: [
+    { id: 'ice1', tpl: 'Ice 20 minutes several times daily' },
+    { id: 'ice2', tpl: 'Elevate the arm as able' }
+  ]},
+  { title: 'Medications', items: [
+    { id: 'md1', tpl: 'Take pain medication as prescribed; wean as tolerated' },
+    { id: 'md2', tpl: 'Resume your home medications' },
+    { id: 'md3', tpl: 'Aspirin {mg} mg {freq} for {w} weeks', inputs: [{ k: 'mg', size: 4 }, { k: 'freq', size: 8 }, { k: 'w', size: 3 }] },
+    { id: 'md4', tpl: 'Antibiotic: {name}', inputs: [{ k: 'name', size: 16 }] },
+    { id: 'md5', tpl: 'Do not drive or drink alcohol while taking narcotic pain medication' }
+  ]},
+  { title: 'Driving / Work', items: [
+    { id: 'dw1', tpl: 'No driving while in the sling or on narcotic pain medication' },
+    { id: 'dw2', tpl: 'May return to desk / sedentary work on {date}', inputs: [{ k: 'date', size: 10, date: true }] },
+    { id: 'dw3', tpl: 'Off work until {date} (work note provided)', inputs: [{ k: 'date', size: 10, date: true }] }
+  ]}
+];
+
+var INTERVALS = ['4 weeks', '6 weeks', '3 months', '6 months', '2 years', '5 years', 'as needed'];
+
+// Common shoulder/elbow procedures for the Procedure dropdown (follow-up visits)
+var PROCEDURES = [
+  'Rotator cuff repair',
+  'Rotator cuff repair with biceps tenodesis',
+  'Reverse total shoulder arthroplasty',
+  'Anatomic total shoulder arthroplasty',
+  'Subacromial decompression / acromioplasty',
+  'Biceps tenodesis',
+  'Distal clavicle resection (Mumford)',
+  'Labral / Bankart repair',
+  'SLAP repair',
+  'Superior capsular reconstruction',
+  'Distal biceps repair',
+  'Clavicle ORIF',
+  'Proximal humerus ORIF',
+  'Shoulder arthroscopy (diagnostic)',
+  'Manipulation under anesthesia'
+];
+
+// ---------- rendering ----------
+function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+function labelHtml(item) {
+  // Build the on-screen label with inline inputs replacing {tokens}
+  var html = esc(item.tpl);
+  (item.inputs || []).forEach(function(inp) {
+    var cls = 'mini' + (inp.date ? ' date' : '');
+    var field = '<input class="' + cls + '" id="' + item.id + '_' + inp.k + '" size="' + inp.size + '">';
+    html = html.replace('{' + inp.k + '}', field);
+  });
+  // restore degree symbol if escaped (it wasn't) - leave as-is
+  return html;
+}
+
+function renderForm() {
+  var root = document.getElementById('form-root');
+  var html = '';
+  SECTIONS.forEach(function(sec, si) {
+    html += '<div class="section-title">' + esc(sec.title) + (sec.note ? ' <small>(' + esc(sec.note) + ')</small>' : '') + '</div>';
+    sec.items.forEach(function(item) {
+      var onch = sec.chooseOne ? ' onchange="soloCheck(' + si + ',\'' + item.id + '\')"' : '';
+      html += '<label class="chk"><input type="checkbox" id="chk_' + item.id + '"' + onch + '><span>' + labelHtml(item) + '</span></label>';
+    });
+  });
+  root.innerHTML = html;
+
+  var fu = document.getElementById('fu-intervals');
+  var ih = '<div style="font-size:12px;color:#666;font-weight:bold;margin:4px 0;">Interval</div><div style="display:flex;flex-wrap:wrap;gap:6px 16px;">';
+  INTERVALS.forEach(function(v, i) {
+    ih += '<label class="chk" style="padding:2px"><input type="checkbox" id="fu_' + i + '"><span>' + esc(v) + '</span></label>';
+  });
+  ih += '</div>';
+  fu.innerHTML = ih;
+}
+
+// In a "choose one" section, checking one clears the others
+function soloCheck(si, id) {
+  var box = document.getElementById('chk_' + id);
+  if (!box.checked) return;
+  SECTIONS[si].items.forEach(function(item) {
+    if (item.id !== id) { var o = document.getElementById('chk_' + item.id); if (o) o.checked = false; }
+  });
+}
+
+function v(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+
+// ---------- procedure dropdown ----------
+function initProcedures() {
+  var s = document.getElementById('p-proc-sel'); if (!s) return;
+  var h = '<option value="">— select procedure —</option>';
+  PROCEDURES.forEach(function(p) { h += '<option value="' + esc(p) + '">' + esc(p) + '</option>'; });
+  h += '<option value="__other__">Other (type below)…</option>';
+  s.innerHTML = h;
+}
+// Show the free-text box only when "Other" is chosen
+function onProcChange() {
+  var sel = document.getElementById('p-proc-sel'), txt = document.getElementById('p-proc');
+  if (sel.value === '__other__') { txt.style.display = 'block'; try { txt.focus(); } catch (e) {} }
+  else { txt.style.display = 'none'; txt.value = ''; }
+}
+// Resolve the chosen procedure: dropdown value, or the typed value when "Other"
+function procValue() {
+  var sel = document.getElementById('p-proc-sel');
+  if (!sel) return v('p-proc');
+  if (sel.value === '__other__') return v('p-proc');
+  return sel.value;
+}
+
+// Fill {tokens} in a template with input values (blank -> underline)
+function fillTpl(item) {
+  var t = item.tpl;
+  (item.inputs || []).forEach(function(inp) {
+    var val = v(item.id + '_' + inp.k);
+    t = t.replace('{' + inp.k + '}', val || '______');
+  });
+  return t;
+}
+
+// ---------- generate ----------
+function generate() {
+  var side = v('p-side') || document.getElementById('p-side').value;
+  var rows = [
+    ['Patient', v('p-name') || '—'],
+    ['DOB', v('p-dob') || '—'],
+    ['Date of Surgery', v('p-dos') || '—'],
+    ['Procedure', procValue() || '—'],
+    ['Side', side],
+    ['Today’s Date', v('p-date') || '—']
+  ];
+  var h = '';
+  h += '<div class="doc-header"><div class="doc-practice">Beacon Orthopaedics</div>';
+  h += '<div class="doc-title">Post-Operative Instructions / Patient Checkout</div>';
+  h += '<div class="doc-sub">Robert H. Rolf, MD &mdash; Shoulder &amp; Elbow Surgery</div></div>';
+  h += '<table class="doc-table">';
+  for (var i = 0; i < rows.length; i += 2) {
+    h += '<tr><td class="k">' + esc(rows[i][0]) + '</td><td>' + esc(rows[i][1]) + '</td>';
+    if (rows[i + 1]) h += '<td class="k">' + esc(rows[i + 1][0]) + '</td><td>' + esc(rows[i + 1][1]) + '</td>';
+    h += '</tr>';
+  }
+  h += '</table>';
+
+  // Sections: only checked items
+  SECTIONS.forEach(function(sec) {
+    var picked = sec.items.filter(function(item) { var c = document.getElementById('chk_' + item.id); return c && c.checked; });
+    if (!picked.length) return;
+    h += '<div class="doc-sec"><h3>' + esc(sec.title) + '</h3><ul>';
+    picked.forEach(function(item) { h += '<li>' + esc(fillTpl(item)) + '</li>'; });
+    h += '</ul></div>';
+  });
+
+  // Warning signs (always)
+  var phone = v('p-phone');
+  h += '<div class="doc-sec doc-warn"><h3>When to Call the Office' + (phone ? ' — ' + esc(phone) : '') + '</h3>';
+  h += '<p>Call the office for any of the following: fever over 101.5°F; increasing redness, drainage, or foul odor at the incision; ' +
+       'worsening or uncontrolled pain; or new numbness, tingling, or cold/blue fingers. ' +
+       'For calf pain or swelling, chest pain, or shortness of breath, <b>call 911</b>. ' +
+       'After hours, call the office line or go to the nearest emergency room.</p></div>';
+
+  // Follow-up
+  var ints = [];
+  INTERVALS.forEach(function(val, i) { var c = document.getElementById('fu_' + i); if (c && c.checked) ints.push(val); });
+  var fuLines = [];
+  if (v('fu-when')) fuLines.push('Scheduled: ' + esc(v('fu-when')) + (v('fu-for') ? ' — ' + esc(v('fu-for')) : ''));
+  else if (v('fu-for')) fuLines.push('For: ' + esc(v('fu-for')));
+  if (ints.length) fuLines.push('Return in: ' + ints.map(esc).join(', '));
+  if (fuLines.length) {
+    h += '<div class="doc-sec"><h3>Follow-Up Appointment</h3><ul>';
+    fuLines.forEach(function(l) { h += '<li>' + l + '</li>'; });
+    h += '</ul></div>';
+  }
+
+  h += '<div class="doc-footer">Provider initials: ________   Date: ____________ &nbsp;&nbsp; Full rehab protocols at doctorrolf.com</div>';
+  h += '<div class="doc-contact"><span class="lbl">Questions? Contact</span> Team Rolf &nbsp;&bull;&nbsp; Teamrolf@beaconortho.com &nbsp;&bull;&nbsp; doctorrolf.com</div>';
+
+  document.getElementById('handout').innerHTML = h;
+  var panel = document.getElementById('output-panel');
+  panel.classList.add('active');
+  try { panel.scrollIntoView({ behavior: 'smooth' }); } catch (e) {}
+}
+
+// ---------- copy / print / clear ----------
+function copyDoc() {
+  var text = document.getElementById('handout').innerText;
+  var done = function() { var m = document.getElementById('copy-msg'); if (m) { m.style.display = 'inline'; setTimeout(function() { m.style.display = 'none'; }, 2000); } };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(function() { fallbackCopy(text); done(); });
+  } else { fallbackCopy(text); done(); }
+}
+function fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  try { document.execCommand('copy'); } catch (e) {}
+  document.body.removeChild(ta);
+}
+function printDoc() { window.print(); }
+
+function clearAll() {
+  document.querySelectorAll('#form-root input, #fu-intervals input').forEach(function(el) {
+    if (el.type === 'checkbox') el.checked = false; else el.value = '';
+  });
+  ['p-name','p-dob','p-dos','p-proc','p-phone','fu-when','fu-for'].forEach(function(id){ document.getElementById(id).value=''; });
+  document.getElementById('p-side').selectedIndex = 0;
+  document.getElementById('p-proc-sel').selectedIndex = 0;
+  onProcChange();
+  setToday();
+  document.getElementById('output-panel').classList.remove('active');
+}
+
+function setToday() {
+  var d = new Date();
+  document.getElementById('p-date').value = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+// ---------- post-op presets ----------
+/* Checks patient-facing instructions for each post-op visit. fu index: 0=4wk,1=6wk,2=3mo,3=6mo,4=2yr,5=5yr,6=as needed */
+var PRESETS_CO = [
+  { label:'Post-op #1 (first visit)', checks:[{id:'sl1'},{id:'wc1'},{id:'wc3'},{id:'ice1'}], fu:[1] },
+  { label:'Post-op 6 weeks', checks:[{id:'sl4'},{id:'lf1',inputs:{lbs:'5'}},{id:'pt1'}], fu:[1] },
+  { label:'Post-op 3 months', checks:[{id:'pt3'},{id:'rom5'}], fu:[3] },
+  { label:'Post-op 6 months — rotator cuff', checks:[{id:'pt4'},{id:'rom7'}], fu:[6] },
+  { label:'Post-op 6 months — arthroplasty', checks:[{id:'pt4'},{id:'rom7'}], fu:[5] }
+];
+function initCOPresets(){
+  var s=document.getElementById('co-preset-select'); if(!s) return;
+  var h='<option value="">— choose post-op visit to auto-fill —</option>';
+  PRESETS_CO.forEach(function(pr,i){ h+='<option value="'+i+'">'+pr.label+'</option>'; });
+  s.innerHTML=h;
+}
+function applyPresetCO(idx){
+  document.querySelectorAll('#form-root input[type=checkbox]').forEach(function(c){ c.checked=false; });
+  document.querySelectorAll('#form-root input:not([type=checkbox])').forEach(function(i){ i.value=''; });
+  document.querySelectorAll('#fu-intervals input[type=checkbox]').forEach(function(c){ c.checked=false; });
+  var pr=PRESETS_CO[idx];
+  pr.checks.forEach(function(ck){
+    var box=document.getElementById('chk_'+ck.id); if(box) box.checked=true;
+    if(ck.inputs){ Object.keys(ck.inputs).forEach(function(k){ var inp=document.getElementById(ck.id+'_'+k); if(inp) inp.value=ck.inputs[k]; }); }
+  });
+  (pr.fu||[]).forEach(function(i){ var f=document.getElementById('fu_'+i); if(f) f.checked=true; });
+}
+
+// ---------- init ----------
+renderForm();
+initCOPresets();
+initProcedures();
+setToday();
+</script>
+</body>
+</html>

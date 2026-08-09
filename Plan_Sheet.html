@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1B3A6B">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Plan">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+
+<title>Plan Sheet - Dr. Rolf</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; font-size: 14px; }
+.header { background: #1B3A6B; color: #fff; padding: 14px 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+.header h1 { font-size: 19px; }
+.header span { color: #E8A838; font-size: 12px; }
+.container { max-width: 960px; margin: 16px auto; padding: 0 14px; }
+.panel { background: #fff; border-radius: 8px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.hint { font-size: 12px; color: #666; margin-bottom: 6px; }
+.row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.field { flex: 1; min-width: 120px; }
+.field label { display: block; font-size: 11px; color: #666; font-weight: bold; margin-bottom: 2px; }
+.field input, .field select { width: 100%; padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
+.presets { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 6px 0 10px; }
+.presets .plabel { font-size: 13px; color: #1B3A6B; font-weight: bold; }
+.presets select { padding: 7px 10px; border: 2px solid #E8A838; background: #FFF8E1; color: #1B3A6B; border-radius: 6px; font-size: 13px; font-weight: bold; min-width: 220px; }
+.sec { border: 1px solid #e2e6ee; border-radius: 6px; padding: 8px 10px; margin-top: 9px; }
+.sec-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+.sec-title { font-size: 13px; font-weight: bold; color: #1B3A6B; }
+.picker select { padding: 6px 8px; border: 1px solid #1B3A6B; border-radius: 5px; font-size: 13px; background: #fff; min-width: 180px; max-width: 320px; }
+.cbwrap { display: flex; flex-wrap: wrap; gap: 3px 16px; }
+.chk { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; padding: 3px 2px; cursor: pointer; }
+.chk input[type=checkbox] { width: 16px; height: 16px; accent-color: #1B3A6B; }
+.chk .cin { width: 70px; border: 1px solid #ccc; border-radius: 3px; font-size: 12px; padding: 1px 4px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; background: #E8F0FB; border: 1px solid #1B3A6B; color: #1B3A6B; border-radius: 14px; padding: 3px 9px; font-size: 12.5px; }
+.chip .cin { width: 74px; border: 1px solid #ccc; border-radius: 3px; font-size: 12px; padding: 1px 4px; }
+.chip .x { cursor: pointer; font-weight: bold; color: #C62828; font-size: 14px; line-height: 1; }
+.chip .sbadge { background: #1B3A6B; color: #fff; border-radius: 9px; padding: 0 6px; font-weight: bold; cursor: pointer; font-size: 11px; }
+.moretoggle { margin-top: 12px; padding: 8px 10px; background: #f0f4f8; border: 1px dashed #1B3A6B; border-radius: 6px; color: #1B3A6B; font-weight: bold; font-size: 13px; cursor: pointer; }
+.freebox { width: 100%; padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; resize: vertical; min-height: 40px; }
+.btn-row { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.btn { padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer; }
+.btn-primary { background: #1B3A6B; color: #fff; }
+.btn-secondary { background: #E8A838; color: #1B3A6B; }
+.btn-outline { background: #fff; color: #1B3A6B; border: 2px solid #1B3A6B; }
+.copied-msg { display: none; color: #2E7D32; font-weight: bold; font-size: 13px; margin-left: 6px; }
+.output-panel { display: none; background: #fff; border-radius: 8px; padding: 18px; margin-top: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.output-panel.active { display: block; }
+.plan { background: #fff; color: #222; }
+.plan-header { border-bottom: 3px solid #1B3A6B; padding-bottom: 6px; margin-bottom: 10px; }
+.plan-header .t { font-size: 17px; font-weight: bold; color: #1B3A6B; }
+.plan-header .s { font-size: 12px; color: #666; }
+.plan-line { font-size: 13px; margin-bottom: 4px; line-height: 1.45; }
+.plan-line b { color: #1B3A6B; }
+.outblock { border: 1px solid #e2e6ee; border-radius: 8px; padding: 12px; margin-bottom: 14px; }
+.outhead { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; font-weight: bold; color: #1B3A6B; font-size: 14px; }
+.outhead .btn { padding: 6px 12px; font-size: 12px; }
+.handout { background: #fff; color: #222; }
+.ph-header { border-bottom: 3px solid #1B3A6B; padding-bottom: 6px; margin-bottom: 10px; }
+.ph-header .t { font-size: 17px; font-weight: bold; color: #1B3A6B; }
+.ph-header .s { font-size: 12px; color: #666; }
+.ph-sec { margin-bottom: 8px; font-size: 13px; line-height: 1.45; }
+.ph-sec b { color: #1B3A6B; }
+.ph-warn { color: #C62828; font-weight: bold; }
+.ph-footer { margin-top: 12px; padding-top: 8px; border-top: 2px solid #1B3A6B; text-align: center; font-size: 12.5px; font-weight: bold; color: #1B3A6B; }
+@media print {
+  body { background: #fff; }
+  body.pp-provider * { visibility: hidden; }
+  body.pp-provider #plan, body.pp-provider #plan * { visibility: visible; }
+  body.pp-provider #plan { position: absolute; left: 0; top: 0; width: 100%; }
+  body.pp-patient * { visibility: hidden; }
+  body.pp-patient #patient, body.pp-patient #patient * { visibility: visible; }
+  body.pp-patient #patient { position: absolute; left: 0; top: 0; width: 100%; }
+}
+</style>
+</head>
+<body>
+<div class="header"><h1>Plan Sheet</h1><span>Robert H. Rolf, MD | Beacon Orthopaedics</span></div>
+<div class="container">
+  <div class="panel">
+    <div class="row">
+      <div class="field"><label>Patient</label><input id="p-name"></div>
+      <div class="field" style="max-width:140px"><label>MRN / DOB</label><input id="p-mrn"></div>
+      <div class="field" style="max-width:130px"><label>Date</label><input id="p-date" type="date"></div>
+      <div class="field" style="max-width:140px"><label>Side (default)</label><select id="global-side"><option value="right">Right</option><option value="left">Left</option><option value="bilateral">Bilateral</option></select></div>
+    </div>
+    <div class="presets" id="presets"></div>
+    <div class="hint">Pick a <b>Visit type</b> to auto-fill, then adjust. Checkboxes: tap to select. Dropdown sections (Diagnosis, Injection, Surgery, Other) drop in as tags &mdash; tap the <b>R/L/B</b> badge to change a tag's side.</div>
+    <div id="form-root"></div>
+    <div class="sec">
+      <div class="sec-title">Other / free-text notes</div>
+      <textarea class="freebox" id="p-other" placeholder="Anything not captured above..."></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="generate()">Generate Plan</button>
+      <button class="btn btn-outline" onclick="clearAll()">Clear</button>
+    </div>
+  </div>
+  <div class="output-panel" id="output-panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+      <h2 style="color:#1B3A6B;">Output</h2>
+      <button class="btn btn-outline" onclick="document.getElementById('output-panel').classList.remove('active')">Close</button>
+    </div>
+    <div class="outblock">
+      <div class="outhead"><span>Provider plan &mdash; for Athena</span>
+        <span><button class="btn btn-secondary" onclick="copyPlan()">Copy</button>
+        <button class="btn btn-outline" onclick="printPlan()">Print</button>
+        <span class="copied-msg" id="copy-msg">Copied!</span></span></div>
+      <div class="plan" id="plan"></div>
+    </div>
+    <div class="outblock">
+      <div class="outhead"><span>Patient handout &mdash; print &amp; give</span>
+        <span><button class="btn btn-secondary" onclick="copyPatient()">Copy</button>
+        <button class="btn btn-outline" onclick="printPatient()">Print</button>
+        <span class="copied-msg" id="copy-msg2">Copied!</span></span></div>
+      <div class="handout" id="patient"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+var SECTIONS = [
+  { key:'dx', title:'Diagnosis', drop:true, lat:true, items:[
+    ['Px','pain'],['sprain','sprain'],['strain','strain'],['RCI','rotator cuff impingement'],['RCT','rotator cuff tear'],['pRCT','partial-thickness rotator cuff tear'],
+    ['RCA','rotator cuff arthropathy'],['GHoa','glenohumeral osteoarthritis'],['ACoa','AC joint osteoarthritis'],['Adcap','adhesive capsulitis'],['SLAP','SLAP tear'],
+    ['ALT','anterior labral tear'],['PLT','posterior labral tear'],['PHfx','proximal humerus fracture'],['BT','biceps tendinitis'],['Brupture','biceps rupture'],
+    ['CT','calcific tendinitis'],['D/L','dislocation / instability'],['ClavicleFX','clavicle fracture'],['IrrRTC','irreparable rotator cuff tear'],['GHBL','glenohumeral bone loss'],
+    ['?RCT','possible rotator cuff tear'],['?SLAP','possible SLAP tear'],['S/P','status post'],['DBrupture','distal biceps rupture']
+  ]},
+  { key:'postop', title:'Post-op', items:[
+    ['Reviewed images','reviewed operative / arthroscopy images with the patient'],['Wound check','wound checked, healing appropriately'],
+    ['Steri-strips','remove steri-strips next week if not already off'],['Strength testing','began strength testing'],['Discharge','discharged from care']
+  ]},
+  { key:'dxho', title:'Dx history', prefix:'history of ', more:true, items:[
+    ['RCT','rotator cuff tear'],['GHOA','glenohumeral osteoarthritis'],['RCA','rotator cuff arthropathy'],['ACOA','AC joint osteoarthritis'],['BT','biceps tendinitis'],
+    ['RCI','rotator cuff impingement'],['Adcap','adhesive capsulitis'],['SLAP','SLAP tear'],['ALT','anterior labral tear'],['PLT','posterior labral tear']
+  ]},
+  { key:'sxho', title:'Surgical history', prefix:'prior ', more:true, items:[
+    ['TSA','total shoulder arthroplasty'],['RSA','reverse total shoulder arthroplasty'],['FAQ','FAQ (?)'],['RCR','rotator cuff repair'],['CR','CR (?)'],['OSBT','open subpectoral biceps tenodesis'],['ORIF','ORIF'],['LR','LR (?)']
+  ]},
+  { key:'inj', title:'Injection', drop:true, lat:true, items:[
+    ['suba','subacromial'],['AC','AC joint'],['GH','glenohumeral'],['GH2','glenohumeral (2nd) (?)'],['GH2INB','glenohumeral 2nd + block (?)'],['BT','biceps'],['SSN','suprascapular nerve'],['STB','STB (?)'],['ASP','with aspiration'],['visco','viscosupplementation'],['PRP','PRP']
+  ]},
+  { key:'img', title:'Imaging ordered', items:[
+    ['X-ray','X-ray'],['C-spine X-ray','cervical spine X-ray'],['MRI','MRI'],['MRA','MR arthrogram'],['EMG','EMG'],['CT','CT'],['CTA','CT arthrogram'],['CT w&w/o','CT with and without contrast'],['US','ultrasound'],['Bone scan','bone scan'],['xray marker','X-ray with marker']
+  ]},
+  { key:'pt', title:'Physical therapy', items:[
+    ['Start PT','begin physical therapy'],['Continue PT','continue physical therapy'],['Continue HEP','continue home program'],['PT->HEP','transition from physical therapy to a home program'],['PT 2x6','physical therapy 2×/week for 6 weeks'],
+    ['AAOS','AAOS handout given'],['TSMPA','TSMPA handout given'],['Sleeper stretch','sleeper stretch handout given'],['1st set (RSA)','1st set of exercises handout given (reverse arthroplasty)'],['2nd set (RSA)','2nd set of exercises handout given (reverse arthroplasty)'],['Biceps protocol','biceps therapy protocol handout given (?)']
+  ]},
+  { key:'meds', title:'Medications / treatment', items:[
+    ['Aspirin','aspirin 81 mg PO BID'],['Tylenol','acetaminophen 1000 mg up to 3-4 times daily'],['meloxicam','meloxicam'],['ibuprofen','ibuprofen'],['diclofenac','diclofenac'],['Celebrex','celecoxib'],
+    ['Voltaren gel','diclofenac gel'],['Medrol dose pack','Medrol dose pack'],['Tramadol','tramadol {}','dose'],['Oxycodone','oxycodone {}','dose'],['Norco','hydrocodone-acetaminophen {}','dose'],['Cyclobenzaprine','cyclobenzaprine {}','dose'],['Gabapentin','gabapentin {}','dose'],['Prednisone','prednisone'],['Ice','ice']
+  ]},
+  { key:'dme', title:'DME', items:[ ['Posling','post-op sling'],['simple','simple sling'],['cuffcollar','cuff-and-collar'],['exos','EXOS brace'] ]},
+  { key:'handout', title:'Surgical handouts', items:[
+    ['TSA','total shoulder arthroplasty handout'],['RSA','reverse total shoulder arthroplasty handout'],['RCR','rotator cuff repair handout'],['Instability','instability / Bankart handout'],['SCR','superior capsular reconstruction handout'],['Biceps tenodesis','biceps tenodesis handout'],['Distal biceps','distal biceps repair handout'],['Clavicle ORIF','clavicle ORIF handout'],['PH ORIF','proximal humerus ORIF handout'],['FAQ','frequently asked questions handout']
+  ]},
+  { key:'condition', title:'Condition handouts (info guides)', items:[
+    ['Rotator cuff','rotator cuff information guide'],['Impingement','impingement information guide'],['AC arthritis','AC arthritis information guide'],['Biceps tendinitis','biceps tendinitis information guide'],['SLAP','SLAP tear information guide'],['GH arthritis','glenohumeral arthritis information guide'],['Adhesive capsulitis','adhesive capsulitis information guide'],['Instability','instability information guide'],['RC arthropathy','rotator cuff arthropathy information guide'],['Calcific tendinitis','calcific tendinitis information guide'],['Fracture','fracture information guide'],['Distal biceps','distal biceps information guide']
+  ]},
+  { key:'restrict', title:'Restrictions', items:[
+    ['5 lb','no lifting greater than 5 lb'],['10 lb','no lifting greater than 10 lb'],['15 lb','no lifting greater than 15 lb'],['30 lb','no lifting greater than 30 lb'],['no limit','no lifting restrictions'],['No PPL','no pushing, pulling, or lifting'],['No overhead','no overhead reaching'],['No repetitive','no repetitive motion'],['No driving','no driving'],['Work note','work note provided'],['School note','school note provided'],['ATC note','note for athletic trainer']
+  ]},
+  { key:'surg', title:'Surgery', drop:true, lat:true, nSided:16, items:[
+    ['TSA','total shoulder arthroplasty'],['RSA','reverse total shoulder arthroplasty'],['RCR','rotator cuff repair'],['DCR','distal clavicle resection'],['SAD','subacromial decompression'],['Collagen','collagen patch/graft'],['OSBT','open subpectoral biceps tenodesis'],['BT','biceps tenodesis'],['Labrum','labral repair'],['mRCR','massive rotator cuff repair'],['Subscap','subscapularis repair'],['ORIF','ORIF'],['ROI','removal of implant'],['SCR','superior capsular reconstruction'],['arthro','arthroscopic'],['open','open'],
+    ['ready','ready for surgery'],['thinking','considering surgery'],['ASC','at Beacon ASC'],['GSH','at Good Samaritan'],['MMH','at Margaret Mary'],['inpt','inpatient'],['23','23-hour observation'],['out','outpatient'],['heart','cardiac clearance'],['PCP','PCP clearance'],['lung','pulmonary clearance'],['clearance','{} clearance','other']
+  ]},
+  { key:'fu', title:'Follow-up', items:[
+    ['in ___','return in {}','interval'],['INB','INB (?)'],['PRN','as needed'],['afterimaging','after imaging'],['afterPSI','after PSI planning'],['Call>MRI','call after MRI'],['spine','spine referral'],['hand','hand referral'],['PNS','PNS (?)'],['email','email patient']
+  ]},
+  { key:'other', title:'Other (non-shoulder)', drop:true, more:true, items:[
+    ['knee inj','knee injection'],['pes','pes anserine injection'],['ITB','IT band injection'],['LE','lateral epicondyle injection'],['ME','medial epicondyle injection'],['elbow inj','elbow injection'],['TS','thumb spica brace'],['CUWB','cock-up wrist brace'],['boxer','boxer splint'],['TB','tall boot'],['SB','short boot'],['POknee','post-op knee brace'],['MCL','MCL brace'],['unloader','unloader brace'],['sleeve','sleeve'],['walker','walker'],['crutches','crutches'],['TKA','total knee arthroplasty'],['PMM','partial medial meniscectomy'],['PLM','partial lateral meniscectomy'],['ACL','ACL reconstruction'],['smart','smart (?)']
+  ]}
+];
+var SEC_BY_KEY={}; SECTIONS.forEach(function(s){ SEC_BY_KEY[s.key]=s; });
+
+/* Presets by token so adding items never breaks them. pick = [sectionKey, token, optionalValue] */
+var PRESETS = [
+  // ---- New-visit standards ----
+  { label:'Impingement / bursitis', group:'New visit', picks:[['dx','RCI'],['inj','suba'],['pt','Start PT'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','Impingement'],['fu','in ___','6 weeks']] },
+  { label:'Rotator cuff tear', group:'New visit', picks:[['dx','RCT'],['inj','suba'],['pt','Start PT'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','Rotator cuff'],['fu','in ___','6 weeks']] },
+  { label:'Acute rotator cuff tear', group:'New visit', picks:[['dx','RCT'],['img','MRI'],['surg','thinking'],['condition','Rotator cuff'],['fu','in ___','2 weeks']], note:'Acute tear with dysfunction — expedite MRI and surgical discussion.' },
+  { label:'AC joint arthritis', group:'New visit', picks:[['dx','ACoa'],['inj','AC'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','AC arthritis'],['fu','in ___','6 weeks']] },
+  { label:'Biceps tendinitis', group:'New visit', picks:[['dx','BT'],['inj','BT'],['pt','Start PT'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','Biceps tendinitis'],['fu','in ___','6 weeks']] },
+  { label:'SLAP tear', group:'New visit', picks:[['dx','SLAP'],['inj','suba'],['pt','Start PT'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','SLAP'],['fu','in ___','6 weeks']] },
+  { label:'Glenohumeral arthritis', group:'New visit', picks:[['dx','GHoa'],['pt','Start PT'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','GH arthritis'],['fu','in ___','6 weeks']], note:'GH injection optional if symptomatic.' },
+  { label:'Adhesive capsulitis', group:'New visit', picks:[['dx','Adcap'],['inj','suba'],['pt','PT 2x6'],['pt','Sleeper stretch'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','Adhesive capsulitis'],['fu','in ___','10-12 weeks']], note:'If no better, glenohumeral injection under ultrasound in 2 weeks.' },
+  { label:'Calcific tendinitis', group:'New visit', picks:[['dx','CT'],['inj','suba'],['pt','Start PT'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','Calcific tendinitis'],['fu','in ___','6 weeks']], note:'Consider US-guided barbotage if persists.' },
+  { label:'Instability / dislocation', group:'New visit', picks:[['dx','D/L'],['img','MRA'],['pt','Start PT'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','Instability'],['fu','in ___','6 weeks']], note:'Activity modification; no injection.' },
+  { label:'Rotator cuff arthropathy', group:'New visit', picks:[['dx','RCA'],['pt','Start PT'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','RC arthropathy'],['fu','in ___','6 weeks']], note:'GH injection optional; reverse arthroplasty pathway.' },
+  { label:'Distal biceps rupture', group:'New visit', picks:[['dx','DBrupture'],['img','MRI'],['dme','Posling'],['meds','Tylenol'],['condition','Distal biceps']], note:'Urgent surgical discussion — repair within ~2–3 weeks.' },
+  { label:'Fracture, clavicle — non-op', group:'New visit', picks:[['dx','ClavicleFX'],['dme','Posling'],['meds','Tylenol'],['img','X-ray'],['condition','Fracture'],['fu','in ___','1 week']], note:'Non-operative: weekly X-rays x2 weeks to confirm alignment; start PT after 2 weeks.' },
+  { label:'Fracture, prox humerus — non-op', group:'New visit', picks:[['dx','PHfx'],['dme','Posling'],['meds','Tylenol'],['img','X-ray'],['condition','Fracture'],['fu','in ___','1 week']], note:'Non-operative: weekly X-rays x2 weeks to confirm alignment; start PT after 2 weeks.' },
+  { label:'Fracture, clavicle — surgical', group:'New visit', picks:[['dx','ClavicleFX'],['dme','Posling'],['meds','Tylenol'],['surg','thinking'],['condition','Fracture']], note:'Set up for surgery (ORIF clavicle).' },
+  { label:'Fracture, prox humerus — surgical', group:'New visit', picks:[['dx','PHfx'],['img','CT'],['dme','Posling'],['meds','Tylenol'],['surg','thinking'],['condition','Fracture']], note:'CT to evaluate fracture alignment; set up for surgery.' },
+  { label:'Pre-op discussion', group:'New visit', picks:[['handout','FAQ']] },
+  // ---- Follow-up (per diagnosis) ----
+  { label:'Follow-up (generic)', group:'Follow-up', picks:[['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess response to treatment; continue/adjust PT; repeat injection if the last one helped; escalate to MRI or surgical discussion if failing.' },
+  { label:'Impingement / bursitis — follow-up', group:'Follow-up', picks:[['dx','RCI'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; repeat subacromial injection if it helped; if not better in ~6 wks or injection failed → MRI; surgical discussion if failing.' },
+  { label:'Rotator cuff tear — follow-up', group:'Follow-up', picks:[['dx','RCT'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; repeat subacromial injection if it helped; MRI if failing/weak → surgical discussion.' },
+  { label:'AC joint arthritis — follow-up', group:'Follow-up', picks:[['dx','ACoa'],['fu','in ___','6 weeks']], note:'Reassess; repeat AC injection if it helped; discuss distal clavicle resection if injection fails.' },
+  { label:'Biceps tendinitis — follow-up', group:'Follow-up', picks:[['dx','BT'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; repeat biceps injection if it helped; MRI if persistent; discuss tenodesis if failing.' },
+  { label:'SLAP tear — follow-up', group:'Follow-up', picks:[['dx','SLAP'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; repeat subacromial injection if it helped; MR arthrogram → surgical discussion if failing.' },
+  { label:'Glenohumeral arthritis — follow-up', group:'Follow-up', picks:[['dx','GHoa'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; GH injection if symptomatic; when failing → arthroplasty discussion + CT.' },
+  { label:'Adhesive capsulitis — follow-up', group:'Follow-up', picks:[['dx','Adcap'],['pt','Continue PT'],['fu','in ___','10-12 weeks']], note:'Reassess motion; GH injection under ultrasound if still restricted; consider MUA / capsular release.' },
+  { label:'Calcific tendinitis — follow-up', group:'Follow-up', picks:[['dx','CT'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; repeat subacromial injection if it helped; consider US-guided barbotage or surgery if persistent.' },
+  { label:'Instability / dislocation — follow-up', group:'Follow-up', picks:[['dx','D/L'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess stability; if recurrent → MR arthrogram and surgical stabilization discussion (Bankart / Latarjet).' },
+  { label:'Rotator cuff arthropathy — follow-up', group:'Follow-up', picks:[['dx','RCA'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; GH injection if symptomatic; reverse arthroplasty discussion when failing.' },
+  // ---- Post-op ----
+  { label:'Post-op #1 (first)', group:'Post-op', picks:[['postop','Reviewed images'],['postop','Wound check'],['postop','Steri-strips'],['fu','in ___','4 weeks']] },
+  { label:'Post-op 6 weeks', group:'Post-op', picks:[['restrict','5 lb'],['pt','Continue PT'],['fu','in ___','6 weeks']] },
+  { label:'Post-op 6 weeks — arthroplasty', group:'Post-op', picks:[['restrict','5 lb'],['pt','Continue PT'],['img','X-ray'],['fu','in ___','6 weeks']] },
+  { label:'Post-op 3 months', group:'Post-op', picks:[['postop','Strength testing'],['pt','PT->HEP'],['fu','in ___','3 months']] },
+  { label:'Post-op 6 months — rotator cuff (discharge)', group:'Post-op', picks:[['postop','Discharge'],['fu','PRN']] },
+  { label:'Post-op 6 months — arthroplasty', group:'Post-op', picks:[['img','X-ray'],['fu','in ___','5 years']] }
+];
+
+var chips={};
+var SABBR={right:'R',left:'L',bilateral:'B'}, SIDE_ORDER=['right','left','bilateral'];
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function cleanX(x){ return x.replace('(?)','').trim(); }
+function labelFor(item){ return cleanX(item[1]).replace('{}','').replace(/\s+/g,' ').trim(); }
+function val(id){ var e=document.getElementById(id); return e?e.value.trim():''; }
+function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+function isSided(sec,i){ return !!sec.lat && (sec.nSided===undefined || i<sec.nSided); }
+function tokenIndex(sec,token){ for(var k=0;k<sec.items.length;k++){ if(sec.items[k][0]===token) return k; } return -1; }
+
+function renderSection(sec){
+  var h='<div class="sec"><div class="sec-head"><span class="sec-title">'+esc(sec.title)+(sec.lat?' <small style="font-weight:normal;color:#888">(R/L/B per tag)</small>':'')+'</span>';
+  if(sec.drop){
+    h+='<span class="picker"><select onchange="addChip(\''+sec.key+'\',this)"><option value="">+ add…</option>';
+    sec.items.forEach(function(item,i){ h+='<option value="'+i+'">'+esc(labelFor(item))+'</option>'; });
+    h+='</select></span></div><div class="chips" id="chips_'+sec.key+'"></div></div>';
+  } else {
+    h+='</div><div class="cbwrap">';
+    sec.items.forEach(function(item,i){
+      h+='<label class="chk"><input type="checkbox" id="c_'+sec.key+'_'+i+'"><span>'+esc(item[0])+'</span>';
+      if(item[2]){ h+=' <input class="cin" id="ci_'+sec.key+'_'+i+'" placeholder="'+esc(item[2])+'">'; }
+      h+='</label>';
+    });
+    h+='</div></div>';
+  }
+  return h;
+}
+function renderForm(){
+  var main='', more='';
+  SECTIONS.forEach(function(sec){ if(sec.more) more+=renderSection(sec); else main+=renderSection(sec); });
+  document.getElementById('form-root').innerHTML = main
+    + '<div class="moretoggle" onclick="toggleMore()"><span id="more-arrow">▸</span> More — history &amp; non-shoulder</div>'
+    + '<div id="more-box" style="display:none">'+more+'</div>';
+  // Visit-type dropdown
+  var groups={}, order=[];
+  PRESETS.forEach(function(pr,i){ if(!groups[pr.group]){groups[pr.group]=[];order.push(pr.group);} groups[pr.group].push('<option value="'+i+'">'+esc(pr.label)+'</option>'); });
+  var ph='<span class="plabel">Visit type:</span><select id="preset-select" onchange="if(this.value!==\'\'){applyPreset(parseInt(this.value,10)); this.value=\'\';}"><option value="">— choose to auto-fill —</option>';
+  order.forEach(function(g){ ph+='<optgroup label="'+esc(g)+'">'+groups[g].join('')+'</optgroup>'; });
+  ph+='</select>';
+  document.getElementById('presets').innerHTML=ph;
+  renderAllChips();
+}
+function toggleMore(){ var box=document.getElementById('more-box'), a=document.getElementById('more-arrow'); var open=box.style.display!=='none'; box.style.display=open?'none':'block'; a.textContent=open?'▸':'▾'; }
+
+function addChip(key, sel){
+  var i=sel.value; sel.value=''; if(i==='') return; i=parseInt(i,10);
+  if(!chips[key]) chips[key]=[];
+  if(chips[key].some(function(e){return e.i===i;})) return;
+  var sec=SEC_BY_KEY[key];
+  chips[key].push({i:i, v:'', side: isSided(sec,i)?(val('global-side')||'right'):null});
+  renderChips(key);
+}
+function removeChip(key,pos){ chips[key].splice(pos,1); renderChips(key); }
+function setChipVal(key,pos,v){ if(chips[key]&&chips[key][pos]) chips[key][pos].v=v; }
+function cycleSide(key,pos){ var e=chips[key][pos]; if(e.side===null) return; e.side=SIDE_ORDER[(SIDE_ORDER.indexOf(e.side)+1)%3]; renderChips(key); }
+function renderChips(key){
+  var sec=SEC_BY_KEY[key]; var box=document.getElementById('chips_'+key); if(!box) return; var h='';
+  (chips[key]||[]).forEach(function(e,pos){
+    var item=sec.items[e.i]; h+='<span class="chip">';
+    if(e.side!==null && e.side!==undefined){ h+='<span class="sbadge" title="tap to change side" onclick="cycleSide(\''+key+'\','+pos+')">'+(SABBR[e.side]||'?')+'</span> '; }
+    h+=esc(item[0]);
+    if(item[2]){ h+=' <input class="cin" placeholder="'+esc(item[2])+'" value="'+esc(e.v)+'" oninput="setChipVal(\''+key+'\','+pos+',this.value)">'; }
+    h+=' <span class="x" onclick="removeChip(\''+key+'\','+pos+')">×</span></span>';
+  });
+  box.innerHTML=h;
+}
+function renderAllChips(){ SECTIONS.forEach(function(s){ if(s.drop) renderChips(s.key); }); }
+
+function applyPreset(idx){
+  chips={}; renderForm();
+  document.getElementById('p-other').value = '';
+  var gs=val('global-side')||'right';
+  PRESETS[idx].picks.forEach(function(pk){
+    var key=pk[0], token=pk[1], value=pk[2]||'', sec=SEC_BY_KEY[key]; if(!sec) return;
+    var i=tokenIndex(sec,token); if(i<0) return;
+    if(sec.drop){
+      if(!chips[key]) chips[key]=[];
+      if(chips[key].some(function(e){return e.i===i;})) return;
+      chips[key].push({i:i, v:value, side: isSided(sec,i)?gs:null});
+    } else {
+      var cb=document.getElementById('c_'+key+'_'+i); if(cb) cb.checked=true;
+      if(value){ var ci=document.getElementById('ci_'+key+'_'+i); if(ci) ci.value=value; }
+    }
+  });
+  if(PRESETS[idx].note){ var ob=document.getElementById('p-other'); if(ob) ob.value = PRESETS[idx].note; }
+  renderAllChips();
+}
+
+function expandItem(sec,e){ var item=sec.items[e.i]; var x=cleanX(item[1]); if(item[2]){ x = x.indexOf('{}')>=0 ? x.replace('{}', e.v||'___') : (x+(e.v?' '+e.v:'')); } return x; }
+function collect(sec){
+  if(sec.drop) return chips[sec.key]||[];
+  var arr=[]; sec.items.forEach(function(item,i){ var cb=document.getElementById('c_'+sec.key+'_'+i); if(cb&&cb.checked){ arr.push({i:i, v:val('ci_'+sec.key+'_'+i), side:null}); } }); return arr;
+}
+function sectionText(sec){
+  var arr=collect(sec); if(!arr.length) return '';
+  if(sec.lat){ var groups={}, order=[]; arr.forEach(function(e){ var s=e.side||''; if(!groups[s]){groups[s]=[];order.push(s);} groups[s].push(expandItem(sec,e)); }); return order.map(function(s){ return (s?cap(s)+' — ':'')+groups[s].join(', '); }).join('; '); }
+  var picked=arr.map(function(e){ return expandItem(sec,e); });
+  return (sec.prefix?picked.map(function(p){return sec.prefix+p;}):picked).join(', ');
+}
+function generate(){
+  var lines=[];
+  SECTIONS.forEach(function(sec){ var t=sectionText(sec); if(t) lines.push({label:sec.title, text:t}); });
+  var other=val('p-other');
+  var h='<div class="plan-header"><div class="t">Plan — '+esc(val('p-name')||'[patient]')+'</div>';
+  h+='<div class="s">'+esc(val('p-mrn')?'MRN/DOB: '+val('p-mrn')+'   ':'')+esc(val('p-date')?'Date: '+val('p-date'):'')+'   Robert H. Rolf, MD, Beacon Orthopaedics</div></div>';
+  lines.forEach(function(l){ h+='<div class="plan-line"><b>'+esc(l.label)+':</b> '+esc(l.text)+'</div>'; });
+  if(other){ h+='<div class="plan-line"><b>Other:</b> '+esc(other)+'</div>'; }
+  if(!lines.length && !other){ h+='<div class="plan-line">No items selected.</div>'; }
+  document.getElementById('plan').innerHTML=h;
+  buildPatient();
+  var p=document.getElementById('output-panel'); p.classList.add('active');
+  try{ p.scrollIntoView({behavior:'smooth'}); }catch(e){}
+}
+
+/* Patient-facing handout built from the same selections. */
+function buildPatient(){
+  function exps(key){ var sec=SEC_BY_KEY[key]; return collect(sec).map(function(e){ return expandItem(sec,e); }); }
+  var h='<div class="ph-header"><div class="t">Visit Summary — '+esc(val('p-name')||'[patient]')+'</div>';
+  h+='<div class="s">'+esc(val('p-date')?'Date: '+val('p-date')+'   ':'')+'Robert H. Rolf, MD · Beacon Orthopaedics</div></div>';
+  var dxT=sectionText(SEC_BY_KEY['dx']); if(dxT) h+='<div class="ph-sec"><b>Your diagnosis:</b> '+esc(dxT)+'.</div>';
+  if(exps('condition').length) h+='<div class="ph-sec">We gave you an information sheet about your condition.</div>';
+  var injT=sectionText(SEC_BY_KEY['inj']); if(injT) h+='<div class="ph-sec"><b>Injection today:</b> '+esc(injT)+' cortisone injection. Mild soreness for 1–2 days is normal; ice helps.</div>';
+  var img=exps('img'); if(img.length) h+='<div class="ph-sec"><b>Tests ordered:</b> '+esc(img.join(', '))+'. Our office will call you to schedule.</div>';
+  var meds=exps('meds'); if(meds.length) h+='<div class="ph-sec"><b>Medications:</b> '+esc(meds.join('; '))+'.</div>';
+  var pt=exps('pt'); if(pt.length) h+='<div class="ph-sec"><b>Physical therapy:</b> '+esc(pt.join('; '))+'.</div>';
+  var res=exps('restrict'); if(res.length) h+='<div class="ph-sec"><b>Activity:</b> '+esc(res.join('; '))+'.</div>';
+  var dme=exps('dme'); if(dme.length) h+='<div class="ph-sec"><b>Brace / sling:</b> '+esc(dme.join(', '))+'.</div>';
+  var po=exps('postop'); if(po.length) h+='<div class="ph-sec"><b>After surgery:</b> '+esc(po.join('; '))+'.</div>';
+  var surgT=sectionText(SEC_BY_KEY['surg']); if(surgT) h+='<div class="ph-sec"><b>Surgery:</b> we discussed '+esc(surgT)+'. See the surgery information sheet.</div>';
+  var ho=exps('handout'); if(ho.length) h+='<div class="ph-sec">We gave you: '+esc(ho.join(', '))+'.</div>';
+  var fu=exps('fu'); if(fu.length) h+='<div class="ph-sec"><b>Follow-up:</b> '+esc(fu.join(', '))+'.</div>';
+  var other=val('p-other'); if(other) h+='<div class="ph-sec"><b>Notes:</b> '+esc(other)+'</div>';
+  h+='<div class="ph-sec ph-warn">Call the office for worsening pain, fever, redness or drainage, new numbness, or any concerns.</div>';
+  h+='<div class="ph-footer">Questions? Contact Team Rolf · Teamrolf@beaconortho.com · doctorrolf.com</div>';
+  document.getElementById('patient').innerHTML=h;
+}
+function copyPlan(){ var text=document.getElementById('plan').innerText; var done=function(){ var m=document.getElementById('copy-msg'); if(m){m.style.display='inline'; setTimeout(function(){m.style.display='none';},2000);} }; if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(function(){fb(text);done();}); } else { fb(text); done(); } }
+function fb(text){ var ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.left='-9999px'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); }
+function copyPatient(){
+  var text=document.getElementById('patient').innerText;
+  var done=function(){ var m=document.getElementById('copy-msg2'); if(m){m.style.display='inline'; setTimeout(function(){m.style.display='none';},2000);} };
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(function(){fb(text);done();}); } else { fb(text); done(); }
+}
+function printAs(cls){ document.body.classList.add(cls); window.print(); document.body.classList.remove(cls); }
+function printPlan(){ printAs('pp-provider'); }
+function printPatient(){ printAs('pp-patient'); }
+function clearAll(){ chips={}; renderForm(); ['p-name','p-mrn','p-other'].forEach(function(id){document.getElementById(id).value='';}); document.getElementById('global-side').selectedIndex=0; setToday(); document.getElementById('output-panel').classList.remove('active'); }
+function setToday(){ var d=new Date(); document.getElementById('p-date').value=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+renderForm(); setToday();
+</script>
+</body>
+</html>

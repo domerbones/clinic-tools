@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1B3A6B">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Booking">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+
+<title>Surgery Booking Form - Dr. Rolf</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
+.header { background: #1B3A6B; color: white; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; }
+.header h1 { font-size: 22px; }
+.header span { color: #E8A838; font-size: 14px; }
+.container { max-width: 900px; margin: 20px auto; padding: 0 20px; }
+.form-panel { background: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.section-title { font-size: 16px; font-weight: bold; color: #1B3A6B; border-bottom: 2px solid #E8A838; padding-bottom: 6px; margin: 24px 0 12px 0; }
+.section-title:first-child { margin-top: 0; }
+.row { display: flex; gap: 16px; margin-bottom: 10px; flex-wrap: wrap; }
+.field { flex: 1; min-width: 150px; }
+.field label { display: block; font-size: 12px; color: #666; margin-bottom: 3px; font-weight: bold; }
+.field input, .field select, .field textarea { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; font-family: Arial, sans-serif; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: #1B3A6B; outline: none; box-shadow: 0 0 0 2px rgba(27,58,107,0.15); }
+.field textarea { resize: vertical; min-height: 60px; }
+.field input.required-empty, .field select.required-empty { background: #FFF3E0; border: 2px solid #E8A838; }
+.field input.filled, .field select.filled { background: #E8F5E9; border: 1px solid #66BB6A; }
+.field-small { flex: 0 0 100px; min-width: 100px; }
+.field-med { flex: 0 0 180px; min-width: 180px; }
+.btn-row { margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.btn { padding: 12px 28px; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; }
+.btn-primary { background: #1B3A6B; color: white; }
+.btn-primary:hover { background: #153058; }
+.btn-secondary { background: #E8A838; color: #1B3A6B; }
+.btn-secondary:hover { background: #d4952e; }
+.btn-outline { background: white; color: #1B3A6B; border: 2px solid #1B3A6B; }
+.btn-outline:hover { background: #f0f4f8; }
+.output-panel { display: none; background: white; border-radius: 8px; padding: 30px; margin-top: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.output-panel.active { display: block; }
+.output-panel pre { white-space: pre-wrap; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.6; background: #fafafa; padding: 20px; border-radius: 6px; border: 1px solid #e0e0e0; }
+
+/* Formatted booking document (shown on screen and printed) */
+.booking-doc { background: #fff; color: #222; padding: 8px 4px; }
+.doc-header { text-align: center; border-bottom: 3px solid #1B3A6B; padding-bottom: 10px; margin-bottom: 16px; }
+.doc-practice { font-size: 20px; font-weight: bold; color: #1B3A6B; letter-spacing: 0.5px; }
+.doc-title { font-size: 16px; font-weight: bold; color: #333; margin-top: 2px; }
+.doc-sub { font-size: 13px; color: #666; margin-top: 2px; }
+.doc-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+.doc-table th { text-align: left; width: 170px; padding: 6px 10px; background: #f0f4f8; border: 1px solid #d0d7e2; font-size: 13px; color: #1B3A6B; vertical-align: top; }
+.doc-table td { padding: 6px 10px; border: 1px solid #d0d7e2; font-size: 13px; }
+.doc-section { margin-bottom: 14px; }
+.doc-section h3 { font-size: 14px; color: #1B3A6B; border-bottom: 1px solid #E8A838; padding-bottom: 3px; margin-bottom: 6px; }
+.doc-section ul { margin: 0; padding-left: 20px; }
+.doc-section li { font-size: 13px; margin-bottom: 3px; }
+.doc-section p { font-size: 14px; font-weight: bold; }
+.doc-note { color: #C62828; font-weight: bold; }
+.doc-footer { margin-top: 24px; padding-top: 10px; border-top: 1px solid #ccc; font-size: 13px; color: #333; }
+
+/* Print: show only the formatted booking document, hide everything else. Works on iOS without a pop-up. */
+@media print {
+  body { background: #fff; }
+  body * { visibility: hidden; }
+  #booking-doc, #booking-doc * { visibility: visible; }
+  #booking-doc { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; }
+}
+.copied-msg { display: none; color: #2E7D32; font-weight: bold; margin-left: 12px; font-size: 14px; }
+.checkbox-group { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-bottom: 12px; padding: 8px 0; }
+.checkbox-item { display: flex; align-items: center; gap: 6px; }
+.checkbox-item input[type="checkbox"] { width: 16px; height: 16px; accent-color: #1B3A6B; cursor: pointer; }
+.checkbox-item label { font-size: 13px; cursor: pointer; color: #333; }
+.other-text { width: 160px; padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; margin-left: 4px; }
+.procedure-section { display: none; }
+.procedure-section.active { display: block; }
+.static-field { padding: 8px 10px; background: #f0f4f8; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; color: #666; }
+.revision-note { background: #FFF3E0; border: 2px solid #E8A838; border-radius: 6px; padding: 12px 16px; margin: 12px 0; font-weight: bold; color: #C62828; font-size: 14px; }
+.icd-info { font-size: 12px; color: #888; margin-bottom: 8px; font-style: italic; }
+</style>
+</head>
+<body>
+<div class="header">
+<h1>Surgery Booking Form</h1>
+<span>Robert H. Rolf, MD | Beacon Orthopaedics</span>
+</div>
+<div class="container">
+<div class="form-panel">
+
+<div class="section-title" style="margin-top:0">Common Fields</div>
+<div class="row">
+<div class="field"><label>Patient Name</label><input type="text" id="patient-name"></div>
+<div class="field field-med"><label>Date of Surgery</label><input type="date" id="dos"></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Location</label><select id="location"><option value="Good Samaritan">Good Samaritan</option><option value="Margaret Mary">Margaret Mary</option><option value="Beacon ASC">Beacon ASC</option></select></div>
+<div class="field field-small"><label>Side</label><select id="side"><option value="Right">Right</option><option value="Left">Left</option><option value="Bilateral">Bilateral</option></select></div>
+<div class="field field-med"><label>Block Type</label><select id="block-type"><option value="Interscalene block">Interscalene block</option><option value="Interscalene block with indwelling catheter">Interscalene block with indwelling catheter</option><option value="Interscalene block using Exparel">Interscalene block using Exparel</option></select></div>
+</div>
+<div class="row">
+<div class="field field-small">
+<label>Workers Comp</label>
+<div class="checkbox-group" style="margin:0;padding:4px 0;">
+<div class="checkbox-item"><input type="checkbox" id="workers-comp"><label for="workers-comp">Yes</label></div>
+</div>
+</div>
+<div class="field field-med"><label>Position</label><div class="static-field">Beach Chair</div></div>
+</div>
+
+<div class="section-title">Rep</div>
+<div class="row">
+<div class="field field-med"><label>Rep Company</label><select id="rep-company"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+<div class="field"><label>Rep Name</label><input id="rep-name"></div>
+<div class="field" id="rep-other-field" style="display:none"><label>Other Company</label><input id="rep-other"></div>
+</div>
+
+<div class="section-title">Procedure Selection</div>
+<div class="row">
+<div class="field"><label>Procedure</label>
+<select id="procedure-select" onchange="switchProcedure(this.value)">
+<option value="">-- Select Procedure --</option>
+<option value="tsa">Total Shoulder Arthroplasty (TSA)</option>
+<option value="rtsa">Reverse Total Shoulder Arthroplasty (rTSA)</option>
+<option value="rev-tsa">Revision Total Shoulder Arthroplasty</option>
+<option value="rev-rtsa">Revision Reverse Total Shoulder Arthroplasty</option>
+<option value="bankart">Shoulder Arthroscopy - Instability/Bankart Repair</option>
+<option value="rcr">Shoulder Arthroscopy - Rotator Cuff Repair</option>
+<option value="scope">Shoulder Arthroscopy - Debridement/Scope</option>
+<option value="scr">Superior Capsular Reconstruction (SCR)</option>
+<option value="acj">AC Joint Reconstruction</option>
+<option value="mua">Manipulation Under Anesthesia (MUA)</option>
+<option value="orif-clav">ORIF Clavicle Fracture</option>
+<option value="orif-phum">ORIF Proximal Humerus Fracture</option>
+<option value="hw-removal">Hardware Removal</option>
+<option value="biceps-tenodesis">Biceps Tenodesis (Standalone)</option>
+<option value="latarjet">Latarjet</option>
+<option value="distal-biceps">Distal Biceps Repair</option>
+</select>
+</div>
+</div>
+
+<!-- TSA -->
+<div class="procedure-section" id="sec-tsa">
+<div class="section-title">Total Shoulder Arthroplasty</div>
+<p class="icd-info">ICD-10: M19.011 Primary osteoarthritis, right shoulder / M19.012 Primary osteoarthritis, left shoulder</p>
+<p class="icd-info">CPT: 23472 Total shoulder arthroplasty</p>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="tsa-ct" checked><label for="tsa-ct">CT scan for PSI planning needed</label></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Follow Up</label><select id="tsa-followup"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option></select></div>
+</div>
+<div class="row">
+<div class="field"><label>Implant System</label><input id="tsa-implant" value="Zimmer Biomet Identity"></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Special Equipment</label><select id="tsa-special-equip"><option value="">-- None --</option><option value="Femoral head allograft">Femoral head allograft</option><option value="Augmented baseplate">Augmented baseplate</option><option value="Long stem">Long stem</option><option value="Revision stem system">Revision stem system</option><option value="Other">Other</option></select></div>
+<div class="field field-med"><label>Graft</label><select id="tsa-graft"><option value="">-- None --</option><option value="Femoral head allograft">Femoral head allograft</option><option value="Cancellous bone chips">Cancellous bone chips</option><option value="Dermal allograft">Dermal allograft</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="tsa-equip"></textarea></div>
+</div>
+</div>
+
+<!-- rTSA -->
+<div class="procedure-section" id="sec-rtsa">
+<div class="section-title">Reverse Total Shoulder Arthroplasty</div>
+<p class="icd-info">ICD-10: M75.101 Rotator cuff tear, right / M75.102 Rotator cuff tear, left; M19.011 OA right shoulder / M19.012 OA left shoulder</p>
+<p class="icd-info">CPT: 23472 Reverse total shoulder arthroplasty</p>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="rtsa-ct" checked><label for="rtsa-ct">CT scan for PSI planning needed</label></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Follow Up</label><select id="rtsa-followup"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option></select></div>
+</div>
+<div class="row">
+<div class="field"><label>Implant System</label><input id="rtsa-implant" value="Zimmer Biomet Identity"></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Special Equipment</label><select id="rtsa-special-equip"><option value="">-- None --</option><option value="Femoral head allograft">Femoral head allograft</option><option value="Augmented baseplate">Augmented baseplate</option><option value="Long stem">Long stem</option><option value="Revision stem system">Revision stem system</option><option value="Other">Other</option></select></div>
+<div class="field field-med"><label>Graft</label><select id="rtsa-graft"><option value="">-- None --</option><option value="Femoral head allograft">Femoral head allograft</option><option value="Cancellous bone chips">Cancellous bone chips</option><option value="Dermal allograft">Dermal allograft</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="rtsa-equip"></textarea></div>
+</div>
+</div>
+
+<!-- Revision TSA -->
+<div class="procedure-section" id="sec-rev-tsa">
+<div class="section-title">Revision Total Shoulder Arthroplasty</div>
+<p class="icd-info">ICD-10: T84.010A Mechanical loosening of internal prosthetic joint / T84.018A Other mechanical complication of internal prosthetic joint</p>
+<p class="icd-info">CPT: 23473 Revision, humeral or glenoid / 23474 Revision, humeral and glenoid / 20680 Removal of implant, deep</p>
+<div class="revision-note">*** PLEASE OBTAIN PRIOR OPERATIVE REPORT ***</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="rev-tsa-ct" checked><label for="rev-tsa-ct">CT scan for PSI planning needed</label></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Follow Up</label><select id="rev-tsa-followup"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option></select></div>
+</div>
+<div class="section-title">Special Instruments</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="rev-tsa-osteotome" checked><label for="rev-tsa-osteotome">Flexible osteotome</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rev-tsa-shukla" checked><label for="rev-tsa-shukla">Shukla shoulder removal set</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rev-tsa-prostalac" checked><label for="rev-tsa-prostalac">Osteo Remedies Prostalac</label></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Special Equipment</label><select id="rev-tsa-special-equip"><option value="">-- None --</option><option value="Femoral head allograft">Femoral head allograft</option><option value="Augmented baseplate">Augmented baseplate</option><option value="Long stem">Long stem</option><option value="Revision stem system">Revision stem system</option><option value="Cement">Cement</option><option value="Other">Other</option></select></div>
+<div class="field field-med"><label>Graft</label><select id="rev-tsa-graft"><option value="">-- None --</option><option value="Femoral head allograft">Femoral head allograft</option><option value="Cancellous bone chips">Cancellous bone chips</option><option value="Dermal allograft">Dermal allograft</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="rev-tsa-equip"></textarea></div>
+</div>
+</div>
+
+<!-- Revision rTSA -->
+<div class="procedure-section" id="sec-rev-rtsa">
+<div class="section-title">Revision Reverse Total Shoulder Arthroplasty</div>
+<p class="icd-info">ICD-10: T84.010A Mechanical loosening of internal prosthetic joint / T84.018A Other mechanical complication of internal prosthetic joint</p>
+<p class="icd-info">CPT: 23473 Revision, humeral or glenoid / 23474 Revision, humeral and glenoid / 20680 Removal of implant, deep</p>
+<div class="revision-note">*** PLEASE OBTAIN PRIOR OPERATIVE REPORT ***</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="rev-rtsa-ct" checked><label for="rev-rtsa-ct">CT scan for PSI planning needed</label></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Follow Up</label><select id="rev-rtsa-followup"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option></select></div>
+</div>
+<div class="section-title">Special Instruments</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="rev-rtsa-osteotome" checked><label for="rev-rtsa-osteotome">Flexible osteotome</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rev-rtsa-shukla" checked><label for="rev-rtsa-shukla">Shukla shoulder removal set</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rev-rtsa-prostalac" checked><label for="rev-rtsa-prostalac">Osteo Remedies Prostalac</label></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Special Equipment</label><select id="rev-rtsa-special-equip"><option value="">-- None --</option><option value="Femoral head allograft">Femoral head allograft</option><option value="Augmented baseplate">Augmented baseplate</option><option value="Long stem">Long stem</option><option value="Revision stem system">Revision stem system</option><option value="Cement">Cement</option><option value="Other">Other</option></select></div>
+<div class="field field-med"><label>Graft</label><select id="rev-rtsa-graft"><option value="">-- None --</option><option value="Femoral head allograft">Femoral head allograft</option><option value="Cancellous bone chips">Cancellous bone chips</option><option value="Dermal allograft">Dermal allograft</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="rev-rtsa-equip"></textarea></div>
+</div>
+</div>
+
+<!-- Instability/Bankart -->
+<div class="procedure-section" id="sec-bankart">
+<div class="section-title">Shoulder Arthroscopy - Instability/Bankart Repair</div>
+<p class="icd-info">ICD-10: S43.001A Anterior dislocation right shoulder / S43.002A Anterior dislocation left shoulder; M24.411 Recurrent dislocation right shoulder / M24.412 Recurrent dislocation left shoulder</p>
+<p class="icd-info">CPT: 29806 Arthroscopic capsulorrhaphy</p>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="bankart-slap"><label for="bankart-slap">29807 Arthroscopic SLAP repair (if applicable)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="bankart-remplissage"><label for="bankart-remplissage">Remplissage</label></div>
+</div>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="bankart-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+<div class="field"><label>Rep 1 Name</label><input id="bankart-rep1-name"></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="bankart-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+<div class="field"><label>Rep 2 Name</label><input id="bankart-rep2-name"></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="bankart-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+<div class="field"><label>Rep 3 Name</label><input id="bankart-rep3-name"></div>
+</div>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="bankart-equip"></textarea></div>
+</div>
+</div>
+
+<!-- RCR -->
+<div class="procedure-section" id="sec-rcr">
+<div class="section-title">Shoulder Arthroscopy - Rotator Cuff Repair</div>
+<p class="icd-info">ICD-10: M75.101 Rotator cuff tear right / M75.102 Rotator cuff tear left; M75.111 Incomplete rotator cuff tear right / M75.112 Incomplete rotator cuff tear left</p>
+<p class="icd-info">CPT: 29827 Arthroscopic rotator cuff repair; +29826 Add-on for extensive debridement</p>
+<div class="section-title">Additional Procedures</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="rcr-bk-decompression"><label for="rcr-bk-decompression">Subacromial Decompression (29826)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-bk-acromioplasty"><label for="rcr-bk-acromioplasty">Acromioplasty</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-bk-dcr"><label for="rcr-bk-dcr">Distal Clavicle Resection (29824)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-bk-tenotomy"><label for="rcr-bk-tenotomy">Arthroscopic Biceps Tenotomy</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-bk-tenodesis"><label for="rcr-bk-tenodesis">Open Subpectoral Biceps Tenodesis (23430)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-bk-debridement"><label for="rcr-bk-debridement">Extensive Glenohumeral Debridement</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-carm"><label for="rcr-carm">C-arm needed</label></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Graft / Patch</label><select id="rcr-graft"><option value="">-- None --</option><option value="Arthrex REGENETEN Bioinductive Implant">Arthrex REGENETEN Bioinductive Implant</option><option value="Zimmer Biomet Tapestry RC Biointegrative Implant">Zimmer Biomet Tapestry RC</option><option value="Anika Integrity Rotator Cuff Patch">Anika Integrity Patch</option><option value="Dermal allograft (ArthroFLEX)">Dermal allograft (ArthroFLEX)</option><option value="Other">Other</option></select></div>
+</div>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="rcr-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+<div class="field"><label>Rep 1 Name</label><input id="rcr-rep1-name"></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="rcr-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+<div class="field"><label>Rep 2 Name</label><input id="rcr-rep2-name"></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="rcr-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+<div class="field"><label>Rep 3 Name</label><input id="rcr-rep3-name"></div>
+</div>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="rcr-equip"></textarea></div>
+</div>
+</div>
+
+<!-- Scope/Debridement -->
+<div class="procedure-section" id="sec-scope">
+<div class="section-title">Shoulder Arthroscopy - Debridement/Scope</div>
+<p class="icd-info">ICD-10: M19.011/M19.012 OA; M24.11/M24.12 Loose body; M75.41/M75.42 Impingement</p>
+<p class="icd-info">CPT: 29819 Arthroscopic removal loose body; 29822/29823 Debridement limited/extensive; 29826 Subacromial decompression</p>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="scope-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+<div class="field"><label>Rep 1 Name</label><input id="scope-rep1-name"></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="scope-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+<div class="field"><label>Rep 2 Name</label><input id="scope-rep2-name"></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="scope-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+<div class="field"><label>Rep 3 Name</label><input id="scope-rep3-name"></div>
+</div>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="scope-equip"></textarea></div>
+</div>
+</div>
+
+<!-- SCR -->
+<div class="procedure-section" id="sec-scr">
+<div class="section-title">Superior Capsular Reconstruction (SCR)</div>
+<p class="icd-info">ICD-10: M75.101 Rotator cuff tear right / M75.102 Rotator cuff tear left</p>
+<p class="icd-info">CPT: 29827 (used for SCR)</p>
+<div class="row">
+<div class="field"><label>Graft Type</label><input id="scr-graft" value="Dermal allograft"></div>
+</div>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="scr-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+<div class="field"><label>Rep 1 Name</label><input id="scr-rep1-name"></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="scr-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+<div class="field"><label>Rep 2 Name</label><input id="scr-rep2-name"></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="scr-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+<div class="field"><label>Rep 3 Name</label><input id="scr-rep3-name"></div>
+</div>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="scr-equip"></textarea></div>
+</div>
+</div>
+
+<!-- AC Joint -->
+<div class="procedure-section" id="sec-acj">
+<div class="section-title">AC Joint Reconstruction</div>
+<p class="icd-info">ICD-10: S43.101A AC joint dislocation right / S43.102A AC joint dislocation left</p>
+<p class="icd-info">CPT: 23550 Open treatment AC dislocation</p>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="acj-equip"></textarea></div>
+</div>
+</div>
+
+<!-- MUA -->
+<div class="procedure-section" id="sec-mua">
+<div class="section-title">Manipulation Under Anesthesia (MUA)</div>
+<p class="icd-info">ICD-10: M75.01 Adhesive capsulitis right / M75.02 Adhesive capsulitis left</p>
+<p class="icd-info">CPT: 23700 Manipulation under anesthesia</p>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="mua-equip"></textarea></div>
+</div>
+</div>
+
+<!-- ORIF Clavicle -->
+<div class="procedure-section" id="sec-orif-clav">
+<div class="section-title">ORIF Clavicle Fracture</div>
+<p class="icd-info">CPT: 23515 ORIF clavicle</p>
+<div class="section-title">ICD-10 Diagnosis</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="clav-dx-021A"><label for="clav-dx-021A">S42.021A Displaced fracture of shaft of right clavicle</label></div>
+<div class="checkbox-item"><input type="checkbox" id="clav-dx-022A"><label for="clav-dx-022A">S42.022A Displaced fracture of shaft of left clavicle</label></div>
+<div class="checkbox-item"><input type="checkbox" id="clav-dx-024A"><label for="clav-dx-024A">S42.024A Nondisplaced fracture of shaft of right clavicle</label></div>
+<div class="checkbox-item"><input type="checkbox" id="clav-dx-025A"><label for="clav-dx-025A">S42.025A Nondisplaced fracture of shaft of left clavicle</label></div>
+<div class="checkbox-item"><input type="checkbox" id="clav-dx-031A"><label for="clav-dx-031A">S42.031A Displaced fracture of lateral end of right clavicle</label></div>
+<div class="checkbox-item"><input type="checkbox" id="clav-dx-032A"><label for="clav-dx-032A">S42.032A Displaced fracture of lateral end of left clavicle</label></div>
+<div class="checkbox-item"><input type="checkbox" id="clav-dx-034A"><label for="clav-dx-034A">S42.034A Nondisplaced fracture of lateral end of right clavicle</label></div>
+<div class="checkbox-item"><input type="checkbox" id="clav-dx-035A"><label for="clav-dx-035A">S42.035A Nondisplaced fracture of lateral end of left clavicle</label></div>
+</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="clav-carm" checked><label for="clav-carm">C-arm needed</label></div>
+</div>
+<div class="row">
+<div class="field"><label>Implant</label><input id="clav-implant" value="AccuMed clavicle locking plate"></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Graft</label><select id="clav-graft"><option value="">-- None --</option><option value="Cancellous bone chips">Cancellous bone chips</option><option value="Demineralized bone matrix (DBM)">Demineralized bone matrix (DBM)</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="clav-equip"></textarea></div>
+</div>
+</div>
+
+<!-- ORIF Proximal Humerus -->
+<div class="procedure-section" id="sec-orif-phum">
+<div class="section-title">ORIF Proximal Humerus Fracture</div>
+<p class="icd-info">CPT: 23615 ORIF proximal humerus</p>
+<div class="section-title">ICD-10 Diagnosis</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="phum-dx-211A"><label for="phum-dx-211A">S42.211A Displaced fracture of surgical neck of right humerus</label></div>
+<div class="checkbox-item"><input type="checkbox" id="phum-dx-212A"><label for="phum-dx-212A">S42.212A Displaced fracture of surgical neck of left humerus</label></div>
+<div class="checkbox-item"><input type="checkbox" id="phum-dx-214A"><label for="phum-dx-214A">S42.214A Nondisplaced fracture of surgical neck of right humerus</label></div>
+<div class="checkbox-item"><input type="checkbox" id="phum-dx-215A"><label for="phum-dx-215A">S42.215A Nondisplaced fracture of surgical neck of left humerus</label></div>
+<div class="checkbox-item"><input type="checkbox" id="phum-dx-221A"><label for="phum-dx-221A">S42.221A 2-part fracture of surgical neck of right humerus</label></div>
+<div class="checkbox-item"><input type="checkbox" id="phum-dx-222A"><label for="phum-dx-222A">S42.222A 2-part fracture of surgical neck of left humerus</label></div>
+<div class="checkbox-item"><input type="checkbox" id="phum-dx-231A"><label for="phum-dx-231A">S42.231A 3-part fracture of surgical neck of right humerus</label></div>
+<div class="checkbox-item"><input type="checkbox" id="phum-dx-232A"><label for="phum-dx-232A">S42.232A 3-part fracture of surgical neck of left humerus</label></div>
+<div class="checkbox-item"><input type="checkbox" id="phum-dx-241A"><label for="phum-dx-241A">S42.241A 4-part fracture of surgical neck of right humerus</label></div>
+<div class="checkbox-item"><input type="checkbox" id="phum-dx-242A"><label for="phum-dx-242A">S42.242A 4-part fracture of surgical neck of left humerus</label></div>
+<div class="checkbox-item"><input type="checkbox" id="phum-dx-251A"><label for="phum-dx-251A">S42.251A Displaced fracture of greater tuberosity of right humerus</label></div>
+<div class="checkbox-item"><input type="checkbox" id="phum-dx-252A"><label for="phum-dx-252A">S42.252A Displaced fracture of greater tuberosity of left humerus</label></div>
+<div class="checkbox-item"><input type="checkbox" id="phum-dx-254A"><label for="phum-dx-254A">S42.254A Nondisplaced fracture of greater tuberosity of right humerus</label></div>
+<div class="checkbox-item"><input type="checkbox" id="phum-dx-255A"><label for="phum-dx-255A">S42.255A Nondisplaced fracture of greater tuberosity of left humerus</label></div>
+</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="phum-carm" checked><label for="phum-carm">C-arm needed</label></div>
+<div class="checkbox-item"><input type="checkbox" id="phum-ct"><label for="phum-ct">CT scan needed</label></div>
+</div>
+<div class="row">
+<div class="field"><label>Implant</label><input id="phum-implant" value="Zimmer Biomet proximal humerus locking plate"></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Special Equipment</label><select id="phum-special-equip"><option value="">-- None --</option><option value="Fibular strut allograft">Fibular strut allograft</option><option value="Femoral head allograft">Femoral head allograft</option><option value="Cement">Cement</option><option value="Other">Other</option></select></div>
+<div class="field field-med"><label>Graft</label><select id="phum-graft"><option value="">-- None --</option><option value="Fibular strut allograft">Fibular strut allograft</option><option value="Cancellous bone chips">Cancellous bone chips</option><option value="Femoral head allograft">Femoral head allograft</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="phum-equip"></textarea></div>
+</div>
+</div>
+
+<!-- Hardware Removal -->
+<div class="procedure-section" id="sec-hw-removal">
+<div class="section-title">Hardware Removal</div>
+<p class="icd-info">ICD-10: T84.498A Other mechanical complication of internal fixation; Z47.2 Encounter for removal of internal fixation device</p>
+<p class="icd-info">CPT: 20680 Removal of implant, deep</p>
+<div class="revision-note">*** PLEASE OBTAIN PRIOR OPERATIVE REPORT ***</div>
+<div class="row">
+<div class="field"><label>Location of Hardware</label><input type="text" id="hw-location"></div>
+</div>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="hw-equip"></textarea></div>
+</div>
+</div>
+
+<!-- Biceps Tenodesis (Standalone) -->
+<div class="procedure-section" id="sec-biceps-tenodesis">
+<div class="section-title">Biceps Tenodesis (Standalone)</div>
+<p class="icd-info">ICD-10: M75.21 Bicipital tendinitis right / M75.22 Bicipital tendinitis left; S46.111A Strain of tendon of biceps right / S46.112A Strain of tendon of biceps left</p>
+<p class="icd-info">CPT: 23430 Tenodesis of long tendon of biceps</p>
+<div class="row">
+<div class="field"><label>Implant</label><input id="bten-implant" value="Arthrex FiberTak 1.8 mm double-loaded anchor"></div>
+</div>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="bten-equip"></textarea></div>
+</div>
+</div>
+
+<!-- Latarjet -->
+<div class="procedure-section" id="sec-latarjet">
+<div class="section-title">Latarjet</div>
+<p class="icd-info">ICD-10: M24.411 Recurrent dislocation right shoulder / M24.412 Recurrent dislocation left shoulder; S43.001A Anterior dislocation right shoulder</p>
+<p class="icd-info">CPT: 23460 Capsulorrhaphy, anterior, with bone block</p>
+<div class="row">
+<div class="field"><label>Special Instruments</label><input id="latarjet-instruments" value="Latarjet-specific instrumentation"></div>
+</div>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="latarjet-equip"></textarea></div>
+</div>
+</div>
+
+<!-- Distal Biceps Repair -->
+<div class="procedure-section" id="sec-distal-biceps">
+<div class="section-title">Distal Biceps Repair</div>
+<p class="icd-info">ICD-10: S56.111A Strain of flexor muscle at forearm level right / S56.112A Strain of flexor muscle at forearm level left; S46.111A Strain of biceps tendon right</p>
+<p class="icd-info">CPT: 24342 Reinsertion of ruptured biceps tendon, distal</p>
+<div class="row">
+<div class="field"><label>Implant</label><input id="distal-biceps-implant" value="Arthrex Biceps Button"></div>
+</div>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="distal-biceps-equip"></textarea></div>
+</div>
+</div>
+
+<div class="btn-row">
+<button class="btn btn-primary" onclick="generateBooking()">Generate Booking Form</button>
+<button class="btn btn-outline" onclick="resetForm()">Clear Form</button>
+<span class="copied-msg" id="gen-copied">Generated!</span>
+</div>
+
+</div>
+
+<!-- OUTPUT -->
+<div class="output-panel" id="output-panel">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+<h2 style="color:#1B3A6B;">Surgery Booking Form</h2>
+<div style="display:flex;gap:8px;flex-wrap:wrap;">
+<button class="btn btn-secondary" onclick="copyReport()">Copy to Clipboard</button>
+<button class="btn btn-secondary" onclick="copyAndReset()">Copy &amp; Reset</button>
+<button class="btn btn-outline" onclick="printReport()">Print</button>
+<button class="btn btn-outline" onclick="document.getElementById('output-panel').classList.remove('active')">Close</button>
+</div>
+</div>
+<span class="copied-msg" id="copy-msg">Copied to clipboard!</span>
+<span class="copied-msg" id="copy-reset-msg">Copied &amp; Reset!</span>
+<div class="booking-doc" id="booking-doc"></div>
+<pre id="report-output" style="display:none;"></pre>
+</div>
+
+</div>
+
+<script>
+function v(id) {
+  var el = document.getElementById(id);
+  return el ? el.value : '';
+}
+function ck(id) {
+  var el = document.getElementById(id);
+  return el ? el.checked : false;
+}
+
+function todayStr() {
+  var d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function getProcReps(prefix) {
+  var reps = [];
+  for (var i = 1; i <= 3; i++) {
+    var co = v(prefix + '-rep' + i + '-co');
+    var name = v(prefix + '-rep' + i + '-name');
+    if (co) {
+      reps.push(co + (name.trim() ? ' - ' + name.trim() : ''));
+    }
+  }
+  return reps;
+}
+
+function switchProcedure(val) {
+  document.querySelectorAll('.procedure-section').forEach(function(s) {
+    s.classList.remove('active');
+  });
+  if (val) {
+    var sec = document.getElementById('sec-' + val);
+    if (sec) sec.classList.add('active');
+  }
+}
+
+function getCheckedDiagnoses(prefix, items) {
+  var results = [];
+  items.forEach(function(item) {
+    if (ck(prefix + item.id)) {
+      results.push(item.label);
+    }
+  });
+  return results;
+}
+
+function getProcedureName(val) {
+  var names = {
+    'tsa': 'Total Shoulder Arthroplasty (TSA)',
+    'rtsa': 'Reverse Total Shoulder Arthroplasty (rTSA)',
+    'rev-tsa': 'Revision Total Shoulder Arthroplasty',
+    'rev-rtsa': 'Revision Reverse Total Shoulder Arthroplasty',
+    'bankart': 'Shoulder Arthroscopy - Instability/Bankart Repair',
+    'rcr': 'Shoulder Arthroscopy - Rotator Cuff Repair',
+    'scope': 'Shoulder Arthroscopy - Debridement/Scope',
+    'scr': 'Superior Capsular Reconstruction (SCR)',
+    'acj': 'AC Joint Reconstruction',
+    'mua': 'Manipulation Under Anesthesia (MUA)',
+    'orif-clav': 'ORIF Clavicle Fracture',
+    'orif-phum': 'ORIF Proximal Humerus Fracture',
+    'hw-removal': 'Hardware Removal',
+    'biceps-tenodesis': 'Biceps Tenodesis (Standalone)',
+    'latarjet': 'Latarjet',
+    'distal-biceps': 'Distal Biceps Repair'
+  };
+  return names[val] || '';
+}
+
+function esc(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// Build the clean, printable booking-form document (HTML) from the current inputs.
+function renderBookingDoc(proc, side) {
+  var repCo = v('rep-company');
+  if (repCo === 'Other') repCo = v('rep-other') || 'Other';
+  var repStr = repCo ? (repCo + (v('rep-name').trim() ? ' - ' + v('rep-name').trim() : '')) : '—';
+  var rows = [
+    ['Patient', v('patient-name') || '—'],
+    ['Date of Surgery', v('dos') || '—'],
+    ['Location', v('location')],
+    ['Side', side],
+    ['Workers Comp', ck('workers-comp') ? 'Yes' : 'No'],
+    ['Position', 'Beach Chair'],
+    ['Block Type', v('block-type')],
+    ['Rep', repStr]
+  ];
+  var h = '';
+  h += '<div class="doc-header"><div class="doc-practice">Beacon Orthopaedics</div>';
+  h += '<div class="doc-title">Surgical Booking Form</div><div class="doc-sub">Robert H. Rolf, MD</div></div>';
+  h += '<table class="doc-table">';
+  rows.forEach(function(r) { h += '<tr><th>' + esc(r[0]) + '</th><td>' + esc(r[1]) + '</td></tr>'; });
+  h += '</table>';
+  h += '<div class="doc-section"><h3>Procedure</h3><p>' + esc(getProcedureName(proc)) + '</p></div>';
+  var dx = getDiagnosisLines(proc, side);
+  h += '<div class="doc-section"><h3>Preoperative Diagnosis / ICD-10</h3><ul>' +
+       dx.map(function(d) { return '<li>' + esc(d) + '</li>'; }).join('') + '</ul></div>';
+  var cpt = getCPTLines(proc);
+  h += '<div class="doc-section"><h3>CPT Code(s)</h3><ul>' +
+       cpt.map(function(c) { return '<li>' + esc(c) + '</li>'; }).join('') + '</ul></div>';
+  var det = getProcedureDetails(proc, side);
+  if (det.length) {
+    h += '<div class="doc-section"><h3>Details</h3><ul>' +
+         det.map(function(d) {
+           var cls = d.indexOf('***') !== -1 ? ' class="doc-note"' : '';
+           return '<li' + cls + '>' + esc(d) + '</li>';
+         }).join('') + '</ul></div>';
+  }
+  h += '<div class="doc-footer">Booked by: Robert H. Rolf, MD</div>';
+  return h;
+}
+
+function generateBooking() {
+  try {
+  var proc = v('procedure-select');
+  if (!proc) {
+    alert('Please select a procedure.');
+    return;
+  }
+
+  var side = v('side');
+  var lines = [];
+
+  lines.push('========================================');
+  lines.push('       SURGERY BOOKING FORM');
+  lines.push('========================================');
+  lines.push('');
+  lines.push('Patient: ' + v('patient-name'));
+  lines.push('Date of Surgery: ' + v('dos'));
+  lines.push('Location: ' + v('location'));
+  lines.push('Side: ' + side);
+  lines.push('Workers Comp: ' + (ck('workers-comp') ? 'Yes' : 'No'));
+  lines.push('Position: Beach Chair');
+  lines.push('Block Type: ' + v('block-type'));
+  var repCo = v('rep-company');
+  if (repCo === 'Other') repCo = v('rep-other') || 'Other';
+  if (repCo) {
+    var repLine = 'Rep: ' + repCo;
+    if (v('rep-name').trim()) repLine += ' - ' + v('rep-name');
+    lines.push(repLine);
+  }
+  lines.push('');
+  lines.push('Procedure: ' + getProcedureName(proc));
+  lines.push('');
+
+  // Preoperative Diagnosis with ICD-10
+  lines.push('PREOPERATIVE DIAGNOSIS / ICD-10:');
+  var dxLines = getDiagnosisLines(proc, side);
+  dxLines.forEach(function(d) { lines.push('  ' + d); });
+  lines.push('');
+
+  // CPT
+  lines.push('CPT CODE(S):');
+  var cptLines = getCPTLines(proc);
+  cptLines.forEach(function(c) { lines.push('  ' + c); });
+  lines.push('');
+
+  // Procedure-specific details
+  var details = getProcedureDetails(proc, side);
+  if (details.length > 0) {
+    details.forEach(function(d) { lines.push(d); });
+    lines.push('');
+  }
+
+  lines.push('Booked by: Robert H. Rolf, MD');
+  lines.push('========================================');
+
+  var report = lines.join('\n');
+  document.getElementById('report-output').textContent = report;
+  document.getElementById('booking-doc').innerHTML = renderBookingDoc(proc, side);
+  document.getElementById('output-panel').style.display = 'block';
+  document.getElementById('output-panel').className = 'output-panel active';
+  try { document.getElementById('output-panel').scrollIntoView({ behavior: 'smooth' }); } catch(e) { document.getElementById('output-panel').scrollIntoView(true); }
+  } catch(err) {
+    alert('Error generating form: ' + err.message);
+  }
+}
+
+function getDiagnosisLines(proc, side) {
+  var dx = [];
+  var s = side === 'Right' ? 'right' : 'left';
+
+  switch(proc) {
+    case 'tsa':
+      if (side === 'Right' || side === 'Bilateral') dx.push('M19.011 - Primary osteoarthritis, right shoulder');
+      if (side === 'Left' || side === 'Bilateral') dx.push('M19.012 - Primary osteoarthritis, left shoulder');
+      break;
+    case 'rtsa':
+      if (side === 'Right' || side === 'Bilateral') {
+        dx.push('M75.101 - Rotator cuff tear, right shoulder');
+        dx.push('M19.011 - Primary osteoarthritis, right shoulder');
+      }
+      if (side === 'Left' || side === 'Bilateral') {
+        dx.push('M75.102 - Rotator cuff tear, left shoulder');
+        dx.push('M19.012 - Primary osteoarthritis, left shoulder');
+      }
+      break;
+    case 'rev-tsa':
+    case 'rev-rtsa':
+      dx.push('T84.010A - Mechanical loosening of internal prosthetic joint');
+      dx.push('T84.018A - Other mechanical complication of internal prosthetic joint');
+      break;
+    case 'bankart':
+      if (side === 'Right' || side === 'Bilateral') {
+        dx.push('S43.001A - Anterior dislocation, right shoulder');
+        dx.push('M24.411 - Recurrent dislocation, right shoulder');
+      }
+      if (side === 'Left' || side === 'Bilateral') {
+        dx.push('S43.002A - Anterior dislocation, left shoulder');
+        dx.push('M24.412 - Recurrent dislocation, left shoulder');
+      }
+      break;
+    case 'rcr':
+      if (side === 'Right' || side === 'Bilateral') {
+        dx.push('M75.101 - Rotator cuff tear, right shoulder');
+        dx.push('M75.111 - Incomplete rotator cuff tear, right shoulder');
+      }
+      if (side === 'Left' || side === 'Bilateral') {
+        dx.push('M75.102 - Rotator cuff tear, left shoulder');
+        dx.push('M75.112 - Incomplete rotator cuff tear, left shoulder');
+      }
+      break;
+    case 'scope':
+      if (side === 'Right' || side === 'Bilateral') {
+        dx.push('M19.011 - Primary osteoarthritis, right shoulder');
+        dx.push('M24.11 - Loose body, right shoulder');
+        dx.push('M75.41 - Impingement syndrome, right shoulder');
+      }
+      if (side === 'Left' || side === 'Bilateral') {
+        dx.push('M19.012 - Primary osteoarthritis, left shoulder');
+        dx.push('M24.12 - Loose body, left shoulder');
+        dx.push('M75.42 - Impingement syndrome, left shoulder');
+      }
+      break;
+    case 'scr':
+      if (side === 'Right' || side === 'Bilateral') dx.push('M75.101 - Rotator cuff tear, right shoulder');
+      if (side === 'Left' || side === 'Bilateral') dx.push('M75.102 - Rotator cuff tear, left shoulder');
+      break;
+    case 'acj':
+      if (side === 'Right' || side === 'Bilateral') dx.push('S43.101A - AC joint dislocation, right');
+      if (side === 'Left' || side === 'Bilateral') dx.push('S43.102A - AC joint dislocation, left');
+      break;
+    case 'mua':
+      if (side === 'Right' || side === 'Bilateral') dx.push('M75.01 - Adhesive capsulitis, right shoulder');
+      if (side === 'Left' || side === 'Bilateral') dx.push('M75.02 - Adhesive capsulitis, left shoulder');
+      break;
+    case 'orif-clav':
+      var clavDx = [
+        {id:'021A', label:'S42.021A - Displaced fracture of shaft of right clavicle'},
+        {id:'022A', label:'S42.022A - Displaced fracture of shaft of left clavicle'},
+        {id:'024A', label:'S42.024A - Nondisplaced fracture of shaft of right clavicle'},
+        {id:'025A', label:'S42.025A - Nondisplaced fracture of shaft of left clavicle'},
+        {id:'031A', label:'S42.031A - Displaced fracture of lateral end of right clavicle'},
+        {id:'032A', label:'S42.032A - Displaced fracture of lateral end of left clavicle'},
+        {id:'034A', label:'S42.034A - Nondisplaced fracture of lateral end of right clavicle'},
+        {id:'035A', label:'S42.035A - Nondisplaced fracture of lateral end of left clavicle'}
+      ];
+      clavDx.forEach(function(item) {
+        if (ck('clav-dx-' + item.id)) dx.push(item.label);
+      });
+      if (dx.length === 0) dx.push('(No ICD-10 diagnosis selected)');
+      break;
+    case 'orif-phum':
+      var phumDx = [
+        {id:'211A', label:'S42.211A - Displaced fracture of surgical neck of right humerus'},
+        {id:'212A', label:'S42.212A - Displaced fracture of surgical neck of left humerus'},
+        {id:'214A', label:'S42.214A - Nondisplaced fracture of surgical neck of right humerus'},
+        {id:'215A', label:'S42.215A - Nondisplaced fracture of surgical neck of left humerus'},
+        {id:'221A', label:'S42.221A - 2-part fracture of surgical neck of right humerus'},
+        {id:'222A', label:'S42.222A - 2-part fracture of surgical neck of left humerus'},
+        {id:'231A', label:'S42.231A - 3-part fracture of surgical neck of right humerus'},
+        {id:'232A', label:'S42.232A - 3-part fracture of surgical neck of left humerus'},
+        {id:'241A', label:'S42.241A - 4-part fracture of surgical neck of right humerus'},
+        {id:'242A', label:'S42.242A - 4-part fracture of surgical neck of left humerus'},
+        {id:'251A', label:'S42.251A - Displaced fracture of greater tuberosity of right humerus'},
+        {id:'252A', label:'S42.252A - Displaced fracture of greater tuberosity of left humerus'},
+        {id:'254A', label:'S42.254A - Nondisplaced fracture of greater tuberosity of right humerus'},
+        {id:'255A', label:'S42.255A - Nondisplaced fracture of greater tuberosity of left humerus'}
+      ];
+      phumDx.forEach(function(item) {
+        if (ck('phum-dx-' + item.id)) dx.push(item.label);
+      });
+      if (dx.length === 0) dx.push('(No ICD-10 diagnosis selected)');
+      break;
+    case 'hw-removal':
+      dx.push('T84.498A - Other mechanical complication of internal fixation');
+      dx.push('Z47.2 - Encounter for removal of internal fixation device');
+      break;
+    case 'biceps-tenodesis':
+      if (side === 'Right' || side === 'Bilateral') {
+        dx.push('M75.21 - Bicipital tendinitis, right shoulder');
+        dx.push('S46.111A - Strain of tendon of biceps, right');
+      }
+      if (side === 'Left' || side === 'Bilateral') {
+        dx.push('M75.22 - Bicipital tendinitis, left shoulder');
+        dx.push('S46.112A - Strain of tendon of biceps, left');
+      }
+      break;
+    case 'latarjet':
+      if (side === 'Right' || side === 'Bilateral') {
+        dx.push('M24.411 - Recurrent dislocation, right shoulder');
+        dx.push('S43.001A - Anterior dislocation, right shoulder');
+      }
+      if (side === 'Left' || side === 'Bilateral') {
+        dx.push('M24.412 - Recurrent dislocation, left shoulder');
+      }
+      break;
+    case 'distal-biceps':
+      if (side === 'Right' || side === 'Bilateral') {
+        dx.push('S56.111A - Strain of flexor muscle at forearm level, right');
+        dx.push('S46.111A - Strain of biceps tendon, right');
+      }
+      if (side === 'Left' || side === 'Bilateral') {
+        dx.push('S56.112A - Strain of flexor muscle at forearm level, left');
+      }
+      break;
+  }
+  return dx;
+}
+
+function getCPTLines(proc) {
+  var cpt = [];
+  switch(proc) {
+    case 'tsa':
+      cpt.push('23472 - Total shoulder arthroplasty');
+      break;
+    case 'rtsa':
+      cpt.push('23472 - Reverse total shoulder arthroplasty');
+      break;
+    case 'rev-tsa':
+    case 'rev-rtsa':
+      cpt.push('23473 - Revision of total shoulder arthroplasty, humeral or glenoid component');
+      cpt.push('23474 - Revision of total shoulder arthroplasty, humeral and glenoid component');
+      break;
+    case 'bankart':
+      cpt.push('29806 - Arthroscopic capsulorrhaphy');
+      if (ck('bankart-slap')) cpt.push('29807 - Arthroscopic SLAP repair');
+      break;
+    case 'rcr':
+      cpt.push('29827 - Arthroscopic rotator cuff repair');
+      cpt.push('+29826 - Add-on for extensive debridement');
+      break;
+    case 'scope':
+      cpt.push('29819 - Arthroscopic removal loose body');
+      cpt.push('29822/29823 - Debridement limited/extensive');
+      cpt.push('29826 - Subacromial decompression');
+      break;
+    case 'scr':
+      cpt.push('29827 - Superior capsular reconstruction');
+      break;
+    case 'acj':
+      cpt.push('23550 - Open treatment AC dislocation');
+      break;
+    case 'mua':
+      cpt.push('23700 - Manipulation under anesthesia');
+      break;
+    case 'orif-clav':
+      cpt.push('23515 - ORIF clavicle');
+      break;
+    case 'orif-phum':
+      cpt.push('23615 - ORIF proximal humerus');
+      break;
+    case 'hw-removal':
+      cpt.push('20680 - Removal of implant, deep');
+      break;
+    case 'biceps-tenodesis':
+      cpt.push('23430 - Tenodesis of long tendon of biceps');
+      break;
+    case 'latarjet':
+      cpt.push('23460 - Capsulorrhaphy, anterior, with bone block');
+      break;
+    case 'distal-biceps':
+      cpt.push('24342 - Reinsertion of ruptured biceps tendon, distal');
+      break;
+  }
+  return cpt;
+}
+
+function getProcedureDetails(proc, side) {
+  var details = [];
+
+  switch(proc) {
+    case 'tsa':
+      if (ck('tsa-ct')) details.push('CT Scan for PSI Planning: Yes');
+      details.push('Follow Up: ' + v('tsa-followup'));
+      details.push('Implant System: ' + v('tsa-implant'));
+      if (v('tsa-special-equip')) details.push('Special Equipment: ' + v('tsa-special-equip'));
+      if (v('tsa-graft')) details.push('Graft: ' + v('tsa-graft'));
+      if (v('tsa-equip').trim()) details.push('Additional Equipment: ' + v('tsa-equip').trim());
+      break;
+    case 'rtsa':
+      if (ck('rtsa-ct')) details.push('CT Scan for PSI Planning: Yes');
+      details.push('Follow Up: ' + v('rtsa-followup'));
+      details.push('Implant System: ' + v('rtsa-implant'));
+      if (v('rtsa-special-equip')) details.push('Special Equipment: ' + v('rtsa-special-equip'));
+      if (v('rtsa-graft')) details.push('Graft: ' + v('rtsa-graft'));
+      if (v('rtsa-equip').trim()) details.push('Additional Equipment: ' + v('rtsa-equip').trim());
+      break;
+    case 'rev-tsa':
+      details.push('*** PLEASE OBTAIN PRIOR OPERATIVE REPORT ***');
+      if (ck('rev-tsa-ct')) details.push('CT Scan for PSI Planning: Yes');
+      details.push('Follow Up: ' + v('rev-tsa-followup'));
+      var revTsaInstr = [];
+      if (ck('rev-tsa-osteotome')) revTsaInstr.push('Flexible osteotome');
+      if (ck('rev-tsa-shukla')) revTsaInstr.push('Shukla shoulder removal set');
+      if (ck('rev-tsa-prostalac')) revTsaInstr.push('Osteo Remedies Prostalac');
+      if (revTsaInstr.length > 0) details.push('Special Instruments: ' + revTsaInstr.join(', '));
+      if (v('rev-tsa-special-equip')) details.push('Special Equipment: ' + v('rev-tsa-special-equip'));
+      if (v('rev-tsa-graft')) details.push('Graft: ' + v('rev-tsa-graft'));
+      if (v('rev-tsa-equip').trim()) details.push('Additional Equipment: ' + v('rev-tsa-equip').trim());
+      break;
+    case 'rev-rtsa':
+      details.push('*** PLEASE OBTAIN PRIOR OPERATIVE REPORT ***');
+      if (ck('rev-rtsa-ct')) details.push('CT Scan for PSI Planning: Yes');
+      details.push('Follow Up: ' + v('rev-rtsa-followup'));
+      var revRtsaInstr = [];
+      if (ck('rev-rtsa-osteotome')) revRtsaInstr.push('Flexible osteotome');
+      if (ck('rev-rtsa-shukla')) revRtsaInstr.push('Shukla shoulder removal set');
+      if (ck('rev-rtsa-prostalac')) revRtsaInstr.push('Osteo Remedies Prostalac');
+      if (revRtsaInstr.length > 0) details.push('Special Instruments: ' + revRtsaInstr.join(', '));
+      if (v('rev-rtsa-special-equip')) details.push('Special Equipment: ' + v('rev-rtsa-special-equip'));
+      if (v('rev-rtsa-graft')) details.push('Graft: ' + v('rev-rtsa-graft'));
+      if (v('rev-rtsa-equip').trim()) details.push('Additional Equipment: ' + v('rev-rtsa-equip').trim());
+      break;
+    case 'bankart':
+      if (ck('bankart-slap')) details.push('SLAP Repair: Yes');
+      if (ck('bankart-remplissage')) details.push('Remplissage: Yes');
+      var bankartReps = getProcReps('bankart');
+      if (bankartReps.length > 0) details.push('Reps: ' + bankartReps.join('; '));
+      if (v('bankart-equip').trim()) details.push('Additional Equipment: ' + v('bankart-equip').trim());
+      break;
+    case 'rcr':
+      var rcrAddProcs = [];
+      if (ck('rcr-bk-decompression')) rcrAddProcs.push('Subacromial Decompression');
+      if (ck('rcr-bk-acromioplasty')) rcrAddProcs.push('Acromioplasty');
+      if (ck('rcr-bk-dcr')) rcrAddProcs.push('Distal Clavicle Resection');
+      if (ck('rcr-bk-tenotomy')) rcrAddProcs.push('Arthroscopic Biceps Tenotomy');
+      if (ck('rcr-bk-tenodesis')) rcrAddProcs.push('Open Subpectoral Biceps Tenodesis');
+      if (ck('rcr-bk-debridement')) rcrAddProcs.push('Extensive Glenohumeral Debridement');
+      if (rcrAddProcs.length > 0) details.push('Additional Procedures: ' + rcrAddProcs.join(', '));
+      if (ck('rcr-carm')) details.push('C-arm: Yes');
+      if (v('rcr-graft')) details.push('Graft/Patch: ' + v('rcr-graft'));
+      var rcrReps = getProcReps('rcr');
+      if (rcrReps.length > 0) details.push('Reps: ' + rcrReps.join('; '));
+      if (v('rcr-equip').trim()) details.push('Additional Equipment: ' + v('rcr-equip').trim());
+      break;
+    case 'scope':
+      var scopeReps = getProcReps('scope');
+      if (scopeReps.length > 0) details.push('Reps: ' + scopeReps.join('; '));
+      if (v('scope-equip').trim()) details.push('Additional Equipment: ' + v('scope-equip').trim());
+      break;
+    case 'scr':
+      details.push('Graft Type: ' + v('scr-graft'));
+      var scrReps = getProcReps('scr');
+      if (scrReps.length > 0) details.push('Reps: ' + scrReps.join('; '));
+      if (v('scr-equip').trim()) details.push('Additional Equipment: ' + v('scr-equip').trim());
+      break;
+    case 'acj':
+      if (v('acj-equip').trim()) details.push('Additional Equipment: ' + v('acj-equip').trim());
+      break;
+    case 'mua':
+      if (v('mua-equip').trim()) details.push('Additional Equipment: ' + v('mua-equip').trim());
+      break;
+    case 'orif-clav':
+      if (ck('clav-carm')) details.push('C-arm: Yes');
+      details.push('Implant: ' + v('clav-implant'));
+      if (v('clav-graft')) details.push('Graft: ' + v('clav-graft'));
+      if (v('clav-equip').trim()) details.push('Additional Equipment: ' + v('clav-equip').trim());
+      break;
+    case 'orif-phum':
+      if (ck('phum-carm')) details.push('C-arm: Yes');
+      if (ck('phum-ct')) details.push('CT Scan: Yes');
+      details.push('Implant: ' + v('phum-implant'));
+      if (v('phum-special-equip')) details.push('Special Equipment: ' + v('phum-special-equip'));
+      if (v('phum-graft')) details.push('Graft: ' + v('phum-graft'));
+      if (v('phum-equip').trim()) details.push('Additional Equipment: ' + v('phum-equip').trim());
+      break;
+    case 'hw-removal':
+      details.push('*** PLEASE OBTAIN PRIOR OPERATIVE REPORT ***');
+      if (v('hw-location').trim()) details.push('Location of Hardware: ' + v('hw-location').trim());
+      if (v('hw-equip').trim()) details.push('Additional Equipment: ' + v('hw-equip').trim());
+      break;
+    case 'biceps-tenodesis':
+      details.push('Implant: ' + v('bten-implant'));
+      if (v('bten-equip').trim()) details.push('Additional Equipment: ' + v('bten-equip').trim());
+      break;
+    case 'latarjet':
+      details.push('Special Instruments: ' + v('latarjet-instruments'));
+      if (v('latarjet-equip').trim()) details.push('Additional Equipment: ' + v('latarjet-equip').trim());
+      break;
+    case 'distal-biceps':
+      details.push('Implant: ' + v('distal-biceps-implant'));
+      if (v('distal-biceps-equip').trim()) details.push('Additional Equipment: ' + v('distal-biceps-equip').trim());
+      break;
+  }
+  return details;
+}
+
+function fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  ta.style.top = '0';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try {
+    var range = document.createRange();
+    range.selectNodeContents(ta);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    ta.setSelectionRange(0, ta.value.length);
+    document.execCommand('copy');
+  } catch(e) {}
+  document.body.removeChild(ta);
+}
+
+function copyReport() {
+  var text = document.getElementById('report-output').textContent;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function() {
+      showMsg('copy-msg');
+    }).catch(function() {
+      fallbackCopy(text);
+      showMsg('copy-msg');
+    });
+  } else {
+    fallbackCopy(text);
+    showMsg('copy-msg');
+  }
+}
+
+function copyAndReset() {
+  var text = document.getElementById('report-output').textContent;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function() {
+      resetForm();
+      showMsg('copy-reset-msg');
+    }).catch(function() {
+      fallbackCopy(text);
+      resetForm();
+      showMsg('copy-reset-msg');
+    });
+  } else {
+    fallbackCopy(text);
+    resetForm();
+    showMsg('copy-reset-msg');
+  }
+}
+
+function showMsg(id) {
+  var msg = document.getElementById(id);
+  if (msg) { msg.style.display = 'inline'; setTimeout(function() { msg.style.display = 'none'; }, 2000); }
+}
+
+function printReport() {
+  // Print the current page; @media print CSS shows only the booking form. No pop-up,
+  // so it works reliably on iOS/iPadOS where window.open is often blocked.
+  window.print();
+}
+
+function resetForm() {
+  document.getElementById('patient-name').value = '';
+  document.getElementById('dos').value = todayStr();
+  document.getElementById('location').selectedIndex = 0;
+  document.getElementById('side').selectedIndex = 0;
+  document.getElementById('workers-comp').checked = false;
+  document.getElementById('rep-company').value = '';
+  document.getElementById('rep-name').value = '';
+  document.getElementById('rep-other').value = '';
+  document.getElementById('rep-other-field').style.display = 'none';
+  document.getElementById('block-type').selectedIndex = 0;
+  document.getElementById('procedure-select').selectedIndex = 0;
+
+  // Hide all procedure sections
+  document.querySelectorAll('.procedure-section').forEach(function(s) {
+    s.classList.remove('active');
+  });
+
+  // Reset all text inputs and textareas in procedure sections
+  document.querySelectorAll('.procedure-section input[type="text"], .procedure-section textarea').forEach(function(el) {
+    if (el.defaultValue) {
+      el.value = el.defaultValue;
+    } else {
+      el.value = '';
+    }
+  });
+
+  // Reset all checkboxes in procedure sections
+  document.querySelectorAll('.procedure-section input[type="checkbox"]').forEach(function(el) {
+    el.checked = el.defaultChecked;
+  });
+}
+
+// Initialize date on load
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('dos').value = todayStr();
+  document.getElementById('rep-company').addEventListener('change', function() {
+    document.getElementById('rep-other-field').style.display = this.value === 'Other' ? 'block' : 'none';
+  });
+});
+</script>
+</body>
+</html>
