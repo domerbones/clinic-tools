@@ -1713,7 +1713,8 @@ var INCLUDE_CODES = false;
 var ICD_MAP = [
   [/Cuff Tear Arthropathy/i, 'M19.011', 'M19.012', 'Rotator cuff arthropathy'],
   [/Osteoarthritis/i, 'M19.011', 'M19.012', 'Primary osteoarthritis, shoulder'],
-  [/Rotator Cuff Tear/i, 'M75.101', 'M75.102', 'Complete rotator cuff tear'],
+  [/Partial.*Rotator Cuff Tear|Rotator Cuff Tear.*Partial/i, 'M75.111', 'M75.112', 'Incomplete rotator cuff tear'],
+  [/Rotator Cuff Tear/i, 'M75.121', 'M75.122', 'Complete rotator cuff tear'],
   [/Impingement/i, 'M75.41', 'M75.42', 'Impingement syndrome'],
   [/Biceps Tendinosis|Bicipital Tendinitis/i, 'M75.21', 'M75.22', 'Bicipital tendinitis'],
   [/Superior Labral Tear|SLAP/i, 'M67.811', 'M67.812', 'SLAP lesion'],
