@@ -8,11 +8,11 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Op Note">
+<meta name="apple-mobile-web-app-title" content="Op+Codes">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
 
-<title>Operative Report Generator - Dr. Rolf</title>
+<title>Op Report + Billing Codes - Dr. Rolf</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
@@ -72,7 +72,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </head>
 <body>
 <div class="header">
-<h1>Operative Report Generator</h1>
+<h1>Op Report Generator — with CPT/ICD Codes</h1>
 <span>Robert H. Rolf, MD | Beacon Orthopaedics</span>
 </div>
 <div class="container">
@@ -1630,7 +1630,7 @@ function printReport() {
 }
 
 // Codes appear only in the "with codes" build of this tool (flag flipped at build time)
-var INCLUDE_CODES = false;
+var INCLUDE_CODES = true;
 // ICD-10 codes (from Dr. Rolf's Billing Coder) matched from the diagnosis lines
 var ICD_MAP = [
   [/Cuff Tear Arthropathy/i, 'M19.011', 'M19.012', 'Rotator cuff arthropathy'],

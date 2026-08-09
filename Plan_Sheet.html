@@ -15,12 +15,12 @@
 <title>Plan Sheet - Dr. Rolf</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; font-size: 14px; }
-.header { background: #1B3A6B; color: #fff; padding: 14px 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
-.header h1 { font-size: 19px; }
-.header span { color: #E8A838; font-size: 12px; }
-.container { max-width: 960px; margin: 16px auto; padding: 0 14px; }
-.panel { background: #fff; border-radius: 8px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
+.header { background: #1B3A6B; color: #fff; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+.header h1 { font-size: 20px; }
+.header span { color: #E8A838; font-size: 13px; }
+.container { max-width: 1000px; margin: 18px auto; padding: 0 16px; }
+.panel { background: #fff; border-radius: 8px; padding: 22px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 .hint { font-size: 12px; color: #666; margin-bottom: 6px; }
 .row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
 .field { flex: 1; min-width: 120px; }
@@ -29,16 +29,25 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; font-si
 .presets { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 6px 0 10px; }
 .presets .plabel { font-size: 13px; color: #1B3A6B; font-weight: bold; }
 .presets select { padding: 7px 10px; border: 2px solid #E8A838; background: #FFF8E1; color: #1B3A6B; border-radius: 6px; font-size: 13px; font-weight: bold; min-width: 220px; }
-.sec { border: 1px solid #e2e6ee; border-radius: 6px; padding: 8px 10px; margin-top: 9px; }
-.sec-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
-.sec-title { font-size: 13px; font-weight: bold; color: #1B3A6B; }
+.sec { margin: 0 0 12px; }
+.sec-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; border-bottom: 2px solid #E8A838; padding-bottom: 3px; margin-bottom: 6px; }
+.sec-title { font-size: 15px; font-weight: bold; color: #1B3A6B; }
+/* Fixed two-column layout on wider screens (phones stay single-column) */
+.cols { display: flex; gap: 26px; align-items: flex-start; }
+.colx { flex: 1; min-width: 0; }
+@media (max-width: 759px) { .cols { display: block; } }
 .picker select { padding: 6px 8px; border: 1px solid #1B3A6B; border-radius: 5px; font-size: 13px; background: #fff; min-width: 180px; max-width: 320px; }
-.cbwrap { display: flex; flex-wrap: wrap; gap: 3px 16px; }
-.chk { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; padding: 3px 2px; cursor: pointer; }
-.chk input[type=checkbox] { width: 16px; height: 16px; accent-color: #1B3A6B; }
-.chk .cin { width: 70px; border: 1px solid #ccc; border-radius: 3px; font-size: 12px; padding: 1px 4px; }
+.cbwrap { display: block; }
+.cbwrap.grid2 { display: grid; grid-template-columns: 1fr 1fr; column-gap: 12px; }
+.chk { display: flex; align-items: center; gap: 7px; font-size: 14px; padding: 3px 2px; cursor: pointer; }
+.chk input[type=checkbox] { width: 17px; height: 17px; accent-color: #1B3A6B; flex-shrink: 0; }
+.chk .cin { width: 95px; border: 1px solid #ccc; border-radius: 3px; font-size: 13px; padding: 2px 5px; }
+.grid2 .cin { width: 68px; }
+.cbwrap .cin[type=date], .grid2 .cin[type=date] { width: 150px; }
+.wrow { display: flex; align-items: center; gap: 8px; margin: 2px 0 8px; font-size: 14px; }
+.wrow select { padding: 6px 9px; border: 1px solid #ccc; border-radius: 4px; font-size: 13.5px; min-width: 130px; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
-.chip { display: inline-flex; align-items: center; gap: 6px; background: #E8F0FB; border: 1px solid #1B3A6B; color: #1B3A6B; border-radius: 14px; padding: 3px 9px; font-size: 12.5px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; background: #E8F0FB; border: 1px solid #1B3A6B; color: #1B3A6B; border-radius: 14px; padding: 4px 10px; font-size: 13.5px; }
 .chip .cin { width: 74px; border: 1px solid #ccc; border-radius: 3px; font-size: 12px; padding: 1px 4px; }
 .chip .x { cursor: pointer; font-weight: bold; color: #C62828; font-size: 14px; line-height: 1; }
 .chip .sbadge { background: #1B3A6B; color: #fff; border-radius: 9px; padding: 0 6px; font-weight: bold; cursor: pointer; font-size: 11px; }
@@ -53,6 +62,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; font-si
 .output-panel { display: none; background: #fff; border-radius: 8px; padding: 18px; margin-top: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 .output-panel.active { display: block; }
 .plan { background: #fff; color: #222; }
+[contenteditable]:focus { outline: 2px dashed #E8A838; outline-offset: 4px; }
 .plan-header { border-bottom: 3px solid #1B3A6B; padding-bottom: 6px; margin-bottom: 10px; }
 .plan-header .t { font-size: 17px; font-weight: bold; color: #1B3A6B; }
 .plan-header .s { font-size: 12px; color: #666; }
@@ -86,12 +96,24 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; font-si
   <div class="panel">
     <div class="row">
       <div class="field"><label>Patient</label><input id="p-name"></div>
-      <div class="field" style="max-width:140px"><label>MRN / DOB</label><input id="p-mrn"></div>
+      <div class="field" style="max-width:140px"><label>DOB</label><input id="p-mrn" placeholder="mm/dd/yyyy"></div>
       <div class="field" style="max-width:130px"><label>Date</label><input id="p-date" type="date"></div>
       <div class="field" style="max-width:140px"><label>Side (default)</label><select id="global-side"><option value="right">Right</option><option value="left">Left</option><option value="bilateral">Bilateral</option></select></div>
     </div>
-    <div class="presets" id="presets"></div>
-    <div class="hint">Pick a <b>Visit type</b> to auto-fill, then adjust. Checkboxes: tap to select. Dropdown sections (Diagnosis, Injection, Surgery, Other) drop in as tags &mdash; tap the <b>R/L/B</b> badge to change a tag's side.</div>
+    <div class="presets">
+      <span class="plabel">Visit type:</span>
+      <select id="vtype-sel" onchange="onVisitTypeChange()" style="min-width:210px">
+        <option value="">— select visit type —</option>
+        <option value="new">New patient</option>
+        <option value="estab">Established patient — new problem</option>
+        <option value="fu">Follow-up</option>
+        <option value="postop">Post-op</option>
+      </select>
+      <select id="dx-sel" onchange="applyDxPreset()" style="min-width:230px;display:none"></select>
+      <select id="ps-proc-sel" onchange="applyPostopNew()" style="min-width:210px;display:none"></select>
+      <select id="ps-visit-sel" onchange="applyPostopNew()" style="min-width:150px;display:none"></select>
+    </div>
+    <div class="hint">Pick <b>Visit type</b> &rarr; <b>diagnosis</b> (post-op: <b>surgery + visit</b>), then adjust. Tag sections: tap the <b>R/L/B</b> badge to change a tag's side.</div>
     <div id="form-root"></div>
     <div class="sec">
       <div class="sec-title">Other / free-text notes</div>
@@ -108,94 +130,88 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; font-si
       <button class="btn btn-outline" onclick="document.getElementById('output-panel').classList.remove('active')">Close</button>
     </div>
     <div class="outblock">
-      <div class="outhead"><span>Provider plan &mdash; for Athena</span>
+      <div class="outhead"><span>Plan / Visit summary <small style="font-weight:normal;color:#888">(tap text to edit before copy/print)</small></span>
         <span><button class="btn btn-secondary" onclick="copyPlan()">Copy</button>
         <button class="btn btn-outline" onclick="printPlan()">Print</button>
         <span class="copied-msg" id="copy-msg">Copied!</span></span></div>
-      <div class="plan" id="plan"></div>
-    </div>
-    <div class="outblock">
-      <div class="outhead"><span>Patient handout &mdash; print &amp; give</span>
-        <span><button class="btn btn-secondary" onclick="copyPatient()">Copy</button>
-        <button class="btn btn-outline" onclick="printPatient()">Print</button>
-        <span class="copied-msg" id="copy-msg2">Copied!</span></span></div>
-      <div class="handout" id="patient"></div>
+      <div class="plan" id="plan" contenteditable="true" spellcheck="false"></div>
     </div>
   </div>
 </div>
 
 <script>
 var SECTIONS = [
-  { key:'dx', title:'Diagnosis', drop:true, lat:true, items:[
+  { key:'dx', title:'Diagnosis', drop:true, lat:true,
+    groups:[
+      {label:'Rotator cuff', tokens:['RCI','RCT','pRCT','IrrRTC','?RCT']},
+      {label:'Arthritis', tokens:['GHoa','ACoa','RCA']},
+      {label:'Instability / labrum', tokens:['D/L','SLAP','ALT','PLT','?SLAP','GHBL']},
+      {label:'Biceps', tokens:['BT','Brupture','DBrupture']},
+      {label:'Fracture', tokens:['PHfx','ClavicleFX']}
+    ], items:[
     ['Px','pain'],['sprain','sprain'],['strain','strain'],['RCI','rotator cuff impingement'],['RCT','rotator cuff tear'],['pRCT','partial-thickness rotator cuff tear'],
     ['RCA','rotator cuff arthropathy'],['GHoa','glenohumeral osteoarthritis'],['ACoa','AC joint osteoarthritis'],['Adcap','adhesive capsulitis'],['SLAP','SLAP tear'],
     ['ALT','anterior labral tear'],['PLT','posterior labral tear'],['PHfx','proximal humerus fracture'],['BT','biceps tendinitis'],['Brupture','biceps rupture'],
     ['CT','calcific tendinitis'],['D/L','dislocation / instability'],['ClavicleFX','clavicle fracture'],['IrrRTC','irreparable rotator cuff tear'],['GHBL','glenohumeral bone loss'],
     ['?RCT','possible rotator cuff tear'],['?SLAP','possible SLAP tear'],['S/P','status post'],['DBrupture','distal biceps rupture']
   ]},
-  { key:'postop', title:'Post-op', items:[
+  { key:'postop', title:'Post-op', grid2:true, items:[
     ['Reviewed images','reviewed operative / arthroscopy images with the patient'],['Wound check','wound checked, healing appropriately'],
     ['Steri-strips','remove steri-strips next week if not already off'],['Strength testing','began strength testing'],['Discharge','discharged from care']
-  ]},
-  { key:'dxho', title:'Dx history', prefix:'history of ', more:true, items:[
-    ['RCT','rotator cuff tear'],['GHOA','glenohumeral osteoarthritis'],['RCA','rotator cuff arthropathy'],['ACOA','AC joint osteoarthritis'],['BT','biceps tendinitis'],
-    ['RCI','rotator cuff impingement'],['Adcap','adhesive capsulitis'],['SLAP','SLAP tear'],['ALT','anterior labral tear'],['PLT','posterior labral tear']
-  ]},
-  { key:'sxho', title:'Surgical history', prefix:'prior ', more:true, items:[
-    ['TSA','total shoulder arthroplasty'],['RSA','reverse total shoulder arthroplasty'],['FAQ','FAQ (?)'],['RCR','rotator cuff repair'],['CR','CR (?)'],['OSBT','open subpectoral biceps tenodesis'],['ORIF','ORIF'],['LR','LR (?)']
   ]},
   { key:'inj', title:'Injection', drop:true, lat:true, items:[
     ['suba','subacromial'],['AC','AC joint'],['GH','glenohumeral'],['GH2','glenohumeral (2nd) (?)'],['GH2INB','glenohumeral 2nd + block (?)'],['BT','biceps'],['SSN','suprascapular nerve'],['STB','STB (?)'],['ASP','with aspiration'],['visco','viscosupplementation'],['PRP','PRP']
   ]},
-  { key:'img', title:'Imaging ordered', items:[
-    ['X-ray','X-ray'],['C-spine X-ray','cervical spine X-ray'],['MRI','MRI'],['MRA','MR arthrogram'],['EMG','EMG'],['CT','CT'],['CTA','CT arthrogram'],['CT w&w/o','CT with and without contrast'],['US','ultrasound'],['Bone scan','bone scan'],['xray marker','X-ray with marker']
+  { key:'img', title:'Imaging ordered', grid2:true, items:[
+    ['X-ray','X-ray'],['C-spine X-ray','cervical spine X-ray'],['MRI','MRI'],['MRA','MR arthrogram'],['EMG','EMG'],['CT','CT'],['CTA','CT arthrogram'],['US','ultrasound'],['Bone scan','bone scan'],['xray marker','X-ray with marker']
   ]},
-  { key:'pt', title:'Physical therapy', items:[
-    ['Start PT','begin physical therapy'],['Continue PT','continue physical therapy'],['Continue HEP','continue home program'],['PT->HEP','transition from physical therapy to a home program'],['PT 2x6','physical therapy 2×/week for 6 weeks'],
-    ['AAOS','AAOS handout given'],['TSMPA','TSMPA handout given'],['Sleeper stretch','sleeper stretch handout given'],['1st set (RSA)','1st set of exercises handout given (reverse arthroplasty)'],['2nd set (RSA)','2nd set of exercises handout given (reverse arthroplasty)'],['Biceps protocol','biceps therapy protocol handout given (?)']
+  { key:'pt', title:'Physical therapy', grid2:true, items:[
+    ['PT 1x4','physical therapy 1×/week for 4 weeks'],['PT 2x6','physical therapy 2×/week for 6 weeks'],['Continue PT','continue physical therapy'],['PT->HEP','transition from physical therapy to a home program'],['HEP','home exercise program'],['Continue HEP','continue home program'],
+    ['AAOS','AAOS handout given'],['TSMPA','TSMPA handout given'],['Sleeper stretch','sleeper stretch handout given'],['1st set (RSA)','1st set of exercises handout given (reverse arthroplasty)'],['2nd set (RSA)','2nd set of exercises handout given (reverse arthroplasty)'],['Iontophoresis','iontophoresis']
   ]},
-  { key:'meds', title:'Medications / treatment', items:[
+  { key:'meds', title:'Medications / treatment', grid2:true, items:[
     ['Aspirin','aspirin 81 mg PO BID'],['Tylenol','acetaminophen 1000 mg up to 3-4 times daily'],['meloxicam','meloxicam'],['ibuprofen','ibuprofen'],['diclofenac','diclofenac'],['Celebrex','celecoxib'],
-    ['Voltaren gel','diclofenac gel'],['Medrol dose pack','Medrol dose pack'],['Tramadol','tramadol {}','dose'],['Oxycodone','oxycodone {}','dose'],['Norco','hydrocodone-acetaminophen {}','dose'],['Cyclobenzaprine','cyclobenzaprine {}','dose'],['Gabapentin','gabapentin {}','dose'],['Prednisone','prednisone'],['Ice','ice']
+    ['Voltaren gel','diclofenac gel'],['Medrol dose pack','Medrol dose pack'],['Journavx','Journavx (suzetrigine)'],['Tramadol','tramadol {}','dose'],['Oxycodone','oxycodone {}','dose'],['Norco','hydrocodone-acetaminophen {}','dose'],['Cyclobenzaprine','cyclobenzaprine {}','dose'],['Gabapentin','gabapentin {}','dose'],['Prednisone','prednisone'],['Ice','ice']
   ]},
-  { key:'dme', title:'DME', items:[ ['Posling','post-op sling'],['simple','simple sling'],['cuffcollar','cuff-and-collar'],['exos','EXOS brace'] ]},
-  { key:'handout', title:'Surgical handouts', items:[
-    ['TSA','total shoulder arthroplasty handout'],['RSA','reverse total shoulder arthroplasty handout'],['RCR','rotator cuff repair handout'],['Instability','instability / Bankart handout'],['SCR','superior capsular reconstruction handout'],['Biceps tenodesis','biceps tenodesis handout'],['Distal biceps','distal biceps repair handout'],['Clavicle ORIF','clavicle ORIF handout'],['PH ORIF','proximal humerus ORIF handout'],['FAQ','frequently asked questions handout']
+  { key:'dme', title:'DME', grid2:true, items:[ ['Posling','post-op sling'],['simple','simple sling'],['cuffcollar','cuff-and-collar'],['Other','{}','specify'] ]},
+  { key:'handout', title:'Surgical handouts', grid2:true, items:[
+    ['TSA','total shoulder arthroplasty handout'],['RSA','reverse total shoulder arthroplasty handout'],['RCR','rotator cuff repair handout'],['Instability','instability / Bankart handout'],['Impingement','impingement surgery handout'],['Biceps tenodesis','biceps tenodesis handout'],['Clavicle ORIF','clavicle ORIF handout'],['Proximal humerus ORIF','proximal humerus ORIF handout'],['FAQ','frequently asked questions handout']
   ]},
-  { key:'condition', title:'Condition handouts (info guides)', items:[
-    ['Rotator cuff','rotator cuff information guide'],['Impingement','impingement information guide'],['AC arthritis','AC arthritis information guide'],['Biceps tendinitis','biceps tendinitis information guide'],['SLAP','SLAP tear information guide'],['GH arthritis','glenohumeral arthritis information guide'],['Adhesive capsulitis','adhesive capsulitis information guide'],['Instability','instability information guide'],['RC arthropathy','rotator cuff arthropathy information guide'],['Calcific tendinitis','calcific tendinitis information guide'],['Fracture','fracture information guide'],['Distal biceps','distal biceps information guide']
+  { key:'condition', title:'Condition handouts (info guides)', grid2:true, items:[
+    ['Rotator cuff','rotator cuff information guide'],['Impingement','impingement information guide'],['AC arthritis','AC arthritis information guide'],['Biceps tendinitis','biceps tendinitis information guide'],['SLAP','SLAP tear information guide'],['GH arthritis','glenohumeral arthritis information guide'],['OA','osteoarthritis information guide'],['Adhesive capsulitis','adhesive capsulitis information guide'],['Instability','instability information guide'],['RCA','rotator cuff arthropathy information guide'],['Calcific tendinitis','calcific tendinitis information guide'],['Fracture','fracture information guide']
   ]},
-  { key:'restrict', title:'Restrictions', items:[
-    ['5 lb','no lifting greater than 5 lb'],['10 lb','no lifting greater than 10 lb'],['15 lb','no lifting greater than 15 lb'],['30 lb','no lifting greater than 30 lb'],['no limit','no lifting restrictions'],['No PPL','no pushing, pulling, or lifting'],['No overhead','no overhead reaching'],['No repetitive','no repetitive motion'],['No driving','no driving'],['Work note','work note provided'],['School note','school note provided'],['ATC note','note for athletic trainer']
+  { key:'restrict', title:'Restrictions', grid2:true, weightDrop:5, items:[
+    ['5 lb','no lifting greater than 5 lb'],['10 lb','no lifting greater than 10 lb'],['15 lb','no lifting greater than 15 lb'],['30 lb','no lifting greater than 30 lb'],['no limit','no lifting restrictions'],['No PPL','no pushing, pulling, or lifting'],['No overhead','no overhead reaching'],['No repetitive','no repetitive motion'],['No driving','no driving'],['Work note','work note provided'],['School note','school note provided'],['ATC note','note for athletic trainer'],['RTW','return to work {}','date']
   ]},
-  { key:'surg', title:'Surgery', drop:true, lat:true, nSided:16, items:[
-    ['TSA','total shoulder arthroplasty'],['RSA','reverse total shoulder arthroplasty'],['RCR','rotator cuff repair'],['DCR','distal clavicle resection'],['SAD','subacromial decompression'],['Collagen','collagen patch/graft'],['OSBT','open subpectoral biceps tenodesis'],['BT','biceps tenodesis'],['Labrum','labral repair'],['mRCR','massive rotator cuff repair'],['Subscap','subscapularis repair'],['ORIF','ORIF'],['ROI','removal of implant'],['SCR','superior capsular reconstruction'],['arthro','arthroscopic'],['open','open'],
-    ['ready','ready for surgery'],['thinking','considering surgery'],['ASC','at Beacon ASC'],['GSH','at Good Samaritan'],['MMH','at Margaret Mary'],['inpt','inpatient'],['23','23-hour observation'],['out','outpatient'],['heart','cardiac clearance'],['PCP','PCP clearance'],['lung','pulmonary clearance'],['clearance','{} clearance','other']
+  { key:'surg', title:'Surgery', drop:true, lat:true, nSided:9, items:[
+    ['TSA','total shoulder arthroplasty'],['RSA','reverse total shoulder arthroplasty'],['RCR','rotator cuff repair'],['Scope','shoulder arthroscopy'],['BT','biceps tenodesis'],['Labrum','labral repair / instability'],['SCR','superior capsular reconstruction'],['ORIF','ORIF'],['Distal biceps','distal biceps repair'],
+    ['ready','ready for surgery'],['thinking','considering surgery']
   ]},
-  { key:'fu', title:'Follow-up', items:[
+  { key:'fu', title:'Follow-up', grid2:true, items:[
     ['in ___','return in {}','interval'],['INB','INB (?)'],['PRN','as needed'],['afterimaging','after imaging'],['afterPSI','after PSI planning'],['Call>MRI','call after MRI'],['spine','spine referral'],['hand','hand referral'],['PNS','PNS (?)'],['email','email patient']
   ]},
-  { key:'other', title:'Other (non-shoulder)', drop:true, more:true, items:[
-    ['knee inj','knee injection'],['pes','pes anserine injection'],['ITB','IT band injection'],['LE','lateral epicondyle injection'],['ME','medial epicondyle injection'],['elbow inj','elbow injection'],['TS','thumb spica brace'],['CUWB','cock-up wrist brace'],['boxer','boxer splint'],['TB','tall boot'],['SB','short boot'],['POknee','post-op knee brace'],['MCL','MCL brace'],['unloader','unloader brace'],['sleeve','sleeve'],['walker','walker'],['crutches','crutches'],['TKA','total knee arthroplasty'],['PMM','partial medial meniscectomy'],['PLM','partial lateral meniscectomy'],['ACL','ACL reconstruction'],['smart','smart (?)']
-  ]}
 ];
 var SEC_BY_KEY={}; SECTIONS.forEach(function(s){ SEC_BY_KEY[s.key]=s; });
+// Every section gets an "Other ___" free-text item (skips sections that already have one)
+SECTIONS.forEach(function(sec){
+  if(!sec.items.some(function(it){ return it[0]==='Other'; })) sec.items.push(['Other','{}','specify']);
+});
 
 /* Presets by token so adding items never breaks them. pick = [sectionKey, token, optionalValue] */
 var PRESETS = [
   // ---- New-visit standards ----
-  { label:'Impingement / bursitis', group:'New visit', picks:[['dx','RCI'],['inj','suba'],['pt','Start PT'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','Impingement'],['fu','in ___','6 weeks']] },
-  { label:'Rotator cuff tear', group:'New visit', picks:[['dx','RCT'],['inj','suba'],['pt','Start PT'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','Rotator cuff'],['fu','in ___','6 weeks']] },
+  { label:'Impingement / bursitis', group:'New visit', picks:[['dx','RCI'],['inj','suba'],['pt','PT 1x4'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','Impingement'],['fu','in ___','6 weeks']] },
+  { label:'Rotator cuff tear', group:'New visit', picks:[['dx','RCT'],['inj','suba'],['pt','PT 1x4'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','Rotator cuff'],['fu','in ___','6 weeks']] },
   { label:'Acute rotator cuff tear', group:'New visit', picks:[['dx','RCT'],['img','MRI'],['surg','thinking'],['condition','Rotator cuff'],['fu','in ___','2 weeks']], note:'Acute tear with dysfunction — expedite MRI and surgical discussion.' },
   { label:'AC joint arthritis', group:'New visit', picks:[['dx','ACoa'],['inj','AC'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','AC arthritis'],['fu','in ___','6 weeks']] },
-  { label:'Biceps tendinitis', group:'New visit', picks:[['dx','BT'],['inj','BT'],['pt','Start PT'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','Biceps tendinitis'],['fu','in ___','6 weeks']] },
-  { label:'SLAP tear', group:'New visit', picks:[['dx','SLAP'],['inj','suba'],['pt','Start PT'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','SLAP'],['fu','in ___','6 weeks']] },
-  { label:'Glenohumeral arthritis', group:'New visit', picks:[['dx','GHoa'],['pt','Start PT'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','GH arthritis'],['fu','in ___','6 weeks']], note:'GH injection optional if symptomatic.' },
+  { label:'Biceps tendinitis', group:'New visit', picks:[['dx','BT'],['inj','BT'],['pt','PT 1x4'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','Biceps tendinitis'],['fu','in ___','6 weeks']] },
+  { label:'SLAP tear', group:'New visit', picks:[['dx','SLAP'],['inj','suba'],['pt','PT 1x4'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','SLAP'],['fu','in ___','6 weeks']] },
+  { label:'Glenohumeral arthritis', group:'New visit', picks:[['dx','GHoa'],['pt','PT 1x4'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','GH arthritis'],['fu','in ___','6 weeks']], note:'GH injection optional if symptomatic.' },
   { label:'Adhesive capsulitis', group:'New visit', picks:[['dx','Adcap'],['inj','suba'],['pt','PT 2x6'],['pt','Sleeper stretch'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','Adhesive capsulitis'],['fu','in ___','10-12 weeks']], note:'If no better, glenohumeral injection under ultrasound in 2 weeks.' },
-  { label:'Calcific tendinitis', group:'New visit', picks:[['dx','CT'],['inj','suba'],['pt','Start PT'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','Calcific tendinitis'],['fu','in ___','6 weeks']], note:'Consider US-guided barbotage if persists.' },
-  { label:'Instability / dislocation', group:'New visit', picks:[['dx','D/L'],['img','MRA'],['pt','Start PT'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','Instability'],['fu','in ___','6 weeks']], note:'Activity modification; no injection.' },
-  { label:'Rotator cuff arthropathy', group:'New visit', picks:[['dx','RCA'],['pt','Start PT'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','RC arthropathy'],['fu','in ___','6 weeks']], note:'GH injection optional; reverse arthroplasty pathway.' },
-  { label:'Distal biceps rupture', group:'New visit', picks:[['dx','DBrupture'],['img','MRI'],['dme','Posling'],['meds','Tylenol'],['condition','Distal biceps']], note:'Urgent surgical discussion — repair within ~2–3 weeks.' },
+  { label:'Calcific tendinitis', group:'New visit', picks:[['dx','CT'],['inj','suba'],['pt','PT 1x4'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','Calcific tendinitis'],['fu','in ___','6 weeks']], note:'Consider US-guided barbotage if persists.' },
+  { label:'Instability / dislocation', group:'New visit', picks:[['dx','D/L'],['img','MRA'],['pt','PT 1x4'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','Instability'],['fu','in ___','6 weeks']], note:'Activity modification; no injection.' },
+  { label:'Rotator cuff arthropathy', group:'New visit', picks:[['dx','RCA'],['pt','PT 1x4'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','RCA'],['fu','in ___','6 weeks']], note:'GH injection optional; reverse arthroplasty pathway.' },
+  { label:'Distal biceps rupture', group:'New visit', picks:[['dx','DBrupture'],['img','MRI'],['dme','Posling'],['meds','Tylenol']], note:'Urgent surgical discussion — repair within ~2–3 weeks.' },
   { label:'Fracture, clavicle — non-op', group:'New visit', picks:[['dx','ClavicleFX'],['dme','Posling'],['meds','Tylenol'],['img','X-ray'],['condition','Fracture'],['fu','in ___','1 week']], note:'Non-operative: weekly X-rays x2 weeks to confirm alignment; start PT after 2 weeks.' },
   { label:'Fracture, prox humerus — non-op', group:'New visit', picks:[['dx','PHfx'],['dme','Posling'],['meds','Tylenol'],['img','X-ray'],['condition','Fracture'],['fu','in ___','1 week']], note:'Non-operative: weekly X-rays x2 weeks to confirm alignment; start PT after 2 weeks.' },
   { label:'Fracture, clavicle — surgical', group:'New visit', picks:[['dx','ClavicleFX'],['dme','Posling'],['meds','Tylenol'],['surg','thinking'],['condition','Fracture']], note:'Set up for surgery (ORIF clavicle).' },
@@ -213,20 +229,58 @@ var PRESETS = [
   { label:'Calcific tendinitis — follow-up', group:'Follow-up', picks:[['dx','CT'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; repeat subacromial injection if it helped; consider US-guided barbotage or surgery if persistent.' },
   { label:'Instability / dislocation — follow-up', group:'Follow-up', picks:[['dx','D/L'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess stability; if recurrent → MR arthrogram and surgical stabilization discussion (Bankart / Latarjet).' },
   { label:'Rotator cuff arthropathy — follow-up', group:'Follow-up', picks:[['dx','RCA'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; GH injection if symptomatic; reverse arthroplasty discussion when failing.' },
-  // ---- Post-op ----
-  { label:'Post-op #1 (first)', group:'Post-op', picks:[['postop','Reviewed images'],['postop','Wound check'],['postop','Steri-strips'],['fu','in ___','4 weeks']] },
-  { label:'Post-op 6 weeks', group:'Post-op', picks:[['restrict','5 lb'],['pt','Continue PT'],['fu','in ___','6 weeks']] },
-  { label:'Post-op 6 weeks — arthroplasty', group:'Post-op', picks:[['restrict','5 lb'],['pt','Continue PT'],['img','X-ray'],['fu','in ___','6 weeks']] },
-  { label:'Post-op 3 months', group:'Post-op', picks:[['postop','Strength testing'],['pt','PT->HEP'],['fu','in ___','3 months']] },
-  { label:'Post-op 6 months — rotator cuff (discharge)', group:'Post-op', picks:[['postop','Discharge'],['fu','PRN']] },
-  { label:'Post-op 6 months — arthroplasty', group:'Post-op', picks:[['img','X-ray'],['fu','in ___','5 years']] }
+  // ---- Post-op is handled by the Surgery + post-op-visit auto-fill row ----
 ];
+
+/* ---- Surgery + post-op-visit auto-fill (mirrors the Checkout Sheet) ---- */
+var PROCEDURES = ['Rotator cuff repair','Rotator cuff repair with biceps tenodesis','Reverse total shoulder arthroplasty','Anatomic total shoulder arthroplasty','Subacromial decompression / acromioplasty','Biceps tenodesis','Distal clavicle resection (Mumford)','Labral / Bankart repair','SLAP repair','Superior capsular reconstruction','Distal biceps repair','Clavicle ORIF','Proximal humerus ORIF','Shoulder arthroscopy (diagnostic)','Manipulation under anesthesia'];
+var PROC_TRACK = { 'Rotator cuff repair':'cuff','Rotator cuff repair with biceps tenodesis':'cuff','Superior capsular reconstruction':'cuff','Anatomic total shoulder arthroplasty':'tsa','Reverse total shoulder arthroplasty':'rsa','Labral / Bankart repair':'instab','SLAP repair':'instab','Distal biceps repair':'dbiceps','Clavicle ORIF':'fracture','Proximal humerus ORIF':'fracture','Subacromial decompression / acromioplasty':'soft','Biceps tenodesis':'soft','Distal clavicle resection (Mumford)':'soft','Shoulder arthroscopy (diagnostic)':'soft','Manipulation under anesthesia':'mua' };
+var VISIT_KEYS = ['first','wk6','mo3','mo6','annual'];
+var VISIT_LABELS_PS = ['First post-op visit','6 weeks','3 months','6 months','Annual visit'];
+// Annual / routine long-term visit: return in 1 year, no automatic X-ray.
+var ANNUAL_PS = { picks:[['fu','in ___','1 year']] };
+// Added to every FIRST post-op visit (your always-adds)
+var FIRST_COMMON_PS = [['postop','Reviewed images'],['postop','Wound check'],['postop','Steri-strips'],['meds','Aspirin'],['restrict','No driving'],['restrict','Work note']];
+var TRACK_PLANS_PS = {
+  cuff:{ first:{picks:[['dme','Posling'],['restrict','No PPL'],['restrict','No overhead'],['fu','in ___','6 weeks']]},
+         wk6:{picks:[['restrict','5 lb'],['pt','Continue PT'],['fu','in ___','3 months']]},
+         mo3:{picks:[['postop','Strength testing'],['pt','PT->HEP'],['fu','in ___','6 months']]},
+         mo6:{picks:[['postop','Discharge'],['fu','PRN']]} },
+  tsa:{ first:{picks:[['dme','Posling'],['restrict','No PPL'],['restrict','No overhead'],['img','X-ray'],['fu','in ___','6 weeks']]},
+        wk6:{picks:[['restrict','5 lb'],['pt','Continue PT'],['img','X-ray'],['fu','in ___','3 months']]},
+        mo3:{picks:[['postop','Strength testing'],['pt','PT->HEP'],['img','X-ray'],['fu','in ___','6 months']]},
+        mo6:{picks:[['restrict','30 lb'],['img','X-ray'],['fu','in ___','5 years']], note:'No overhead lifting greater than 30 lb; no restriction at waist level.'} },
+  rsa:{ first:{picks:[['dme','Posling'],['restrict','No PPL'],['restrict','No overhead'],['img','X-ray'],['fu','in ___','6 weeks']], note:'No reaching behind back / no forced internal rotation. Sling 4–6 weeks.'},
+        wk6:{picks:[['restrict','5 lb'],['pt','Continue PT'],['img','X-ray'],['fu','in ___','3 months']]},
+        mo3:{picks:[['postop','Strength testing'],['pt','PT->HEP'],['img','X-ray'],['fu','in ___','6 months']]},
+        mo6:{picks:[['restrict','15 lb'],['img','X-ray'],['fu','in ___','5 years']], note:'No overhead lifting greater than 15 lb; no restriction at waist level.'} },
+  instab:{ first:{picks:[['dme','Posling'],['restrict','No PPL'],['restrict','No overhead'],['fu','in ___','6 weeks']]},
+           wk6:{picks:[['restrict','5 lb'],['pt','Continue PT'],['fu','in ___','3 months']]},
+           mo3:{picks:[['postop','Strength testing'],['pt','PT->HEP'],['fu','in ___','6 months']]},
+           mo6:{picks:[['postop','Discharge'],['fu','PRN']]} },
+  dbiceps:{ first:{picks:[['dme','simple'],['restrict','No PPL'],['fu','in ___','2 weeks']]},
+            wk6:{picks:[['restrict','5 lb'],['pt','PT 1x4'],['fu','in ___','3 months']]},
+            mo3:{picks:[['postop','Strength testing'],['pt','PT->HEP'],['fu','in ___','6 months']]},
+            mo6:{picks:[['postop','Discharge'],['fu','PRN']]} },
+  fracture:{ first:{picks:[['dme','Posling'],['restrict','No PPL'],['img','X-ray'],['fu','in ___','2 weeks']]},
+             wk6:{picks:[['restrict','5 lb'],['pt','PT 1x4'],['img','X-ray'],['fu','in ___','3 months']]},
+             mo3:{picks:[['pt','Continue PT'],['img','X-ray'],['fu','in ___','6 months']]},
+             mo6:{picks:[['postop','Discharge'],['img','X-ray'],['fu','PRN']]} },
+  soft:{ first:{picks:[['dme','simple'],['pt','PT 1x4'],['restrict','5 lb'],['fu','in ___','6 weeks']]},
+         wk6:{picks:[['pt','Continue PT'],['fu','in ___','3 months']]},
+         mo3:{picks:[['postop','Discharge'],['fu','PRN']]},
+         mo6:{picks:[['postop','Discharge'],['fu','PRN']]} },
+  mua:{ first:{picks:[['dme','simple'],['pt','PT 1x4'],['fu','in ___','2 weeks']]},
+        wk6:{picks:[['pt','Continue PT'],['fu','in ___','3 months']]},
+        mo3:{picks:[['postop','Discharge'],['fu','PRN']]},
+        mo6:{picks:[['postop','Discharge'],['fu','PRN']]} }
+};
 
 var chips={};
 var SABBR={right:'R',left:'L',bilateral:'B'}, SIDE_ORDER=['right','left','bilateral'];
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function cleanX(x){ return x.replace('(?)','').trim(); }
-function labelFor(item){ return cleanX(item[1]).replace('{}','').replace(/\s+/g,' ').trim(); }
+function labelFor(item){ var t=cleanX(item[1]).replace('{}','').replace(/\s+/g,' ').trim(); return t||item[0]; }
 function val(id){ var e=document.getElementById(id); return e?e.value.trim():''; }
 function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
 function isSided(sec,i){ return !!sec.lat && (sec.nSided===undefined || i<sec.nSided); }
@@ -236,13 +290,35 @@ function renderSection(sec){
   var h='<div class="sec"><div class="sec-head"><span class="sec-title">'+esc(sec.title)+(sec.lat?' <small style="font-weight:normal;color:#888">(R/L/B per tag)</small>':'')+'</span>';
   if(sec.drop){
     h+='<span class="picker"><select onchange="addChip(\''+sec.key+'\',this)"><option value="">+ add…</option>';
-    sec.items.forEach(function(item,i){ h+='<option value="'+i+'">'+esc(labelFor(item))+'</option>'; });
+    if(sec.groups){
+      var used={};
+      sec.groups.forEach(function(g){
+        var opts='';
+        g.tokens.forEach(function(t){ var i=tokenIndex(sec,t); if(i>=0){ used[i]=1; opts+='<option value="'+i+'">'+esc(labelFor(sec.items[i]))+'</option>'; } });
+        if(opts) h+='<optgroup label="'+esc(g.label)+'">'+opts+'</optgroup>';
+      });
+      var left='';
+      sec.items.forEach(function(item,i){ if(!used[i]) left+='<option value="'+i+'">'+esc(labelFor(item))+'</option>'; });
+      if(left) h+='<optgroup label="Other">'+left+'</optgroup>';
+    } else {
+      sec.items.forEach(function(item,i){ h+='<option value="'+i+'">'+esc(labelFor(item))+'</option>'; });
+    }
     h+='</select></span></div><div class="chips" id="chips_'+sec.key+'"></div></div>';
   } else {
-    h+='</div><div class="cbwrap">';
+    h+='</div>';
+    var start=0;
+    if(sec.weightDrop){
+      // first N items are the weight options -> one dropdown instead of checkboxes
+      start=sec.weightDrop;
+      h+='<div class="wrow"><span><b>Weight limit:</b></span><select id="weight-limit"><option value="">— none —</option>';
+      for(var wi=0; wi<sec.weightDrop; wi++){ h+='<option value="'+wi+'">'+esc(sec.items[wi][0])+'</option>'; }
+      h+='</select></div>';
+    }
+    h+='<div class="cbwrap'+(sec.grid2?' grid2':'')+'">';
     sec.items.forEach(function(item,i){
+      if(i<start) return;
       h+='<label class="chk"><input type="checkbox" id="c_'+sec.key+'_'+i+'"><span>'+esc(item[0])+'</span>';
-      if(item[2]){ h+=' <input class="cin" id="ci_'+sec.key+'_'+i+'" placeholder="'+esc(item[2])+'">'; }
+      if(item[2]){ h+=' <input class="cin"'+(item[2]==='date'?' type="date"':'')+' id="ci_'+sec.key+'_'+i+'" placeholder="'+esc(item[2])+'">'; }
       h+='</label>';
     });
     h+='</div></div>';
@@ -250,21 +326,17 @@ function renderSection(sec){
   return h;
 }
 function renderForm(){
-  var main='', more='';
-  SECTIONS.forEach(function(sec){ if(sec.more) more+=renderSection(sec); else main+=renderSection(sec); });
-  document.getElementById('form-root').innerHTML = main
-    + '<div class="moretoggle" onclick="toggleMore()"><span id="more-arrow">▸</span> More — history &amp; non-shoulder</div>'
-    + '<div id="more-box" style="display:none">'+more+'</div>';
-  // Visit-type dropdown
-  var groups={}, order=[];
-  PRESETS.forEach(function(pr,i){ if(!groups[pr.group]){groups[pr.group]=[];order.push(pr.group);} groups[pr.group].push('<option value="'+i+'">'+esc(pr.label)+'</option>'); });
-  var ph='<span class="plabel">Visit type:</span><select id="preset-select" onchange="if(this.value!==\'\'){applyPreset(parseInt(this.value,10)); this.value=\'\';}"><option value="">— choose to auto-fill —</option>';
-  order.forEach(function(g){ ph+='<optgroup label="'+esc(g)+'">'+groups[g].join('')+'</optgroup>'; });
-  ph+='</select>';
-  document.getElementById('presets').innerHTML=ph;
+  // fixed column assignment: workup on the left, treatment on the right
+  var RIGHTCOL = { pt:1, meds:1, restrict:1, fu:1 };
+  var L='', R='';
+  SECTIONS.forEach(function(sec){
+    if(RIGHTCOL[sec.key]) R+=renderSection(sec);
+    else L+=renderSection(sec);
+  });
+  document.getElementById('form-root').innerHTML =
+    '<div class="cols"><div class="colx">'+L+'</div><div class="colx">'+R+'</div></div>';
   renderAllChips();
 }
-function toggleMore(){ var box=document.getElementById('more-box'), a=document.getElementById('more-arrow'); var open=box.style.display!=='none'; box.style.display=open?'none':'block'; a.textContent=open?'▸':'▾'; }
 
 function addChip(key, sel){
   var i=sel.value; sel.value=''; if(i==='') return; i=parseInt(i,10);
@@ -290,30 +362,101 @@ function renderChips(key){
 }
 function renderAllChips(){ SECTIONS.forEach(function(s){ if(s.drop) renderChips(s.key); }); }
 
-function applyPreset(idx){
+function applyPicks(picks, note){
   chips={}; renderForm();
   document.getElementById('p-other').value = '';
   var gs=val('global-side')||'right';
-  PRESETS[idx].picks.forEach(function(pk){
+  picks.forEach(function(pk){
     var key=pk[0], token=pk[1], value=pk[2]||'', sec=SEC_BY_KEY[key]; if(!sec) return;
     var i=tokenIndex(sec,token); if(i<0) return;
     if(sec.drop){
       if(!chips[key]) chips[key]=[];
       if(chips[key].some(function(e){return e.i===i;})) return;
       chips[key].push({i:i, v:value, side: isSided(sec,i)?gs:null});
+    } else if(sec.weightDrop && i<sec.weightDrop){
+      // weight limits live in the dropdown, not checkboxes
+      var ws=document.getElementById('weight-limit'); if(ws) ws.value=String(i);
     } else {
       var cb=document.getElementById('c_'+key+'_'+i); if(cb) cb.checked=true;
       if(value){ var ci=document.getElementById('ci_'+key+'_'+i); if(ci) ci.value=value; }
     }
   });
-  if(PRESETS[idx].note){ var ob=document.getElementById('p-other'); if(ob) ob.value = PRESETS[idx].note; }
+  if(note){ var ob=document.getElementById('p-other'); if(ob) ob.value = note; }
   renderAllChips();
 }
+function applyPreset(idx){ applyPicks(PRESETS[idx].picks, PRESETS[idx].note); }
 
-function expandItem(sec,e){ var item=sec.items[e.i]; var x=cleanX(item[1]); if(item[2]){ x = x.indexOf('{}')>=0 ? x.replace('{}', e.v||'___') : (x+(e.v?' '+e.v:'')); } return x; }
+// Populate the surgery + post-op-visit dropdowns (called once at startup)
+function initVisitControls(){
+  var ps=document.getElementById('ps-proc-sel');
+  if(ps){ var h='<option value="">— surgery —</option>'; PROCEDURES.forEach(function(p){ h+='<option value="'+esc(p)+'">'+esc(p)+'</option>'; }); ps.innerHTML=h; }
+  var vs=document.getElementById('ps-visit-sel');
+  if(vs){ var v2='<option value="">— post-op visit —</option>'; VISIT_LABELS_PS.forEach(function(l,i){ v2+='<option value="'+i+'">'+esc(l)+'</option>'; }); vs.innerHTML=v2; }
+}
+
+// Visit type changed -> show the right dependent field(s)
+function onVisitTypeChange(){
+  var vt=document.getElementById('vtype-sel').value;
+  var dx=document.getElementById('dx-sel'), ps=document.getElementById('ps-proc-sel'), pv=document.getElementById('ps-visit-sel');
+  dx.style.display='none'; ps.style.display='none'; pv.style.display='none';
+  if(vt==='new'||vt==='estab'||vt==='fu'){
+    // established-new-problem uses the same standard as a new patient
+    populateDx(vt==='fu' ? 'Follow-up' : 'New visit');
+    dx.style.display=''; dx.selectedIndex=0;
+  } else if(vt==='postop'){
+    ps.style.display=''; pv.style.display=''; ps.selectedIndex=0; pv.selectedIndex=0;
+  }
+}
+// Fill the diagnosis dropdown from the presets in the chosen group
+// Category for each diagnosis preset (keyed by base label; anything unlisted -> Other)
+var PRESET_CAT = {
+  'Impingement / bursitis':'Rotator cuff', 'Rotator cuff tear':'Rotator cuff', 'Acute rotator cuff tear':'Rotator cuff',
+  'AC joint arthritis':'Arthritis', 'Glenohumeral arthritis':'Arthritis', 'Rotator cuff arthropathy':'Arthritis',
+  'SLAP tear':'Instability / labrum', 'Instability / dislocation':'Instability / labrum',
+  'Biceps tendinitis':'Biceps', 'Distal biceps rupture':'Biceps',
+  'Fracture, clavicle — non-op':'Fracture', 'Fracture, prox humerus — non-op':'Fracture',
+  'Fracture, clavicle — surgical':'Fracture', 'Fracture, prox humerus — surgical':'Fracture'
+};
+function populateDx(group){
+  var dx=document.getElementById('dx-sel');
+  var h='<option value="">— select diagnosis —</option>';
+  // generic follow-up first, ungrouped
+  PRESETS.forEach(function(pr,i){ if(pr.group===group && pr.label==='Follow-up (generic)'){ h+='<option value="'+i+'">'+esc(pr.label)+'</option>'; } });
+  ['Rotator cuff','Arthritis','Instability / labrum','Biceps','Fracture','Other'].forEach(function(cat){
+    var opts='';
+    PRESETS.forEach(function(pr,i){
+      if(pr.group!==group || pr.label==='Follow-up (generic)') return;
+      var base=pr.label.replace(/ — follow-up$/i,'');
+      if((PRESET_CAT[base]||'Other')===cat) opts+='<option value="'+i+'">'+esc(base)+'</option>';
+    });
+    if(opts) h+='<optgroup label="'+cat+'">'+opts+'</optgroup>';
+  });
+  dx.innerHTML=h;
+}
+function applyDxPreset(){
+  var v=document.getElementById('dx-sel').value; if(v==='') return;
+  applyPreset(parseInt(v,10));
+}
+// Apply the chosen surgery + post-op visit (needs both selected)
+function applyPostopNew(){
+  var proc=document.getElementById('ps-proc-sel').value;
+  var vi=document.getElementById('ps-visit-sel').value;
+  if(proc===''||vi==='') return;
+  vi=parseInt(vi,10);
+  var track=PROC_TRACK[proc]||'cuff';
+  var plan = (VISIT_KEYS[vi]==='annual') ? ANNUAL_PS : (TRACK_PLANS_PS[track]||TRACK_PLANS_PS.cuff)[VISIT_KEYS[vi]];
+  if(!plan) return;
+  var picks=(vi===0?FIRST_COMMON_PS.slice():[]).concat(plan.picks||[]);
+  applyPicks(picks, plan.note||'');
+}
+
+function fmtDate(s){ var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s); return m ? (+m[2])+'/'+(+m[3])+'/'+m[1] : s; } // yyyy-mm-dd -> m/d/yyyy
+function expandItem(sec,e){ var item=sec.items[e.i]; var x=cleanX(item[1]); if(item[2]){ var vv=(item[2]==='date')?fmtDate(e.v):e.v; x = x.indexOf('{}')>=0 ? x.replace('{}', vv||'___') : (x+(vv?' '+vv:'')); } return x; }
 function collect(sec){
   if(sec.drop) return chips[sec.key]||[];
-  var arr=[]; sec.items.forEach(function(item,i){ var cb=document.getElementById('c_'+sec.key+'_'+i); if(cb&&cb.checked){ arr.push({i:i, v:val('ci_'+sec.key+'_'+i), side:null}); } }); return arr;
+  var arr=[];
+  if(sec.weightDrop){ var wv=val('weight-limit'); if(wv!==''){ arr.push({i:parseInt(wv,10), v:'', side:null}); } }
+  sec.items.forEach(function(item,i){ var cb=document.getElementById('c_'+sec.key+'_'+i); if(cb&&cb.checked){ arr.push({i:i, v:val('ci_'+sec.key+'_'+i), side:null}); } }); return arr;
 }
 function sectionText(sec){
   var arr=collect(sec); if(!arr.length) return '';
@@ -325,52 +468,31 @@ function generate(){
   var lines=[];
   SECTIONS.forEach(function(sec){ var t=sectionText(sec); if(t) lines.push({label:sec.title, text:t}); });
   var other=val('p-other');
-  var h='<div class="plan-header"><div class="t">Plan — '+esc(val('p-name')||'[patient]')+'</div>';
-  h+='<div class="s">'+esc(val('p-mrn')?'MRN/DOB: '+val('p-mrn')+'   ':'')+esc(val('p-date')?'Date: '+val('p-date'):'')+'   Robert H. Rolf, MD, Beacon Orthopaedics</div></div>';
+  var h='<div class="plan-header"><div class="t">Plan / Visit Summary — '+esc(val('p-name')||'[patient]')+'</div>';
+  h+='<div class="s">'+esc(val('p-mrn')?'DOB: '+val('p-mrn')+'   ':'')+esc(val('p-date')?'Date: '+val('p-date'):'')+'   Robert H. Rolf, MD, Beacon Orthopaedics</div></div>';
   lines.forEach(function(l){ h+='<div class="plan-line"><b>'+esc(l.label)+':</b> '+esc(l.text)+'</div>'; });
   if(other){ h+='<div class="plan-line"><b>Other:</b> '+esc(other)+'</div>'; }
   if(!lines.length && !other){ h+='<div class="plan-line">No items selected.</div>'; }
+  // patient-facing footer so the same page prints as the patient's copy
+  h+='<div class="ph-sec ph-warn" style="margin-top:10px">Call the office for worsening pain, fever, redness or drainage, new numbness, or any concerns.</div>';
+  h+='<div class="ph-footer">Questions? Contact Team Rolf &middot; Teamrolf@beaconortho.com &middot; doctorrolf.com</div>';
   document.getElementById('plan').innerHTML=h;
-  buildPatient();
   var p=document.getElementById('output-panel'); p.classList.add('active');
   try{ p.scrollIntoView({behavior:'smooth'}); }catch(e){}
 }
 
-/* Patient-facing handout built from the same selections. */
-function buildPatient(){
-  function exps(key){ var sec=SEC_BY_KEY[key]; return collect(sec).map(function(e){ return expandItem(sec,e); }); }
-  var h='<div class="ph-header"><div class="t">Visit Summary — '+esc(val('p-name')||'[patient]')+'</div>';
-  h+='<div class="s">'+esc(val('p-date')?'Date: '+val('p-date')+'   ':'')+'Robert H. Rolf, MD · Beacon Orthopaedics</div></div>';
-  var dxT=sectionText(SEC_BY_KEY['dx']); if(dxT) h+='<div class="ph-sec"><b>Your diagnosis:</b> '+esc(dxT)+'.</div>';
-  if(exps('condition').length) h+='<div class="ph-sec">We gave you an information sheet about your condition.</div>';
-  var injT=sectionText(SEC_BY_KEY['inj']); if(injT) h+='<div class="ph-sec"><b>Injection today:</b> '+esc(injT)+' cortisone injection. Mild soreness for 1–2 days is normal; ice helps.</div>';
-  var img=exps('img'); if(img.length) h+='<div class="ph-sec"><b>Tests ordered:</b> '+esc(img.join(', '))+'. Our office will call you to schedule.</div>';
-  var meds=exps('meds'); if(meds.length) h+='<div class="ph-sec"><b>Medications:</b> '+esc(meds.join('; '))+'.</div>';
-  var pt=exps('pt'); if(pt.length) h+='<div class="ph-sec"><b>Physical therapy:</b> '+esc(pt.join('; '))+'.</div>';
-  var res=exps('restrict'); if(res.length) h+='<div class="ph-sec"><b>Activity:</b> '+esc(res.join('; '))+'.</div>';
-  var dme=exps('dme'); if(dme.length) h+='<div class="ph-sec"><b>Brace / sling:</b> '+esc(dme.join(', '))+'.</div>';
-  var po=exps('postop'); if(po.length) h+='<div class="ph-sec"><b>After surgery:</b> '+esc(po.join('; '))+'.</div>';
-  var surgT=sectionText(SEC_BY_KEY['surg']); if(surgT) h+='<div class="ph-sec"><b>Surgery:</b> we discussed '+esc(surgT)+'. See the surgery information sheet.</div>';
-  var ho=exps('handout'); if(ho.length) h+='<div class="ph-sec">We gave you: '+esc(ho.join(', '))+'.</div>';
-  var fu=exps('fu'); if(fu.length) h+='<div class="ph-sec"><b>Follow-up:</b> '+esc(fu.join(', '))+'.</div>';
-  var other=val('p-other'); if(other) h+='<div class="ph-sec"><b>Notes:</b> '+esc(other)+'</div>';
-  h+='<div class="ph-sec ph-warn">Call the office for worsening pain, fever, redness or drainage, new numbness, or any concerns.</div>';
-  h+='<div class="ph-footer">Questions? Contact Team Rolf · Teamrolf@beaconortho.com · doctorrolf.com</div>';
-  document.getElementById('patient').innerHTML=h;
-}
 function copyPlan(){ var text=document.getElementById('plan').innerText; var done=function(){ var m=document.getElementById('copy-msg'); if(m){m.style.display='inline'; setTimeout(function(){m.style.display='none';},2000);} }; if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(function(){fb(text);done();}); } else { fb(text); done(); } }
 function fb(text){ var ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.left='-9999px'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); }
-function copyPatient(){
-  var text=document.getElementById('patient').innerText;
-  var done=function(){ var m=document.getElementById('copy-msg2'); if(m){m.style.display='inline'; setTimeout(function(){m.style.display='none';},2000);} };
-  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(function(){fb(text);done();}); } else { fb(text); done(); }
-}
 function printAs(cls){ document.body.classList.add(cls); window.print(); document.body.classList.remove(cls); }
 function printPlan(){ printAs('pp-provider'); }
-function printPatient(){ printAs('pp-patient'); }
-function clearAll(){ chips={}; renderForm(); ['p-name','p-mrn','p-other'].forEach(function(id){document.getElementById(id).value='';}); document.getElementById('global-side').selectedIndex=0; setToday(); document.getElementById('output-panel').classList.remove('active'); }
+function clearAll(){ chips={}; renderForm(); ['p-name','p-mrn','p-other'].forEach(function(id){document.getElementById(id).value='';}); document.getElementById('global-side').selectedIndex=0;
+  document.getElementById('vtype-sel').selectedIndex=0;
+  var dx=document.getElementById('dx-sel'); if(dx){ dx.style.display='none'; dx.innerHTML=''; }
+  var a=document.getElementById('ps-proc-sel'); if(a){ a.selectedIndex=0; a.style.display='none'; }
+  var b=document.getElementById('ps-visit-sel'); if(b){ b.selectedIndex=0; b.style.display='none'; }
+  setToday(); document.getElementById('output-panel').classList.remove('active'); }
 function setToday(){ var d=new Date(); document.getElementById('p-date').value=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
-renderForm(); setToday();
+renderForm(); initVisitControls(); setToday();
 </script>
 </body>
 </html>

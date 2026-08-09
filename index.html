@@ -50,11 +50,13 @@
   </div>
 <script>
   var TOOLS = [
-    ["Plan_Sheet.html",            "Plan",     "Plan Sheet",      "Build the visit plan + patient handout"],
+    ["Clinic_Encounter_Sheet.html","Clin",     "Clinic Encounter","New / established / follow-up + patient handout"],
+    ["Patient_Checkout_Sheet.html","Post",     "Post-op Encounter","Post-op provider note + patient handout"],
     ["Billing_Coder.html",         "Bill",     "Billing Coder",   "Diagnosis & procedure codes"],
     ["Op_Report_Generator.html",   "Op",       "Op Report",       "Operative note to paste into Athena"],
+    ["Op_Report_Generator_Coded.html", "Op$",  "Op Report + Codes","Same op note with CPT/ICD codes listed"],
     ["Surgery_Booking_Form.html",  "Book",     "Surgery Booking", "Booking form for staff"],
-    ["Patient_Checkout_Sheet.html","Chk",      "Checkout Sheet",  "Post-op discharge instructions"]
+    ["Plan_Sheet.html",            "Plan",     "Plan Sheet",      "Legacy — being replaced by the encounter sheets"]
   ];
   var g = document.getElementById("grid");
   TOOLS.forEach(function(t){

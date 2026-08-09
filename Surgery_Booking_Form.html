@@ -93,6 +93,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title" style="margin-top:0">Common Fields</div>
 <div class="row">
 <div class="field"><label>Patient Name</label><input type="text" id="patient-name"></div>
+<div class="field"><label>DOB</label><input type="text" id="patient-dob" placeholder="mm/dd/yyyy"></div>
 <div class="field field-med"><label>Date of Surgery</label><input type="date" id="dos"></div>
 </div>
 <div class="row">
@@ -113,7 +114,6 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Rep</div>
 <div class="row">
 <div class="field field-med"><label>Rep Company</label><select id="rep-company"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
-<div class="field"><label>Rep Name</label><input id="rep-name"></div>
 <div class="field" id="rep-other-field" style="display:none"><label>Other Company</label><input id="rep-other"></div>
 </div>
 
@@ -254,15 +254,12 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Reps</div>
 <div class="row">
 <div class="field field-med"><label>Rep 1 Company</label><select id="bankart-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
-<div class="field"><label>Rep 1 Name</label><input id="bankart-rep1-name"></div>
 </div>
 <div class="row">
 <div class="field field-med"><label>Rep 2 Company</label><select id="bankart-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
-<div class="field"><label>Rep 2 Name</label><input id="bankart-rep2-name"></div>
 </div>
 <div class="row">
 <div class="field field-med"><label>Rep 3 Company</label><select id="bankart-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
-<div class="field"><label>Rep 3 Name</label><input id="bankart-rep3-name"></div>
 </div>
 <div class="row">
 <div class="field"><label>Additional Equipment</label><textarea id="bankart-equip"></textarea></div>
@@ -290,15 +287,12 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Reps</div>
 <div class="row">
 <div class="field field-med"><label>Rep 1 Company</label><select id="rcr-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
-<div class="field"><label>Rep 1 Name</label><input id="rcr-rep1-name"></div>
 </div>
 <div class="row">
 <div class="field field-med"><label>Rep 2 Company</label><select id="rcr-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
-<div class="field"><label>Rep 2 Name</label><input id="rcr-rep2-name"></div>
 </div>
 <div class="row">
 <div class="field field-med"><label>Rep 3 Company</label><select id="rcr-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
-<div class="field"><label>Rep 3 Name</label><input id="rcr-rep3-name"></div>
 </div>
 <div class="row">
 <div class="field"><label>Additional Equipment</label><textarea id="rcr-equip"></textarea></div>
@@ -313,15 +307,12 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Reps</div>
 <div class="row">
 <div class="field field-med"><label>Rep 1 Company</label><select id="scope-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
-<div class="field"><label>Rep 1 Name</label><input id="scope-rep1-name"></div>
 </div>
 <div class="row">
 <div class="field field-med"><label>Rep 2 Company</label><select id="scope-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
-<div class="field"><label>Rep 2 Name</label><input id="scope-rep2-name"></div>
 </div>
 <div class="row">
 <div class="field field-med"><label>Rep 3 Company</label><select id="scope-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
-<div class="field"><label>Rep 3 Name</label><input id="scope-rep3-name"></div>
 </div>
 <div class="row">
 <div class="field"><label>Additional Equipment</label><textarea id="scope-equip"></textarea></div>
@@ -339,15 +330,12 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Reps</div>
 <div class="row">
 <div class="field field-med"><label>Rep 1 Company</label><select id="scr-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
-<div class="field"><label>Rep 1 Name</label><input id="scr-rep1-name"></div>
 </div>
 <div class="row">
 <div class="field field-med"><label>Rep 2 Company</label><select id="scr-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
-<div class="field"><label>Rep 2 Name</label><input id="scr-rep2-name"></div>
 </div>
 <div class="row">
 <div class="field field-med"><label>Rep 3 Company</label><select id="scr-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
-<div class="field"><label>Rep 3 Name</label><input id="scr-rep3-name"></div>
 </div>
 <div class="row">
 <div class="field"><label>Additional Equipment</label><textarea id="scr-equip"></textarea></div>
@@ -539,9 +527,8 @@ function getProcReps(prefix) {
   var reps = [];
   for (var i = 1; i <= 3; i++) {
     var co = v(prefix + '-rep' + i + '-co');
-    var name = v(prefix + '-rep' + i + '-name');
     if (co) {
-      reps.push(co + (name.trim() ? ' - ' + name.trim() : ''));
+      reps.push(co);
     }
   }
   return reps;
@@ -597,9 +584,10 @@ function esc(s) {
 function renderBookingDoc(proc, side) {
   var repCo = v('rep-company');
   if (repCo === 'Other') repCo = v('rep-other') || 'Other';
-  var repStr = repCo ? (repCo + (v('rep-name').trim() ? ' - ' + v('rep-name').trim() : '')) : '—';
+  var repStr = repCo || '—';
   var rows = [
     ['Patient', v('patient-name') || '—'],
+    ['DOB', v('patient-dob') || '—'],
     ['Date of Surgery', v('dos') || '—'],
     ['Location', v('location')],
     ['Side', side],
@@ -649,6 +637,7 @@ function generateBooking() {
   lines.push('========================================');
   lines.push('');
   lines.push('Patient: ' + v('patient-name'));
+  if (v('patient-dob')) lines.push('DOB: ' + v('patient-dob'));
   lines.push('Date of Surgery: ' + v('dos'));
   lines.push('Location: ' + v('location'));
   lines.push('Side: ' + side);
@@ -658,9 +647,7 @@ function generateBooking() {
   var repCo = v('rep-company');
   if (repCo === 'Other') repCo = v('rep-other') || 'Other';
   if (repCo) {
-    var repLine = 'Rep: ' + repCo;
-    if (v('rep-name').trim()) repLine += ' - ' + v('rep-name');
-    lines.push(repLine);
+    lines.push('Rep: ' + repCo);
   }
   lines.push('');
   lines.push('Procedure: ' + getProcedureName(proc));
@@ -1087,12 +1074,12 @@ function printReport() {
 
 function resetForm() {
   document.getElementById('patient-name').value = '';
+  document.getElementById('patient-dob').value = '';
   document.getElementById('dos').value = todayStr();
   document.getElementById('location').selectedIndex = 0;
   document.getElementById('side').selectedIndex = 0;
   document.getElementById('workers-comp').checked = false;
   document.getElementById('rep-company').value = '';
-  document.getElementById('rep-name').value = '';
   document.getElementById('rep-other').value = '';
   document.getElementById('rep-other-field').style.display = 'none';
   document.getElementById('block-type').selectedIndex = 0;

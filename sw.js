@@ -6,11 +6,13 @@ const ASSETS = [
   "icon-192.png",
   "icon-512.png",
   "apple-touch-icon.png",
+  "Op_Report_Generator_Coded.html",
+  "Clinic_Encounter_Sheet.html",
+  "Patient_Checkout_Sheet.html",
   "Plan_Sheet.html",
   "Billing_Coder.html",
   "Op_Report_Generator.html",
-  "Surgery_Booking_Form.html",
-  "Patient_Checkout_Sheet.html"
+  "Surgery_Booking_Form.html"
 ];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));

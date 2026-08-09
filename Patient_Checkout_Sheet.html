@@ -8,7 +8,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Checkout">
+<meta name="apple-mobile-web-app-title" content="Post-op">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
 
@@ -24,6 +24,12 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 .section-title { font-size: 15px; font-weight: bold; color: #1B3A6B; border-bottom: 2px solid #E8A838; padding-bottom: 4px; margin: 18px 0 8px; }
 .section-title small { font-weight: normal; color: #888; font-size: 12px; }
 .section-title:first-child { margin-top: 0; }
+/* Fixed two-column layout on wider screens (phones stay single-column) */
+.formsec { margin-bottom: 14px; }
+.formsec .section-title { margin-top: 0; }
+.cols { display: flex; gap: 26px; align-items: flex-start; }
+.col { flex: 1; min-width: 0; }
+@media (max-width: 759px) { .cols { display: block; } }
 .row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
 .field { flex: 1; min-width: 150px; }
 .field label { display: block; font-size: 12px; color: #666; font-weight: bold; margin-bottom: 3px; }
@@ -60,16 +66,42 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 .doc-contact { text-align: center; margin-top: 8px; padding-top: 8px; border-top: 2px solid #1B3A6B; font-size: 13px; font-weight: bold; color: #1B3A6B; }
 .doc-contact .lbl { color: #555; font-weight: normal; }
 
+.outblock { border: 1px solid #e2e6ee; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+.outhead { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; font-weight: bold; color: #1B3A6B; font-size: 15px; }
+.outhead .btns { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.provider { background: #fff; color: #222; }
+[contenteditable]:focus { outline: 2px dashed #E8A838; outline-offset: 4px; }
+/* embedded handout documents appended to the printable summary */
+#hp-pages { margin-top: 14px; }
+.hp-doc { border-top: 2px dashed #94a3b8; margin-top: 14px; padding-top: 12px; font-size: 12.5px; line-height: 1.55; color: #1e2a3a; }
+.hp-doc .hp-head { text-align: center; padding-bottom: 8px; margin-bottom: 12px; border-bottom: 3px solid #1B3A6B; position: relative; }
+.hp-doc .hp-head:after { content: ""; position: absolute; left: 35%; right: 35%; bottom: -7px; height: 4px; background: #E8A838; border-radius: 2px; }
+.hp-doc .hp-practice { font-size: 19px; font-weight: bold; color: #1B3A6B; letter-spacing: .4px; }
+.hp-doc .hp-title { font-size: 15px; font-weight: bold; margin-top: 3px; }
+.hp-doc .hp-sub { font-size: 11px; color: #667; margin-top: 2px; }
+.hp-doc h3 { color: #1B3A6B; font-size: 13.5px; border-bottom: 2px solid #E8A838; padding-bottom: 2px; margin: 14px 0 6px; }
+.hp-doc ul, .hp-doc ol { margin: 4px 0 8px 22px; }
+.hp-doc li { margin-bottom: 3px; }
+.hp-doc p { margin-bottom: 7px; }
+.hp-doc table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; }
+.hp-doc td { border: 1px solid #dbe3ef; padding: 6px 10px; font-size: 12.5px; vertical-align: top; }
+.hp-doc td:first-child { background: #f0f4f8; color: #1B3A6B; font-weight: bold; width: 30%; }
+.hp-doc tr:nth-child(even) td:not(:first-child) { background: #fafbfd; }
+.hp-doc .hp-foot { margin-top: 12px; padding-top: 6px; border-top: 2px solid #1B3A6B; text-align: center; font-weight: bold; color: #1B3A6B; font-size: 12px; }
+@media print { .hp-doc { border-top: none; page-break-before: always; margin-top: 0; padding-top: 0; } .hp-doc table, .hp-doc h3 { page-break-inside: avoid; } }
 @media print {
   body { background: #fff; }
-  body * { visibility: hidden; }
-  #handout, #handout * { visibility: visible; }
-  #handout { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; }
+  body.pp-provider * { visibility: hidden; }
+  body.pp-provider #provider, body.pp-provider #provider * { visibility: visible; }
+  body.pp-provider #provider { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; }
+  body.pp-patient * { visibility: hidden; }
+  body.pp-patient #handout, body.pp-patient #handout * { visibility: visible; }
+  body.pp-patient #handout { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; }
 }
 </style>
 </head>
 <body>
-<div class="header"><h1>Patient Checkout Sheet</h1><span>Robert H. Rolf, MD | Beacon Orthopaedics</span></div>
+<div class="header"><h1>Post-op Encounter Sheet</h1><span>Robert H. Rolf, MD | Beacon Orthopaedics</span></div>
 <div class="container">
   <div class="panel">
     <div class="section-title">Patient &amp; Encounter</div>
@@ -87,42 +119,45 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
         <input id="p-proc" style="display:none;margin-top:6px" placeholder="Type the procedure"></div>
       <div class="field" style="max-width:160px"><label>Side</label><select id="p-side"><option>Right</option><option>Left</option><option>Bilateral</option></select></div>
     </div>
-    <div class="row">
-      <div class="field" style="max-width:220px"><label>Office Phone</label><input id="p-phone" placeholder="(   )    -    "></div>
-    </div>
 
-    <div class="section-title">Post-op visit auto-fill</div>
-    <div class="row"><div class="field" style="max-width:360px"><select id="co-preset-select" onchange="if(this.value!==''){applyPresetCO(parseInt(this.value,10)); this.value='';}"></select></div></div>
+    <div class="section-title">Post-op visit</div>
+    <div class="row"><div class="field" style="max-width:360px"><select id="co-preset-select" onchange="if(this.value!==''){applyPresetCO(parseInt(this.value,10));}"></select></div></div>
 
     <div id="form-root"></div>
 
     <div class="section-title">Follow-Up</div>
-    <div class="row">
-      <div class="field"><label>Scheduled appointment (date / time)</label><input id="fu-when" placeholder="optional"></div>
-      <div class="field"><label>Visit is for</label><input id="fu-for" placeholder="suture check, X-ray, etc."></div>
-    </div>
     <div id="fu-intervals"></div>
 
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="generate()">Generate Checkout Sheet</button>
+      <button class="btn btn-primary" onclick="generate()">Generate</button>
       <button class="btn btn-outline" onclick="clearAll()">Clear</button>
     </div>
   </div>
 
   <div class="output-panel" id="output-panel">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
-      <h2 style="color:#1B3A6B;">Patient Checkout Sheet</h2>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="btn btn-secondary" onclick="copyDoc()">Copy</button>
-        <button class="btn btn-outline" onclick="printDoc()">Print</button>
-        <button class="btn btn-outline" onclick="document.getElementById('output-panel').classList.remove('active')">Close</button>
-      </div>
+      <h2 style="color:#1B3A6B;">Output</h2>
+      <button class="btn btn-outline" onclick="document.getElementById('output-panel').classList.remove('active')">Close</button>
     </div>
-    <span class="copied-msg" id="copy-msg">Copied to clipboard!</span>
-    <div class="handout" id="handout"></div>
+    <div class="outblock">
+      <div class="outhead"><span>Provider note — for Athena <small style="font-weight:normal;color:#888">(tap text to edit)</small></span>
+        <span class="btns"><button class="btn btn-secondary" onclick="copyProvider()">Copy</button>
+        <button class="btn btn-outline" onclick="printProvider()">Print</button>
+        <span class="copied-msg" id="copy-msg-p">Copied!</span></span></div>
+      <div class="provider" id="provider" contenteditable="true" spellcheck="false"></div>
+    </div>
+    <div class="outblock">
+      <div class="outhead"><span>Patient handout — print &amp; give <small style="font-weight:normal;color:#888">(tap text to edit)</small></span>
+        <span class="btns"><button class="btn btn-secondary" onclick="copyDoc()">Copy</button>
+        <button class="btn btn-primary" onclick="printPatientAll()">Print + handout</button>
+        <button class="btn btn-outline" onclick="printPatient()">Print</button>
+        <span class="copied-msg" id="copy-msg">Copied!</span></span></div>
+      <div class="handout" id="handout" contenteditable="true" spellcheck="false"></div>
+    </div>
   </div>
 </div>
 
+<script id="handout-data">var HANDOUT_HTML = {"sh_tsa": "<div class=\"hp-head\"><div class=\"hp-practice\">Beacon Orthopaedics</div><div class=\"hp-title\">Total Shoulder Replacement</div><div class=\"hp-sub\">Robert H. Rolf, MD &mdash; Shoulder &amp; Elbow Surgery</div></div>\n<p>Robert H. Rolf, M.D. | Beacon Orthopaedics &amp; Sports Medicine</p>\n<table>\n\n<tbody>\n<tr>\n<td><strong>Procedure</strong></td>\n<td>Damaged joint surfaces replaced with metal and plastic implants</td>\n</tr>\n<tr>\n<td><strong>Surgery Time</strong></td>\n<td>Approximately 1-2 hours</td>\n</tr>\n<tr>\n<td><strong>Same Day?</strong></td>\n<td>Most patients go home the same day</td>\n</tr>\n<tr>\n<td><strong>Sling</strong></td>\n<td>4 weeks</td>\n</tr>\n<tr>\n<td><strong>Lifetime Limit</strong></td>\n<td>25-30 lbs overhead</td>\n</tr>\n<tr>\n<td><strong>Return to Sports</strong></td>\n<td>Golf, swimming, tennis at 4-6 months</td>\n</tr>\n</tbody>\n</table>\n<h3>Why Consider Surgery?</h3>\n<p>Shoulder arthritis causes cartilage to wear down, leading to bone-on-bone contact, pain, and stiffness. When conservative treatments (therapy, injections, medications) no longer provide relief, Total Shoulder Replacement (TSA) restores smooth, pain-free motion by replacing the damaged ball and socket with artificial implants.</p>\n<h3>Recovery Timeline</h3>\n<table>\n\n<tbody>\n<tr>\n<td><strong>Phase</strong></td>\n<td><strong>Timeframe</strong></td>\n<td><strong>What to Expect</strong></td>\n</tr>\n<tr>\n<td>Immediate</td>\n<td>Day 1</td>\n<td>Begin gentle movement with physical therapist</td>\n</tr>\n<tr>\n<td>Protection</td>\n<td>Weeks 1-4</td>\n<td>Wear sling for comfort and protection</td>\n</tr>\n<tr>\n<td>Early Rehab</td>\n<td>Weeks 4-12</td>\n<td>Increase movement gradually; 5-lb lifting limit</td>\n</tr>\n<tr>\n<td>Strengthening</td>\n<td>Months 4-6</td>\n<td>Return to swimming, golf, tennis; 10-lb limit</td>\n</tr>\n<tr>\n<td>Long-Term</td>\n<td>6+ months</td>\n<td>Most function restored; 25-30 lb overhead limit</td>\n</tr>\n</tbody>\n</table>\n<table>\n\n<tbody>\n<tr>\n<td><strong>Avoid heavy lifting (&gt;25-30 lbs overhead), high-impact sports, and activities that risk falls.</strong></td>\n</tr>\n</tbody>\n</table>\n<h3>Risks</h3>\n<p>Complications are rare but may include: infection, stiffness, implant loosening or wear over time, fractures around the implant, or incomplete pain relief. The benefits far outweigh the risks for most patients.</p>\n<h3>Frequently Asked Questions</h3>\n<table>\n\n<tbody>\n<tr>\n<td><h3>Q: Will my shoulder feel normal?</h3>\n<blockquote>\n<p>Most patients regain 80% or more of their normal function with significant pain relief.</p>\n</blockquote>\n<h3>Q: When can I drive?</h3>\n<blockquote>\n<p>Once you can safely control the vehicle and are no longer taking narcotic pain medication.</p>\n</blockquote>\n<h3>Q: Can I return to sports?</h3>\n<blockquote>\n<p>Golf, swimming, and tennis typically resume at 4-6 months. Avoid contact sports and heavy weightlifting.</p>\n</blockquote>\n<h3>Q: Will I need physical therapy?</h3>\n<blockquote>\n<p>Yes. PT begins within days of surgery and continues for 3-4 months to restore strength and motion.</p>\n</blockquote></td>\n</tr>\n</tbody>\n</table>\n<h3>First 4 Weeks: Do’s and Don’ts</h3>\n<table>\n\n<tbody>\n<tr>\n<td><strong>✅ DO</strong></td>\n<td><strong>❌ DON’T</strong></td>\n</tr>\n<tr>\n<td>Ice your shoulder 20 min on / 20 min off</td>\n<td>Lift anything with your surgical arm</td>\n</tr>\n<tr>\n<td>Sleep elevated or in a recliner</td>\n<td>Reach behind your back</td>\n</tr>\n<tr>\n<td>Take medications on schedule</td>\n<td>Push or pull with the surgical arm</td>\n</tr>\n<tr>\n<td>Wear your sling as instructed</td>\n<td>Remove your sling without instructions</td>\n</tr>\n<tr>\n<td>Begin PT exercises as directed</td>\n<td>Drive until cleared</td>\n</tr>\n<tr>\n<td>Use the opposite arm for daily tasks</td>\n<td>Submerge incision in water (no pools/baths)</td>\n</tr>\n</tbody>\n</table>\n<table>\n\n<tbody>\n<tr>\n<td><p><strong>myMobility</strong> with Zimmer Biomet</p>\n<p>Dr. Rolf uses the myMobility app by Zimmer Biomet for all shoulder replacement patients during the first year after surgery. This app allows our team to monitor your recovery progress, track outcomes, and provide guided exercises and education directly to your phone or tablet. You will receive setup instructions before your procedure.</p></td>\n</tr>\n</tbody>\n</table>\n<table>\n\n<tbody>\n<tr>\n<td><h3>Questions? Contact Us</h3>\n<p>Phone: 513-354-3700 | Email: teamrolf@beaconortho.com | www.DoctorRolf.com</p></td>\n</tr>\n</tbody>\n</table>\n", "sh_rsa": "<div class=\"hp-head\"><div class=\"hp-practice\">Beacon Orthopaedics</div><div class=\"hp-title\">Reverse Shoulder Replacement</div><div class=\"hp-sub\">Robert H. Rolf, MD &mdash; Shoulder &amp; Elbow Surgery</div></div>\n<p>Robert H. Rolf, M.D. | Beacon Orthopaedics &amp; Sports Medicine</p>\n<table>\n\n<tbody>\n<tr>\n<td><strong>Procedure</strong></td>\n<td>Ball and socket reversed so the deltoid muscle powers the arm</td>\n</tr>\n<tr>\n<td><strong>Surgery Time</strong></td>\n<td>Approximately 1.5-2.5 hours</td>\n</tr>\n<tr>\n<td><strong>Same Day?</strong></td>\n<td>Most patients go home same day; overnight if needed</td>\n</tr>\n<tr>\n<td><strong>Sling</strong></td>\n<td>2-4 weeks</td>\n</tr>\n<tr>\n<td><strong>Lifetime Limit</strong></td>\n<td>10-15 lbs overhead</td>\n</tr>\n<tr>\n<td><strong>Return to Sports</strong></td>\n<td>Golf, swimming, tennis at 4-6 months</td>\n</tr>\n</tbody>\n</table>\n<h3>Why Consider Surgery?</h3>\n<p>When the rotator cuff is severely torn and not repairable, the shoulder loses stability and develops arthritis. A Reverse Shoulder Replacement flips the normal anatomy, placing a ball where the socket was and vice versa, allowing the deltoid muscle to compensate for the missing rotator cuff. <strong>Common reasons:</strong> irreparable cuff tear with arthritis, failed previous replacement, complex fractures, severe arthritis with instability.</p>\n<p><strong>How is this different from a standard replacement?</strong> A standard replacement requires a functioning rotator cuff. A reverse swaps the ball and socket, allowing the deltoid to power the arm when the cuff is too damaged to repair.</p>\n<h3>Recovery Timeline</h3>\n<table>\n\n<tbody>\n<tr>\n<td><strong>Phase</strong></td>\n<td><strong>Timeframe</strong></td>\n<td><strong>What to Expect</strong></td>\n</tr>\n<tr>\n<td>Immediate</td>\n<td>Day 1</td>\n<td>Begin gentle movement with physical therapist</td>\n</tr>\n<tr>\n<td>Protection</td>\n<td>Weeks 1-4</td>\n<td>Wear sling for comfort and protection</td>\n</tr>\n<tr>\n<td>Early Rehab</td>\n<td>Weeks 4-12</td>\n<td>Increase movement gradually; 5-lb lifting limit</td>\n</tr>\n<tr>\n<td>Strengthening</td>\n<td>Months 4-6</td>\n<td>Return to swimming, golf, tennis; 10-lb limit</td>\n</tr>\n<tr>\n<td>Long-Term</td>\n<td>6+ months</td>\n<td>Most function restored; 10-15 lb overhead limit</td>\n</tr>\n</tbody>\n</table>\n<table>\n\n<tbody>\n<tr>\n<td><strong>Avoid heavy lifting (&gt;10-15 lbs overhead), high-impact sports, and activities that risk falls.</strong></td>\n</tr>\n</tbody>\n</table>\n<h3>Longevity &amp; Risks</h3>\n<p>91-94% of implants survive 10+ years; 84-87% at 15 years. Rare risks include: infection, dislocation, nerve injury, component loosening, acromion fracture, or revision surgery.</p>\n<h3>Frequently Asked Questions</h3>\n<table>\n\n<tbody>\n<tr>\n<td><h3>Q: Will my shoulder feel normal?</h3>\n<blockquote>\n<p>Most patients regain significant function and pain relief. The deltoid does the work the rotator cuff no longer can.</p>\n</blockquote>\n<h3>Q: When can I drive?</h3>\n<blockquote>\n<p>Once you can safely control the vehicle and are no longer taking narcotic pain medication.</p>\n</blockquote>\n<h3>Q: Can I return to sports?</h3>\n<blockquote>\n<p>Golf, swimming, and tennis typically resume at 4-6 months. Avoid contact sports and heavy weightlifting.</p>\n</blockquote>\n<h3>Q: Will I need physical therapy?</h3>\n<blockquote>\n<p>Yes. PT begins 2-3 days after surgery and continues for 3-4 months.</p>\n</blockquote></td>\n</tr>\n</tbody>\n</table>\n<h3>First 4 Weeks: Do’s and Don’ts</h3>\n<table>\n\n<tbody>\n<tr>\n<td><strong>✅ DO</strong></td>\n<td><strong>❌ DON’T</strong></td>\n</tr>\n<tr>\n<td>Ice your shoulder 20 min on / 20 min off</td>\n<td>Lift anything with your surgical arm</td>\n</tr>\n<tr>\n<td>Sleep elevated or in a recliner</td>\n<td>Reach behind your back</td>\n</tr>\n<tr>\n<td>Take medications on schedule</td>\n<td>Push or pull with the surgical arm</td>\n</tr>\n<tr>\n<td>Wear your sling as instructed</td>\n<td>Remove your sling without instructions</td>\n</tr>\n<tr>\n<td>Begin PT exercises as directed</td>\n<td>Drive until cleared</td>\n</tr>\n<tr>\n<td>Use the opposite arm for daily tasks</td>\n<td>Submerge incision in water (no pools/baths)</td>\n</tr>\n</tbody>\n</table>\n<table>\n\n<tbody>\n<tr>\n<td><p><strong>myMobility</strong> with Zimmer Biomet</p>\n<p>Dr. Rolf uses the myMobility app by Zimmer Biomet for all shoulder replacement patients during the first year after surgery. This app allows our team to monitor your recovery progress, track outcomes, and provide guided exercises and education directly to your phone or tablet. You will receive setup instructions before your procedure.</p></td>\n</tr>\n</tbody>\n</table>\n<h3>Questions? 513-354-3700 | teamrolf@beaconortho.com | www.DoctorRolf.com</h3>\n<p><em>Refs: Grubhofer et al. JSES 2016. Young et al. JBJS 2020. Smith et al. JSES 2024.</em></p>\n", "sh_rcr": "<div class=\"hp-head\"><div class=\"hp-practice\">Beacon Orthopaedics</div><div class=\"hp-title\">Rotator Cuff Repair</div><div class=\"hp-sub\">Robert H. Rolf, MD &mdash; Shoulder &amp; Elbow Surgery</div></div><table>\n\n<tbody>\n<tr>\n<td><strong>What Is It?</strong></td>\n<td>A partial or complete tear of one or more rotator cuff tendons</td>\n</tr>\n<tr>\n<td><strong>Who Gets It?</strong></td>\n<td>Adults over 40 (degenerative), athletes/laborers (traumatic)</td>\n</tr>\n<tr>\n<td><strong>Key Symptom</strong></td>\n<td>Pain with overhead reaching, weakness lifting the arm</td>\n</tr>\n<tr>\n<td><strong>Diagnosis</strong></td>\n<td>Physical exam + MRI to determine tear size and location</td>\n</tr>\n<tr>\n<td><strong>Treatment</strong></td>\n<td>Physical therapy, injections, or arthroscopic surgical repair</td>\n</tr>\n</tbody>\n</table>\n<h3>Understanding Your Rotator Cuff</h3>\n<p>The rotator cuff is a group of four muscles and tendons that surround the shoulder joint: the supraspinatus, infraspinatus, teres minor, and subscapularis. Together they stabilize the ball in the socket and allow you to lift and rotate your arm. When one or more of these tendons tears, it can cause significant pain and weakness. Tears range from partial-thickness (a fraying of the tendon) to full-thickness (a complete tear through the tendon).</p>\n<h3>Types of Rotator Cuff Tears</h3>\n<table>\n\n<tbody>\n<tr>\n<td><h3>By Cause</h3>\n<p>• Degenerative: gradual wear over time (most common)</p>\n<p>• Traumatic: from a fall, lifting, or sudden injury</p>\n<p>• Overuse: repetitive overhead work or sport</p></td>\n<td><h3>By Severity</h3>\n<p>• Partial-thickness: tendon is damaged but not torn through</p>\n<p>• Full-thickness (small): &lt;1 cm tear</p>\n<p>• Full-thickness (large): 1-3 cm tear</p>\n<p>• Massive: &gt;3 cm or involves multiple tendons</p></td>\n</tr>\n</tbody>\n</table>\n<h3>Common Symptoms</h3>\n<table>\n\n<tbody>\n<tr>\n<td><h3>Pain</h3>\n<p>• Aching at the top or side of the shoulder</p>\n<p>• Pain worse at night, especially lying on that side</p>\n<p>• Sharp pain with overhead motions</p>\n<p>• Gradual or sudden onset depending on cause</p></td>\n<td><h3>Function</h3>\n<p>• Weakness lifting or rotating the arm</p>\n<p>• Difficulty reaching behind back (bra strap, belt)</p>\n<p>• Arm feels heavy or fatigued</p>\n<p>• Crackling or popping sensation with movement</p></td>\n</tr>\n</tbody>\n</table>\n<h3>Treatment Options</h3>\n<p>Not all rotator cuff tears require surgery. Many partial tears and even some full-thickness tears can be managed successfully with physical therapy, activity modification, and anti-inflammatory measures. Your surgeon will consider the tear size, your activity level, symptom severity, and how long the tear has been present when recommending treatment.</p>\n<table>\n\n<tbody>\n<tr>\n<td><h3>Non-Surgical</h3>\n<p>• Physical therapy to strengthen surrounding muscles</p>\n<p>• Anti-inflammatory medications (oral or topical)</p>\n<p>• Cortisone injection for pain relief</p>\n<p>• Activity modification and ergonomic adjustments</p></td>\n<td><h3>Surgical</h3>\n<p>• Arthroscopic rotator cuff repair (most common)</p>\n<p>• Mini-open repair for larger tears</p>\n<p>• Tendon transfer or superior capsular reconstruction</p>\n<p>• Reverse shoulder replacement (massive irreparable tears)</p></td>\n</tr>\n</tbody>\n</table>\n<h3>After Surgery: What to Expect</h3>\n<p>If surgery is recommended, you will wear a sling for approximately 6 weeks while the repaired tendon heals. Physical therapy begins soon after surgery with gentle passive motion, progressing to active motion around 6 weeks and strengthening around 12 weeks. Most patients return to full activity by 5-6 months, though large or massive tears may take longer. Your specific restrictions will be: 5 lb lifting limit at 6 weeks, 10 lb at 3 months, with no restrictions after 6 months for small and medium tears.</p>\n<h3>Frequently Asked Questions</h3>\n<h3>Q: Will my tear get bigger if I don't have surgery?</h3>\n<blockquote>\n<p>It depends. Some tears remain stable for years, while others may enlarge over time, especially with continued heavy use. Your surgeon can help you weigh the risks of waiting versus repairing the tear.</p>\n</blockquote>\n<h3>Q: Can a torn rotator cuff heal on its own?</h3>\n<blockquote>\n<p>Partial tears can sometimes improve with rest and therapy, but full-thickness tears generally do not heal without surgical repair. The tendon edges retract and the muscle can develop fatty changes over time.</p>\n</blockquote>\n<h3>Q: How long will I be out of work?</h3>\n<blockquote>\n<p>Desk work: 1-2 weeks after surgery. Light physical work: 3-4 months. Heavy labor or overhead work: 5-6 months. Your surgeon will provide specific work restriction documentation.</p>\n</blockquote>\n<h3>Q: What if I don't have surgery?</h3>\n<blockquote>\n<p>Many patients do well with physical therapy alone, especially with partial tears or lower activity demands. However, if the tear is causing significant pain or weakness that limits your daily life, surgery may be the best option for long-term improvement.</p>\n</blockquote>\n<h3>Q: What happens if a tear goes untreated for a long time?</h3>\n<blockquote>\n<p>Over time, an untreated tear can enlarge, and the rotator cuff muscle can develop fatty infiltration and atrophy. Once these changes become severe, the tear may no longer be repairable with standard techniques. This is why monitoring with your surgeon is important, even if you choose not to have surgery right away.</p>\n</blockquote>\n<h3>Q: When can I return to sports or recreational activities?</h3>\n<blockquote>\n<p>Low-impact activities like walking or stationary biking can begin within a few weeks of surgery. Golf and swimming typically resume around 4-5 months. Full contact or overhead sports require 6 months and surgeon clearance. Your recovery tracker will provide specific milestones.</p>\n</blockquote>\n<table>\n\n<tbody>\n<tr>\n<td><h3>Questions? Contact Us</h3>\n<p>Phone: 513-354-3700 | Email: teamrolf@beaconortho.com | www.DoctorRolf.com</p></td>\n</tr>\n</tbody>\n</table>\n", "sh_faq": "<div class=\"hp-head\"><div class=\"hp-practice\">Beacon Orthopaedics</div><div class=\"hp-title\">Shoulder Surgery FAQ</div><div class=\"hp-sub\">Robert H. Rolf, MD &mdash; Shoulder &amp; Elbow Surgery</div></div><h3>Frequently Asked Questions</h3>\n<p>About Shoulder Surgery</p>\n<h3>What Will My Restrictions Be After Surgery?</h3>\n<p>Your post-operative restrictions depend on the type of shoulder surgery performed. Follow these guidelines to ensure proper healing:</p>\n<h3>Rotator Cuff Repair</h3>\n<table>\n\n<tbody>\n<tr>\n<td><strong>0-6 weeks</strong></td>\n<td>Must wear a sling</td>\n</tr>\n<tr>\n<td><strong>7-12 weeks</strong></td>\n<td>5-pound lifting limit</td>\n</tr>\n<tr>\n<td><strong>13-26 weeks</strong></td>\n<td>10-pound lifting limit</td>\n</tr>\n<tr>\n<td><strong>After 26 weeks</strong></td>\n<td>Cleared for normal activity</td>\n</tr>\n</tbody>\n</table>\n<h3>Total Shoulder Replacement</h3>\n<table>\n\n<tbody>\n<tr>\n<td><strong>0-4 weeks</strong></td>\n<td>Must wear a sling</td>\n</tr>\n<tr>\n<td><strong>7-12 weeks</strong></td>\n<td>5-pound lifting limit</td>\n</tr>\n<tr>\n<td><strong>13-26 weeks</strong></td>\n<td>10-pound lifting limit</td>\n</tr>\n<tr>\n<td><strong>Indefinite</strong></td>\n<td>25-30 lb overhead lifting limit</td>\n</tr>\n</tbody>\n</table>\n<h3>Labral Repair</h3>\n<table>\n\n<tbody>\n<tr>\n<td><strong>0-6 weeks</strong></td>\n<td>Must wear a sling</td>\n</tr>\n<tr>\n<td><strong>7-12 weeks</strong></td>\n<td>5-pound lifting limit</td>\n</tr>\n<tr>\n<td><strong>13-26 weeks</strong></td>\n<td>10-pound lifting limit</td>\n</tr>\n<tr>\n<td><strong>After 26 weeks</strong></td>\n<td>Cleared for normal activity</td>\n</tr>\n</tbody>\n</table>\n<h3>Reverse Shoulder Replacement</h3>\n<table>\n\n<tbody>\n<tr>\n<td><strong>0-4 weeks</strong></td>\n<td>Must wear a sling</td>\n</tr>\n<tr>\n<td><strong>6-12 weeks</strong></td>\n<td>5-pound lifting limit</td>\n</tr>\n<tr>\n<td><strong>13-26 weeks</strong></td>\n<td>10-pound lifting limit</td>\n</tr>\n<tr>\n<td><strong>Indefinite</strong></td>\n<td>10-15 lb overhead lifting limit</td>\n</tr>\n</tbody>\n</table>\n<h3>When Can I Return to Work?</h3>\n<blockquote>\n<p>• Most patients can return to work the week after surgery, depending on their job duties.</p>\n<p>• Review the post-operative restrictions above with your employer to determine when you can safely resume work.</p>\n<p>• If your employer requires work restriction notes, we can provide them via email or fax upon request.</p>\n<p>• If your job requires lifting beyond your restrictions, your employer may either keep you off work or modify your job duties accordingly.</p>\n</blockquote>\n<h3>Will I Need Physical Therapy After Surgery?</h3>\n<p>Yes, physical therapy is required for all shoulder surgery to ensure proper recovery.</p>\n<blockquote>\n<p>• <strong>First PT Visit:</strong> 2 days after surgery for a dressing change and incision check.</p>\n</blockquote>\n<h3>Shoulder Replacements:</h3>\n<blockquote>\n<p>• PT twice a week for 6 weeks.</p>\n<p>• Then transition to once a week or every other week until 3-4 months after surgery.</p>\n</blockquote>\n<h3>Shoulder Repairs:</h3>\n<blockquote>\n<p>• Attend initial PT visit.</p>\n<p>• Return in 2-4 weeks, depending on the extent of the repair.</p>\n<p>• Your therapy schedule will be outlined on your PT script, provided on the day of surgery.</p>\n</blockquote>\n<h3>When Can I Return to Golf After Shoulder Surgery?</h3>\n<p>Your return to golf will depend on the type of shoulder surgery performed and your progress in rehabilitation.</p>\n<h3>Rotator Cuff Repair</h3>\n<blockquote>\n<p>• <strong>Chipping &amp; putting:</strong> ~4 months</p>\n<p>• <strong>Full swings:</strong> ~6 months</p>\n<p>• <strong>Return to competitive play:</strong> ~6-9 months</p>\n</blockquote>\n<h3>Total Shoulder Replacement</h3>\n<blockquote>\n<p>• <strong>Chipping &amp; putting:</strong> ~3-4 months</p>\n<p>• <strong>Full swings:</strong> ~5-6 months</p>\n<p>• <strong>Return to competitive play:</strong> ~6-9 months</p>\n</blockquote>\n<h3>Labral Repair</h3>\n<blockquote>\n<p>• <strong>Chipping &amp; putting:</strong> ~4 months</p>\n<p>• <strong>Full swings:</strong> ~6 months</p>\n<p>• <strong>Return to competitive play:</strong> ~6-9 months</p>\n</blockquote>\n<h3>Reverse Shoulder Replacement</h3>\n<blockquote>\n<p>• <strong>Chipping &amp; putting:</strong> ~3-4 months</p>\n<p>• <strong>Full swings:</strong> ~5-6 months</p>\n<p>• <strong>Return to competitive play:</strong> ~6-9 months</p>\n</blockquote>\n<table>\n\n<tbody>\n<tr>\n<td><h3>Questions? Contact Us</h3>\n<p>Phone: 513-354-3700 | Email: teamrolf@beaconortho.com | www.DoctorRolf.com</p></td>\n</tr>\n</tbody>\n</table>\n"};</script>
 <script>
 // ---------- data ----------
 var SECTIONS = [
@@ -139,10 +174,14 @@ var SECTIONS = [
     { id: 'rom4', tpl: 'No external rotation past {d}°', inputs: [{ k: 'd', size: 3 }] },
     { id: 'rom5', tpl: 'Begin active range of motion' },
     { id: 'rom6', tpl: 'No pushing, pulling, or overhead reaching' },
-    { id: 'rom7', tpl: 'Progress activity as tolerated' }
+    { id: 'rom7', tpl: 'Progress activity as tolerated' },
+    { id: 'act0', tpl: 'No lifting or active use of the operated arm' },
+    { id: 'rbb', tpl: 'No reaching behind the back' },
+    { id: 'actf', tpl: 'Resume full activity as tolerated' }
   ]},
   { title: 'Lifting', note: 'choose one', chooseOne: true, items: [
-    { id: 'lf1', tpl: 'No lifting greater than {lbs} lbs for {w} weeks', inputs: [{ k: 'lbs', size: 3 }, { k: 'w', size: 3 }] }
+    { id: 'lf1', tpl: 'No lifting greater than {lbs} lbs', inputs: [{ k: 'lbs', size: 3 }] },
+    { id: 'lf2', tpl: 'No overhead lifting greater than {lbs} lbs (no restriction at waist level)', inputs: [{ k: 'lbs', size: 3 }] }
   ]},
   { title: 'Physical Therapy', items: [
     { id: 'pt1', tpl: 'Continue physical therapy' },
@@ -175,7 +214,8 @@ var SECTIONS = [
   ]}
 ];
 
-var INTERVALS = ['4 weeks', '6 weeks', '3 months', '6 months', '2 years', '5 years', 'as needed'];
+var INTERVALS = ['2 weeks', '4 weeks', '6 weeks', '3 months', '6 months', '2 years', '5 years', 'as needed'];
+var fuForVal = ''; // internal "visit is for" tag (e.g., X-ray) set by the presets
 
 // Common shoulder/elbow procedures for the Procedure dropdown (follow-up visits)
 var PROCEDURES = [
@@ -214,14 +254,18 @@ function labelHtml(item) {
 function renderForm() {
   var root = document.getElementById('form-root');
   var html = '';
+  var RIGHT = { 'Wound / Incision Care':1, 'Ice / Swelling':1, 'Medications':1, 'Driving / Work':1 };
+  var colL = '', colR = '';
   SECTIONS.forEach(function(sec, si) {
-    html += '<div class="section-title">' + esc(sec.title) + (sec.note ? ' <small>(' + esc(sec.note) + ')</small>' : '') + '</div>';
+    var s = '<div class="formsec"><div class="section-title">' + esc(sec.title) + (sec.note ? ' <small>(' + esc(sec.note) + ')</small>' : '') + '</div>';
     sec.items.forEach(function(item) {
       var onch = sec.chooseOne ? ' onchange="soloCheck(' + si + ',\'' + item.id + '\')"' : '';
-      html += '<label class="chk"><input type="checkbox" id="chk_' + item.id + '"' + onch + '><span>' + labelHtml(item) + '</span></label>';
+      s += '<label class="chk"><input type="checkbox" id="chk_' + item.id + '"' + onch + '><span>' + labelHtml(item) + '</span></label>';
     });
+    s += '</div>';
+    if (RIGHT[sec.title]) colR += s; else colL += s;
   });
-  root.innerHTML = html;
+  root.innerHTML = '<div class="cols"><div class="col">' + colL + '</div><div class="col">' + colR + '</div></div>';
 
   var fu = document.getElementById('fu-intervals');
   var ih = '<div style="font-size:12px;color:#666;font-weight:bold;margin:4px 0;">Interval</div><div style="display:flex;flex-wrap:wrap;gap:6px 16px;">';
@@ -256,6 +300,9 @@ function onProcChange() {
   var sel = document.getElementById('p-proc-sel'), txt = document.getElementById('p-proc');
   if (sel.value === '__other__') { txt.style.display = 'block'; try { txt.focus(); } catch (e) {} }
   else { txt.style.display = 'none'; txt.value = ''; }
+  // if a post-op visit is already chosen, re-apply so the plan matches the new procedure
+  var vs = document.getElementById('co-preset-select');
+  if (vs && vs.value !== '') applyPresetCO(parseInt(vs.value, 10));
 }
 // Resolve the chosen procedure: dropdown value, or the typed value when "Other"
 function procValue() {
@@ -308,8 +355,7 @@ function generate() {
   });
 
   // Warning signs (always)
-  var phone = v('p-phone');
-  h += '<div class="doc-sec doc-warn"><h3>When to Call the Office' + (phone ? ' — ' + esc(phone) : '') + '</h3>';
+  h += '<div class="doc-sec doc-warn"><h3>When to Call the Office — (513) 354-3700</h3>';
   h += '<p>Call the office for any of the following: fever over 101.5°F; increasing redness, drainage, or foul odor at the incision; ' +
        'worsening or uncontrolled pain; or new numbness, tingling, or cold/blue fingers. ' +
        'For calf pain or swelling, chest pain, or shortness of breath, <b>call 911</b>. ' +
@@ -319,8 +365,7 @@ function generate() {
   var ints = [];
   INTERVALS.forEach(function(val, i) { var c = document.getElementById('fu_' + i); if (c && c.checked) ints.push(val); });
   var fuLines = [];
-  if (v('fu-when')) fuLines.push('Scheduled: ' + esc(v('fu-when')) + (v('fu-for') ? ' — ' + esc(v('fu-for')) : ''));
-  else if (v('fu-for')) fuLines.push('For: ' + esc(v('fu-for')));
+  if (fuForVal) fuLines.push('For: ' + esc(fuForVal));
   if (ints.length) fuLines.push('Return in: ' + ints.map(esc).join(', '));
   if (fuLines.length) {
     h += '<div class="doc-sec"><h3>Follow-Up Appointment</h3><ul>';
@@ -329,12 +374,50 @@ function generate() {
   }
 
   h += '<div class="doc-footer">Provider initials: ________   Date: ____________ &nbsp;&nbsp; Full rehab protocols at doctorrolf.com</div>';
-  h += '<div class="doc-contact"><span class="lbl">Questions? Contact</span> Team Rolf &nbsp;&bull;&nbsp; Teamrolf@beaconortho.com &nbsp;&bull;&nbsp; doctorrolf.com</div>';
+  h += '<div class="doc-contact"><span class="lbl">Questions? Contact</span> Team Rolf &nbsp;&bull;&nbsp; (513) 354-3700 &nbsp;&bull;&nbsp; Teamrolf@beaconortho.com &nbsp;&bull;&nbsp; doctorrolf.com</div>';
 
   document.getElementById('handout').innerHTML = h;
+  buildProvider();
   var panel = document.getElementById('output-panel');
   panel.classList.add('active');
   try { panel.scrollIntoView({ behavior: 'smooth' }); } catch (e) {}
+}
+
+// Concise provider note (to paste into Athena) from the same selections.
+function buildProvider() {
+  var proc = procValue() || '—';
+  var side = v('p-side') || document.getElementById('p-side').value;
+  var dos = v('p-dos');
+  var vsel = document.getElementById('co-preset-select');
+  var visitLabel = (vsel && vsel.value !== '') ? vsel.options[vsel.selectedIndex].text : '';
+
+  var items = [];
+  SECTIONS.forEach(function(sec) {
+    sec.items.forEach(function(item) {
+      var c = document.getElementById('chk_' + item.id);
+      if (c && c.checked) items.push(fillTpl(item));
+    });
+  });
+
+  var ints = [];
+  INTERVALS.forEach(function(val, i) { var c = document.getElementById('fu_' + i); if (c && c.checked) ints.push(val); });
+  var fuBits = [];
+  if (fuForVal) fuBits.push(fuForVal);
+  if (ints.length) fuBits.push('return in ' + ints.join(', '));
+
+  var h = '<div class="doc-header"><div class="doc-practice">Provider Note</div>';
+  h += '<div class="doc-sub">' + esc(v('p-name') || '[patient]') + (v('p-dob') ? ' &middot; DOB ' + esc(v('p-dob')) : '') + (v('p-date') ? ' &middot; ' + esc(v('p-date')) : '') + ' &middot; Robert H. Rolf, MD</div></div>';
+  var sp = 'S/P ' + esc(proc) + ' (' + esc(side) + ')';
+  if (dos) sp += ', DOS ' + esc(dos);
+  if (visitLabel) sp += ' &mdash; ' + esc(visitLabel);
+  h += '<div class="doc-sec"><p>' + sp + '.</p></div>';
+  if (items.length) {
+    h += '<div class="doc-sec"><h3>Plan</h3><ul>';
+    items.forEach(function(t) { h += '<li>' + esc(t) + '</li>'; });
+    h += '</ul></div>';
+  }
+  if (fuBits.length) h += '<div class="doc-sec"><h3>Follow-up</h3><p>' + esc(fuBits.join('; ')) + '.</p></div>';
+  document.getElementById('provider').innerHTML = h;
 }
 
 // ---------- copy / print / clear ----------
@@ -352,15 +435,46 @@ function fallbackCopy(text) {
   try { document.execCommand('copy'); } catch (e) {}
   document.body.removeChild(ta);
 }
-function printDoc() { window.print(); }
+function copyProvider() {
+  var text = document.getElementById('provider').innerText;
+  var done = function() { var m = document.getElementById('copy-msg-p'); if (m) { m.style.display = 'inline'; setTimeout(function() { m.style.display = 'none'; }, 2000); } };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(function() { fallbackCopy(text); done(); });
+  } else { fallbackCopy(text); done(); }
+}
+function printAs(cls) { document.body.classList.add(cls); window.print(); document.body.classList.remove(cls); }
+function printPatient() { printAs('pp-patient'); }
+function printProvider() { printAs('pp-provider'); }
+
+// ---- merged print: append the procedure's embedded surgical handout ----
+var PROC_HANDOUT = {
+  'Anatomic total shoulder arthroplasty': 'sh_tsa',
+  'Reverse total shoulder arthroplasty': 'sh_rsa',
+  'Rotator cuff repair': 'sh_rcr',
+  'Rotator cuff repair with biceps tenodesis': 'sh_rcr'
+};
+function appendHandoutDocs() {
+  var old = document.getElementById('hp-pages');
+  if (old) old.parentNode.removeChild(old);
+  var key = PROC_HANDOUT[procValue()];
+  if (!key || !window.HANDOUT_HTML || !HANDOUT_HTML[key]) return;
+  var box = document.createElement('div'); box.id = 'hp-pages';
+  var d = document.createElement('div'); d.className = 'hp-doc';
+  d.innerHTML = HANDOUT_HTML[key];
+  box.appendChild(d);
+  document.getElementById('handout').appendChild(box);
+}
+function printPatientAll() { appendHandoutDocs(); printAs('pp-patient'); }
 
 function clearAll() {
   document.querySelectorAll('#form-root input, #fu-intervals input').forEach(function(el) {
     if (el.type === 'checkbox') el.checked = false; else el.value = '';
   });
-  ['p-name','p-dob','p-dos','p-proc','p-phone','fu-when','fu-for'].forEach(function(id){ document.getElementById(id).value=''; });
+  ['p-name','p-dob','p-dos','p-proc'].forEach(function(id){ document.getElementById(id).value=''; });
+  fuForVal = '';
   document.getElementById('p-side').selectedIndex = 0;
   document.getElementById('p-proc-sel').selectedIndex = 0;
+  document.getElementById('co-preset-select').selectedIndex = 0;
   onProcChange();
   setToday();
   document.getElementById('output-panel').classList.remove('active');
@@ -371,31 +485,125 @@ function setToday() {
   document.getElementById('p-date').value = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 }
 
-// ---------- post-op presets ----------
-/* Checks patient-facing instructions for each post-op visit. fu index: 0=4wk,1=6wk,2=3mo,3=6mo,4=2yr,5=5yr,6=as needed */
-var PRESETS_CO = [
-  { label:'Post-op #1 (first visit)', checks:[{id:'sl1'},{id:'wc1'},{id:'wc3'},{id:'ice1'}], fu:[1] },
-  { label:'Post-op 6 weeks', checks:[{id:'sl4'},{id:'lf1',inputs:{lbs:'5'}},{id:'pt1'}], fu:[1] },
-  { label:'Post-op 3 months', checks:[{id:'pt3'},{id:'rom5'}], fu:[3] },
-  { label:'Post-op 6 months — rotator cuff', checks:[{id:'pt4'},{id:'rom7'}], fu:[6] },
-  { label:'Post-op 6 months — arthroplasty', checks:[{id:'pt4'},{id:'rom7'}], fu:[5] }
+// ---------- post-op presets (procedure-aware, full per-track plans) ----------
+/* Pick Procedure + post-op visit -> the plan fills in. Each procedure maps to a
+   track; each track defines First / 6 weeks / 3 months / 6 months.
+   fu is an interval LABEL, resolved to a checkbox index against INTERVALS. */
+
+var PROC_TRACK = {
+  'Rotator cuff repair': 'cuff',
+  'Rotator cuff repair with biceps tenodesis': 'cuff',
+  'Superior capsular reconstruction': 'cuff',
+  'Anatomic total shoulder arthroplasty': 'tsa',
+  'Reverse total shoulder arthroplasty': 'rsa',
+  'Labral / Bankart repair': 'instab',
+  'SLAP repair': 'instab',
+  'Distal biceps repair': 'dbiceps',
+  'Clavicle ORIF': 'fracture',
+  'Proximal humerus ORIF': 'fracture',
+  'Subacromial decompression / acromioplasty': 'soft',
+  'Biceps tenodesis': 'soft',
+  'Distal clavicle resection (Mumford)': 'soft',
+  'Shoulder arthroscopy (diagnostic)': 'soft',
+  'Manipulation under anesthesia': 'mua'
+};
+function currentTrack() {
+  var sel = document.getElementById('p-proc-sel');
+  return (sel && PROC_TRACK[sel.value]) ? PROC_TRACK[sel.value] : 'cuff';
+}
+
+// Added to EVERY track's FIRST visit (your always-adds): wound care, ice,
+// aspirin 81 mg twice daily x4 wks, no driving in sling/on narcotics, work note.
+var FIRST_COMMON = [
+  {id:'wc1'}, {id:'wc3'}, {id:'ice1'},
+  {id:'md3', inputs:{mg:'81', freq:'twice daily', w:'4'}},
+  {id:'dw1'}, {id:'dw3'}
 ];
+
+// Per-track plans. checks = items to check; fu = next-visit interval label;
+// xray = add "X-ray" as the follow-up reason.
+var TRACK_PLANS = {
+  cuff: {
+    first:{ checks:[{id:'sl1'},{id:'rom6'}], fu:'6 weeks' },
+    wk6:  { checks:[{id:'sl4'},{id:'lf1',inputs:{lbs:'5'}},{id:'pt1'}], fu:'3 months' },
+    mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'6 months' },
+    mo6:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed' }
+  },
+  tsa: {
+    first:{ checks:[{id:'sl2',inputs:{w:'2–4'}},{id:'rom6'}], fu:'6 weeks', xray:true },
+    wk6:  { checks:[{id:'sl4'},{id:'lf1',inputs:{lbs:'5'}},{id:'pt1'}], fu:'3 months', xray:true },
+    mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'6 months', xray:true },
+    mo6:  { checks:[{id:'lf2',inputs:{lbs:'30'}},{id:'pt4'}], fu:'5 years', xray:true }
+  },
+  rsa: {
+    first:{ checks:[{id:'sl2',inputs:{w:'4–6'}},{id:'rom6'},{id:'rbb'}], fu:'6 weeks', xray:true },
+    wk6:  { checks:[{id:'sl4'},{id:'lf1',inputs:{lbs:'5'}},{id:'pt1'}], fu:'3 months', xray:true },
+    mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'6 months', xray:true },
+    mo6:  { checks:[{id:'lf2',inputs:{lbs:'15'}},{id:'pt4'}], fu:'5 years', xray:true }
+  },
+  instab: {
+    first:{ checks:[{id:'sl1'},{id:'rom6'}], fu:'6 weeks' },
+    wk6:  { checks:[{id:'sl4'},{id:'lf1',inputs:{lbs:'5'}},{id:'pt1'}], fu:'3 months' },
+    mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'6 months' },
+    mo6:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed' }
+  },
+  dbiceps: {
+    first:{ checks:[{id:'sl1'},{id:'act0'}], fu:'2 weeks' },
+    wk6:  { checks:[{id:'sl4'},{id:'lf1',inputs:{lbs:'5'}},{id:'pt1'}], fu:'3 months' },
+    mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'6 months' },
+    mo6:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed' }
+  },
+  fracture: {
+    first:{ checks:[{id:'sl1'},{id:'act0'}], fu:'2 weeks', xray:true },
+    wk6:  { checks:[{id:'sl4'},{id:'lf1',inputs:{lbs:'5'}},{id:'pt1'}], fu:'3 months', xray:true },
+    mo3:  { checks:[{id:'rom7'},{id:'pt1'}], fu:'6 months', xray:true },
+    mo6:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed', xray:true }
+  },
+  soft: {
+    first:{ checks:[{id:'sl3'},{id:'lf1',inputs:{lbs:'5'}},{id:'pt1'}], fu:'6 weeks' },
+    wk6:  { checks:[{id:'sl4'},{id:'rom7'},{id:'pt1'}], fu:'3 months' },
+    mo3:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed' },
+    mo6:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed' }
+  },
+  mua: {
+    first:{ checks:[{id:'sl3'},{id:'pt1'}], fu:'2 weeks' },
+    wk6:  { checks:[{id:'sl4'},{id:'rom7'},{id:'pt1'}], fu:'3 months' },
+    mo3:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed' },
+    mo6:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed' }
+  }
+};
+
+var VISIT_KEYS = ['first','wk6','mo3','mo6'];
+var VISIT_LABELS = ['First post-op visit', '6 weeks', '3 months', '6 months'];
+
 function initCOPresets(){
   var s=document.getElementById('co-preset-select'); if(!s) return;
   var h='<option value="">— choose post-op visit to auto-fill —</option>';
-  PRESETS_CO.forEach(function(pr,i){ h+='<option value="'+i+'">'+pr.label+'</option>'; });
+  VISIT_LABELS.forEach(function(lbl,i){ h+='<option value="'+i+'">'+lbl+'</option>'; });
   s.innerHTML=h;
 }
+
 function applyPresetCO(idx){
+  // clear everything the presets touch
   document.querySelectorAll('#form-root input[type=checkbox]').forEach(function(c){ c.checked=false; });
   document.querySelectorAll('#form-root input:not([type=checkbox])').forEach(function(i){ i.value=''; });
   document.querySelectorAll('#fu-intervals input[type=checkbox]').forEach(function(c){ c.checked=false; });
-  var pr=PRESETS_CO[idx];
-  pr.checks.forEach(function(ck){
+  fuForVal='';
+
+  var track=currentTrack();
+  var plan=(TRACK_PLANS[track]||TRACK_PLANS.cuff)[VISIT_KEYS[idx]];
+  if(!plan) return;
+
+  // first visit also gets the universal always-add items
+  var checks=(idx===0 ? FIRST_COMMON.slice() : []).concat(plan.checks||[]);
+  checks.forEach(function(ck){
     var box=document.getElementById('chk_'+ck.id); if(box) box.checked=true;
     if(ck.inputs){ Object.keys(ck.inputs).forEach(function(k){ var inp=document.getElementById(ck.id+'_'+k); if(inp) inp.value=ck.inputs[k]; }); }
   });
-  (pr.fu||[]).forEach(function(i){ var f=document.getElementById('fu_'+i); if(f) f.checked=true; });
+
+  // follow-up interval (by label) + optional X-ray reason
+  if(plan.fu){ var fi=INTERVALS.indexOf(plan.fu); if(fi>=0){ var f=document.getElementById('fu_'+fi); if(f) f.checked=true; } }
+  if(plan.xray){ fuForVal='X-ray'; }
 }
 
 // ---------- init ----------
