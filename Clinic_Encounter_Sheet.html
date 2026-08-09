@@ -292,11 +292,14 @@ function fmtDate(s){ var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s); return m ? (+m[2
 function pickedLabels(key){
   var sec=SEC_BY_KEY[key]; if(!sec) return [];
   if(sec.dropdown){
-    var sel=v('dd_'+key); if(!sel) return [];
-    var it=sec.items.filter(function(x){ return x[0]===sel; })[0];
-    if(!it) return [];
-    if(it[1]==='Other'){ var ov=v('dd_'+key+'_other'); return [ov||'Other: ______']; }
-    return [it[1]];
+    var out3=[];
+    var sel=v('dd_'+key);
+    if(sel){
+      var it=sec.items.filter(function(x){ return x[0]===sel; })[0];
+      if(it){ out3.push(it[1]==='Other' ? (v('dd_'+key+'_other')||'Other: ______') : it[1]); }
+    }
+    if(key==='fu' && ck('chk_fu_img')) out3.push('Return after imaging');
+    return out3;
   }
   if(sec.multi){
     return (multiSel[key]||[]).map(function(id){ var it=sec.items.filter(function(x){ return x[0]===id; })[0]; return it?it[1]:id; });
@@ -337,6 +340,7 @@ function renderForm(){
       s+='<select class="dd" id="dd_'+sec.key+'" onchange="ddOther(\''+sec.key+'\')"><option value="">— none —</option>';
       sec.items.forEach(function(it){ s+='<option value="'+it[0]+'">'+esc(it[1])+'</option>'; });
       s+='</select><input class="mini" id="dd_'+sec.key+'_other" placeholder="specify" style="display:none;margin-top:4px;width:100%">';
+      if(sec.key==='fu'){ s+='<label class="chk"><input type="checkbox" id="chk_fu_img"><span>Return after imaging</span></label>'; }
       s+='</div>';
       if(sec.col==='R') R+=s; else L+=s;
       return;

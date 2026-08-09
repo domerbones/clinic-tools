@@ -216,7 +216,7 @@ var SECTIONS = [
   ]}
 ];
 
-var INTERVALS = ['2 weeks', '4 weeks', '6 weeks', '3 months', '6 months', '2 years', '5 years', 'as needed'];
+var INTERVALS = ['2 weeks', '4 weeks', '6 weeks', '3 months', '6 months', '2 years', '5 years', 'after imaging', 'as needed'];
 var fuForVal = ''; // internal "visit is for" tag (e.g., X-ray) set by the presets
 
 // Common shoulder/elbow procedures for the Procedure dropdown (follow-up visits)
@@ -369,7 +369,7 @@ function generate() {
   INTERVALS.forEach(function(val, i) { var c = document.getElementById('fu_' + i); if (c && c.checked) ints.push(val); });
   var fuLines = [];
   if (fuForVal) fuLines.push('For: ' + esc(fuForVal));
-  if (ints.length) fuLines.push('Return in: ' + ints.map(esc).join(', '));
+  if (ints.length) fuLines.push('Return: ' + ints.map(function(v){ return /^(after|as)/.test(v) ? esc(v) : 'in ' + esc(v); }).join(', '));
   if (fuLines.length) {
     h += '<div class="doc-sec"><h3>Follow-Up Appointment</h3><ul>';
     fuLines.forEach(function(l) { h += '<li>' + l + '</li>'; });
@@ -406,7 +406,7 @@ function buildProvider() {
   INTERVALS.forEach(function(val, i) { var c = document.getElementById('fu_' + i); if (c && c.checked) ints.push(val); });
   var fuBits = [];
   if (fuForVal) fuBits.push(fuForVal);
-  if (ints.length) fuBits.push('return in ' + ints.join(', '));
+  if (ints.length) fuBits.push('return ' + ints.map(function(v){ return /^(after|as)/.test(v) ? v : 'in ' + v; }).join(', '));
 
   var h = '<div class="doc-header"><div class="doc-practice">Provider Note</div>';
   h += '<div class="doc-sub">' + esc(v('p-name') || '[patient]') + (v('p-dob') ? ' &middot; DOB ' + esc(v('p-dob')) : '') + (v('p-date') ? ' &middot; ' + esc(v('p-date')) : '') + ' &middot; Robert H. Rolf, MD</div></div>';
