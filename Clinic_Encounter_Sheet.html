@@ -175,10 +175,10 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 var SECTIONS = [
   { key:'inj', title:'Injection', col:'L', lat:true, items:[
     ['inj_suba','Subacromial cortisone injection'],['inj_ac','AC joint cortisone injection'],['inj_gh','Glenohumeral cortisone injection'],
-    ['inj_bt','Biceps sheath cortisone injection'],['inj_ssn','Suprascapular nerve block']
+    ['inj_bt','Biceps sheath cortisone injection'],['inj_ssn','Suprascapular nerve block'],['inj_st','Scapulothoracic injection']
   ]},
   { key:'img', title:'Imaging ordered', col:'L', items:[
-    ['img_xray','X-ray'],['img_cspine','Cervical spine X-ray'],['img_mri','MRI'],['img_mra','MR arthrogram'],['img_ct','CT'],['img_us','Ultrasound'],['img_emg','EMG']
+    ['img_xray','X-ray'],['img_cspine','Cervical spine X-ray'],['img_mri','MRI'],['img_mra','MR arthrogram'],['img_ct','CT'],['img_cta','CT arthrogram'],['img_us','Ultrasound'],['img_emg','EMG']
   ]},
   { key:'condition', title:'Condition handout (info guide)', col:'L', multi:true, items:[
     ['c_gh','Glenohumeral arthritis information guide'],['c_rca','Rotator cuff arthropathy information guide'],
@@ -507,6 +507,7 @@ function buildPatient(){
   var sh=pickedLabels('shandout'); if(sh.length) h+=docSec('Surgery information', 'We gave you: '+sh.join(', ')+'.');
   var fu=pickedLabels('fu'); if(fu.length) h+=docSec('Follow-up', fu.join(', ')+'.');
   var other=v('p-other'); if(other) h+=docSec('Notes', other);
+  h+=docSec('Scheduling', 'You can set up your appointment online at doctorrolf.com, or call (513) 354-3700.');
   h+='<div class="doc-sec doc-warn"><h3>When to call the office — (513) 354-3700</h3><p>Call for worsening or severe pain, fever, spreading redness or drainage, new numbness or weakness, or any concern. For chest pain or shortness of breath, call 911.</p></div>';
   h+='<div class="doc-contact"><span class="lbl">Questions? Contact</span> Team Rolf &nbsp;&bull;&nbsp; (513) 354-3700 &nbsp;&bull;&nbsp; Teamrolf@beaconortho.com &nbsp;&bull;&nbsp; doctorrolf.com</div>';
   document.getElementById('handout').innerHTML=h;

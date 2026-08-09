@@ -474,7 +474,8 @@ function generate(){
   if(other){ h+='<div class="plan-line"><b>Other:</b> '+esc(other)+'</div>'; }
   if(!lines.length && !other){ h+='<div class="plan-line">No items selected.</div>'; }
   // patient-facing footer so the same page prints as the patient's copy
-  h+='<div class="ph-sec ph-warn" style="margin-top:10px">Call the office for worsening pain, fever, redness or drainage, new numbness, or any concerns.</div>';
+  h+='<div class="ph-sec" style="margin-top:10px"><b>Scheduling:</b> you can set up your appointment online at doctorrolf.com, or call (513) 354-3700.</div>';
+  h+='<div class="ph-sec ph-warn">Call the office for worsening pain, fever, redness or drainage, new numbness, or any concerns.</div>';
   h+='<div class="ph-footer">Questions? Contact Team Rolf &middot; Teamrolf@beaconortho.com &middot; doctorrolf.com</div>';
   document.getElementById('plan').innerHTML=h;
   var p=document.getElementById('output-panel'); p.classList.add('active');

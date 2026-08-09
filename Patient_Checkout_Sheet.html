@@ -187,7 +187,9 @@ var SECTIONS = [
     { id: 'pt1', tpl: 'Continue physical therapy' },
     { id: 'pt2', tpl: 'Start physical therapy on {date}', inputs: [{ k: 'date', size: 10, date: true }] },
     { id: 'pt3', tpl: 'Transition from physical therapy to a home exercise program' },
-    { id: 'pt4', tpl: 'Home exercise program / full protocol at doctorrolf.com' }
+    { id: 'pt4', tpl: 'Home exercise program / full protocol at doctorrolf.com' },
+    { id: 'pt5', tpl: '1st set of exercises handout given (reverse shoulder)' },
+    { id: 'pt6', tpl: '2nd set of exercises handout given (reverse shoulder)' }
   ]},
   { title: 'Wound / Incision Care', items: [
     { id: 'wc1', tpl: 'Keep the dressing clean and dry' },
@@ -354,7 +356,8 @@ function generate() {
     h += '</ul></div>';
   });
 
-  // Warning signs (always)
+  // Scheduling + warning signs (always)
+  h += '<div class="doc-sec"><h3>Scheduling</h3><p>You can set up your appointment online at doctorrolf.com, or call (513) 354-3700.</p></div>';
   h += '<div class="doc-sec doc-warn"><h3>When to Call the Office — (513) 354-3700</h3>';
   h += '<p>Call the office for any of the following: fever over 101.5°F; increasing redness, drainage, or foul odor at the incision; ' +
        'worsening or uncontrolled pain; or new numbness, tingling, or cold/blue fingers. ' +
@@ -536,8 +539,8 @@ var TRACK_PLANS = {
     mo6:  { checks:[{id:'lf2',inputs:{lbs:'30'}},{id:'pt4'}], fu:'5 years', xray:true }
   },
   rsa: {
-    first:{ checks:[{id:'sl2',inputs:{w:'4–6'}},{id:'rom6'},{id:'rbb'}], fu:'6 weeks', xray:true },
-    wk6:  { checks:[{id:'sl4'},{id:'lf1',inputs:{lbs:'5'}},{id:'pt1'}], fu:'3 months', xray:true },
+    first:{ checks:[{id:'sl2',inputs:{w:'4–6'}},{id:'rom6'},{id:'rbb'},{id:'pt5'}], fu:'6 weeks', xray:true },
+    wk6:  { checks:[{id:'sl4'},{id:'lf1',inputs:{lbs:'5'}},{id:'pt1'},{id:'pt6'}], fu:'3 months', xray:true },
     mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'6 months', xray:true },
     mo6:  { checks:[{id:'lf2',inputs:{lbs:'15'}},{id:'pt4'}], fu:'5 years', xray:true }
   },

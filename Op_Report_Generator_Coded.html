@@ -73,7 +73,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <body>
 <div class="header">
 <h1>Op Report Generator — with CPT/ICD Codes</h1>
-<span>Robert H. Rolf, MD | Beacon Orthopaedics</span>
+<span>Robert H. Rolf, MD | Beacon Orthopaedics &nbsp;·&nbsp; v8.9c</span>
 </div>
 <div class="container">
 <div class="tab-bar">
@@ -119,7 +119,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Implants</div>
 <div class="row">
 <div class="field field-small"><label>Stem (mm)</label><select id="tsa-stem"><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8" selected>8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option></select></div>
-<div class="field field-med"><label>Head</label><select id="tsa-head"><option value="38 x 15 mm">38 x 15</option><option value="40 x 15 mm">40 x 15</option><option value="42 x 15 mm" selected>42 x 15</option><option value="42 x 18 mm">42 x 18</option><option value="44 x 15 mm">44 x 15</option><option value="44 x 18 mm">44 x 18</option><option value="46 x 18 mm">46 x 18</option><option value="46 x 21 mm">46 x 21</option><option value="48 x 18 mm">48 x 18</option><option value="48 x 21 mm">48 x 21</option><option value="50 x 21 mm">50 x 21</option><option value="52 x 21 mm">52 x 21</option></select></div>
+<div class="field field-small"><label>Head &Oslash; (mm)</label><select id="tsa-head-diam"><option>38</option><option>40</option><option selected>42</option><option>44</option><option>46</option><option>48</option><option>50</option><option>52</option></select></div>
+<div class="field field-small"><label>Head Ht (mm)</label><select id="tsa-head-ht"><option selected>15</option><option>18</option><option>21</option></select></div>
 <div class="field field-small"><label>Glenoid Size</label><select id="tsa-glenoid-size"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></div>
 <div class="field"><label>Glenoid Type</label><select id="tsa-glenoid-type"><option value="3-peg monoblock glenoid">3-Peg Monoblock</option><option value="4-peg modular glenoid with trabecular metal post" selected>4-Peg Modular w/ TM post</option><option value="3-peg modular glenoid with trabecular metal post">3-Peg Modular w/ TM post</option><option value="2-peg monoblock glenoid">2-Peg Monoblock</option><option value="4-peg modular augmented glenoid with trabecular metal post">4-Peg Augmented w/ TM post</option><option value="4-peg modular posterior augmented glenoid with trabecular metal post">4-Peg Posterior Augmented w/ TM post</option></select></div>
 </div>
@@ -212,6 +213,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="field field-small"><label>Side</label><select id="rtsa-side"><option>Right</option><option>Left</option></select></div>
 <div class="field field-small"><label>Age</label><input type="number" id="rtsa-age"></div>
 <div class="field field-small"><label>Sex</label><select id="rtsa-sex"><option>female</option><option>male</option></select></div>
+<div class="field field-med"><label>Diagnosis</label><select id="rtsa-dx"><option value="Cuff Tear Arthropathy" selected>Cuff Tear Arthropathy</option><option value="Osteoarthritis">Glenohumeral Osteoarthritis</option></select></div>
+<div class="field field-med"><label>Hamada Grade <small>(arthropathy only)</small></label><select id="rtsa-hamada"><option value="">Not graded</option><option value="1">1 — AHI &ge;6 mm</option><option value="2">2 — AHI &le;5 mm</option><option value="3">3 — AHI &le;5 mm + acetabularization</option><option value="4A">4A — GH arthritis, no acetabularization</option><option value="4B">4B — GH arthritis + acetabularization</option><option value="5">5 — humeral head collapse</option></select></div>
 <div class="field"><label>Assistant</label><input id="rtsa-assistant" value="Russel Lee Reynolds, PA-C"></div>
 </div>
 
@@ -366,29 +369,29 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 
 <div class="section-title">Operative Findings</div>
 <div class="row">
-<div class="field"><label>Anterior Load-and-Shift</label><input id="inst-eua-loadshift"></div>
-<div class="field"><label>Sulcus Sign</label><input id="inst-eua-sulcus"></div>
+<div class="field"><label>Anterior Load-and-Shift</label><select id="inst-eua-loadshift"><option value="a 2+ anterior load and shift" selected>2+ anterior</option><option value="a 1+ anterior load and shift">1+ anterior</option><option value="a 3+ anterior load and shift">3+ anterior</option><option value="a 2+ posterior load and shift">2+ posterior</option><option value="a 1+ posterior load and shift">1+ posterior</option></select></div>
+<div class="field"><label>Sulcus Sign</label><select id="inst-eua-sulcus"><option value="a 1+ sulcus sign" selected>1+ sulcus</option><option value="no sulcus sign">No sulcus</option><option value="a 2+ sulcus sign">2+ sulcus</option></select></div>
 </div>
 <div class="row">
 <div class="field field-small"><label>Labral Tear From</label><input id="inst-labral-from"></div>
 <div class="field field-small"><label>Labral Tear To</label><input id="inst-labral-to"></div>
 </div>
 <div class="row">
-<div class="field"><label>Hill-Sachs Description</label><input id="inst-hillsachs-desc"></div>
+<div class="field"><label>Hill-Sachs Description</label><select id="inst-hillsachs-desc"><option value="small and non-engaging" selected>Small, non-engaging</option><option value="none">None</option><option value="moderate and engaging in abduction-external rotation">Moderate, engaging</option><option value="large and engaging">Large, engaging</option></select></div>
 </div>
 <div class="row">
-<div class="field"><label>Glenoid Bone Loss (finding)</label><input id="inst-glenoid-finding" value="minimal"></div>
+<div class="field"><label>Glenoid Bone Loss (finding)</label><select id="inst-glenoid-finding"><option value="minimal" selected>Minimal</option><option value="none">None</option><option value="approximately 10%">~10%</option><option value="approximately 15%">~15%</option><option value="approximately 20%">~20%</option><option value="greater than 20%">&gt;20%</option></select></div>
 </div>
 <div class="row">
 <div class="field"><label>Glenoid Bone Loss % (optional, for indications)</label><input id="inst-glenoid-pct"></div>
 </div>
 <div class="row">
-<div class="field"><label>Capsule</label><input id="inst-capsule" value="patulous; no HAGL lesion"></div>
+<div class="field"><label>Capsule</label><select id="inst-capsule"><option value="patulous; no HAGL lesion" selected>Patulous, no HAGL</option><option value="patulous with generalized laxity">Patulous + laxity</option><option value="normal">Normal</option><option value="torn from the humeral insertion (HAGL lesion)">HAGL lesion</option></select></div>
 </div>
 <div class="row">
-<div class="field"><label>Biceps & Superior Labrum</label><input id="inst-biceps-labrum" value="intact"></div>
-<div class="field"><label>Articular Cartilage</label><input id="inst-cartilage" value="intact"></div>
-<div class="field"><label>Rotator Cuff</label><input id="inst-rotator-cuff" value="intact"></div>
+<div class="field"><label>Biceps & Superior Labrum</label><select id="inst-biceps-labrum"><option value="intact" selected>Intact</option><option value="frayed">Frayed</option><option value="torn superiorly consistent with a SLAP lesion">SLAP tear</option><option value="previously tenotomized">Previously tenotomized</option></select></div>
+<div class="field"><label>Articular Cartilage</label><select id="inst-cartilage"><option value="intact" selected>Intact</option><option value="thinned with grade II chondromalacia">Grade II chondromalacia</option><option value="notable for grade III chondromalacia">Grade III chondromalacia</option><option value="notable for grade IV changes with exposed bone">Grade IV &mdash; exposed bone</option></select></div>
+<div class="field"><label>Rotator Cuff</label><select id="inst-rotator-cuff"><option value="intact" selected>Intact</option><option value="frayed on the articular surface">Frayed (articular)</option><option value="partially torn on the articular surface">Partial tear (articular)</option><option value="intact following debridement">Intact after debridement</option></select></div>
 </div>
 
 <div id="inst-anterior-section" class="conditional-section">
@@ -516,15 +519,15 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="field"><label>EUA</label><input id="rcr-eua" value="a stable, supple shoulder"></div>
 </div>
 <div class="row">
-<div class="field"><label>Glenoid Cartilage</label><input id="rcr-glenoid-cart" value="intact"></div>
-<div class="field"><label>Humeral Head Cartilage</label><input id="rcr-humeral-cart" value="intact"></div>
+<div class="field"><label>Glenoid Cartilage</label><select id="rcr-glenoid-cart"><option value="was intact" selected>Intact</option><option value="demonstrated grade I chondromalacia">Grade I chondromalacia</option><option value="demonstrated grade II chondromalacia">Grade II chondromalacia</option><option value="demonstrated grade III chondromalacia">Grade III chondromalacia</option><option value="demonstrated grade IV chondromalacia with exposed subchondral bone">Grade IV — exposed bone</option><option value="demonstrated diffuse thinning and fibrillation">Diffuse thinning / fibrillation</option></select></div>
+<div class="field"><label>Humeral Head Cartilage</label><select id="rcr-humeral-cart"><option value="was intact" selected>Intact</option><option value="demonstrated grade I chondromalacia">Grade I chondromalacia</option><option value="demonstrated grade II chondromalacia">Grade II chondromalacia</option><option value="demonstrated grade III chondromalacia">Grade III chondromalacia</option><option value="demonstrated grade IV chondromalacia with exposed subchondral bone">Grade IV — exposed bone</option><option value="demonstrated diffuse thinning and fibrillation">Diffuse thinning / fibrillation</option></select></div>
 </div>
 <div class="row">
 <div class="field"><label>Subscapularis</label><select id="rcr-subscap"><option value="intact">Intact</option><option value="partial tear of the upper border">Partial tear - upper border</option><option value="frayed upper border">Frayed upper border</option><option value="full-thickness tear">Full-thickness tear</option></select></div>
 <div class="field"><label>Biceps</label><select id="rcr-biceps-finding"><option value="intact">Intact</option><option value="inflamed and thickened" selected>Inflamed and thickened</option><option value="frayed">Frayed</option><option value="ruptured">Ruptured</option><option value="previously tenotomized">Previously tenotomized</option></select></div>
 </div>
 <div class="row">
-<div class="field"><label>Labrum</label><input id="rcr-labrum" value="intact"></div>
+<div class="field"><label>Labrum</label><select id="rcr-labrum"><option value="intact" selected>Intact</option><option value="frayed and debrided until smoothened">Frayed — debrided</option><option value="degenerative">Degenerative</option><option value="torn superiorly consistent with a SLAP lesion">SLAP tear</option><option value="torn anteriorly">Anterior tear</option><option value="torn posteriorly">Posterior tear</option></select></div>
 </div>
 <div class="row">
 <div class="field"><label>Rotator Cuff</label><select id="rcr-cuff"><option value="">-- select --</option><option value="full-thickness tear of the supraspinatus">Full-thickness tear - Supraspinatus</option><option value="full-thickness tear involving both the supraspinatus and infraspinatus">Full-thickness tear - Supraspinatus + Infraspinatus</option><option value="partial-thickness tear of the supraspinatus">Partial-thickness tear - Supraspinatus</option><option value="intact">Intact</option></select></div>
@@ -911,19 +914,19 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 
 <div class="section-title">Operative Findings</div>
 <div class="row">
-<div class="field"><label>EUA</label><input id="scope-eua"></div>
+<div class="field"><label>EUA</label><select id="scope-eua"><option value="a stable, supple shoulder" selected>Stable, supple</option><option value="diminished passive motion consistent with adhesive capsulitis">Stiff / adhesive capsulitis</option><option value="a stable shoulder with full passive motion">Stable, full motion</option></select></div>
 </div>
 <div class="row">
-<div class="field"><label>Glenoid Cartilage</label><input id="scope-glenoid-cart"></div>
-<div class="field"><label>Humeral Head Cartilage</label><input id="scope-humeral-cart"></div>
+<div class="field"><label>Glenoid Cartilage</label><select id="scope-glenoid-cart"><option value="was intact" selected>Intact</option><option value="demonstrated grade I chondromalacia">Grade I chondromalacia</option><option value="demonstrated grade II chondromalacia">Grade II chondromalacia</option><option value="demonstrated grade III chondromalacia">Grade III chondromalacia</option><option value="demonstrated grade IV chondromalacia with exposed subchondral bone">Grade IV &mdash; exposed bone</option><option value="demonstrated diffuse thinning and fibrillation">Diffuse thinning / fibrillation</option></select></div>
+<div class="field"><label>Humeral Head Cartilage</label><select id="scope-humeral-cart"><option value="was intact" selected>Intact</option><option value="demonstrated grade I chondromalacia">Grade I chondromalacia</option><option value="demonstrated grade II chondromalacia">Grade II chondromalacia</option><option value="demonstrated grade III chondromalacia">Grade III chondromalacia</option><option value="demonstrated grade IV chondromalacia with exposed subchondral bone">Grade IV &mdash; exposed bone</option><option value="demonstrated diffuse thinning and fibrillation">Diffuse thinning / fibrillation</option></select></div>
 </div>
 <div class="row">
-<div class="field"><label>Subscapularis</label><input id="scope-subscap"></div>
-<div class="field"><label>Biceps</label><input id="scope-biceps"></div>
+<div class="field"><label>Subscapularis</label><select id="scope-subscap"><option value="intact" selected>Intact</option><option value="frayed at its upper border">Frayed upper border</option><option value="partially torn at the upper border">Partial tear &mdash; upper border</option><option value="full-thickness torn">Full-thickness tear</option></select></div>
+<div class="field"><label>Biceps</label><select id="scope-biceps"><option value="intact" selected>Intact</option><option value="inflamed and thickened">Inflamed and thickened</option><option value="frayed">Frayed</option><option value="ruptured">Ruptured</option><option value="previously tenotomized">Previously tenotomized</option></select></div>
 </div>
 <div class="row">
-<div class="field"><label>Labrum</label><input id="scope-labrum"></div>
-<div class="field"><label>Rotator Cuff</label><input id="scope-cuff"></div>
+<div class="field"><label>Labrum</label><select id="scope-labrum"><option value="intact" selected>Intact</option><option value="frayed and debrided until smoothened">Frayed &mdash; debrided</option><option value="degenerative">Degenerative</option><option value="torn superiorly consistent with a SLAP lesion">SLAP tear</option><option value="torn anteriorly">Anterior tear</option><option value="torn posteriorly">Posterior tear</option></select></div>
+<div class="field"><label>Rotator Cuff</label><select id="scope-cuff"><option value="intact" selected>Intact</option><option value="frayed but intact">Frayed, intact</option><option value="partially torn on the articular surface">Partial tear (articular)</option><option value="partially torn on the bursal surface">Partial tear (bursal)</option><option value="intact; previously repaired">Previously repaired, intact</option></select></div>
 </div>
 <div class="row">
 <div class="field"><label>Loose Bodies Description</label><input id="scope-loose-desc"></div>
@@ -1033,7 +1036,11 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 
 <div class="section-title">Operative Findings</div>
 <div class="row">
-<div class="field" style="min-width:100%"><label>Findings</label><textarea id="scr-findings" rows="3"></textarea></div>
+<div class="field"><label>Rotator Cuff</label><select id="scr-cuff-finding"><option value="a massive, retracted, irreparable tear of the supraspinatus and infraspinatus" selected>Massive irreparable SS/IS tear</option><option value="a massive irreparable tear retracted to the level of the glenoid">Retracted to glenoid</option><option value="a chronic two-tendon tear with poor tissue quality, not amenable to primary repair">Chronic 2-tendon, poor tissue</option></select></div>
+<div class="field"><label>Subscapularis</label><select id="scr-subscap-finding"><option value="intact" selected>Intact</option><option value="attenuated but intact">Attenuated, intact</option><option value="partially torn and repaired">Partial tear &mdash; repaired</option></select></div>
+<div class="field"><label>Glenoid Cartilage</label><select id="scr-glenoid-cart"><option value="was intact" selected>Intact</option><option value="demonstrated grade I chondromalacia">Grade I chondromalacia</option><option value="demonstrated grade II chondromalacia">Grade II chondromalacia</option><option value="demonstrated grade III chondromalacia">Grade III chondromalacia</option><option value="demonstrated grade IV chondromalacia with exposed subchondral bone">Grade IV &mdash; exposed bone</option><option value="demonstrated diffuse thinning and fibrillation">Diffuse thinning / fibrillation</option></select></div>
+<div class="field"><label>Humeral Head Cartilage</label><select id="scr-humeral-cart"><option value="was intact" selected>Intact</option><option value="demonstrated grade I chondromalacia">Grade I chondromalacia</option><option value="demonstrated grade II chondromalacia">Grade II chondromalacia</option><option value="demonstrated grade III chondromalacia">Grade III chondromalacia</option><option value="demonstrated grade IV chondromalacia with exposed subchondral bone">Grade IV &mdash; exposed bone</option><option value="demonstrated diffuse thinning and fibrillation">Diffuse thinning / fibrillation</option></select></div>
+<div class="field"><label>Biceps</label><select id="scr-biceps-finding"><option value="previously tenotomized" selected>Previously tenotomized</option><option value="tenotomized at the time of surgery">Tenotomized today</option><option value="ruptured">Ruptured</option><option value="absent">Absent</option></select></div>
 </div>
 
 <div class="section-title">Pain Management</div>
@@ -1117,7 +1124,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 
 <div class="section-title">Operative Findings</div>
 <div class="row">
-<div class="field" style="min-width:100%"><label>Findings</label><textarea id="acj-findings" rows="3"></textarea></div>
+<div class="field"><label>AC Joint</label><select id="acj-joint-finding"><option value="significant acromioclavicular joint arthritis with osteophyte formation and joint space narrowing" selected>AC arthritis + osteophytes</option><option value="complete disruption of the acromioclavicular and coracoclavicular ligaments with superior displacement of the distal clavicle">AC/CC disruption &mdash; displaced</option><option value="distal clavicle osteolysis">Distal clavicle osteolysis</option></select></div>
+<div class="field"><label>Distal Clavicle</label><select id="acj-dc-finding"><option value="a hypertrophic distal clavicle" selected>Hypertrophic</option><option value="an unstable distal clavicle">Unstable</option><option value="a normal distal clavicle contour">Normal contour</option></select></div>
 </div>
 
 <div class="section-title">Pain Management</div>
@@ -1208,6 +1216,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="field field-small"><label>Forward Flexion (&deg;)</label><input type="number" id="mua-post-ff"></div>
 <div class="field field-small"><label>External Rotation (&deg;)</label><input type="number" id="mua-post-er"></div>
 <div class="field field-small"><label>Internal Rotation (&deg;)</label><input type="number" id="mua-post-ir"></div>
+<div class="field"><label>Capsule / Joint Findings</label><select id="mua-capsule-finding"><option value="dense global capsular contracture with a thickened rotator interval" selected>Global contracture + thick interval</option><option value="adhesions throughout the glenohumeral joint and subacromial space">Diffuse adhesions</option><option value="predominantly anteroinferior capsular contracture">Anteroinferior contracture</option><option value="post-surgical adhesions with capsular thickening">Post-surgical adhesions</option></select></div>
 </div>
 
 <div class="section-title">Pain Management</div>
@@ -1273,7 +1282,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 
 <div class="section-title">Hardware Details</div>
 <div class="row">
-<div class="field"><label>Hardware Location</label><input id="hwrem-location"></div>
+<div class="field"><label>Hardware Location</label><select id="hwrem-location"><option value="Clavicle" selected>Clavicle</option><option value="Proximal Humerus">Proximal Humerus</option></select></div>
 </div>
 <div class="row">
 <div class="field"><label>Hardware Description (what was removed)</label><input id="hwrem-hardware-desc"></div>
@@ -1384,7 +1393,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 
 <div class="section-title">Operative Findings</div>
 <div class="row">
-<div class="field" style="min-width:100%"><label>Findings</label><textarea id="bten-findings" rows="3"></textarea></div>
+<div class="field"><label>Biceps Tendon</label><select id="bten-tendon-finding"><option value="partial-thickness tearing and tendinosis of the long head of the biceps" selected>Partial tear + tendinosis</option><option value="high-grade partial-thickness tearing (&gt;50%) of the biceps tendon">High-grade partial tear (&gt;50%)</option><option value="subluxation of the biceps tendon out of the bicipital groove">Subluxation from groove</option><option value="severe tendinosis with fraying of the biceps tendon">Severe tendinosis / fraying</option></select></div>
+<div class="field"><label>Bicipital Groove</label><select id="bten-groove-finding"><option value="a stenotic, inflamed bicipital groove" selected>Stenotic, inflamed</option><option value="a normal bicipital groove">Normal</option></select></div>
 </div>
 
 <div class="section-title">Pain Management</div>
@@ -1470,6 +1480,70 @@ function ck(id) { return document.getElementById(id).checked; }
 function todayStr() {
   var d = new Date();
   return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+// ---- pre-op dx auto-select: checking a preop diagnosis mirrors the postop dx
+// and checks the typical procedure(s); unchecking clears them. All still editable.
+var DX_PROC = {
+  'rcr-dx-pain': ['rcr-proc-arthroscopy'],
+  'rcr-dx-cuff-tear': ['rcr-proc-arthroscopy', 'rcr-proc-rcr', 'rcr-proc-decompression'],
+  'rcr-dx-impingement': ['rcr-proc-decompression', 'rcr-proc-acromioplasty'],
+  'rcr-dx-biceps': ['rcr-proc-tenodesis'],
+  'rcr-dx-ac': ['rcr-proc-dcr'],
+  'rcr-dx-synovitis': ['rcr-proc-debridement'],
+  'rcr-dx-labral': ['rcr-proc-debridement'],
+  'scope-dx-pain': ['scope-proc-arthroscopy'],
+  'scope-dx-impingement': ['scope-proc-decompression', 'scope-proc-acromioplasty'],
+  'scope-dx-synovitis': ['scope-proc-synovectomy'],
+  'scope-dx-loose': ['scope-proc-loosebody'],
+  'scope-dx-oa': ['scope-proc-chondroplasty', 'scope-proc-debridement'],
+  'scope-dx-labral': ['scope-proc-debridement'],
+  'scr-dx-pain': ['scr-proc-arthroscopy'],
+  'scr-dx-irreparable': ['scr-proc-arthroscopy', 'scr-proc-scr'],
+  'scr-dx-impingement': ['scr-proc-decompression'],
+  'scr-dx-biceps': ['scr-proc-tenodesis'],
+  'bten-dx-tendinosis': ['bten-proc-tenodesis'],
+  'bten-dx-partial': ['bten-proc-tenodesis'],
+  'bten-dx-complete': ['bten-proc-tenodesis'],
+  'bten-dx-slap': ['bten-proc-arthroscopy'],
+  'inst-dx-instability': ['inst-proc-anterior'],
+  'inst-dx-bankart': ['inst-proc-anterior'],
+  'inst-dx-posterior': ['inst-proc-posterior'],
+  'inst-dx-hillsachs': ['inst-proc-remplissage'],
+  'mua-dx-adhesive': ['mua-proc-mua'],
+  'mua-dx-stiffness': ['mua-proc-mua'],
+  'mua-dx-postsurg': ['mua-proc-mua', 'mua-proc-lysis'],
+  'acj-dx-separation': ['acj-proc-reconstruction'],
+  'acj-dx-dislocation': ['acj-proc-reconstruction']
+};
+function initDxSync() {
+  document.querySelectorAll('input[type=checkbox][id*="-dx-"]').forEach(function(cb) {
+    cb.addEventListener('change', function() {
+      var post = document.getElementById(cb.id.replace('-dx-', '-postdx-'));
+      if (post) post.checked = cb.checked;
+      (DX_PROC[cb.id] || []).forEach(function(pid) {
+        var p = document.getElementById(pid); if (!p) return;
+        if (cb.checked) { p.checked = true; return; }
+        // uncheck only if no other checked diagnosis still maps to this procedure
+        var stillNeeded = Object.keys(DX_PROC).some(function(did) {
+          if (did === cb.id) return false;
+          var d = document.getElementById(did);
+          return d && d.checked && DX_PROC[did].indexOf(pid) !== -1;
+        });
+        if (!stillNeeded) p.checked = false;
+      });
+    });
+  });
+  // keep the "other" free-text mirrored until the postop copy is edited by hand
+  document.querySelectorAll('input[id$="-postdx-other-text"]').forEach(function(pt) {
+    pt.addEventListener('input', function() { pt.dataset.manual = '1'; });
+  });
+  document.querySelectorAll('input[id$="-dx-other-text"]').forEach(function(t) {
+    t.addEventListener('input', function() {
+      var pt = document.getElementById(t.id.replace('-dx-other-text', '-postdx-other-text'));
+      if (pt && !pt.dataset.manual) pt.value = t.value;
+    });
+  });
 }
 
 function painMeds(prefix) {
@@ -1727,8 +1801,10 @@ function showReport(report) {
     document.querySelectorAll('select[id$="-dvt"]').forEach(function(sel) {
       if (sel.offsetParent !== null && sel.value) agent = sel.value;
     });
-    report = report.replace(/(PAIN MANAGEMENT PLAN:\n[^\n]*\n)/,
-      '$1\nDVT PROPHYLAXIS:\n' + agent + '. Sequential compression devices (SCDs) were used intraoperatively and are recommended until the patient is fully ambulatory.\n');
+    var dvtText = (agent === 'None')
+      ? 'No pharmacologic prophylaxis. Sequential compression devices (SCDs) were used intraoperatively and are recommended until the patient is fully ambulatory.'
+      : agent + '. Sequential compression devices (SCDs) were used intraoperatively and are recommended until the patient is fully ambulatory.';
+    report = report.replace(/(PAIN MANAGEMENT PLAN:\n[^\n]*\n)/, '$1\nDVT PROPHYLAXIS:\n' + dvtText + '\n');
   }
   lastReport = report;
   document.getElementById('report-output').textContent = report;
@@ -1783,6 +1859,7 @@ document.addEventListener('DOMContentLoaded', function() {
   buildFindings('tsa');
   buildFindings('rtsa');
   initAssistants();
+  initDxSync();
 });
 
 // ========================================
@@ -1820,7 +1897,8 @@ var DVT_OPTIONS = [
   'Aspirin 81 mg PO BID for 4 weeks',
   'Xarelto (rivaroxaban) per prescribed dosing',
   'Eliquis (apixaban) per prescribed dosing',
-  'Continuation of home Plavix (clopidogrel)'
+  'Continuation of home Plavix (clopidogrel)',
+  'None'
 ];
 // Combined assistant line for the report header
 function asstText(p) {
@@ -1851,7 +1929,7 @@ function generateTSA() {
 'COMPLICATIONS: ' + complicationText('tsa') + '\n' +
 'ANTIBIOTICS: ' + v('tsa-abx') + '\n' +
 'TRANEXAMIC ACID: 1000 mg IV\n' +
-'IMPLANTS: Zimmer Biomet Identity ' + v('tsa-stem') + ' mm humeral stem, ' + v('tsa-head') + ' humeral head, and size ' + v('tsa-glenoid-size') + ' ' + v('tsa-glenoid-type') + '\n\n' +
+'IMPLANTS: Zimmer Biomet Identity ' + v('tsa-stem') + ' mm humeral stem, ' + v('tsa-head-diam') + ' x ' + v('tsa-head-ht') + ' mm humeral head, and size ' + v('tsa-glenoid-size') + ' ' + v('tsa-glenoid-type') + '\n\n' +
 'PHYSICIAN ASSISTANT STATEMENT:\n' +
 'The use of a Physician Assistant was essential in this procedure to facilitate preparation of the humerus and glenoid, implant placement, ' + (bicepsRuptured('tsa') ? '' : 'biceps tenodesis, ') + 'arm positioning, and hemostasis. This minimized risk of poor wound healing or infection and improved operative efficiency and patient safety.\n\n' +
 'INDICATIONS:\n' +
@@ -1878,7 +1956,7 @@ v('tsa-findings') + '\n\n' +
 'GLENOID PREPARATION AND IMPLANTATION:\n' +
 'The labrum was excised. The glenoid was reamed centrally and peripherally, and peg holes were drilled. The trial component was inserted and confirmed for fit. Phenylephrine soaked sponge was used to assist with hemostasis and the pedicles. Palacos-G cement was pressurized into the peripheral peg holes; the final glenoid component was seated and fixed with excellent stability. Excess cement was removed.\n\n' +
 'FINAL HUMERAL IMPLANTATION:\n' +
-'Sequential broaches were advanced to the final size. The final Identity ' + v('tsa-stem') + ' mm micro stem and ' + v('tsa-head') + ' humeral head were assembled and inserted with excellent stability. Confirmed humeral head was placed to restore anatomic fit.\n\n' +
+'Sequential broaches were advanced to the final size. The final Identity ' + v('tsa-stem') + ' mm micro stem and ' + v('tsa-head-diam') + ' x ' + v('tsa-head-ht') + ' mm humeral head were assembled and inserted with excellent stability. Confirmed humeral head was placed to restore anatomic fit.\n\n' +
 'LESSER TUBEROSITY OSTEOTOMY REPAIR:\n' +
 'The lesser tuberosity osteotomy was anatomically reduced and repaired with ' + v('tsa-bb') + ' BroadBand tape sutures passed individually around the lesser tuberosity fragment and through bone tunnels lateral to the lesser tuberosity, then sequentially tied, achieving anatomic reduction and compression of the osteotomy. The rotator interval was closed.\n\n' +
 'RANGE OF MOTION ASSESSMENT:\n' +
@@ -1904,8 +1982,8 @@ function generateRTSA() {
     : 'The humerus was reduced; ' + subscapText + '.';
 
   var report = patientHeader('rtsa') +
-'PREOPERATIVE DIAGNOSIS:\n' + s + ' Shoulder Cuff Tear Arthropathy\n\n' +
-'POSTOPERATIVE DIAGNOSIS:\n' + s + ' Shoulder Cuff Tear Arthropathy\n\n' +
+'PREOPERATIVE DIAGNOSIS:\n' + s + ' Shoulder ' + v('rtsa-dx') + '\n\n' +
+'POSTOPERATIVE DIAGNOSIS:\n' + s + ' Shoulder ' + v('rtsa-dx') + '\n\n' +
 'PROCEDURE(S) PERFORMED:\n' + s + ' Reverse Total Shoulder Arthroplasty\n' + (bicepsRuptured('rtsa') ? '' : s + ' Biceps Tenodesis\n') + '\n' +
 'SURGEON: Robert H. Rolf, MD\n' +
 'ASSISTANT: ' + asstText('rtsa') + '\n' +
@@ -1919,7 +1997,11 @@ function generateRTSA() {
 'PHYSICIAN ASSISTANT STATEMENT:\n' +
 'The Physician Assistant was essential to this procedure, facilitating humeral and glenoid preparation, implant placement, ' + (bicepsRuptured('rtsa') ? '' : 'biceps tenodesis, ') + 'arm positioning, retraction, and hemostasis. Their assistance reduced operative risk and improved safety and efficiency.\n\n' +
 'INDICATIONS:\n' +
-'This is a ' + v('rtsa-age') + '-year-old ' + v('rtsa-sex') + ' with chronic ' + s.toLowerCase() + ' shoulder pain and dysfunction due to cuff tear arthropathy, unresponsive to conservative management. Imaging and clinical exam confirmed the diagnosis. The risks, benefits, prognosis, and alternatives were discussed in detail, and informed consent was obtained. The site was marked, and a surgical time-out confirmed the correct patient, site, and procedure.\n\n' +
+'This is a ' + v('rtsa-age') + '-year-old ' + v('rtsa-sex') + ' with chronic ' + s.toLowerCase() + ' shoulder pain and dysfunction due to ' +
+  (v('rtsa-dx') === 'Osteoarthritis'
+    ? 'advanced glenohumeral osteoarthritis'
+    : 'cuff tear arthropathy' + (v('rtsa-hamada') ? ' (Hamada grade ' + v('rtsa-hamada') + ')' : '')) +
+  ', unresponsive to conservative management. Imaging and clinical exam confirmed the diagnosis. The risks, benefits, prognosis, and alternatives were discussed in detail, and informed consent was obtained. The site was marked, and a surgical time-out confirmed the correct patient, site, and procedure.\n\n' +
 'EXAM UNDER ANESTHESIA:\n' +
 'Motion: forward flexion ' + v('rtsa-eua-ff') + '°; external rotation ' + v('rtsa-eua-er') + '°\n' +
 'Biceps tendon: ' + v('rtsa-biceps') + '\n\n' +
@@ -2365,7 +2447,7 @@ function generateSCR() {
     'IMPLANTS: ' + implantParts.join(', ') + '\n\n' +
     'PHYSICIAN ASSISTANT STATEMENT:\nThe use of a Physician Assistant was essential in this procedure in order to facilitate the shoulder surgery, minimize risks of poor wound healing and wound infection, and improve safety and efficiency. The Physician Assistant assisted with arm positioning, retraction, suture management, graft preparation, and hemostasis.\n\n' +
     'INDICATIONS:\nThis is a ' + v('scr-age') + '-year-old ' + v('scr-sex') + ' with a chronic ' + s.toLowerCase() + ' irreparable rotator cuff tear with failed conservative management. The patient\'s preoperative exam and imaging studies were consistent with the above noted diagnoses. I discussed in detail with the patient the nature of the procedure including risks, benefits, prognosis, and alternatives. Informed consent was obtained. Prior to surgery the appropriate site was identified by the patient and marked with my initials. A time-out was taken to verify the correct patient, the correct site, and the correct procedure.\n\n' +
-    'OPERATIVE FINDINGS:\n' + v('scr-findings') + '\n\n' +
+    'OPERATIVE FINDINGS:\n1. The rotator cuff demonstrated ' + v('scr-cuff-finding') + '.\n2. The subscapularis was ' + v('scr-subscap-finding') + '.\n3. The articular cartilage of the glenoid ' + v('scr-glenoid-cart') + '.\n4. The articular cartilage of the humeral head ' + v('scr-humeral-cart') + '.\n5. The biceps was ' + v('scr-biceps-finding') + '.\n\n' +
     'DESCRIPTION OF PROCEDURE:\n\n' + descSections.join('\n\n') + '\n\n' +
     'DISPOSITION:\nThe patient will remain in a shoulder immobilizer for 6 weeks. Passive range of motion only for 6 weeks. Active range of motion begins at 12 weeks.\n\n' +
     'PAIN MANAGEMENT PLAN:\nMultimodal regimen with ' + v('scr-block') + ', sling, cryotherapy, ' + painMeds('scr') + ', and oral analgesics.\n\n' +
@@ -2412,7 +2494,7 @@ function generateACJoint() {
     'ANTIBIOTICS: ' + v('acj-abx') + '\n\n' +
     'PHYSICIAN ASSISTANT STATEMENT:\nThe use of a Physician Assistant was essential in this procedure in order to facilitate the shoulder surgery, minimize risks of poor wound healing and wound infection, and improve safety and efficiency. The Physician Assistant assisted with arm positioning, retraction, and hemostasis.\n\n' +
     'INDICATIONS:\nThis is a ' + v('acj-age') + '-year-old ' + v('acj-sex') + ' with a ' + s.toLowerCase() + ' AC joint injury. The patient\'s preoperative exam and imaging studies were consistent with the above noted diagnoses. I discussed in detail with the patient the nature of the procedure including risks, benefits, prognosis, and alternatives. Informed consent was obtained. Prior to surgery the appropriate site was identified by the patient and marked with my initials. A time-out was taken to verify the correct patient, the correct site, and the correct procedure.\n\n' +
-    'OPERATIVE FINDINGS:\n' + v('acj-findings') + '\n\n' +
+    'OPERATIVE FINDINGS:\n1. There was ' + v('acj-joint-finding') + '.\n2. There was ' + v('acj-dc-finding') + '.\n\n' +
     'DESCRIPTION OF PROCEDURE:\n\n' + descSections.join('\n\n') + '\n\n' +
     'DISPOSITION:\nStable to PACU. The patient will remain in a sling for 6 weeks.\n\n' +
     'PAIN MANAGEMENT PLAN:\nMultimodal regimen with ' + v('acj-block') + ', sling, cryotherapy, ' + painMeds('acj') + ', and oral analgesics.\n\n' +
@@ -2466,6 +2548,7 @@ function generateMUA() {
     'INDICATIONS:\nThis is a ' + v('mua-age') + '-year-old ' + v('mua-sex') + ' with ' + s.toLowerCase() + ' shoulder stiffness unresponsive to conservative management including physical therapy. The patient\'s preoperative exam and imaging studies were consistent with the above noted diagnoses. I discussed in detail with the patient the nature of the procedure including risks, benefits, prognosis, and alternatives including fracture, dislocation, nerve injury, and recurrent stiffness. Informed consent was obtained. Prior to surgery the appropriate site was identified by the patient and marked with my initials. A time-out was taken to verify the correct patient, the correct site, and the correct procedure.\n\n' +
     'PRE-MANIPULATION RANGE OF MOTION:\nForward Flexion: ' + v('mua-pre-ff') + '°\nExternal Rotation: ' + v('mua-pre-er') + '°\nInternal Rotation: ' + v('mua-pre-ir') + '°\n\n' +
     'POST-MANIPULATION RANGE OF MOTION:\nForward Flexion: ' + v('mua-post-ff') + '°\nExternal Rotation: ' + v('mua-post-er') + '°\nInternal Rotation: ' + v('mua-post-ir') + '°\n\n' +
+    'OPERATIVE FINDINGS:\nThere was ' + v('mua-capsule-finding') + '.\n\n' +
     'DESCRIPTION OF PROCEDURE:\n\n' + descSections.join('\n\n') + '\n\n' +
     'DISPOSITION:\nThe patient will begin physical therapy immediately with an aggressive range of motion protocol. The patient was transferred to the PACU in stable condition.\n\n' +
     'PAIN MANAGEMENT PLAN:\nMultimodal regimen with ' + v('mua-block') + ', sling, cryotherapy, ' + painMeds('mua') + ', and oral analgesics.\n\n' +
@@ -2557,7 +2640,7 @@ function generateBicepsTenodesis() {
     'IMPLANTS: ' + v('bten-implant') + '\n\n' +
     'PHYSICIAN ASSISTANT STATEMENT:\nThe use of a Physician Assistant was essential in this procedure in order to facilitate the shoulder surgery, minimize risks of poor wound healing and wound infection, and improve safety and efficiency. The Physician Assistant assisted with arm positioning, retraction, suture management, and hemostasis.\n\n' +
     'INDICATIONS:\nThis is a ' + v('bten-age') + '-year-old ' + v('bten-sex') + ' who presents for shoulder arthroscopy and biceps tenodesis. The patient\'s preoperative exam and imaging studies were consistent with the above noted diagnoses. I discussed in detail with the patient the nature of the procedure including risks, benefits, prognosis, and alternatives. Informed consent was obtained. Prior to surgery the appropriate site was identified by the patient and marked with my initials. A time-out was taken to verify the correct patient, the correct site, and the correct procedure.\n\n' +
-    'OPERATIVE FINDINGS:\n' + v('bten-findings') + '\n\n' +
+    'OPERATIVE FINDINGS:\n1. There was ' + v('bten-tendon-finding') + '.\n2. There was ' + v('bten-groove-finding') + '.\n\n' +
     'DESCRIPTION OF PROCEDURE:\n\n' + descSections.join('\n\n') + '\n\n' +
     'DISPOSITION:\nThe patient will remain in a sling for ' + v('bten-sling-weeks') + ' weeks. Follow-up in ' + v('bten-followup') + '.\n\n' +
     'PAIN MANAGEMENT PLAN:\nMultimodal regimen with ' + v('bten-block') + ', sling, cryotherapy, ' + painMeds('bten') + ', and oral analgesics.\n\n' +
