@@ -112,7 +112,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </style>
 </head>
 <body>
-<div class="header"><h1>Plan Sheet</h1><span>Robert H. Rolf, MD | Beacon Orthopaedics</span></div>
+<div class="header"><h1>Plan Sheet</h1><span>Robert H. Rolf, MD | Beacon Orthopaedics &middot; v9.1</span></div>
 <div class="container">
   <div class="panel">
     <div class="row">
@@ -157,6 +157,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
         <button class="btn btn-outline" onclick="printPlan()">Print</button>
         <span class="copied-msg" id="copy-msg">Copied!</span></span></div>
       <div class="plan" id="plan" contenteditable="true" spellcheck="false"></div>
+      <div id="plan-attach" style="display:none;margin-top:8px;font-size:12.5px;color:#1B3A6B;background:#FFF8E1;border:1px solid #E8A838;border-radius:6px;padding:7px 10px;"></div>
     </div>
   </div>
 </div>
@@ -543,6 +544,7 @@ function generate(){
   h+='<div class="ph-sec ph-warn">Call the office for worsening pain, fever, redness or drainage, new numbness, or any concerns.</div>';
   h+='<div class="ph-footer">Questions? Contact Team Rolf &middot; Teamrolf@beaconortho.com &middot; doctorrolf.com</div>';
   document.getElementById('plan').innerHTML=h;
+  showAttachInfo();
   var p=document.getElementById('output-panel'); p.classList.add('active');
   try{ p.scrollIntoView({behavior:'smooth'}); }catch(e){}
 }
@@ -562,17 +564,25 @@ function planHandouts(){
     var sec=SEC_BY_KEY[k]; if(!sec) return;
     sec.items.forEach(function(item,i){
       var cb=document.getElementById('c_'+k+'_'+i);
-      if(cb&&cb.checked){ var key=(HANDOUT_KEY[k]||{})[item[0]]; if(key&&window.HANDOUT_HTML&&HANDOUT_HTML[key]) out.push(key); }
+      if(cb&&cb.checked){ var key=(HANDOUT_KEY[k]||{})[item[0]]; if(key&&window.HANDOUT_HTML&&HANDOUT_HTML[key]) out.push({key:key, label:item[0]}); }
     });
   });
   return out;
 }
+function showAttachInfo(){
+  var el=document.getElementById('plan-attach'); if(!el) return;
+  var att=planHandouts();
+  if(att.length){
+    el.innerHTML='<b>&#128196; Included with "Print + handouts":</b> '+att.map(function(a){ return esc(a.label); }).join(', ');
+    el.style.display='block';
+  } else { el.style.display='none'; el.innerHTML=''; }
+}
 function removeHandoutDocs(){ var old=document.getElementById('hp-pages'); if(old) old.parentNode.removeChild(old); }
 function appendHandoutDocs(){
   removeHandoutDocs();
-  var keys=planHandouts(); if(!keys.length) return;
+  var att=planHandouts(); if(!att.length) return;
   var box=document.createElement('div'); box.id='hp-pages';
-  keys.forEach(function(kk){ var d=document.createElement('div'); d.className='hp-doc'; d.innerHTML=HANDOUT_HTML[kk]; box.appendChild(d); });
+  att.forEach(function(a){ var d=document.createElement('div'); d.className='hp-doc'; d.innerHTML=HANDOUT_HTML[a.key]; box.appendChild(d); });
   document.getElementById('plan').appendChild(box);
 }
 function printPlan(){ removeHandoutDocs(); printAs('pp-provider'); }
