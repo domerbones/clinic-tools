@@ -76,10 +76,10 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; font-si
 .em-result .em-desc { font-size: 12px; font-weight: normal; color: #E8A838; margin-top: 2px; }
 
 /* E/M data checkboxes */
-#emDataChecks { margin-bottom: 8px; }
-#emDataChecks .chk-item { padding: 4px 4px; border-bottom: 1px solid #eee; }
-#emDataChecks .chk-item input[type="checkbox"] { width: 18px; height: 18px; }
-#emDataChecks .chk-item .chk-label { font-size: 12px; }
+#emDataChecks, #emRiskChecks { margin-bottom: 8px; }
+#emDataChecks .chk-item, #emRiskChecks .chk-item { padding: 4px 4px; border-bottom: 1px solid #eee; }
+#emDataChecks .chk-item input[type="checkbox"], #emRiskChecks .chk-item input[type="checkbox"] { width: 18px; height: 18px; }
+#emDataChecks .chk-item .chk-label, #emRiskChecks .chk-item .chk-label { font-size: 12px; }
 
 /* Collapsible sections */
 .collapsible-header { font-size: 12px; font-weight: bold; color: #1B3A6B; margin: 10px 0 0 0; padding: 8px 4px; border-bottom: 1px solid #e0e0e0; cursor: pointer; -webkit-tap-highlight-color: rgba(27,58,107,0.1); -webkit-user-select: none; user-select: none; }
@@ -228,24 +228,34 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; font-si
 
   <!-- E/M Helper -->
   <div class="em-helper">
-    <label>How many problems?</label>
+    <label>Problems addressed today</label>
     <select id="emProblems" onchange="calcEM()">
       <option value="">-- Select --</option>
-      <option value="1stable">1 stable chronic problem</option>
-      <option value="1worsen">1 worsening or new problem</option>
-      <option value="2plus">2+ problems</option>
-      <option value="surgical">Surgical decision / high risk</option>
-      <option value="drug">Drug management / severe</option>
+      <option value="2">Minor / self-limited problem</option>
+      <option value="3">1 stable chronic problem, or acute uncomplicated injury</option>
+      <option value="4">1 worsening/new problem, or 2+ stable chronic problems</option>
+      <option value="5">Severe exacerbation / threat to life or limb function</option>
     </select>
     <div class="collapsible-header" onclick="toggleSection('emData')" style="margin:0;border-bottom:none;">
-      <span class="collapse-arrow" id="emDataArrow">&#9654;</span> New data reviewed? <span class="count-badge" id="emDataBadge"></span>
+      <span class="collapse-arrow" id="emDataArrow">&#9654;</span> Data reviewed / ordered <span class="count-badge" id="emDataBadge"></span>
     </div>
     <div class="collapsible-content" id="emDataContent">
       <div id="emDataChecks"></div>
     </div>
+    <div class="collapsible-header" onclick="toggleSection('emRisk')" style="margin:0;border-bottom:none;">
+      <span class="collapse-arrow" id="emRiskArrow">&#9654;</span> Management / risk <span class="count-badge" id="emRiskBadge"></span>
+    </div>
+    <div class="collapsible-content" id="emRiskContent">
+      <div id="emRiskChecks"></div>
+    </div>
+    <div class="chk-item" onclick="toggleCheckbox('emExam')" style="padding:4px;">
+      <input type="checkbox" id="emExam" onclick="event.stopPropagation()" style="width:18px;height:18px;">
+      <span class="chk-label" style="font-size:12px;">Exam performed (documented in summary; does not change level)</span>
+    </div>
     <div class="em-result" id="emResult" style="display:none;">
       <span id="emCode"></span>
       <div class="em-desc" id="emDesc"></div>
+      <div class="em-desc" id="emCols" style="margin-top:2px;"></div>
     </div>
   </div>
 
@@ -393,7 +403,19 @@ var emDataItems = [
   { id: 'emData_ordimg', label: 'Ordered imaging', level: 'ordered' },
   { id: 'emData_ordlabs', label: 'Ordered labs', level: 'ordered' },
   { id: 'emData_independent', label: 'Independent interpretation of imaging', level: 'independent' },
+  { id: 'emData_discussion', label: 'Discussed with outside physician/QHP', level: 'discussion' },
   { id: 'emData_none', label: 'None', level: 'none' }
+];
+
+/* ========== E/M RISK / MANAGEMENT ITEMS (2021 MDM risk column) ========== */
+var emRiskItems = [
+  { id: 'emRisk_rx', label: 'Prescribed / managed prescription medication', level: 4 },
+  { id: 'emRisk_surgdec', label: 'Decision for surgery (elective, no added risk factors)', level: 4 },
+  { id: 'emRisk_surgrisk', label: 'Decision for surgery WITH patient/procedure risk factors', level: 5 },
+  { id: 'emRisk_pt', label: 'Prescribed physical therapy', level: 3 },
+  { id: 'emRisk_otc', label: 'Recommended OTC meds (NSAIDs, Tylenol)', level: 3 },
+  { id: 'emRisk_minor', label: 'Minor procedure today (injection)', level: 3 },
+  { id: 'emRisk_none', label: 'None of these (rest / observation only)', level: 0 }
 ];
 
 /* ========== INJECTION DATA ========== */
@@ -573,6 +595,48 @@ function updateEmDataBadge() {
   }
 }
 
+function renderEmRiskChecks() {
+  var container = document.getElementById('emRiskChecks');
+  var html = '';
+  for (var i = 0; i < emRiskItems.length; i++) {
+    var item = emRiskItems[i];
+    html += '<div class="chk-item" onclick="toggleCheckbox(\'' + item.id + '\')">';
+    html += '<input type="checkbox" id="' + item.id + '" onchange="handleRiskCheckbox(this); calcEM(); updateEmRiskBadge()" onclick="event.stopPropagation()">';
+    html += '<span class="chk-label">' + item.label + '</span>';
+    html += '</div>';
+  }
+  container.innerHTML = html;
+}
+
+function handleRiskCheckbox(cb) {
+  if (cb.id === 'emRisk_none' && cb.checked) {
+    for (var i = 0; i < emRiskItems.length; i++) {
+      if (emRiskItems[i].id !== 'emRisk_none') {
+        document.getElementById(emRiskItems[i].id).checked = false;
+      }
+    }
+  } else if (cb.id !== 'emRisk_none' && cb.checked) {
+    document.getElementById('emRisk_none').checked = false;
+  }
+}
+
+function updateEmRiskBadge() {
+  var count = 0;
+  for (var i = 0; i < emRiskItems.length; i++) {
+    if (emRiskItems[i].level > 0) {
+      var el = document.getElementById(emRiskItems[i].id);
+      if (el && el.checked) count++;
+    }
+  }
+  var badge = document.getElementById('emRiskBadge');
+  if (count > 0) {
+    badge.textContent = '(' + count + ')';
+    badge.className = 'count-badge visible';
+  } else {
+    badge.className = 'count-badge';
+  }
+}
+
 function renderInjList() {
   var container = document.getElementById('injList');
   var html = '';
@@ -717,16 +781,38 @@ function handleDataCheckbox(cb) {
   }
 }
 
+/* Returns the DATA column level (2=minimal, 3=limited, 4=moderate, 5=extensive)
+   per 2021 MDM: Cat 1 = tests/documents reviewed or ordered (each counts once),
+   Cat 2 = independent interpretation, Cat 3 = discussion with external physician/QHP.
+   Moderate = any 1 category met (Cat 1 needs 3 items); Extensive = 2+ categories. */
 function getDataLevel() {
-  var indCb = document.getElementById('emData_independent');
-  if (indCb && indCb.checked) return 'independent';
+  var cat1 = 0;
   for (var i = 0; i < emDataItems.length; i++) {
     if (emDataItems[i].level === 'ordered') {
       var cb = document.getElementById(emDataItems[i].id);
-      if (cb && cb.checked) return 'ordered';
+      if (cb && cb.checked) cat1++;
     }
   }
-  return '';
+  var ind = document.getElementById('emData_independent');
+  var disc = document.getElementById('emData_discussion');
+  var catsMet = (cat1 >= 3 ? 1 : 0) + (ind && ind.checked ? 1 : 0) + (disc && disc.checked ? 1 : 0);
+  if (catsMet >= 2) return 5;
+  if (catsMet >= 1) return 4;
+  if (cat1 >= 2) return 3;
+  return 2;
+}
+
+/* Returns the RISK column level (2=minimal, 3=low, 4=moderate, 5=high):
+   highest checked management/risk item; nothing checked = minimal. */
+function getRiskLevel() {
+  var max = 2;
+  for (var i = 0; i < emRiskItems.length; i++) {
+    if (emRiskItems[i].level > 0) {
+      var cb = document.getElementById(emRiskItems[i].id);
+      if (cb && cb.checked && emRiskItems[i].level > max) max = emRiskItems[i].level;
+    }
+  }
+  return max;
 }
 
 /* ========== COLLAPSIBLE SECTIONS ========== */
@@ -835,35 +921,22 @@ function calcEM() {
     return;
   }
 
-  var level = 3; // default
-  var desc = '';
+  /* 2021 MDM: overall level = middle value of the three columns (2 of 3 rule) */
+  var probLevel = parseInt(prob, 10);
+  var riskLevel = getRiskLevel();
+  var cols = [probLevel, data, riskLevel];
+  cols.sort(function(a, b){ return a - b; });
+  var level = cols[1]; // median = level supported by 2 of 3 columns
 
-  if (prob === '1stable' && (data === 'none' || data === '')) {
-    level = 3;
-  } else if (prob === '1stable' && (data === 'ordered' || data === 'independent')) {
-    level = 3;
-  } else if (prob === '1worsen' || prob === '2plus') {
-    level = 4;
-  } else if (prob === 'surgical') {
-    level = 4;
-  } else if (prob === 'drug') {
-    level = 5;
-  }
-
-  // Data can bump from 3 to 4 in some cases
-  if (level === 3 && data === 'independent') {
-    level = 4;
-  }
-
+  var mdmNames = { 2: 'Straightforward', 3: 'Low', 4: 'Moderate', 5: 'High' };
   var emCode = '';
+  var desc = '';
   if (visitType === 'established') {
-    if (level === 3) { emCode = '99213'; desc = 'Established, Low MDM'; }
-    else if (level === 4) { emCode = '99214'; desc = 'Established, Moderate MDM'; }
-    else if (level === 5) { emCode = '99215'; desc = 'Established, High MDM'; }
+    emCode = { 2: '99212', 3: '99213', 4: '99214', 5: '99215' }[level];
+    desc = 'Established, ' + mdmNames[level] + ' MDM';
   } else {
-    if (level === 3) { emCode = '99203'; desc = 'New Patient, Low MDM'; }
-    else if (level === 4) { emCode = '99204'; desc = 'New Patient, Moderate MDM'; }
-    else if (level === 5) { emCode = '99205'; desc = 'New Patient, High MDM'; }
+    emCode = { 2: '99202', 3: '99203', 4: '99204', 5: '99205' }[level];
+    desc = 'New Patient, ' + mdmNames[level] + ' MDM';
   }
 
   currentEMCode = emCode;
@@ -871,6 +944,11 @@ function calcEM() {
 
   codeEl.textContent = emCode;
   descEl.textContent = desc;
+  var colsEl = document.getElementById('emCols');
+  if (colsEl) {
+    colsEl.textContent = 'Problems: ' + mdmNames[probLevel] + ' · Data: ' + mdmNames[data] +
+      ' · Risk: ' + mdmNames[riskLevel] + ' (level = middle of the 3)';
+  }
   resultDiv.style.display = 'block';
   updateAlerts();
 }
@@ -1004,6 +1082,24 @@ function generateSummary() {
     }
     if (dataItems.length > 0) {
       lines.push('Data: ' + dataItems.join(', '));
+    }
+
+    // List management/risk items
+    var riskItems = [];
+    for (var ri = 0; ri < emRiskItems.length; ri++) {
+      if (emRiskItems[ri].level > 0) {
+        var rcb2 = document.getElementById(emRiskItems[ri].id);
+        if (rcb2 && rcb2.checked) {
+          riskItems.push(emRiskItems[ri].label);
+        }
+      }
+    }
+    if (riskItems.length > 0) {
+      lines.push('Management: ' + riskItems.join(', '));
+    }
+    var examCb = document.getElementById('emExam');
+    if (examCb && examCb.checked) {
+      lines.push('Exam performed');
     }
     lines.push('');
   }
@@ -1323,6 +1419,16 @@ function clearAll() {
     var dcb = document.getElementById(emDataItems[d].id);
     if (dcb) dcb.checked = false;
   }
+  updateEmDataBadge();
+
+  // Reset E/M risk checkboxes
+  for (var r = 0; r < emRiskItems.length; r++) {
+    var rcb = document.getElementById(emRiskItems[r].id);
+    if (rcb) rcb.checked = false;
+  }
+  updateEmRiskBadge();
+  var examCb = document.getElementById('emExam');
+  if (examCb) examCb.checked = false;
 
   // Uncheck all diagnoses, clear per-item side overrides, reset badges
   dxSide = {};
@@ -1393,6 +1499,7 @@ function init() {
   setTodayDate();
   renderDxList();
   renderEmDataChecks();
+  renderEmRiskChecks();
   renderInjList();
   renderOtherProcs();
   updateAlerts();
