@@ -198,10 +198,15 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="procedure-section" id="sec-rev-tsa">
 <div class="section-title">Revision Total Shoulder Arthroplasty</div>
 <p class="icd-info">ICD-10: T84.010A Mechanical loosening of internal prosthetic joint / T84.018A Other mechanical complication of internal prosthetic joint</p>
-<p class="icd-info">CPT: 23473 Revision, humeral or glenoid / 23474 Revision, humeral and glenoid / 20680 Removal of implant, deep</p>
+<p class="icd-info">CPT: 23473 Revision, humeral or glenoid / 23474 Revision, humeral and glenoid / 23334 Removal of prosthesis, humeral or glenoid / 23335 Removal of prosthesis, humeral and glenoid</p>
 <div class="revision-note">*** PLEASE OBTAIN PRIOR OPERATIVE REPORT ***</div>
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="rev-tsa-ct" checked><label for="rev-tsa-ct">CT scan for PSI planning needed</label></div>
+</div>
+<div class="section-title">Removal of Prosthesis (23334 one component / 23335 both)</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="rev-tsa-rem-hum"><label for="rev-tsa-rem-hum">Humeral component</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rev-tsa-rem-glen"><label for="rev-tsa-rem-glen">Glenoid component</label></div>
 </div>
 <div class="row">
 <div class="field field-med"><label>Follow Up</label><select id="rev-tsa-followup"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option></select></div>
@@ -225,10 +230,15 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="procedure-section" id="sec-rev-rtsa">
 <div class="section-title">Revision Reverse Total Shoulder Arthroplasty</div>
 <p class="icd-info">ICD-10: T84.010A Mechanical loosening of internal prosthetic joint / T84.018A Other mechanical complication of internal prosthetic joint</p>
-<p class="icd-info">CPT: 23473 Revision, humeral or glenoid / 23474 Revision, humeral and glenoid / 20680 Removal of implant, deep</p>
+<p class="icd-info">CPT: 23473 Revision, humeral or glenoid / 23474 Revision, humeral and glenoid / 23334 Removal of prosthesis, humeral or glenoid / 23335 Removal of prosthesis, humeral and glenoid</p>
 <div class="revision-note">*** PLEASE OBTAIN PRIOR OPERATIVE REPORT ***</div>
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="rev-rtsa-ct" checked><label for="rev-rtsa-ct">CT scan for PSI planning needed</label></div>
+</div>
+<div class="section-title">Removal of Prosthesis (23334 one component / 23335 both)</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="rev-rtsa-rem-hum"><label for="rev-rtsa-rem-hum">Humeral component</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rev-rtsa-rem-glen"><label for="rev-rtsa-rem-glen">Glenoid component</label></div>
 </div>
 <div class="row">
 <div class="field field-med"><label>Follow Up</label><select id="rev-rtsa-followup"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option></select></div>
@@ -256,6 +266,12 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="bankart-slap"><label for="bankart-slap">29807 Arthroscopic SLAP repair (if applicable)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="bankart-remplissage"><label for="bankart-remplissage">Remplissage</label></div>
+<div class="checkbox-item"><input type="checkbox" id="bankart-bk-decompression"><label for="bankart-bk-decompression">Subacromial Decompression (29826)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="bankart-bk-acromioplasty"><label for="bankart-bk-acromioplasty">Acromioplasty</label></div>
+<div class="checkbox-item"><input type="checkbox" id="bankart-bk-dcr"><label for="bankart-bk-dcr">Distal Clavicle Resection (29824)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="bankart-bk-tenotomy"><label for="bankart-bk-tenotomy">Arthroscopic Biceps Tenotomy</label></div>
+<div class="checkbox-item"><input type="checkbox" id="bankart-bk-tenodesis"><label for="bankart-bk-tenodesis">Open Subpectoral Biceps Tenodesis (23430)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="bankart-bk-debridement"><label for="bankart-bk-debridement">Extensive Glenohumeral Debridement</label></div>
 </div>
 <div class="section-title">Reps</div>
 <div class="row">
@@ -310,6 +326,17 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Shoulder Arthroscopy - Debridement/Scope</div>
 <p class="icd-info">ICD-10: M19.011/M19.012 OA; M24.11/M24.12 Loose body; M75.41/M75.42 Impingement</p>
 <p class="icd-info">CPT: 29819 Arthroscopic removal loose body; 29822/29823 Debridement limited/extensive; 29826 Subacromial decompression</p>
+<div class="section-title">Procedures This Case (check all)</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="scope-bk-decompression"><label for="scope-bk-decompression">Subacromial Decompression (29826)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scope-bk-acromioplasty"><label for="scope-bk-acromioplasty">Acromioplasty</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scope-bk-dcr"><label for="scope-bk-dcr">Distal Clavicle Resection (29824)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scope-bk-tenotomy"><label for="scope-bk-tenotomy">Arthroscopic Biceps Tenotomy</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scope-bk-tenodesis"><label for="scope-bk-tenodesis">Open Subpectoral Biceps Tenodesis (23430)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scope-bk-debridement"><label for="scope-bk-debridement">Extensive Glenohumeral Debridement</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scope-bk-looseb"><label for="scope-bk-looseb">Loose Body Removal (29819)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scope-bk-capsrel"><label for="scope-bk-capsrel">Capsular Release (29825)</label></div>
+</div>
 <div class="section-title">Reps</div>
 <div class="row">
 <div class="field field-med"><label>Rep 1 Company</label><select id="scope-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
@@ -330,6 +357,15 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Superior Capsular Reconstruction (SCR)</div>
 <p class="icd-info">ICD-10: M75.101 Rotator cuff tear right / M75.102 Rotator cuff tear left</p>
 <p class="icd-info">CPT: 29827 (used for SCR)</p>
+<div class="section-title">Additional Procedures (check all)</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="scr-bk-decompression"><label for="scr-bk-decompression">Subacromial Decompression (29826)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scr-bk-acromioplasty"><label for="scr-bk-acromioplasty">Acromioplasty</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scr-bk-dcr"><label for="scr-bk-dcr">Distal Clavicle Resection (29824)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scr-bk-tenotomy"><label for="scr-bk-tenotomy">Arthroscopic Biceps Tenotomy</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scr-bk-tenodesis"><label for="scr-bk-tenodesis">Open Subpectoral Biceps Tenodesis (23430)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scr-bk-debridement"><label for="scr-bk-debridement">Extensive Glenohumeral Debridement</label></div>
+</div>
 <div class="row">
 <div class="field"><label>Graft Type</label><input id="scr-graft" value="Dermal allograft"></div>
 </div>
@@ -619,6 +655,9 @@ function renderBookingDoc(proc, side) {
            return '<li' + cls + '>' + esc(d) + '</li>';
          }).join('') + '</ul></div>';
   }
+  var slist = getSurgeryList(proc);
+  h += '<div class="doc-section"><h3>Surgery List</h3><ol>' +
+       slist.map(function(x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ol></div>';
   h += '<div class="doc-footer">Booked by: Robert H. Rolf, MD</div>';
   return h;
 }
@@ -674,6 +713,10 @@ function generateBooking() {
     lines.push('');
   }
 
+  var slist = getSurgeryList(proc);
+  lines.push('SURGERY LIST:');
+  slist.forEach(function(x, i) { lines.push('  ' + (i + 1) + '. ' + x); });
+  lines.push('');
   lines.push('Booked by: Robert H. Rolf, MD');
   lines.push('========================================');
 
@@ -826,6 +869,41 @@ function getDiagnosisLines(proc, side) {
   return dx;
 }
 
+var SCOPE_ADDONS = [
+  ['decompression','Subacromial Decompression','29826'],
+  ['acromioplasty','Acromioplasty',''],
+  ['dcr','Distal Clavicle Resection','29824'],
+  ['tenotomy','Arthroscopic Biceps Tenotomy','29822'],
+  ['tenodesis','Open Subpectoral Biceps Tenodesis','23430'],
+  ['debridement','Extensive Glenohumeral Debridement',''],
+  ['looseb','Loose Body Removal','29819'],
+  ['capsrel','Capsular Release','29825']
+];
+function addonChecks(prefix) {
+  return SCOPE_ADDONS.filter(function(a){ var el=document.getElementById(prefix+'-bk-'+a[0]); return el && el.checked; });
+}
+function revRemoval(pre) {
+  var hum = ck(pre+'-rem-hum'), glen = ck(pre+'-rem-glen');
+  if (!hum && !glen) return '';
+  if (hum && glen) return 'humeral and glenoid components';
+  return hum ? 'humeral component' : 'glenoid component';
+}
+function getSurgeryList(proc) {
+  var list = [getProcedureName(proc)];
+  if (proc === 'bankart') {
+    if (ck('bankart-slap')) list.push('Arthroscopic SLAP Repair (29807)');
+    if (ck('bankart-remplissage')) list.push('Remplissage');
+  }
+  if (['rcr','bankart','scope','scr'].indexOf(proc) >= 0) {
+    addonChecks(proc).forEach(function(a){ list.push(a[1] + (a[2] ? ' (' + a[2] + ')' : '')); });
+  }
+  if (proc === 'rev-tsa' || proc === 'rev-rtsa') {
+    var rem = revRemoval(proc);
+    // 23335 when both components removed, 23334 for a single component
+    if (rem) list.push('Removal of prosthesis - ' + rem + ' (' + (rem.indexOf(' and ')>=0 ? '23335' : '23334') + ')');
+  }
+  return list;
+}
 function getCPTLines(proc) {
   var cpt = [];
   switch(proc) {
@@ -839,6 +917,11 @@ function getCPTLines(proc) {
     case 'rev-rtsa':
       cpt.push('23473 - Revision of total shoulder arthroplasty, humeral or glenoid component');
       cpt.push('23474 - Revision of total shoulder arthroplasty, humeral and glenoid component');
+      var remCpt = revRemoval(proc);
+      if (remCpt) {
+        if (remCpt.indexOf(' and ') >= 0) cpt.push('23335 - Removal of shoulder prosthesis, humeral and glenoid components');
+        else cpt.push('23334 - Removal of shoulder prosthesis, ' + remCpt);
+      }
       break;
     case 'bankart':
       cpt.push('29806 - Arthroscopic capsulorrhaphy');
@@ -880,6 +963,9 @@ function getCPTLines(proc) {
     case 'distal-biceps':
       cpt.push('24342 - Reinsertion of ruptured biceps tendon, distal');
       break;
+  }
+  if (['rcr','bankart','scope','scr'].indexOf(proc) >= 0) {
+    addonChecks(proc).forEach(function(a){ if (a[2]) cpt.push(a[2] + ' - ' + a[1]); });
   }
   return cpt;
 }

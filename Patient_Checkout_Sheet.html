@@ -216,7 +216,8 @@ var SECTIONS = [
   ]},
   { title: 'Driving / Work', items: [
     { id: 'dw1', tpl: 'No driving while in the sling or on narcotic pain medication' },
-    { id: 'dw2', tpl: 'May return to desk / sedentary work on {date}', inputs: [{ k: 'date', size: 10, date: true }] },
+    { id: 'dw2', tpl: 'May return to sedentary / desk work on {date}', inputs: [{ k: 'date', size: 10, date: true }] },
+    { id: 'dw4', tpl: 'May return to full duty work on {date}', inputs: [{ k: 'date', size: 10, date: true }] },
     { id: 'dw3', tpl: 'Off work until {date} (work note provided)', inputs: [{ k: 'date', size: 10, date: true }] }
   ]}
 ];
@@ -538,50 +539,50 @@ var FIRST_COMMON = [
 // xray = add "X-ray" as the follow-up reason.
 var TRACK_PLANS = {
   cuff: {
-    first:{ checks:[{id:'sl1'},{id:'rom6'}], fu:'6 weeks' },
-    wk6:  { checks:[{id:'sl4'},{id:'lf5'},{id:'pt1'}], fu:'3 months' },
-    mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'6 months' },
+    first:{ checks:[{id:'sl1'},{id:'rom6'}], fu:'4 weeks' },
+    wk6:  { checks:[{id:'sl4'},{id:'lf5'},{id:'pt1'}], fu:'6 weeks' },
+    mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'3 months' },
     mo6:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed' }
   },
   tsa: {
-    first:{ checks:[{id:'sl2',inputs:{w:'2–4'}},{id:'rom6'}], fu:'6 weeks', xray:true },
-    wk6:  { checks:[{id:'sl4'},{id:'lf5'},{id:'pt1'}], fu:'3 months', xray:true },
-    mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'6 months', xray:true },
+    first:{ checks:[{id:'sl2',inputs:{w:'2–4'}},{id:'rom6'}], fu:'4 weeks', xray:true },
+    wk6:  { checks:[{id:'sl4'},{id:'lf5'},{id:'pt1'}], fu:'6 weeks', xray:true },
+    mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'3 months', xray:true },
     mo6:  { checks:[{id:'lf2',inputs:{lbs:'30'}},{id:'pt4'}], fu:'5 years', xray:true }
   },
   rsa: {
-    first:{ checks:[{id:'sl2',inputs:{w:'4–6'}},{id:'rom6'},{id:'rbb'},{id:'pt5'}], fu:'6 weeks', xray:true },
-    wk6:  { checks:[{id:'sl4'},{id:'lf5'},{id:'pt1'},{id:'pt6'}], fu:'3 months', xray:true },
-    mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'6 months', xray:true },
+    first:{ checks:[{id:'sl2',inputs:{w:'4–6'}},{id:'rom6'},{id:'rbb'},{id:'pt5'}], fu:'4 weeks', xray:true },
+    wk6:  { checks:[{id:'sl4'},{id:'lf5'},{id:'pt1'},{id:'pt6'}], fu:'6 weeks', xray:true },
+    mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'3 months', xray:true },
     mo6:  { checks:[{id:'lf2',inputs:{lbs:'15'}},{id:'pt4'}], fu:'5 years', xray:true }
   },
   instab: {
-    first:{ checks:[{id:'sl1'},{id:'rom6'}], fu:'6 weeks' },
-    wk6:  { checks:[{id:'sl4'},{id:'lf5'},{id:'pt1'}], fu:'3 months' },
-    mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'6 months' },
+    first:{ checks:[{id:'sl1'},{id:'rom6'}], fu:'4 weeks' },
+    wk6:  { checks:[{id:'sl4'},{id:'lf5'},{id:'pt1'}], fu:'6 weeks' },
+    mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'3 months' },
     mo6:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed' }
   },
   dbiceps: {
     first:{ checks:[{id:'sl1'},{id:'act0'}], fu:'2 weeks' },
-    wk6:  { checks:[{id:'sl4'},{id:'lf5'},{id:'pt1'}], fu:'3 months' },
-    mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'6 months' },
+    wk6:  { checks:[{id:'sl4'},{id:'lf5'},{id:'pt1'}], fu:'6 weeks' },
+    mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'3 months' },
     mo6:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed' }
   },
   fracture: {
     first:{ checks:[{id:'sl1'},{id:'act0'}], fu:'2 weeks', xray:true },
-    wk6:  { checks:[{id:'sl4'},{id:'lf5'},{id:'pt1'}], fu:'3 months', xray:true },
-    mo3:  { checks:[{id:'rom7'},{id:'pt1'}], fu:'6 months', xray:true },
+    wk6:  { checks:[{id:'sl4'},{id:'lf5'},{id:'pt1'}], fu:'6 weeks', xray:true },
+    mo3:  { checks:[{id:'rom7'},{id:'pt1'}], fu:'3 months', xray:true },
     mo6:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed', xray:true }
   },
   soft: {
-    first:{ checks:[{id:'sl3'},{id:'lf5'},{id:'pt1'}], fu:'6 weeks' },
-    wk6:  { checks:[{id:'sl4'},{id:'rom7'},{id:'pt1'}], fu:'3 months' },
+    first:{ checks:[{id:'sl3'},{id:'lf5'},{id:'pt1'}], fu:'4 weeks' },
+    wk6:  { checks:[{id:'sl4'},{id:'rom7'},{id:'pt1'}], fu:'6 weeks' },
     mo3:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed' },
     mo6:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed' }
   },
   mua: {
     first:{ checks:[{id:'sl3'},{id:'pt1'}], fu:'2 weeks' },
-    wk6:  { checks:[{id:'sl4'},{id:'rom7'},{id:'pt1'}], fu:'3 months' },
+    wk6:  { checks:[{id:'sl4'},{id:'rom7'},{id:'pt1'}], fu:'6 weeks' },
     mo3:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed' },
     mo6:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed' }
   }
