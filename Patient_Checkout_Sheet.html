@@ -219,6 +219,22 @@ var SECTIONS = [
     { id: 'dw2', tpl: 'May return to sedentary / desk work on {date}', inputs: [{ k: 'date', size: 10, date: true }] },
     { id: 'dw4', tpl: 'May return to full duty work on {date}', inputs: [{ k: 'date', size: 10, date: true }] },
     { id: 'dw3', tpl: 'Off work until {date} (work note provided)', inputs: [{ k: 'date', size: 10, date: true }] }
+  ]},
+  { title: 'Imaging reviewed', items: [
+    { id: 'imr1', tpl: 'X-rays reviewed in the office' },
+    { id: 'imr2', tpl: 'MRI reviewed' },
+    { id: 'imr3', tpl: 'CT reviewed' },
+    { id: 'imr4', tpl: 'Outside imaging reviewed' },
+    { id: 'imr5', tpl: '{txt}', inputs: [{ k: 'txt', size: 20 }] }
+  ]},
+  { title: 'Imaging ordered', items: [
+    { id: 'imo1', tpl: 'MRI' },
+    { id: 'imo2', tpl: 'MR arthrogram' },
+    { id: 'imo3', tpl: 'CT' },
+    { id: 'imo4', tpl: 'CT arthrogram' },
+    { id: 'imo5', tpl: 'Ultrasound' },
+    { id: 'imo6', tpl: 'EMG' },
+    { id: 'imo7', tpl: '{txt}', inputs: [{ k: 'txt', size: 20 }] }
   ]}
 ];
 
@@ -262,7 +278,7 @@ function labelHtml(item) {
 function renderForm() {
   var root = document.getElementById('form-root');
   var html = '';
-  var RIGHT = { 'Wound / Incision Care':1, 'Ice / Swelling':1, 'Medications':1, 'Driving / Work':1 };
+  var RIGHT = { 'Wound / Incision Care':1, 'Ice / Swelling':1, 'Medications':1, 'Driving / Work':1, 'Imaging reviewed':1, 'Imaging ordered':1 };
   var colL = '', colR = '';
   SECTIONS.forEach(function(sec, si) {
     var s = '<div class="formsec"><div class="section-title">' + esc(sec.title) + (sec.note ? ' <small>(' + esc(sec.note) + ')</small>' : '') + '</div>';
