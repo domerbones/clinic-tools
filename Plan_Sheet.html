@@ -211,9 +211,13 @@ var SECTIONS = [
   ]},
   { key:'surg', title:'Surgery', drop:true, lat:true, nSided:11, items:[
     ['TSA','total shoulder arthroplasty'],['RSA','reverse total shoulder arthroplasty'],['RCR','rotator cuff repair'],['Scope','shoulder arthroscopy'],['SAD','subacromial decompression'],['DCR','distal clavicle resection'],['BT','open subpectoral biceps tenodesis'],['Labrum','labral repair / instability'],['SCR','superior capsular reconstruction'],['ORIF','ORIF'],['Distal biceps','distal biceps repair'],
-    ['ready','ready for surgery'],['thinking','considering surgery']
+    ['ready','ready for surgery'],['thinking','considering surgery'],['heart','cardiac clearance needed'],['PCP','PCP clearance needed']
+  ]},
+  { key:'recsurg', title:'Surgeries discussed', grid2:true, items:[
+    ['TSA','total shoulder arthroplasty'],['RSA','reverse total shoulder arthroplasty'],['RCR','rotator cuff repair'],['Scope','shoulder arthroscopy'],['SAD','subacromial decompression'],['DCR','distal clavicle resection'],['BT','open subpectoral biceps tenodesis'],['Labrum','labral repair / instability'],['SCR','superior capsular reconstruction'],['ORIF','ORIF'],['Distal biceps','distal biceps repair']
   ]},
   { key:'fu', title:'Follow-up', grid2:true, items:[
+    ['1 wk','return in 1 week'],['2 wk','return in 2 weeks'],['6 wk','return in 6 weeks'],['10-12 wk','return in 10-12 weeks'],['3 mo','return in 3 months'],['6 mo','return in 6 months'],
     ['in ___','return in {}','interval'],['INB','INB (?)'],['PRN','as needed'],['afterimaging','after imaging'],['afterPSI','after PSI planning'],['Call>MRI','call after MRI'],['spine','spine referral'],['hand','hand referral'],['PNS','PNS (?)'],['email','email patient']
   ]},
 ];
@@ -535,7 +539,9 @@ function sectionText(sec){
 }
 function generate(){
   var lines=[];
-  SECTIONS.forEach(function(sec){ var t=sectionText(sec); if(t) lines.push({label:(sec.key==='inj'?'Injections given today':sec.title), text:t}); });
+  SECTIONS.forEach(function(sec){ var t=sectionText(sec);
+    if(t && sec.key==='img') t += ' — our office will call you to schedule';
+    if(t) lines.push({label:(sec.key==='inj'?'Injections given today':sec.title), text:t}); });
   var other=val('p-other');
   var h='<div class="plan-header"><div class="t">Plan / Visit Summary — '+esc(val('p-name')||'[patient]')+'</div>';
   h+='<div class="s">'+esc(val('p-mrn')?'DOB: '+val('p-mrn')+'   ':'')+esc(val('p-date')?'Date: '+val('p-date'):'')+'   Robert H. Rolf, MD, Beacon Orthopaedics</div></div>';
