@@ -179,8 +179,13 @@ var SECTIONS = [
     { id: 'rbb', tpl: 'No reaching behind the back' },
     { id: 'actf', tpl: 'Resume full activity as tolerated' }
   ]},
-  { title: 'Lifting', note: 'choose one', chooseOne: true, items: [
-    { id: 'lf1', tpl: 'No lifting greater than {lbs} lbs', inputs: [{ k: 'lbs', size: 3 }] },
+  { title: 'Lifting / Weight Restriction', note: 'choose one', chooseOne: true, items: [
+    { id: 'lf5',  tpl: 'No lifting greater than 5 lbs' },
+    { id: 'lf10', tpl: 'No lifting greater than 10 lbs' },
+    { id: 'lf15', tpl: 'No lifting greater than 15 lbs' },
+    { id: 'lf30', tpl: 'No lifting greater than 30 lbs' },
+    { id: 'lfno', tpl: 'No lifting restrictions' },
+    { id: 'lf1', tpl: 'No lifting greater than {lbs} lbs (other)', inputs: [{ k: 'lbs', size: 3 }] },
     { id: 'lf2', tpl: 'No overhead lifting greater than {lbs} lbs (no restriction at waist level)', inputs: [{ k: 'lbs', size: 3 }] }
   ]},
   { title: 'Physical Therapy', items: [
@@ -534,42 +539,42 @@ var FIRST_COMMON = [
 var TRACK_PLANS = {
   cuff: {
     first:{ checks:[{id:'sl1'},{id:'rom6'}], fu:'6 weeks' },
-    wk6:  { checks:[{id:'sl4'},{id:'lf1',inputs:{lbs:'5'}},{id:'pt1'}], fu:'3 months' },
+    wk6:  { checks:[{id:'sl4'},{id:'lf5'},{id:'pt1'}], fu:'3 months' },
     mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'6 months' },
     mo6:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed' }
   },
   tsa: {
     first:{ checks:[{id:'sl2',inputs:{w:'2–4'}},{id:'rom6'}], fu:'6 weeks', xray:true },
-    wk6:  { checks:[{id:'sl4'},{id:'lf1',inputs:{lbs:'5'}},{id:'pt1'}], fu:'3 months', xray:true },
+    wk6:  { checks:[{id:'sl4'},{id:'lf5'},{id:'pt1'}], fu:'3 months', xray:true },
     mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'6 months', xray:true },
     mo6:  { checks:[{id:'lf2',inputs:{lbs:'30'}},{id:'pt4'}], fu:'5 years', xray:true }
   },
   rsa: {
     first:{ checks:[{id:'sl2',inputs:{w:'4–6'}},{id:'rom6'},{id:'rbb'},{id:'pt5'}], fu:'6 weeks', xray:true },
-    wk6:  { checks:[{id:'sl4'},{id:'lf1',inputs:{lbs:'5'}},{id:'pt1'},{id:'pt6'}], fu:'3 months', xray:true },
+    wk6:  { checks:[{id:'sl4'},{id:'lf5'},{id:'pt1'},{id:'pt6'}], fu:'3 months', xray:true },
     mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'6 months', xray:true },
     mo6:  { checks:[{id:'lf2',inputs:{lbs:'15'}},{id:'pt4'}], fu:'5 years', xray:true }
   },
   instab: {
     first:{ checks:[{id:'sl1'},{id:'rom6'}], fu:'6 weeks' },
-    wk6:  { checks:[{id:'sl4'},{id:'lf1',inputs:{lbs:'5'}},{id:'pt1'}], fu:'3 months' },
+    wk6:  { checks:[{id:'sl4'},{id:'lf5'},{id:'pt1'}], fu:'3 months' },
     mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'6 months' },
     mo6:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed' }
   },
   dbiceps: {
     first:{ checks:[{id:'sl1'},{id:'act0'}], fu:'2 weeks' },
-    wk6:  { checks:[{id:'sl4'},{id:'lf1',inputs:{lbs:'5'}},{id:'pt1'}], fu:'3 months' },
+    wk6:  { checks:[{id:'sl4'},{id:'lf5'},{id:'pt1'}], fu:'3 months' },
     mo3:  { checks:[{id:'rom7'},{id:'pt3'}], fu:'6 months' },
     mo6:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed' }
   },
   fracture: {
     first:{ checks:[{id:'sl1'},{id:'act0'}], fu:'2 weeks', xray:true },
-    wk6:  { checks:[{id:'sl4'},{id:'lf1',inputs:{lbs:'5'}},{id:'pt1'}], fu:'3 months', xray:true },
+    wk6:  { checks:[{id:'sl4'},{id:'lf5'},{id:'pt1'}], fu:'3 months', xray:true },
     mo3:  { checks:[{id:'rom7'},{id:'pt1'}], fu:'6 months', xray:true },
     mo6:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed', xray:true }
   },
   soft: {
-    first:{ checks:[{id:'sl3'},{id:'lf1',inputs:{lbs:'5'}},{id:'pt1'}], fu:'6 weeks' },
+    first:{ checks:[{id:'sl3'},{id:'lf5'},{id:'pt1'}], fu:'6 weeks' },
     wk6:  { checks:[{id:'sl4'},{id:'rom7'},{id:'pt1'}], fu:'3 months' },
     mo3:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed' },
     mo6:  { checks:[{id:'actf'},{id:'pt4'}], fu:'as needed' }
