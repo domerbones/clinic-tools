@@ -252,6 +252,15 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; font-si
       <input type="checkbox" id="emExam" onclick="event.stopPropagation()" style="width:18px;height:18px;">
       <span class="chk-label" style="font-size:12px;">Exam performed (documented in summary; does not change level)</span>
     </div>
+    <div class="chk-item" onclick="toggleCheckbox('quickSurg')" style="padding:4px;">
+      <input type="checkbox" id="quickSurg" onclick="event.stopPropagation()" onchange="applyQuickSurg()" style="width:18px;height:18px;">
+      <span class="chk-label" style="font-size:12px;"><b>Surgery discussed &amp; decided today</b> (fills risk column: decision for elective major surgery)</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:4px;">
+      <span class="chk-label" style="font-size:12px;"><b>Total time today (min):</b></span>
+      <input type="number" id="emTime" min="0" max="180" style="width:70px;padding:4px;" oninput="calcEM()">
+      <span class="chk-label" style="font-size:11px;color:#666;">optional - bills the higher of MDM vs time</span>
+    </div>
     <div class="em-result" id="emResult" style="display:none;">
       <span id="emCode"></span>
       <div class="em-desc" id="emDesc"></div>
@@ -264,6 +273,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; font-si
     <span class="collapse-arrow" id="injArrow">&#9654;</span> Injections <span class="count-badge" id="injBadge"></span>
   </div>
   <div class="collapsible-content" id="injContent">
+    <div id="injQuick" style="display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 8px;"></div>
     <div id="injList"></div>
   </div>
 
@@ -313,6 +323,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; font-si
   <div class="btn-row no-print">
     <button type="button" class="btn btn-copy" id="genBtn" onclick="generateSummary()">Generate</button>
     <button type="button" class="btn btn-copy" id="copyBtn" onclick="copySummary()">Copy</button>
+    <button type="button" class="btn btn-copy" id="copyClaimBtn" onclick="copyClaimLine()">Copy claim line</button>
     <button type="button" class="btn btn-print" onclick="window.print()">Print</button>
     <button type="button" class="btn btn-clear" onclick="clearAll()">Clear</button>
   </div>
@@ -331,6 +342,9 @@ var otherDxItems = [];
    If an item has no entry, it follows the global selectedSide. */
 var dxSide = {};
 var currentEMCode = '';
+var currentEMBasis = 'MDM';
+var currentClaimLine = '';
+var currentEMTime = 0;
 var currentEMDesc = '';
 
 /* ========== DIAGNOSIS DATA ========== */
@@ -434,7 +448,7 @@ var medOptions = [
   { label: '-- Select medication --', jcode: '', desc: '' },
   { label: 'Depo-Medrol 40mg', jcode: 'J1030', desc: 'Depo-Medrol 40mg' },
   { label: 'Depo-Medrol 80mg', jcode: 'J1040', desc: 'Depo-Medrol 80mg' },
-  { label: 'Kenalog', jcode: 'J3301', desc: 'Triamcinolone (Kenalog)' },
+  { label: 'Kenalog 80mg', jcode: 'J3301', desc: 'Triamcinolone (Kenalog) 80mg', units: 8 },
   { label: 'Hyalgan', jcode: 'J7321', desc: 'Hyalgan' },
   { label: 'Synvisc / Synvisc-One', jcode: 'J7322', desc: 'Synvisc / Synvisc-One' },
   { label: 'Euflexxa', jcode: 'J7323', desc: 'Euflexxa' },
@@ -638,6 +652,41 @@ function updateEmRiskBadge() {
   }
 }
 
+/* One-tap quick-picks matching the Athena injection macros:
+   sets the injection + Kenalog 80mg + "minor procedure" risk in one motion */
+var INJ_QUICK = [
+  { label: 'Subacromial', match: 'Subacromial injection - without US' },
+  { label: 'Subacromial + US', match: 'Subacromial injection - with US' },
+  { label: 'GH + US', match: 'Glenohumeral injection - with US' },
+  { label: 'AC joint', match: 'AC joint injection' }
+];
+function renderInjQuick() {
+  var box = document.getElementById('injQuick');
+  if (!box) return;
+  var h = '';
+  for (var q = 0; q < INJ_QUICK.length; q++) {
+    h += '<button type="button" class="btn" style="padding:6px 10px;font-size:12px;background:#1B3A6B;color:#fff;border:none;border-radius:4px;" onclick="quickInj(' + q + ')">+ ' + INJ_QUICK[q].label + '</button>';
+  }
+  box.innerHTML = h;
+}
+function quickInj(q) {
+  var idx = -1;
+  for (var i = 0; i < injData.length; i++) { if (injData[i].label === INJ_QUICK[q].match) { idx = i; break; } }
+  if (idx < 0) return;
+  var cb = document.getElementById('inj_' + idx);
+  cb.checked = true;
+  toggleMedSelect(idx);
+  // default medication: Kenalog 80mg
+  var sel = document.getElementById('med_' + idx);
+  for (var m = 0; m < medOptions.length; m++) { if (medOptions[m].jcode === 'J3301') { sel.selectedIndex = m; break; } }
+  // risk column: minor procedure today
+  var rk = document.getElementById('emRisk_minor');
+  if (rk && !rk.checked) rk.checked = true;
+  // open the injections section count badge etc.
+  calcEM();
+  updateAlerts();
+  if (typeof updateBadges === "function") updateBadges();
+}
 function renderInjList() {
   var container = document.getElementById('injList');
   var html = '';
@@ -756,6 +805,13 @@ function toggleCheckbox(id) {
   }
 }
 
+function applyQuickSurg() {
+  // One-tap: mark "decision for elective major surgery" in the risk column
+  var q = document.getElementById('quickSurg');
+  var r = document.getElementById('emRisk_surgdec');
+  if (r) { r.checked = q.checked; }
+  calcEM();
+}
 function toggleMedSelect(idx) {
   var cb = document.getElementById('inj_' + idx);
   var sel = document.getElementById('med_' + idx);
@@ -940,6 +996,29 @@ function calcEM() {
     desc = 'New Patient, ' + mdmNames[level] + ' MDM';
   }
 
+  /* ---- Time-based coding fallback (2021 CPT total time on date of encounter) ---- */
+  currentEMBasis = 'MDM';
+  currentEMTime = 0;
+  var tmin = parseInt((document.getElementById('emTime')||{}).value, 10);
+  if (!isNaN(tmin) && tmin > 0) {
+    var timeTable = (visitType === 'established')
+      ? [[10,'99212',2],[20,'99213',3],[30,'99214',4],[40,'99215',5]]
+      : [[15,'99202',2],[30,'99203',3],[45,'99204',4],[60,'99205',5]];
+    var timeCode = '', timeLevel = 0;
+    for (var tt = 0; tt < timeTable.length; tt++) {
+      if (tmin >= timeTable[tt][0]) { timeCode = timeTable[tt][1]; timeLevel = timeTable[tt][2]; }
+    }
+    if (timeLevel > level && timeCode) {
+      emCode = timeCode;
+      desc = (visitType === 'established' ? 'Established' : 'New Patient') + ', by total time (' + tmin + ' min); MDM alone supports ' + ({2:'99212',3:'99213',4:'99214',5:'99215'})[level >= 2 ? level : 2];
+      currentEMBasis = 'TIME';
+      currentEMTime = tmin;
+    }
+    // prolonged services hint
+    var maxT = (visitType === 'established') ? 54 : 74;
+    if (tmin > maxT) desc += ' - consider prolonged services +99417 (Medicare: G2212)';
+  }
+
   currentEMCode = emCode;
   currentEMDesc = desc;
 
@@ -1037,6 +1116,7 @@ function generateSummary() {
   var hasWC = document.getElementById('wcCheck').checked;
 
   var lines = [];
+  var claimProcs = [];
   lines.push('BILLING SUMMARY');
   lines.push('========================================');
   lines.push('Date: ' + formatDate(date));
@@ -1172,11 +1252,15 @@ function generateSummary() {
 
       var procLine = cptStr + ' - ' + procDesc;
 
+      // claim line: skip the bundled subacromial when GH billed same shoulder
+      if (!(ghSameSubac && inj.tag === 'subac')) claimProcs.push(cptStr);
+
       // Add medication
       var medSel = document.getElementById('med_' + i);
       if (medSel && medSel.selectedIndex > 0) {
         var med = medOptions[medSel.selectedIndex];
-        procLine += '\n   ' + med.jcode + ' - ' + med.desc;
+        procLine += '\n   ' + med.jcode + ' - ' + med.desc + (med.units ? ' (' + med.units + ' units)' : '');
+        if (!(ghSameSubac && inj.tag === 'subac')) claimProcs.push(med.jcode + (med.units ? ' x' + med.units : ''));
       }
 
       procLines.push(procLine);
@@ -1225,6 +1309,26 @@ function generateSummary() {
     for (var m = 0; m < modLines.length; m++) {
       lines.push('- ' + modLines[m]);
     }
+    lines.push('');
+  }
+
+  // ---- Claim-ready line for staff (E/M + procedures + dx codes) ----
+  var claimParts = [];
+  if (currentEMCode) claimParts.push(currentEMCode + (hasInj ? '-25' : ''));
+  claimParts = claimParts.concat(claimProcs);
+  var claimDx = [];
+  for (var cd = 0; cd < dxLines.length && claimDx.length < 4; cd++) {
+    var code = dxLines[cd].split(' - ')[0];
+    if (code) claimDx.push(code);
+  }
+  currentClaimLine = claimParts.join(', ') + (claimDx.length ? ' | Dx: ' + claimDx.join(', ') : '');
+  if (claimParts.length || claimDx.length) {
+    lines.push('CLAIM LINE (copy for staff):');
+    lines.push(currentClaimLine);
+    lines.push('');
+  }
+  if (currentEMBasis === 'TIME') {
+    lines.push('E/M billed on TOTAL TIME: ' + currentEMTime + ' minutes. Documentation must state total time spent on the date of the encounter.');
     lines.push('');
   }
 
@@ -1310,6 +1414,19 @@ function formatDate(dateStr) {
 }
 
 /* ========== COPY (iOS-compatible) ========== */
+function copyClaimLine() {
+  if (!currentClaimLine) { generateSummary(); }
+  if (!currentClaimLine) return;
+  var ta = document.createElement('textarea');
+  ta.value = currentClaimLine;
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch(e){}
+  document.body.removeChild(ta);
+  if (navigator.clipboard) { navigator.clipboard.writeText(currentClaimLine).catch(function(){}); }
+  var btn = document.getElementById('copyClaimBtn');
+  if (btn) { var t = btn.textContent; btn.textContent = 'Copied!'; setTimeout(function(){ btn.textContent = t; }, 1200); }
+}
 function copySummary() {
   var text = document.getElementById('outputBox').textContent;
   if (!text) return;
@@ -1502,6 +1619,7 @@ function init() {
   renderEmDataChecks();
   renderEmRiskChecks();
   renderInjList();
+  renderInjQuick();
   renderOtherProcs();
   updateAlerts();
 
