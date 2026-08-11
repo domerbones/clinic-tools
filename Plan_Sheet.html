@@ -128,9 +128,11 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
         <option value="new">New patient</option>
         <option value="estab">Established patient — new problem</option>
         <option value="fu">Follow-up</option>
+        <option value="preop">Pre-op — surgery discussed</option>
         <option value="postop">Post-op</option>
       </select>
       <select id="dx-sel" onchange="applyDxPreset()" style="min-width:230px;display:none"></select>
+      <select id="preop-sel" onchange="applyPreop()" style="min-width:280px;display:none"></select>
       <select id="ps-proc-sel" onchange="applyPostopNew()" style="min-width:210px;display:none"></select>
       <select id="ps-visit-sel" onchange="applyPostopNew()" style="min-width:150px;display:none"></select>
     </div>
@@ -164,19 +166,21 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 
 <script>
 var SECTIONS = [
-  { key:'dx', title:'Diagnosis', drop:true, lat:true,
+  { key:'dx', title:'Diagnosis', drop:true, lat:true, nSided:27,
     groups:[
       {label:'Rotator cuff', tokens:['RCI','RCT','pRCT','IrrRTC','?RCT']},
       {label:'Arthritis', tokens:['GHoa','ACoa','RCA']},
       {label:'Instability / labrum', tokens:['D/L','SLAP','ALT','PLT','?SLAP','GHBL']},
       {label:'Biceps', tokens:['BT','Brupture','DBrupture']},
-      {label:'Fracture', tokens:['PHfx','ClavicleFX']}
+      {label:'Fracture', tokens:['PHfx','ClavicleFX']},
+      {label:'Cervical spine', tokens:['Cradic','Neck']}
     ], items:[
     ['Px','pain'],['sprain','shoulder sprain'],['strain','shoulder strain'],['RCI','rotator cuff impingement'],['RCT','rotator cuff tear'],['pRCT','partial-thickness rotator cuff tear'],
     ['RCA','rotator cuff arthropathy'],['GHoa','glenohumeral osteoarthritis'],['ACoa','AC joint osteoarthritis'],['Adcap','adhesive capsulitis'],['SLAP','SLAP tear'],
     ['ALT','anterior labral tear'],['PLT','posterior labral tear'],['PHfx','proximal humerus fracture'],['BT','biceps tendinitis'],['Brupture','biceps rupture'],
     ['CT','calcific tendinitis'],['D/L','dislocation / instability'],['ClavicleFX','clavicle fracture'],['IrrRTC','irreparable rotator cuff tear'],['GHBL','glenohumeral bone loss'],
-    ['?RCT','possible rotator cuff tear'],['?SLAP','possible SLAP tear'],['S/P','status post'],['DBrupture','distal biceps rupture'],['hxTSA','history of total shoulder arthroplasty'],['hxRSA','history of reverse total shoulder arthroplasty']
+    ['?RCT','possible rotator cuff tear'],['?SLAP','possible SLAP tear'],['S/P','status post'],['DBrupture','distal biceps rupture'],['hxTSA','history of total shoulder arthroplasty'],['hxRSA','history of reverse total shoulder arthroplasty'],
+    ['Cradic','cervical radiculopathy'],['Neck','neck pain']
   ]},
   { key:'postop', title:'Post-op', grid2:true, items:[
     ['Reviewed images','reviewed operative / arthroscopy images with the patient'],['Wound check','wound checked, healing appropriately'],
@@ -217,7 +221,7 @@ var SECTIONS = [
     ['TSA','total shoulder arthroplasty'],['RSA','reverse total shoulder arthroplasty'],['RCR','rotator cuff repair'],['Scope','shoulder arthroscopy'],['SAD','subacromial decompression'],['DCR','distal clavicle resection'],['BT','open subpectoral biceps tenodesis'],['Labrum','labral repair / instability'],['SCR','superior capsular reconstruction'],['ORIF','ORIF'],['Distal biceps','distal biceps repair']
   ]},
   { key:'fu', title:'Follow-up', grid2:true, items:[
-    ['1 wk','return in 1 week'],['2 wk','return in 2 weeks'],['6 wk','return in 6 weeks'],['10-12 wk','return in 10-12 weeks'],['3 mo','return in 3 months'],['6 mo','return in 6 months'],
+    ['1 wk','return in 1 week'],['2 wk','return in 2 weeks'],['6 wk','return in 6 weeks'],['10-12 wk','return in 10-12 weeks'],['3 mo','return in 3 months'],['6 mo','return in 6 months'],['2 yr','return in 2 years'],['5 yr','return in 5 years'],
     ['in ___','return in {}','interval'],['INB','INB (?)'],['PRN','as needed'],['afterimaging','after imaging'],['afterPSI','after PSI planning'],['Call>MRI','call after MRI'],['spine','spine referral'],['hand','hand referral'],['PNS','PNS (?)'],['email','email patient']
   ]},
 ];
@@ -461,14 +465,50 @@ function initVisitControls(){
 function onVisitTypeChange(){
   var vt=document.getElementById('vtype-sel').value;
   var dx=document.getElementById('dx-sel'), ps=document.getElementById('ps-proc-sel'), pv=document.getElementById('ps-visit-sel');
-  dx.style.display='none'; ps.style.display='none'; pv.style.display='none';
+  var po=document.getElementById('preop-sel');
+  dx.style.display='none'; ps.style.display='none'; pv.style.display='none'; po.style.display='none';
   if(vt==='new'||vt==='estab'||vt==='fu'){
     // established-new-problem uses the same standard as a new patient
     populateDx(vt==='fu' ? 'Follow-up' : 'New visit');
     dx.style.display=''; dx.selectedIndex=0;
+  } else if(vt==='preop'){
+    populatePreop(); po.style.display=''; po.selectedIndex=0;
   } else if(vt==='postop'){
     ps.style.display=''; pv.style.display=''; ps.selectedIndex=0; pv.selectedIndex=0;
   }
+}
+
+/* ---------- Pre-op visit: pick the surgery discussed, get the matching handouts ---------- */
+var PREOP_SURG = [
+  { label:'Total shoulder arthroplasty',                 surg:['TSA'],           handouts:['TSA','FAQ'] },
+  { label:'Reverse total shoulder arthroplasty',         surg:['RSA'],           handouts:['RSA','FAQ'] },
+  { label:'Rotator cuff repair',                         surg:['RCR'],           handouts:['RCR','FAQ'] },
+  { label:'Rotator cuff repair + biceps tenodesis',      surg:['RCR','BT'],      handouts:['RCR','Biceps tenodesis','FAQ'] },
+  { label:'Superior capsular reconstruction',            surg:['SCR'],           handouts:['RCR','FAQ'] },
+  { label:'Labral repair / instability',                 surg:['Labrum'],        handouts:['Instability','FAQ'] },
+  { label:'Shoulder arthroscopy / subacromial decompression', surg:['Scope','SAD'], handouts:['Impingement','FAQ'] },
+  { label:'Distal clavicle resection',                   surg:['DCR'],           handouts:['Impingement','FAQ'] },
+  { label:'Open subpectoral biceps tenodesis',           surg:['BT'],            handouts:['Biceps tenodesis','FAQ'] },
+  { label:'Clavicle ORIF',                               surg:['ORIF'],          handouts:['Clavicle ORIF','FAQ'] },
+  { label:'Proximal humerus ORIF',                       surg:['ORIF'],          handouts:['Proximal humerus ORIF','FAQ'] },
+  { label:'Distal biceps repair',                        surg:['Distal biceps'], handouts:['FAQ'] }
+];
+function populatePreop(){
+  var el=document.getElementById('preop-sel');
+  var h='<option value="">— surgery discussed —</option>';
+  PREOP_SURG.forEach(function(p,i){ h+='<option value="'+i+'">'+esc(p.label)+'</option>'; });
+  el.innerHTML=h;
+}
+function applyPreop(){
+  var v=document.getElementById('preop-sel').value; if(v==='') return;
+  var p=PREOP_SURG[parseInt(v,10)];
+  var picks=[];
+  // the planned operation(s), then "ready for surgery", then the matching handouts
+  p.surg.forEach(function(t){ picks.push(['surg',t]); });
+  picks.push(['surg','ready']);
+  p.surg.forEach(function(t){ picks.push(['recsurg',t]); });
+  p.handouts.forEach(function(t){ picks.push(['handout',t]); });
+  applyPicks(picks, 'Pre-operative visit: surgery discussed in detail including indications, alternatives, risks, recovery timeline, and restrictions. Questions answered. Handouts given.');
 }
 // Fill the diagnosis dropdown from the presets in the chosen group
 // Category for each diagnosis preset (keyed by base label; anything unlisted -> Other)

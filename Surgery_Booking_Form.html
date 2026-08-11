@@ -108,6 +108,18 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="field field-med"><label>Block Type</label><select id="block-type"><option value="Interscalene block">Interscalene block</option><option value="Interscalene block with indwelling catheter">Interscalene block with indwelling catheter</option><option value="Interscalene block using Exparel">Interscalene block using Exparel</option></select></div>
 </div>
 <div class="row">
+<div class="field field-med"><label>Admission Status</label><select id="admit-status" onchange="onAdmitChange()"><option value="Outpatient (same day discharge)">Outpatient (same day discharge)</option><option value="23-hour observation">23-hour observation</option><option value="Inpatient">Inpatient</option></select></div>
+<div class="field field-med" id="admit-nights-field" style="display:none"><label>Expected length of stay</label><select id="admit-nights"><option value="two">Expected to cross 2 midnights (two-midnight benchmark)</option><option value="one">Less than 2 midnights - case-by-case exception</option></select></div>
+</div>
+<div id="admit-detail" style="display:none">
+<div class="section-title">Reason for Admission (check all that apply)</div>
+<p class="icd-info">Per 42 CFR 412.3 the admission decision must be supported by documented patient history and comorbidities, severity of signs and symptoms, medical needs, and risk of adverse events. Check the factors actually present.</p>
+<div class="checkbox-group" id="admit-reason-list"></div>
+<div class="row">
+<div class="field"><label>Other / additional detail</label><input id="admit-reason" placeholder="anything not listed above"></div>
+</div>
+</div>
+<div class="row">
 <div class="field field-small">
 <label>Workers Comp</label>
 <div class="checkbox-group" style="margin:0;padding:4px 0;">
@@ -133,6 +145,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <option value="rev-tsa">Revision Total Shoulder Arthroplasty</option>
 <option value="rev-rtsa">Revision Reverse Total Shoulder Arthroplasty</option>
 <option value="bankart">Shoulder Arthroscopy - Instability/Bankart Repair</option>
+<option value="slap">Shoulder Arthroscopy - SLAP Repair</option>
 <option value="rcr">Shoulder Arthroscopy - Rotator Cuff Repair</option>
 <option value="scope">Shoulder Arthroscopy - Debridement/Scope</option>
 <option value="scr">Superior Capsular Reconstruction (SCR)</option>
@@ -155,6 +168,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <p class="icd-info">CPT: 23472 Total shoulder arthroplasty</p>
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="tsa-ct" checked><label for="tsa-ct">CT scan for PSI planning needed</label></div>
+<div class="checkbox-item"><input type="checkbox" id="tsa-vs-rsa"><label for="tsa-vs-rsa"><b>TSA vs RSA</b> - reverse implants also on standby; final decision intraoperative</label></div>
 </div>
 <div class="row">
 <div class="field field-med"><label>Follow Up</label><select id="tsa-followup"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option></select></div>
@@ -178,6 +192,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <p class="icd-info">CPT: 23472 Reverse total shoulder arthroplasty</p>
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="rtsa-ct" checked><label for="rtsa-ct">CT scan for PSI planning needed</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rtsa-vs-tsa"><label for="rtsa-vs-tsa"><b>RSA vs TSA</b> - anatomic implants also on standby; final decision intraoperative</label></div>
 </div>
 <div class="row">
 <div class="field field-med"><label>Follow Up</label><select id="rtsa-followup"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option></select></div>
@@ -263,6 +278,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Shoulder Arthroscopy - Instability/Bankart Repair</div>
 <p class="icd-info">ICD-10: S43.001A Anterior dislocation right shoulder / S43.002A Anterior dislocation left shoulder; M24.411 Recurrent dislocation right shoulder / M24.412 Recurrent dislocation left shoulder</p>
 <p class="icd-info">CPT: 29806 Arthroscopic capsulorrhaphy</p>
+<div class="section-title">Procedures This Case (check all)</div>
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="bankart-slap"><label for="bankart-slap">29807 Arthroscopic SLAP repair (if applicable)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="bankart-remplissage"><label for="bankart-remplissage">Remplissage</label></div>
@@ -272,6 +288,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="bankart-bk-tenotomy"><label for="bankart-bk-tenotomy">Arthroscopic Biceps Tenotomy</label></div>
 <div class="checkbox-item"><input type="checkbox" id="bankart-bk-tenodesis"><label for="bankart-bk-tenodesis">Open Subpectoral Biceps Tenodesis (23430)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="bankart-bk-debridement"><label for="bankart-bk-debridement">Extensive Glenohumeral Debridement</label></div>
+<div class="checkbox-item"><input type="checkbox" id="bankart-bk-looseb"><label for="bankart-bk-looseb">Loose Body Removal (29819)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="bankart-bk-capsrel"><label for="bankart-bk-capsrel">Capsular Release (29825)</label></div>
 </div>
 <div class="section-title">Reps</div>
 <div class="row">
@@ -301,6 +319,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="rcr-bk-tenotomy"><label for="rcr-bk-tenotomy">Arthroscopic Biceps Tenotomy</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-bk-tenodesis"><label for="rcr-bk-tenodesis">Open Subpectoral Biceps Tenodesis (23430)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-bk-debridement"><label for="rcr-bk-debridement">Extensive Glenohumeral Debridement</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-bk-looseb"><label for="rcr-bk-looseb">Loose Body Removal (29819)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-bk-capsrel"><label for="rcr-bk-capsrel">Capsular Release (29825)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-carm"><label for="rcr-carm">C-arm needed</label></div>
 </div>
 <div class="row">
@@ -318,6 +338,37 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 <div class="row">
 <div class="field"><label>Additional Equipment</label><textarea id="rcr-equip"></textarea></div>
+</div>
+</div>
+
+<!-- SLAP Repair -->
+<div class="procedure-section" id="sec-slap">
+<div class="section-title">Shoulder Arthroscopy - SLAP Repair</div>
+<p class="icd-info">ICD-10: S43.431A Superior glenoid labrum lesion, right shoulder / S43.432A Superior glenoid labrum lesion, left shoulder</p>
+<p class="icd-info">CPT: 29807 Arthroscopic SLAP repair</p>
+<div class="section-title">Procedures This Case (check all)</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="slap-bk-decompression"><label for="slap-bk-decompression">Subacromial Decompression (29826)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="slap-bk-acromioplasty"><label for="slap-bk-acromioplasty">Acromioplasty</label></div>
+<div class="checkbox-item"><input type="checkbox" id="slap-bk-dcr"><label for="slap-bk-dcr">Distal Clavicle Resection (29824)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="slap-bk-tenotomy"><label for="slap-bk-tenotomy">Arthroscopic Biceps Tenotomy</label></div>
+<div class="checkbox-item"><input type="checkbox" id="slap-bk-tenodesis"><label for="slap-bk-tenodesis">Open Subpectoral Biceps Tenodesis (23430)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="slap-bk-debridement"><label for="slap-bk-debridement">Extensive Glenohumeral Debridement</label></div>
+<div class="checkbox-item"><input type="checkbox" id="slap-bk-looseb"><label for="slap-bk-looseb">Loose Body Removal (29819)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="slap-bk-capsrel"><label for="slap-bk-capsrel">Capsular Release (29825)</label></div>
+</div>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="slap-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="slap-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="slap-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="slap-equip"></textarea></div>
 </div>
 </div>
 
@@ -365,6 +416,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="scr-bk-tenotomy"><label for="scr-bk-tenotomy">Arthroscopic Biceps Tenotomy</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scr-bk-tenodesis"><label for="scr-bk-tenodesis">Open Subpectoral Biceps Tenodesis (23430)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scr-bk-debridement"><label for="scr-bk-debridement">Extensive Glenohumeral Debridement</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scr-bk-looseb"><label for="scr-bk-looseb">Loose Body Removal (29819)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scr-bk-capsrel"><label for="scr-bk-capsrel">Capsular Release (29825)</label></div>
 </div>
 <div class="row">
 <div class="field"><label>Graft Type</label><input id="scr-graft" value="Dermal allograft"></div>
@@ -572,6 +625,68 @@ function getProcReps(prefix) {
   return reps;
 }
 
+/* Reasons grouped by the four factors CMS requires the admitting physician to
+   consider (42 CFR 412.3). Social factors are listed last and flagged, because
+   they support observation but do not by themselves support inpatient status. */
+var ADMIT_REASONS = [
+  ['ar-osa',      'Obstructive sleep apnea on CPAP/BiPAP'],
+  ['ar-cardiac',  'Cardiac disease requiring monitoring (CAD, CHF, arrhythmia)'],
+  ['ar-pulm',     'COPD, home oxygen, or other significant pulmonary disease'],
+  ['ar-antico',   'Chronic anticoagulation requiring bridging or monitoring'],
+  ['ar-dm',       'Insulin-dependent diabetes requiring glycemic monitoring'],
+  ['ar-ckd',      'Chronic kidney disease or dialysis'],
+  ['ar-asa',      'ASA class III or higher'],
+  ['ar-bmi',      'BMI 40 or greater'],
+  ['ar-frail',    'Advanced age with frailty or prior postoperative delirium'],
+  ['ar-opioid',   'Chronic opioid tolerance; IV pain management anticipated'],
+  ['ar-ponv',     'History of severe postoperative nausea or difficult anesthesia recovery'],
+  ['ar-iv',       'Anticipated need for IV antibiotics or IV medication beyond the day of surgery'],
+  ['ar-tele',     'Anticipated need for telemetry or continued nursing monitoring'],
+  ['ar-complex',  'Complex or revision procedure with anticipated blood loss or extended operative time'],
+  ['ar-block',    'Interscalene block with pulmonary disease - risk of respiratory compromise'],
+  ['ar-fall',     'Fall risk or unable to ambulate safely at discharge'],
+  ['ar-social',   'No caregiver at home for the first 24 hours (supports observation, not inpatient alone)'],
+  ['ar-distance', 'Lives a long distance from the hospital (supports observation, not inpatient alone)']
+];
+function renderAdmitReasons() {
+  var box = document.getElementById('admit-reason-list');
+  if (!box || box.innerHTML) return;
+  box.innerHTML = ADMIT_REASONS.map(function(a) {
+    return '<div class="checkbox-item"><input type="checkbox" id="' + a[0] + '"><label for="' + a[0] + '">' + a[1] + '</label></div>';
+  }).join('');
+}
+function onAdmitChange() {
+  // Observation and inpatient stays need documented medical necessity
+  var st = v('admit-status');
+  var isOut = (st === 'Outpatient (same day discharge)');
+  renderAdmitReasons();
+  document.getElementById('admit-detail').style.display = isOut ? 'none' : '';
+  document.getElementById('admit-nights-field').style.display = (st === 'Inpatient') ? '' : 'none';
+  if (isOut) {
+    // reverting to outpatient clears any reasons picked for a prior status
+    ADMIT_REASONS.forEach(function(a) { var el = document.getElementById(a[0]); if (el) el.checked = false; });
+    var o = document.getElementById('admit-reason'); if (o) o.value = '';
+  }
+}
+function admitReasonLines() {
+  var out = [];
+  if (v('admit-status') === 'Outpatient (same day discharge)') return out;
+  ADMIT_REASONS.forEach(function(a) { if (ck(a[0])) out.push(a[1]); });
+  var other = v('admit-reason').trim();
+  if (other) out.push(other);
+  return out;
+}
+function admitSummary() {
+  var st = v('admit-status');
+  if (st === 'Outpatient (same day discharge)') return st;
+  var txt = st;
+  if (st === 'Inpatient') {
+    txt += (v('admit-nights') === 'two')
+      ? ' - hospital care expected to cross two midnights'
+      : ' - less than two midnights, admitted under the case-by-case exception';
+  }
+  return txt;
+}
 function switchProcedure(val) {
   document.querySelectorAll('.procedure-section').forEach(function(s) {
     s.classList.remove('active');
@@ -599,6 +714,7 @@ function getProcedureName(val) {
     'rev-tsa': 'Revision Total Shoulder Arthroplasty',
     'rev-rtsa': 'Revision Reverse Total Shoulder Arthroplasty',
     'bankart': 'Shoulder Arthroscopy - Instability/Bankart Repair',
+    'slap': 'Shoulder Arthroscopy - SLAP Repair',
     'rcr': 'Shoulder Arthroscopy - Rotator Cuff Repair',
     'scope': 'Shoulder Arthroscopy - Debridement/Scope',
     'scr': 'Superior Capsular Reconstruction (SCR)',
@@ -611,7 +727,11 @@ function getProcedureName(val) {
     'latarjet': 'Latarjet',
     'distal-biceps': 'Distal Biceps Repair'
   };
-  return names[val] || '';
+  var nm = names[val] || '';
+  // Arthroplasty booked with the alternate construct on standby
+  if (val === 'tsa' && ck('tsa-vs-rsa')) nm = 'Total Shoulder Arthroplasty vs Reverse Total Shoulder Arthroplasty (TSA planned)';
+  if (val === 'rtsa' && ck('rtsa-vs-tsa')) nm = 'Reverse Total Shoulder Arthroplasty vs Total Shoulder Arthroplasty (RSA planned)';
+  return nm;
 }
 
 function esc(s) {
@@ -632,6 +752,7 @@ function renderBookingDoc(proc, side) {
     ['Workers Comp', ck('workers-comp') ? 'Yes' : 'No'],
     ['Position', 'Beach Chair'],
     ['Block Type', v('block-type')],
+    ['Admission Status', admitSummary()],
     ['Rep', repStr]
   ];
   var h = '';
@@ -654,6 +775,11 @@ function renderBookingDoc(proc, side) {
            var cls = d.indexOf('***') !== -1 ? ' class="doc-note"' : '';
            return '<li' + cls + '>' + esc(d) + '</li>';
          }).join('') + '</ul></div>';
+  }
+  var arl = admitReasonLines();
+  if (arl.length) {
+    h += '<div class="doc-section"><h3>Reason for Admission</h3><ul>' +
+         arl.map(function(x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>';
   }
   var slist = getSurgeryList(proc);
   h += '<div class="doc-section"><h3>Surgery List</h3><ol>' +
@@ -685,6 +811,12 @@ function generateBooking() {
   lines.push('Workers Comp: ' + (ck('workers-comp') ? 'Yes' : 'No'));
   lines.push('Position: Beach Chair');
   lines.push('Block Type: ' + v('block-type'));
+  lines.push('Admission Status: ' + admitSummary());
+  var admitLines = admitReasonLines();
+  if (admitLines.length) {
+    lines.push('Reason for admission:');
+    admitLines.forEach(function(x) { lines.push('  - ' + x); });
+  }
   var repCo = v('rep-company');
   if (repCo === 'Other') repCo = v('rep-other') || 'Other';
   if (repCo) {
@@ -739,6 +871,10 @@ function getDiagnosisLines(proc, side) {
     case 'tsa':
       if (side === 'Right' || side === 'Bilateral') dx.push('M19.011 - Primary osteoarthritis, right shoulder');
       if (side === 'Left' || side === 'Bilateral') dx.push('M19.012 - Primary osteoarthritis, left shoulder');
+      if (ck('tsa-vs-rsa')) {
+        if (side === 'Right' || side === 'Bilateral') dx.push('M75.101 - Rotator cuff tear, right shoulder (if reverse required)');
+        if (side === 'Left' || side === 'Bilateral') dx.push('M75.102 - Rotator cuff tear, left shoulder (if reverse required)');
+      }
       break;
     case 'rtsa':
       if (side === 'Right' || side === 'Bilateral') {
@@ -764,6 +900,10 @@ function getDiagnosisLines(proc, side) {
         dx.push('S43.002A - Anterior dislocation, left shoulder');
         dx.push('M24.412 - Recurrent dislocation, left shoulder');
       }
+      break;
+    case 'slap':
+      if (side === 'Right' || side === 'Bilateral') dx.push('S43.431A - Superior glenoid labrum lesion, right shoulder');
+      if (side === 'Left' || side === 'Bilateral') dx.push('S43.432A - Superior glenoid labrum lesion, left shoulder');
       break;
     case 'rcr':
       if (side === 'Right' || side === 'Bilateral') {
@@ -894,7 +1034,7 @@ function getSurgeryList(proc) {
     if (ck('bankart-slap')) list.push('Arthroscopic SLAP Repair (29807)');
     if (ck('bankart-remplissage')) list.push('Remplissage');
   }
-  if (['rcr','bankart','scope','scr'].indexOf(proc) >= 0) {
+  if (['rcr','bankart','scope','scr','slap'].indexOf(proc) >= 0) {
     addonChecks(proc).forEach(function(a){ list.push(a[1] + (a[2] ? ' (' + a[2] + ')' : '')); });
   }
   if (proc === 'rev-tsa' || proc === 'rev-rtsa') {
@@ -909,9 +1049,11 @@ function getCPTLines(proc) {
   switch(proc) {
     case 'tsa':
       cpt.push('23472 - Total shoulder arthroplasty');
+      if (ck('tsa-vs-rsa')) cpt.push('23472 also covers reverse if the construct is changed intraoperatively');
       break;
     case 'rtsa':
       cpt.push('23472 - Reverse total shoulder arthroplasty');
+      if (ck('rtsa-vs-tsa')) cpt.push('23472 also covers anatomic if the construct is changed intraoperatively');
       break;
     case 'rev-tsa':
     case 'rev-rtsa':
@@ -926,6 +1068,9 @@ function getCPTLines(proc) {
     case 'bankart':
       cpt.push('29806 - Arthroscopic capsulorrhaphy');
       if (ck('bankart-slap')) cpt.push('29807 - Arthroscopic SLAP repair');
+      break;
+    case 'slap':
+      cpt.push('29807 - Arthroscopic SLAP repair');
       break;
     case 'rcr':
       cpt.push('29827 - Arthroscopic rotator cuff repair');
@@ -964,7 +1109,7 @@ function getCPTLines(proc) {
       cpt.push('24342 - Reinsertion of ruptured biceps tendon, distal');
       break;
   }
-  if (['rcr','bankart','scope','scr'].indexOf(proc) >= 0) {
+  if (['rcr','bankart','scope','scr','slap'].indexOf(proc) >= 0) {
     addonChecks(proc).forEach(function(a){ if (a[2]) cpt.push(a[2] + ' - ' + a[1]); });
   }
   return cpt;
@@ -973,11 +1118,16 @@ function getCPTLines(proc) {
 function getProcedureDetails(proc, side) {
   var details = [];
 
+  // Every booking leads with the complete list of procedures for this case
+  var allProcs = getSurgeryList(proc);
+  if (allProcs.length) details.push('Procedures: ' + allProcs.join(', '));
+
   switch(proc) {
     case 'tsa':
       if (ck('tsa-ct')) details.push('CT Scan for PSI Planning: Yes');
       details.push('Follow Up: ' + v('tsa-followup'));
       details.push('Implant System: ' + v('tsa-implant'));
+      if (ck('tsa-vs-rsa')) details.push('*** TSA vs RSA - HAVE BOTH ANATOMIC AND REVERSE IMPLANTS AVAILABLE. Final construct decided intraoperatively. ***');
       if (v('tsa-special-equip')) details.push('Special Equipment: ' + v('tsa-special-equip'));
       if (v('tsa-graft')) details.push('Graft: ' + v('tsa-graft'));
       if (v('tsa-equip').trim()) details.push('Additional Equipment: ' + v('tsa-equip').trim());
@@ -986,6 +1136,7 @@ function getProcedureDetails(proc, side) {
       if (ck('rtsa-ct')) details.push('CT Scan for PSI Planning: Yes');
       details.push('Follow Up: ' + v('rtsa-followup'));
       details.push('Implant System: ' + v('rtsa-implant'));
+      if (ck('rtsa-vs-tsa')) details.push('*** RSA vs TSA - HAVE BOTH REVERSE AND ANATOMIC IMPLANTS AVAILABLE. Final construct decided intraoperatively. ***');
       if (v('rtsa-special-equip')) details.push('Special Equipment: ' + v('rtsa-special-equip'));
       if (v('rtsa-graft')) details.push('Graft: ' + v('rtsa-graft'));
       if (v('rtsa-equip').trim()) details.push('Additional Equipment: ' + v('rtsa-equip').trim());
@@ -1017,26 +1168,21 @@ function getProcedureDetails(proc, side) {
       if (v('rev-rtsa-equip').trim()) details.push('Additional Equipment: ' + v('rev-rtsa-equip').trim());
       break;
     case 'bankart':
-      if (ck('bankart-slap')) details.push('SLAP Repair: Yes');
-      if (ck('bankart-remplissage')) details.push('Remplissage: Yes');
       var bankartReps = getProcReps('bankart');
       if (bankartReps.length > 0) details.push('Reps: ' + bankartReps.join('; '));
       if (v('bankart-equip').trim()) details.push('Additional Equipment: ' + v('bankart-equip').trim());
       break;
     case 'rcr':
-      var rcrAddProcs = [];
-      if (ck('rcr-bk-decompression')) rcrAddProcs.push('Subacromial Decompression');
-      if (ck('rcr-bk-acromioplasty')) rcrAddProcs.push('Acromioplasty');
-      if (ck('rcr-bk-dcr')) rcrAddProcs.push('Distal Clavicle Resection');
-      if (ck('rcr-bk-tenotomy')) rcrAddProcs.push('Arthroscopic Biceps Tenotomy');
-      if (ck('rcr-bk-tenodesis')) rcrAddProcs.push('Open Subpectoral Biceps Tenodesis');
-      if (ck('rcr-bk-debridement')) rcrAddProcs.push('Extensive Glenohumeral Debridement');
-      if (rcrAddProcs.length > 0) details.push('Additional Procedures: ' + rcrAddProcs.join(', '));
       if (ck('rcr-carm')) details.push('C-arm: Yes');
       if (v('rcr-graft')) details.push('Graft/Patch: ' + v('rcr-graft'));
       var rcrReps = getProcReps('rcr');
       if (rcrReps.length > 0) details.push('Reps: ' + rcrReps.join('; '));
       if (v('rcr-equip').trim()) details.push('Additional Equipment: ' + v('rcr-equip').trim());
+      break;
+    case 'slap':
+      var slapReps = getProcReps('slap');
+      if (slapReps.length > 0) details.push('Reps: ' + slapReps.join('; '));
+      if (v('slap-equip').trim()) details.push('Additional Equipment: ' + v('slap-equip').trim());
       break;
     case 'scope':
       var scopeReps = getProcReps('scope');

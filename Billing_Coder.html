@@ -393,13 +393,18 @@ var dxData = [
     { label: 'Medial Epicondylitis', r: 'M77.01', l: 'M77.02', desc: 'Medial epicondylitis, {side} elbow' },
     { label: 'Distal Biceps Tear', r: 'S46.111A', l: 'S46.112A', desc: 'Distal biceps tear, {side}, initial encounter' }
   ]},
+  { cat: 'Cervical Spine', items: [
+    { label: 'Cervical Radiculopathy', r: 'M54.12', l: 'M54.12', desc: 'Radiculopathy, cervical region', noLat: true, fixedCode: 'M54.12' },
+    { label: 'Neck Pain (Cervicalgia)', r: 'M54.2', l: 'M54.2', desc: 'Cervicalgia (neck pain)', noLat: true, fixedCode: 'M54.2' },
+    { label: 'Cervical Disc Disorder w/ Radiculopathy', r: 'M50.120', l: 'M50.120', desc: 'Cervical disc disorder with radiculopathy, unspecified cervical region', noLat: true, fixedCode: 'M50.120' }
+  ]},
   { cat: 'Other', items: [
     { label: 'Shoulder Pain', r: 'M25.511', l: 'M25.512', desc: 'Pain in {side} shoulder' }
   ]}
 ];
 
 /* ========== FRACTURE CATEGORY INDICES ========== */
-var collapsibleCatIndices = [0, 1, 2, 3, 4, 5]; // Shoulder-Degenerative, Shoulder-Instability, Post-Surgical, Fractures-Prox Humerus, Fractures-Clavicle, Elbow
+var collapsibleCatIndices = [0, 1, 2, 3, 4, 5, 6]; // Shoulder-Degenerative, Shoulder-Instability, Post-Surgical, Fractures-Prox Humerus, Fractures-Clavicle, Elbow
 
 function isCollapsibleCategory(catIdx) {
   for (var i = 0; i < collapsibleCatIndices.length; i++) {
