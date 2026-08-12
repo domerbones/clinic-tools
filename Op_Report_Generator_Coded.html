@@ -1990,6 +1990,7 @@ function initAssistants() {
     var t4 = document.createElement('input');
     t4.type = 'text'; t4.id = pfx + '-protocol-other'; t4.className = 'other-text';
     t4.placeholder = 'name the protocol';
+    if (PROTOCOL_OTHER_DEFAULT[pfx]) t4.value = PROTOCOL_OTHER_DEFAULT[pfx];
     t4.style.display = (s4.value === '__other__') ? 'inline-block' : 'none';
     s4.addEventListener('change', function() {
       t4.style.display = (this.value === '__other__') ? 'inline-block' : 'none';
@@ -2007,6 +2008,11 @@ var PROTOCOL_OPTIONS = [
   ['__other__',                    'Other']
 ];
 // sensible starting protocol per template; everything else starts on Other
+// templates whose protocol is not one of the six: prefill the free-text name
+var PROTOCOL_OTHER_DEFAULT = {
+  phum: 'open reduction and internal fixation of the proximal humerus',
+  clav: 'open reduction and internal fixation of the clavicle'
+};
 var PROTOCOL_DEFAULT = {
   tsa:  'total shoulder replacement',
   rtsa: 'reverse shoulder replacement',
@@ -2089,7 +2095,7 @@ v('tsa-findings') + '\n\n' +
 'PAIN MANAGEMENT PLAN:\n' +
 'Multimodal regimen with nerve block, sling, cryotherapy, ' + painMeds('tsa') + ', and oral analgesics.\n\n' +
 'POSTOPERATIVE THERAPY PROTOCOL:\n' +
-'Immobilizer for 2-4 weeks\nBaby cradle pendulum exercises POD #1\nPassive ROM: Forward flexion < ' + v('tsa-pt-ff') + '°, External rotation < ' + v('tsa-pt-er') + '°\nActive ROM: Begin at 4-6 weeks\nTSA rehab protocol available at doctorrolf.com';
+'Immobilizer for 2-4 weeks\nBaby cradle pendulum exercises POD #1\nPassive ROM: Forward flexion < ' + v('tsa-pt-ff') + '°, External rotation < ' + v('tsa-pt-er') + '°\nActive ROM: Begin at 4-6 weeks';
 
   showReport(report);
 }
@@ -2153,7 +2159,7 @@ v('rtsa-findings') + '\n\n' +
 'PAIN MANAGEMENT PLAN:\n' +
 'Multimodal regimen: interscalene block, cryotherapy, sling, ' + painMeds('rtsa') + ', and oral analgesics.\n\n' +
 'POSTOPERATIVE THERAPY PROTOCOL:\n' +
-'Shoulder immobilizer for up to 4 weeks\nBegin gentle passive and active-assist ER < ' + v('rtsa-pt-er') + '° and FF < ' + v('rtsa-pt-ff') + '° at first follow-up\nActive ROM at 6 weeks\nReverse TSA rehab protocol available at doctorrolf.com';
+'Shoulder immobilizer for up to 4 weeks\nBegin gentle passive and active-assist ER < ' + v('rtsa-pt-er') + '° and FF < ' + v('rtsa-pt-ff') + '° at first follow-up\nActive ROM at 6 weeks';
 
   showReport(report);
 }
@@ -2254,7 +2260,6 @@ function generateInstability() {
     'DESCRIPTION OF PROCEDURE:\n\n' + descSections.join('\n\n') + '\n\n' +
     'DISPOSITION:\nThe patient will remain in the sling for ' + v('inst-sling-weeks') + ' weeks with external rotation limited per protocol. Follow-up in ' + v('inst-followup') + '.\n\n' +
     'PAIN MANAGEMENT PLAN:\nMultimodal regimen with ' + v('inst-block') + ', sling, cryotherapy, ' + painMeds('inst') + ', and oral analgesics.\n\n' +
-    'POSTOPERATIVE THERAPY PROTOCOL:\nThe complete instability rehabilitation protocol is available at doctorrolf.com.\n\n' +
     'PROGNOSIS:\nThe patient has a ' + v('inst-prognosis') + ' prognosis for return to active function.';
 
   showReport(report);
@@ -2475,7 +2480,7 @@ function generateProxHumerus() {
     'CLOSURE:\nThe wound was thoroughly irrigated and closed in layers over no drain. The dermis was closed with 2-0 Vicryl and the skin with 3-0 Monocryl, reinforced with Steri-Strips. Sterile dressing, sling, and Cryocuff were applied. The patient was awakened and transferred to the PACU in stable condition. All counts were correct.\n\n' +
     'DISPOSITION:\nStable to PACU\n\n' +
     'PAIN MANAGEMENT PLAN:\nMultimodal regimen with ' + v('phum-block') + ', sling, cryotherapy, ' + painMeds('phum') + ', and oral analgesics.\n\n' +
-    'POSTOPERATIVE THERAPY PROTOCOL:\nSling for ' + v('phum-sling-weeks') + ' weeks\nPendulums/passive motion per protocol\nFollow-up in ' + v('phum-followup') + ' with radiographs\nDVT prophylaxis per protocol\nThe complete rehabilitation protocol for open reduction, internal fixation proximal humerus is available at doctorrolf.com\n\n' +
+    'POSTOPERATIVE THERAPY PROTOCOL:\nSling for ' + v('phum-sling-weeks') + ' weeks\nPendulums/passive motion per protocol\nFollow-up in ' + v('phum-followup') + ' with radiographs\nDVT prophylaxis per protocol\n\n' +
     'PROGNOSIS:\nThe patient has a ' + v('phum-prognosis') + ' prognosis for return of function.';
 
   showReport(report);
