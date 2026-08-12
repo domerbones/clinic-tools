@@ -119,8 +119,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Implants</div>
 <div class="row">
 <div class="field field-small"><label>Stem (mm)</label><select id="tsa-stem"><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8" selected>8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option></select></div>
-<div class="field field-small"><label>Head &Oslash; (mm)</label><select id="tsa-head-diam" onchange="syncHeadHeights()"><option>36</option><option>39</option><option selected>42</option><option>45</option><option>48</option><option>51</option><option>54</option><option>57</option></select></div>
-<div class="field field-small"><label>Head Ht (mm)</label><select id="tsa-head-ht"></select></div>
+<div class="field field-med"><label>Humeral Head (&Oslash; x ht, mm)</label><select id="tsa-head"><option value="36x14">36 x 14</option><option value="36x16">36 x 16</option><option value="36x19">36 x 19</option><option value="39x14">39 x 14</option><option value="39x17">39 x 17</option><option value="39x20">39 x 20</option><option value="42x15">42 x 15</option><option value="42x18" selected>42 x 18</option><option value="42x21">42 x 21</option><option value="45x16">45 x 16</option><option value="45x19">45 x 19</option><option value="45x22">45 x 22</option><option value="48x17">48 x 17</option><option value="48x20">48 x 20</option><option value="48x23">48 x 23</option><option value="51x18">51 x 18</option><option value="51x21">51 x 21</option><option value="51x24">51 x 24</option><option value="54x19">54 x 19</option><option value="54x22">54 x 22</option><option value="54x25">54 x 25</option><option value="57x20">57 x 20</option><option value="57x23">57 x 23</option><option value="57x26">57 x 26</option></select></div>
 <div class="field field-small"><label>Glenoid Size</label><select id="tsa-glenoid-size"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></div>
 <div class="field"><label>Glenoid Type</label><select id="tsa-glenoid-type"><option value="3-peg monoblock glenoid">3-Peg Monoblock</option><option value="4-peg modular glenoid with trabecular metal post" selected>4-Peg Modular w/ TM post</option><option value="3-peg modular glenoid with trabecular metal post">3-Peg Modular w/ TM post</option><option value="2-peg monoblock glenoid">2-Peg Monoblock</option><option value="4-peg modular augmented glenoid with trabecular metal post">4-Peg Augmented w/ TM post</option><option value="4-peg modular posterior augmented glenoid with trabecular metal post">4-Peg Posterior Augmented w/ TM post</option></select></div>
 </div>
@@ -1841,35 +1840,16 @@ function updatePhumSections() {
   document.getElementById('phum-fibular-section').style.display = ck('phum-fibular') ? 'block' : 'none';
 }
 
-// --- Identity humeral heads: each diameter has its own three heights, so the
-// height list is rebuilt whenever the diameter changes (prevents documenting a
-// head combination the system does not make) ---
-var IDENTITY_HEADS = {
-  '36': [14, 16, 19],
-  '39': [14, 17, 20],
-  '42': [15, 18, 21],
-  '45': [16, 19, 22],
-  '48': [17, 20, 23],
-  '51': [18, 21, 24],
-  '54': [19, 22, 25],
-  '57': [20, 23, 26]
-};
-function syncHeadHeights() {
-  var d = document.getElementById('tsa-head-diam');
-  var h = document.getElementById('tsa-head-ht');
-  if (!d || !h) return;
-  var prev = h.value;
-  var opts = IDENTITY_HEADS[d.value] || [];
-  h.innerHTML = opts.map(function(v) { return '<option value="' + v + '">' + v + '</option>'; }).join('');
-  // keep the surgeon's height if this diameter also offers it, else default to the middle
-  if (opts.indexOf(parseInt(prev, 10)) >= 0) h.value = prev;
-  else h.value = String(opts[1]);
+// --- Identity humeral heads are ordered as matched diameter/height pairs, so the
+// selector lists the actual combinations rather than two independent lists ---
+function headStr() {
+  var v0 = (document.getElementById('tsa-head') || {}).value || '';
+  return v0.replace('x', ' x ');
 }
 
 // --- DOMContentLoaded ---
 
 document.addEventListener('DOMContentLoaded', function() {
-  syncHeadHeights();
   var today = todayStr();
   document.querySelectorAll('input[type="date"]').forEach(function(el) { el.value = today; });
 
@@ -1965,7 +1945,7 @@ function generateTSA() {
 'COMPLICATIONS: ' + complicationText('tsa') + '\n' +
 'ANTIBIOTICS: ' + v('tsa-abx') + '\n' +
 'TRANEXAMIC ACID: 1000 mg IV\n' +
-'IMPLANTS: Zimmer Biomet Identity ' + v('tsa-stem') + ' mm humeral stem, ' + v('tsa-head-diam') + ' x ' + v('tsa-head-ht') + ' mm humeral head, and size ' + v('tsa-glenoid-size') + ' ' + v('tsa-glenoid-type') + '\n\n' +
+'IMPLANTS: Zimmer Biomet Identity ' + v('tsa-stem') + ' mm humeral stem, ' + headStr() + ' mm humeral head, and size ' + v('tsa-glenoid-size') + ' ' + v('tsa-glenoid-type') + '\n\n' +
 'PHYSICIAN ASSISTANT STATEMENT:\n' +
 'The use of a Physician Assistant was essential in this procedure to facilitate preparation of the humerus and glenoid, implant placement, ' + (bicepsRuptured('tsa') ? '' : 'biceps tenodesis, ') + 'arm positioning, and hemostasis. This minimized risk of poor wound healing or infection and improved operative efficiency and patient safety.\n\n' +
 'INDICATIONS:\n' +
@@ -1992,7 +1972,7 @@ v('tsa-findings') + '\n\n' +
 'GLENOID PREPARATION AND IMPLANTATION:\n' +
 'The labrum was excised. Remaining articular cartilage was removed from the glenoid face with a Cobb elevator. The glenoid was reamed centrally and peripherally, and peg holes were drilled. The trial component was inserted and confirmed for fit. Phenylephrine soaked sponge was used to assist with hemostasis and the pedicles. Palacos-G cement was pressurized into the peripheral peg holes; the final glenoid component was seated and fixed with excellent stability. Excess cement was removed.\n\n' +
 'FINAL HUMERAL IMPLANTATION:\n' +
-'Sequential broaches were advanced to the final size. The final Identity ' + v('tsa-stem') + ' mm micro stem and ' + v('tsa-head-diam') + ' x ' + v('tsa-head-ht') + ' mm humeral head were assembled and inserted with excellent stability. Confirmed humeral head was placed to restore anatomic fit.\n\n' +
+'Sequential broaches were advanced to the final size. The final Identity ' + v('tsa-stem') + ' mm micro stem and ' + headStr() + ' mm humeral head were assembled and inserted with excellent stability. Confirmed humeral head was placed to restore anatomic fit.\n\n' +
 'LESSER TUBEROSITY OSTEOTOMY REPAIR:\n' +
 'The lesser tuberosity osteotomy was anatomically reduced and repaired with ' + v('tsa-bb') + ' BroadBand tape sutures passed individually around the lesser tuberosity fragment and through bone tunnels lateral to the lesser tuberosity, then sequentially tied, achieving anatomic reduction and compression of the osteotomy. The rotator interval was closed.\n\n' +
 'RANGE OF MOTION ASSESSMENT:\n' +
