@@ -585,6 +585,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
 <h2 style="color:#1B3A6B;">Surgery Booking Form</h2>
 <div style="display:flex;gap:8px;flex-wrap:wrap;">
+<button class="btn btn-primary" onclick="emailBooking()">Email to Staff</button>
 <button class="btn btn-secondary" onclick="copyReport()">Copy to Clipboard</button>
 <button class="btn btn-secondary" onclick="copyAndReset()">Copy &amp; Reset</button>
 <button class="btn btn-outline" onclick="printReport()">Print</button>
@@ -592,6 +593,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 </div>
 <span class="copied-msg" id="copy-msg">Copied to clipboard!</span>
+<span class="copied-msg" id="email-msg">Email opened. If the body is blank, paste from the clipboard.</span>
+<div style="margin:6px 0 10px;font-size:13px;"><label for="staff-email" style="font-weight:bold;color:#1B3A6B;">Send to:</label> <input id="staff-email" type="email" placeholder="scheduler@beaconortho.com" style="padding:6px;min-width:260px;" oninput="rememberStaffEmail()"><span style="color:#666;"> &nbsp;saved on this device</span></div>
 <span class="copied-msg" id="copy-reset-msg">Copied &amp; Reset!</span>
 <div class="booking-doc" id="booking-doc"></div>
 <pre id="report-output" style="display:none;"></pre>
@@ -1258,6 +1261,74 @@ function fallbackCopy(text) {
   document.body.removeChild(ta);
 }
 
+/* ---- Email the booking to the office ----
+   Built as a mailto: link so it uses whatever mail app the device already has
+   signed in, with no server and no patient data leaving the device except
+   through the user's own mail client. Long forms exceed what some mail clients
+   accept in a mailto body, so the full text is always copied to the clipboard
+   first and the body is only inlined when it is short enough to survive. */
+var MAILTO_BODY_LIMIT = 1600;
+
+function rememberStaffEmail() {
+  try { localStorage.setItem('rolfStaffEmail', document.getElementById('staff-email').value.trim()); } catch (e) {}
+}
+function loadStaffEmail() {
+  try {
+    var saved = localStorage.getItem('rolfStaffEmail');
+    if (saved) document.getElementById('staff-email').value = saved;
+  } catch (e) {}
+}
+
+function bookingSubject() {
+  var name = v('patient-name').trim();
+  var proc = getProcedureName(v('procedure-select')) || 'Surgery';
+  var side = v('side');
+  var dos  = v('dos');
+  var dob  = v('patient-dob').trim();
+  var bits = ['Surgery Booking'];
+  // name and date of birth are what the office needs to pull the chart
+  if (name) bits.push(name + (dob ? ' (DOB ' + dob + ')' : ''));
+  bits.push(side + ' ' + proc);
+  if (dos) bits.push('DOS ' + dos);
+  return bits.join(' - ');
+}
+
+function buildMailto(text) {
+  var to = (document.getElementById('staff-email').value || '').trim();
+  var subject = bookingSubject();
+  var short = text.length <= MAILTO_BODY_LIMIT;
+  var body = short
+    ? text
+    : 'The full booking form was copied to your clipboard - please paste it here before sending.\n\n'
+      + text.slice(0, 400) + '\n... (truncated, paste the full form)';
+  return {
+    url: 'mailto:' + encodeURIComponent(to) + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body),
+    inlined: short
+  };
+}
+
+function emailBooking() {
+  var text = document.getElementById('report-output').textContent;
+  if (!text.trim()) { alert('Generate the booking form first.'); return; }
+  // an emailed booking is useless to the office without both identifiers
+  var missing = [];
+  if (!v('patient-name').trim()) missing.push('patient name');
+  if (!v('patient-dob').trim()) missing.push('date of birth');
+  if (missing.length) {
+    alert('Add the ' + missing.join(' and ') + ', then generate again.\n\nThe office needs both to identify the patient.');
+    return;
+  }
+  // always put the full text on the clipboard as the reliable path
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).catch(function() { fallbackCopy(text); });
+  } else {
+    fallbackCopy(text);
+  }
+  var m = buildMailto(text);
+  showMsg('email-msg');
+  window.location.href = m.url;
+}
+
 function copyReport() {
   var text = document.getElementById('report-output').textContent;
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1342,6 +1413,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('rep-other-field').style.display = this.value === 'Other' ? 'block' : 'none';
   });
 });
+document.addEventListener('DOMContentLoaded', loadStaffEmail);
 </script>
 </body>
 </html>
