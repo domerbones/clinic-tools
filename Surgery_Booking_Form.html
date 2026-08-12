@@ -856,7 +856,7 @@ function renderBookingDoc(proc, side) {
   h += '<table class="doc-table">';
   rows.forEach(function(r) { h += '<tr><th>' + esc(r[0]) + '</th><td>' + esc(r[1]) + '</td></tr>'; });
   h += '</table>';
-  h += '<div class="doc-section"><h3>Procedure</h3><p>' + esc(getProcedureName(proc)) + '</p></div>';
+  h += '<div class="doc-section"><h3>Procedure</h3><p>' + esc(withSide(side, getProcedureName(proc))) + '</p></div>';
   var dx = getDiagnosisLines(proc, side);
   h += '<div class="doc-section"><h3>Preoperative Diagnosis / ICD-10</h3><ul>' +
        dx.map(function(d) { return '<li>' + esc(d) + '</li>'; }).join('') + '</ul></div>';
@@ -876,7 +876,7 @@ function renderBookingDoc(proc, side) {
     h += '<div class="doc-section"><h3>Reason for Admission</h3><ul>' +
          arl.map(function(x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>';
   }
-  var slist = getSurgeryList(proc);
+  var slist = getSurgeryList(proc, side);
   h += '<div class="doc-section"><h3>Surgery List</h3><ol>' +
        slist.map(function(x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ol></div>';
   h += '<div class="doc-footer">Booked by: Robert H. Rolf, MD</div>';
@@ -941,7 +941,7 @@ function generateBooking() {
     lines.push('Rep: ' + repCo);
   }
   lines.push('');
-  lines.push('Procedure: ' + getProcedureName(proc));
+  lines.push('Procedure: ' + withSide(side, getProcedureName(proc)));
   lines.push('');
 
   // Preoperative Diagnosis with ICD-10
@@ -963,7 +963,7 @@ function generateBooking() {
     lines.push('');
   }
 
-  var slist = getSurgeryList(proc);
+  var slist = getSurgeryList(proc, side);
   lines.push('SURGERY LIST:');
   slist.forEach(function(x, i) { lines.push('  ' + (i + 1) + '. ' + x); });
   lines.push('');
@@ -1146,7 +1146,15 @@ function revRemoval(pre) {
   if (hum && glen) return 'humeral and glenoid components';
   return hum ? 'humeral component' : 'glenoid component';
 }
-function getSurgeryList(proc) {
+/* Every line the office reads off - the surgery list, the procedures line, the
+   procedure heading - carries the side. Staff transcribe these lines one at a
+   time onto the schedule, so a line that reads "Rotator Cuff Repair" with the
+   side living somewhere else on the page is a wrong-site risk. */
+function withSide(side, name) {
+  return side ? side + ' ' + name : name;
+}
+
+function getSurgeryList(proc, side) {
   var list = [getProcedureName(proc)];
   if (proc === 'bankart') {
     if (ck('bankart-slap')) list.push('Arthroscopic SLAP Repair (29807)');
@@ -1160,7 +1168,7 @@ function getSurgeryList(proc) {
     // 23335 when both components removed, 23334 for a single component
     if (rem) list.push('Removal of prosthesis - ' + rem + ' (' + (rem.indexOf(' and ')>=0 ? '23335' : '23334') + ')');
   }
-  return list;
+  return list.map(function(name) { return withSide(side, name); });
 }
 function getCPTLines(proc) {
   var cpt = [];
@@ -1237,7 +1245,7 @@ function getProcedureDetails(proc, side) {
   var details = [];
 
   // Every booking leads with the complete list of procedures for this case
-  var allProcs = getSurgeryList(proc);
+  var allProcs = getSurgeryList(proc, side);
   if (allProcs.length) details.push('Procedures: ' + allProcs.join(', '));
 
   switch(proc) {
