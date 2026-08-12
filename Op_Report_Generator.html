@@ -343,6 +343,15 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="inst-proc-anterior" onchange="updateInstSections()"><label for="inst-proc-anterior">Anterior Labral Repair</label></div>
 <div class="checkbox-item"><input type="checkbox" id="inst-proc-posterior" onchange="updateInstSections()"><label for="inst-proc-posterior">Posterior Labral Repair</label></div>
 <div class="checkbox-item"><input type="checkbox" id="inst-proc-remplissage" onchange="updateInstSections()"><label for="inst-proc-remplissage">Remplissage</label></div>
+<div class="checkbox-item"><input type="checkbox" id="inst-proc-slap" onchange="updateInstSections()"><label for="inst-proc-slap">SLAP Repair (29807)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="inst-proc-decompression"><label for="inst-proc-decompression">Subacromial Decompression (29826)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="inst-proc-acromioplasty"><label for="inst-proc-acromioplasty">Acromioplasty</label></div>
+<div class="checkbox-item"><input type="checkbox" id="inst-proc-dcr"><label for="inst-proc-dcr">Distal Clavicle Resection (29824)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="inst-proc-tenotomy"><label for="inst-proc-tenotomy">Arthroscopic Biceps Tenotomy</label></div>
+<div class="checkbox-item"><input type="checkbox" id="inst-proc-tenodesis"><label for="inst-proc-tenodesis">Open Subpectoral Biceps Tenodesis (23430)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="inst-proc-debridement"><label for="inst-proc-debridement">Extensive Glenohumeral Debridement (29823)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="inst-proc-looseb"><label for="inst-proc-looseb">Loose Body Removal (29819)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="inst-proc-capsrel"><label for="inst-proc-capsrel">Capsular Release (29825)</label></div>
 </div>
 
 <div class="section-title">Patient & Procedure</div>
@@ -400,6 +409,14 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="field field-small"><label>Anchors (#)</label><input type="number" id="inst-ant-anchors"></div>
 <div class="field field-med"><label>Anchor Size/Type</label><input id="inst-ant-anchor-type"></div>
 <div class="field field-small"><label>Start Position</label><input id="inst-ant-start-pos"></div>
+</div>
+</div>
+
+<div id="inst-slap-section" class="conditional-section" style="display:none">
+<div class="section-title">SLAP Repair Details</div>
+<div class="row">
+<div class="field field-small"><label>Anchors (#)</label><input type="number" id="inst-slap-anchors"></div>
+<div class="field field-med"><label>Anchor Size/Type</label><input id="inst-slap-anchor-type"></div>
 </div>
 </div>
 
@@ -1836,6 +1853,7 @@ function updateInstSections() {
   document.getElementById('inst-anterior-section').style.display = ck('inst-proc-anterior') ? 'block' : 'none';
   document.getElementById('inst-posterior-section').style.display = ck('inst-proc-posterior') ? 'block' : 'none';
   document.getElementById('inst-remplissage-section').style.display = ck('inst-proc-remplissage') ? 'block' : 'none';
+  document.getElementById('inst-slap-section').style.display = ck('inst-proc-slap') ? 'block' : 'none';
 }
 
 function updateRcrSections() {
@@ -2079,6 +2097,15 @@ function generateInstability() {
   if (ck('inst-proc-anterior')) procs.push(s + ' Shoulder Arthroscopic Anterior Labral (Bankart) Repair with Capsulorrhaphy');
   if (ck('inst-proc-posterior')) procs.push(s + ' Shoulder Arthroscopic Posterior Labral Repair with Capsulorrhaphy');
   if (ck('inst-proc-remplissage')) procs.push(s + ' Shoulder Arthroscopic Remplissage');
+  if (ck('inst-proc-slap')) procs.push(s + ' Shoulder Arthroscopic SLAP Repair');
+  if (ck('inst-proc-decompression')) procs.push(s + ' Shoulder Arthroscopic Subacromial Decompression');
+  if (ck('inst-proc-acromioplasty')) procs.push(s + ' Shoulder Arthroscopic Acromioplasty');
+  if (ck('inst-proc-dcr')) procs.push(s + ' Shoulder Arthroscopic Distal Clavicle Resection');
+  if (ck('inst-proc-tenotomy')) procs.push(s + ' Shoulder Arthroscopic Biceps Tenotomy');
+  if (ck('inst-proc-tenodesis')) procs.push(s + ' Shoulder Open Subpectoral Biceps Tenodesis');
+  if (ck('inst-proc-debridement')) procs.push(s + ' Shoulder Arthroscopic Extensive Glenohumeral Debridement');
+  if (ck('inst-proc-looseb')) procs.push(s + ' Shoulder Arthroscopic Loose Body Removal');
+  if (ck('inst-proc-capsrel')) procs.push(s + ' Shoulder Arthroscopic Capsular Release');
   var gblPct = v('inst-glenoid-pct').trim();
   var gblSentence = gblPct ? ' Glenoid bone loss assessed at ' + gblPct + '% on advanced imaging.' : '';
   var findings = [];
@@ -2105,6 +2132,30 @@ function generateInstability() {
   }
   if (ck('inst-proc-remplissage')) {
     descSections.push('REMPLISSAGE:\nThe arthroscope was placed anteriorly and the Hill-Sachs lesion visualized. ' + v('inst-remp-anchors') + ' anchors were placed into the defect and sutures passed through the infraspinatus and posterior capsule, which were tied in the subacromial space, completing the remplissage.');
+  }
+  if (ck('inst-proc-slap')) {
+    descSections.push('SLAP REPAIR:\nThe superior labrum was detached from the glenoid rim at the biceps anchor. The superior glenoid neck was prepared with a shaver and burr to a bleeding bony bed. ' + v('inst-slap-anchors') + ' ' + v('inst-slap-anchor-type') + ' suture anchors were placed at the superior glenoid rim and the labrum secured, restoring a stable biceps anchor. The repair was probed and found to be secure.');
+  }
+  if (ck('inst-proc-looseb')) {
+    descSections.push('LOOSE BODY REMOVAL:\nLoose bodies were identified within the glenohumeral joint and removed with an arthroscopic grasper. The joint was then inspected and no further loose bodies were identified.');
+  }
+  if (ck('inst-proc-debridement')) {
+    descSections.push('GLENOHUMERAL DEBRIDEMENT:\nExtensive debridement of the glenohumeral joint was performed with an arthroscopic shaver, addressing the degenerative labral and chondral tissue and inflamed synovium until a stable rim of tissue remained.');
+  }
+  if (ck('inst-proc-capsrel')) {
+    descSections.push('CAPSULAR RELEASE:\nA circumferential capsular release was performed with an arthroscopic elevator and radiofrequency device, taking care to protect the axillary nerve inferiorly. Motion was reassessed and found to be substantially improved.');
+  }
+  if (ck('inst-proc-tenotomy')) {
+    descSections.push('BICEPS TENOTOMY:\nThe long head of the biceps was inspected and found to be degenerative. The tendon was released at its origin from the superior labrum and allowed to retract into the bicipital groove.');
+  }
+  if (ck('inst-proc-tenodesis')) {
+    descSections.push('OPEN SUBPECTORAL BICEPS TENODESIS:\nAn incision was made at the inferior border of the pectoralis major. Dissection was carried down to the bicipital groove and the biceps tendon delivered into the wound. The tendon was prepared and secured to the proximal humerus at the subpectoral position with an interference screw, restoring appropriate length-tension. The wound was irrigated and closed in layers.');
+  }
+  if (ck('inst-proc-decompression') || ck('inst-proc-acromioplasty')) {
+    descSections.push('SUBACROMIAL DECOMPRESSION:\nThe arthroscope was redirected into the subacromial space. A bursectomy was performed with an arthroscopic shaver to allow adequate visualization. The undersurface of the acromion was identified and an acromioplasty performed with a burr, creating a flat acromial undersurface and a smooth space for the rotator cuff to glide.');
+  }
+  if (ck('inst-proc-dcr')) {
+    descSections.push('DISTAL CLAVICLE RESECTION:\nThe acromioclavicular joint was identified and the distal clavicle exposed. Approximately 8 to 10 mm of distal clavicle was resected with a burr, preserving the superior and posterior AC ligaments. Adequate resection was confirmed arthroscopically through a full range of motion without impingement.');
   }
   descSections.push('STABILITY ASSESSMENT AND CLOSURE:\nThe shoulder was taken through a gentle range of motion confirming a stable repair. Portal sites were closed in interrupted fashion with Monocryl, reinforced with Steri-Strips. The shoulder was dressed sterilely and placed in a sling and Cryocuff, and the patient was transferred to the recovery room in satisfactory condition having tolerated the procedure well.');
 

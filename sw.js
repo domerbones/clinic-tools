@@ -1,4 +1,4 @@
-const CACHE = "rolf-tools-ae70894fc3ab";
+const CACHE = "rolf-tools-684c03458092";
 const ASSETS = [
   "./",
   "index.html",
