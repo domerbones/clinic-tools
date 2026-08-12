@@ -33,7 +33,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 .field input, .field select, .field textarea { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; font-family: Arial, sans-serif; }
 .field input:focus, .field select:focus, .field textarea:focus { border-color: #1B3A6B; outline: none; box-shadow: 0 0 0 2px rgba(27,58,107,0.15); }
 .field textarea { resize: vertical; min-height: 60px; }
-.field input.required-empty, .field select.required-empty { background: #FFF3E0; border: 2px solid #E8A838; }
+.field input.required-empty, .field select.required-empty, .field textarea.required-empty { background: #FFF3E0; border: 2px solid #E8A838; }
+.field input.filled, .field select.filled, .field textarea.filled { background: #E8F5E9; border: 1px solid #66BB6A; }
 .field input.filled, .field select.filled { background: #E8F5E9; border: 1px solid #66BB6A; }
 .incomplete-msg { display: none; color: #C62828; font-weight: bold; margin-left: 12px; font-size: 14px; }
 .field-small { flex: 0 0 100px; min-width: 100px; }
@@ -212,7 +213,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="field field-small"><label>Side</label><select id="rtsa-side"><option>Right</option><option>Left</option></select></div>
 <div class="field field-small"><label>Age</label><input type="number" id="rtsa-age"></div>
 <div class="field field-small"><label>Sex</label><select id="rtsa-sex"><option>female</option><option>male</option></select></div>
-<div class="field field-med"><label>Diagnosis</label><select id="rtsa-dx"><option value="Cuff Tear Arthropathy" selected>Cuff Tear Arthropathy</option><option value="Osteoarthritis">Glenohumeral Osteoarthritis</option></select></div>
+<div class="field field-med"><label>Diagnosis</label><select id="rtsa-dx"><option value="Cuff Tear Arthropathy" selected>Cuff Tear Arthropathy</option><option value="Osteoarthritis">Glenohumeral Osteoarthritis</option><option value="Osteoarthritis with Severe Glenoid Bone Loss">Glenohumeral OA w/ Severe Glenoid Bone Loss</option><option value="Proximal Humerus Fracture">Proximal Humerus Fracture</option><option value="Failed Prior Shoulder Arthroplasty">Failed Prior Shoulder Arthroplasty</option></select></div>
 <div class="field field-med"><label>Hamada Grade <small>(arthropathy only)</small></label><select id="rtsa-hamada"><option value="">Not graded</option><option value="1">1 — AHI &ge;6 mm</option><option value="2">2 — AHI &le;5 mm</option><option value="3">3 — AHI &le;5 mm + acetabularization</option><option value="4A">4A — GH arthritis, no acetabularization</option><option value="4B">4B — GH arthritis + acetabularization</option><option value="5">5 — humeral head collapse</option></select></div>
 <div class="field"><label>Assistant</label><input id="rtsa-assistant" value="Russel Lee Reynolds, PA-C"></div>
 </div>
@@ -255,7 +256,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Arthritis Findings (build the sentence)</div>
 <div class="row">
 <div class="field field-small"><label>Severity</label><select id="rtsa-f-sev" onchange="buildFindings('rtsa')"><option selected>Advanced</option><option>Moderate</option><option>End-stage</option><option>Severe</option></select></div>
-<div class="field"><label>Diagnosis</label><select id="rtsa-f-dx" onchange="buildFindings('rtsa')"><option selected>glenohumeral arthropathy</option><option>rotator cuff tear arthropathy</option><option>glenohumeral osteoarthritis</option></select></div>
+<div class="field"><label>Diagnosis</label><select id="rtsa-f-dx" onchange="buildFindings('rtsa')"><option selected>glenohumeral arthropathy</option><option>rotator cuff tear arthropathy</option><option>glenohumeral osteoarthritis</option><option>glenohumeral osteoarthritis with severe glenoid bone loss</option><option>glenohumeral osteoarthritis with posterior glenoid wear and subluxation</option><option>a proximal humerus fracture</option><option>a failed prior shoulder arthroplasty</option></select></div>
 </div>
 <div class="row">
 <div class="field" style="min-width:100%"><label>Cartilage loss</label><select id="rtsa-f-cart" onchange="buildFindings('rtsa')"><option selected>diffuse full-thickness cartilage loss involving the humeral head and glenoid</option><option>full-thickness glenoid cartilage loss with humeral head involvement</option><option>eccentric posterior glenoid cartilage wear</option><option>bipolar full-thickness cartilage loss</option></select></div>
@@ -1470,9 +1471,16 @@ function buildFindings(pfx) {
   var joined = (parts.length === 2)
     ? parts[0] + ' and ' + parts[1]
     : parts.slice(0, -1).join(', ') + ', and ' + parts[parts.length - 1];
-  var txt = sev + ' ' + dx + ' was present with ' + joined + '.';
-  var walch = v(pfx + '-f-walch');
-  if (walch) txt += ' The glenoid demonstrated ' + walch + '.';
+  // Fracture and failed-arthroplasty cases are not described in degenerative
+  // terms, so they get their own opening sentence instead of the arthritis stem.
+  var txt;
+  if (dx.indexOf('fracture') >= 0 || dx.indexOf('failed prior') >= 0) {
+    txt = dx.charAt(0).toUpperCase() + dx.slice(1) + ' was present.';
+  } else {
+    txt = sev + ' ' + dx + ' was present with ' + joined + '.';
+    var walch = v(pfx + '-f-walch');
+    if (walch) txt += ' The glenoid demonstrated ' + walch + '.';
+  }
   var cuff = v(pfx + '-f-cuff');
   txt += ' The rotator cuff was ' + cuff;
   // an intact cuff does not support the cuff-deficiency indication, so the clause
@@ -1587,25 +1595,23 @@ function markFields(panelId) {
     var cs = el.closest('.conditional-section');
     if (cs && cs.style.display === 'none') return;
     if (el.classList.contains('other-text') && el.style.display === 'none') return;
-    var hasValue = el.value && el.value.trim() !== '';
+    // A preset value is not the same as a reviewed value: a field stays amber
+    // until it has been touched, so nothing gets documented unexamined.
+    var confirmed = el.dataset.confirmed === '1' && el.value && el.value.trim() !== '';
     el.classList.remove('required-empty', 'filled');
-    if (hasValue) {
-      el.classList.add('filled');
-    } else {
-      el.classList.add('required-empty');
-    }
+    el.classList.add(confirmed ? 'filled' : 'required-empty');
   });
 }
 
 function checkIncomplete(panelId) {
   var panel = document.getElementById(panelId);
   var missing = 0;
-  panel.querySelectorAll('input').forEach(function(el) {
+  panel.querySelectorAll('input, select').forEach(function(el) {
     if (el.type === 'checkbox' || el.type === 'button') return;
     var cs = el.closest('.conditional-section');
     if (cs && cs.style.display === 'none') return;
     if (el.classList.contains('other-text') && el.style.display === 'none') return;
-    if (!el.value || el.value.trim() === '') missing++;
+    if (!el.value || el.value.trim() === '' || el.dataset.confirmed !== '1') missing++;
   });
   return missing;
 }
@@ -1620,6 +1626,8 @@ function switchTab(tab) {
 
 function clearForm(prefix) {
   var panel = document.getElementById('panel-' + prefix);
+  // clearing a form also clears the review state, so every field goes back to amber
+  panel.querySelectorAll('input, select, textarea').forEach(function(el) { delete el.dataset.confirmed; });
   panel.querySelectorAll('input').forEach(function(i) {
     if (i.type === 'checkbox') {
       i.checked = i.defaultChecked;
@@ -1853,19 +1861,22 @@ document.addEventListener('DOMContentLoaded', function() {
   var today = todayStr();
   document.querySelectorAll('input[type="date"]').forEach(function(el) { el.value = today; });
 
+  // Amber = not yet reviewed. Green = you looked at it. Touching a field at all
+  // (opening a dropdown, typing, tabbing through) counts as confirming it, so a
+  // preset you agree with still needs one deliberate tap.
+  function confirmField(el) {
+    if (el.type === 'checkbox' || el.type === 'button') return;
+    el.dataset.confirmed = '1';
+    el.classList.remove('required-empty', 'filled');
+    if (el.value && el.value.trim() !== '') { el.classList.add('filled'); }
+    else { el.classList.add('required-empty'); }
+  }
   document.querySelectorAll('.form-panel input, .form-panel select, .form-panel textarea').forEach(function(el) {
-    el.addEventListener('input', function() {
-      if (this.type === 'checkbox') return;
-      this.classList.remove('required-empty', 'filled');
-      if (this.value && this.value.trim() !== '') { this.classList.add('filled'); }
-      else { this.classList.add('required-empty'); }
+    ['input', 'change', 'blur'].forEach(function(evt) {
+      el.addEventListener(evt, function() { confirmField(this); });
     });
-    el.addEventListener('change', function() {
-      if (this.type === 'checkbox') return;
-      this.classList.remove('required-empty', 'filled');
-      if (this.value && this.value.trim() !== '') { this.classList.add('filled'); }
-      else { this.classList.add('required-empty'); }
-    });
+    // a tap that opens a native picker counts even if the value ends up unchanged
+    el.addEventListener('click', function() { confirmField(this); });
   });
 
   var panels = ['tsa','rtsa','inst','rcr','clav','phum','scope','scr','acj','mua','hwrem','bten'];
