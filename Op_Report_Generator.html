@@ -267,7 +267,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 <div class="row">
 <div class="field"><label>Glenoid wear (Walch)</label><select id="rtsa-f-walch" onchange="buildFindings('rtsa')"><option selected value="">not specified</option><option value="concentric glenoid wear (Walch A1)">concentric (A1)</option><option value="central glenoid erosion (Walch A2)">central erosion (A2)</option><option value="posterior glenoid wear with mild retroversion (Walch B1)">posterior wear (B1)</option><option value="biconcave posterior glenoid wear with retroversion (Walch B2)">biconcave (B2)</option><option value="monoconcave posterior glenoid wear with severe retroversion (Walch B3)">monoconcave (B3)</option><option value="dysplastic glenoid with retroversion (Walch C)">dysplastic (C)</option></select></div>
-<div class="field"><label>Rotator cuff</label><select id="rtsa-f-cuff" onchange="buildFindings('rtsa')"><option selected>chronically torn and irreparable</option><option>deficient</option><option>massively torn and retracted</option></select></div>
+<div class="field"><label>Rotator cuff</label><select id="rtsa-f-cuff" onchange="buildFindings('rtsa')"><option selected>chronically torn and irreparable</option><option>deficient</option><option>massively torn and retracted</option><option>intact</option><option>intact but attenuated</option></select></div>
 </div>
 <div class="row">
 <div class="field" style="min-width:100%"><label>Intraoperative Findings (auto-built, editable)</label><textarea id="rtsa-findings" rows="4">Advanced glenohumeral arthropathy was present with diffuse full-thickness cartilage loss involving the humeral head and glenoid and exposed subchondral bone. The rotator cuff was chronically torn and irreparable, supporting the indication for reverse shoulder arthroplasty.</textarea></div>
@@ -1474,8 +1474,13 @@ function buildFindings(pfx) {
   var txt = sev + ' ' + dx + ' was present with ' + joined + '.';
   var walch = v(pfx + '-f-walch');
   if (walch) txt += ' The glenoid demonstrated ' + walch + '.';
-  txt += ' The rotator cuff was ' + v(pfx + '-f-cuff');
-  if (pfx === 'rtsa') txt += ', supporting the indication for reverse shoulder arthroplasty';
+  var cuff = v(pfx + '-f-cuff');
+  txt += ' The rotator cuff was ' + cuff;
+  // an intact cuff does not support the cuff-deficiency indication, so the clause
+  // is only appended when the cuff is actually deficient
+  if (pfx === 'rtsa' && cuff.indexOf('intact') === -1) {
+    txt += ', supporting the indication for reverse shoulder arthroplasty';
+  }
   txt += '.';
   document.getElementById(pfx + '-findings').value = txt;
 }
