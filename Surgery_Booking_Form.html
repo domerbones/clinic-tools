@@ -594,7 +594,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 <span class="copied-msg" id="copy-msg">Copied to clipboard!</span>
 <span class="copied-msg" id="email-msg">Email opened. If the body is blank, paste from the clipboard.</span>
-<div style="margin:6px 0 10px;font-size:13px;"><label for="staff-email" style="font-weight:bold;color:#1B3A6B;">Send to:</label> <input id="staff-email" type="email" placeholder="scheduler@beaconortho.com" style="padding:6px;min-width:260px;" oninput="rememberStaffEmail()"><span style="color:#666;"> &nbsp;saved on this device</span></div>
+<div style="margin:6px 0 10px;font-size:13px;"><label for="staff-email" style="font-weight:bold;color:#1B3A6B;">Send to:</label> <input id="staff-email" type="email" placeholder="scheduler@beaconortho.com" style="padding:6px;min-width:260px;" oninput="rememberStaffEmail()"><span style="color:#666;"> &nbsp;saved on this device</span>&nbsp;&nbsp;<label for="mail-app" style="font-weight:bold;color:#1B3A6B;">Open in:</label> <select id="mail-app" style="padding:6px;" onchange="rememberMailApp()"><option value="outlookweb" selected>Outlook (web)</option><option value="outlookapp">Outlook (phone app)</option><option value="default">Default mail app</option></select></div>
 <span class="copied-msg" id="copy-reset-msg">Copied &amp; Reset!</span>
 <div class="booking-doc" id="booking-doc"></div>
 <pre id="report-output" style="display:none;"></pre>
@@ -1272,7 +1272,14 @@ var MAILTO_BODY_LIMIT = 1600;
 function rememberStaffEmail() {
   try { localStorage.setItem('rolfStaffEmail', document.getElementById('staff-email').value.trim()); } catch (e) {}
 }
+function rememberMailApp() {
+  try { localStorage.setItem('rolfMailApp', document.getElementById('mail-app').value); } catch (e) {}
+}
 function loadStaffEmail() {
+  try {
+    var app = localStorage.getItem('rolfMailApp');
+    if (app) document.getElementById('mail-app').value = app;
+  } catch (e) {}
   try {
     var saved = localStorage.getItem('rolfStaffEmail');
     if (saved) document.getElementById('staff-email').value = saved;
@@ -1301,10 +1308,26 @@ function buildMailto(text) {
     ? text
     : 'The full booking form was copied to your clipboard - please paste it here before sending.\n\n'
       + text.slice(0, 400) + '\n... (truncated, paste the full form)';
-  return {
-    url: 'mailto:' + encodeURIComponent(to) + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body),
-    inlined: short
-  };
+  var app = (document.getElementById('mail-app') || {}).value || 'outlookweb';
+  var url;
+  if (app === 'outlookweb') {
+    // Outlook on the web composes in the signed-in work mailbox
+    url = 'https://outlook.office.com/mail/deeplink/compose'
+        + '?to=' + encodeURIComponent(to)
+        + '&subject=' + encodeURIComponent(subject)
+        + '&body=' + encodeURIComponent(body)
+        + '&online=1';
+  } else if (app === 'outlookapp') {
+    url = 'ms-outlook://compose'
+        + '?to=' + encodeURIComponent(to)
+        + '&subject=' + encodeURIComponent(subject)
+        + '&body=' + encodeURIComponent(body);
+  } else {
+    url = 'mailto:' + encodeURIComponent(to)
+        + '?subject=' + encodeURIComponent(subject)
+        + '&body=' + encodeURIComponent(body);
+  }
+  return { url: url, inlined: short, app: app };
 }
 
 function emailBooking() {
@@ -1326,7 +1349,11 @@ function emailBooking() {
   }
   var m = buildMailto(text);
   showMsg('email-msg');
-  window.location.href = m.url;
+  if (m.app === 'outlookweb') {
+    window.open(m.url, '_blank');
+  } else {
+    window.location.href = m.url;
+  }
 }
 
 function copyReport() {
