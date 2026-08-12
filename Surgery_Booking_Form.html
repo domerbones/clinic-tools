@@ -29,8 +29,11 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 .field input, .field select, .field textarea { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; font-family: Arial, sans-serif; }
 .field input:focus, .field select:focus, .field textarea:focus { border-color: #1B3A6B; outline: none; box-shadow: 0 0 0 2px rgba(27,58,107,0.15); }
 .field textarea { resize: vertical; min-height: 60px; }
-.field input.required-empty, .field select.required-empty { background: #FFF3E0; border: 2px solid #E8A838; }
-.field input.filled, .field select.filled { background: #E8F5E9; border: 1px solid #66BB6A; }
+.field input.required-empty, .field select.required-empty, .field textarea.required-empty { background: #FFF3E0; border: 2px solid #E8A838; }
+.field input.filled, .field select.filled, .field textarea.filled { background: #E8F5E9; border: 1px solid #66BB6A; }
+.review-chip { font-size: 13px; font-weight: bold; padding: 8px 12px; border-radius: 6px; }
+.review-chip.pending { color: #8A5A00; background: #FFF3E0; border: 1px solid #E8A838; }
+.review-chip.done { color: #2E7D32; background: #E8F5E9; border: 1px solid #66BB6A; }
 .field-small { flex: 0 0 100px; min-width: 100px; }
 .field-med { flex: 0 0 180px; min-width: 180px; }
 .btn-row { margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
@@ -100,11 +103,11 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="row">
 <div class="field"><label>Patient Name</label><input type="text" id="patient-name"></div>
 <div class="field"><label>DOB</label><input type="text" id="patient-dob" placeholder="mm/dd/yyyy"></div>
-<div class="field field-med"><label>Date of Surgery</label><input type="date" id="dos"></div>
+<div class="field field-med"><label>Date of Surgery <span style="font-weight:normal;color:#666;">(office schedules)</span></label><input type="date" id="dos"></div>
 </div>
 <div class="row">
-<div class="field field-med"><label>Location</label><select id="location"><option value="Good Samaritan">Good Samaritan</option><option value="Margaret Mary">Margaret Mary</option><option value="Beacon ASC">Beacon ASC</option></select></div>
-<div class="field field-small"><label>Side</label><select id="side"><option value="Right">Right</option><option value="Left">Left</option><option value="Bilateral">Bilateral</option></select></div>
+<div class="field field-med"><label>Location</label><select id="location"><option value="Beacon ASC" selected>Beacon ASC</option><option value="Good Samaritan">Good Samaritan</option><option value="Margaret Mary">Margaret Mary</option></select></div>
+<div class="field field-small"><label>Side <span style="color:#C62828;">*</span></label><select id="side" onchange="markSide()"><option value="" selected>-- Select --</option><option value="Right">Right</option><option value="Left">Left</option><option value="Bilateral">Bilateral</option></select></div>
 <div class="field field-med"><label>Block Type</label><select id="block-type"><option value="Interscalene block">Interscalene block</option><option value="Interscalene block with indwelling catheter">Interscalene block with indwelling catheter</option><option value="Interscalene block using Exparel">Interscalene block using Exparel</option></select></div>
 </div>
 <div class="row">
@@ -575,6 +578,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="btn-row">
 <button class="btn btn-primary" onclick="generateBooking()">Generate Booking Form</button>
 <button class="btn btn-outline" onclick="resetForm()">Clear Form</button>
+<span class="review-chip pending" id="review-count">&nbsp;</span>
 <span class="copied-msg" id="gen-copied">Generated!</span>
 </div>
 
@@ -611,6 +615,92 @@ function ck(id) {
   var el = document.getElementById(id);
   return el ? el.checked : false;
 }
+
+/* ---------- Field review state ----------
+   Amber = not yet looked at. Green = reviewed. A preset value is not the same
+   as a reviewed value, so every visible field starts amber and only turns green
+   once it has been touched. Blank is a legitimate answer for several fields on
+   this form (date of surgery, rep company, optional notes), so reviewing a blank
+   field still turns it green. Side is the exception: a silent default there is a
+   wrong-site risk, so it must actually carry a value and it blocks generation. */
+
+function isReviewable(el) {
+  if (!el) return false;
+  if (el.type === 'checkbox' || el.type === 'button' || el.type === 'hidden') return false;
+  if (el.dataset.noreview === '1') return false;
+  if (el.classList.contains('other-text')) return false; // inline free text, only used when its checkbox is on
+  // Rep slots 2 and 3 are optional extras that are usually left at "-- None --";
+  // requiring a tap on each of them for every case is noise, not a safety check.
+  if (/-rep[23]-co$/.test(el.id)) return false;
+  return el.offsetParent !== null; // null for anything inside a hidden section
+}
+
+function allFormFields() {
+  return Array.prototype.slice.call(
+    document.querySelectorAll('.form-panel input, .form-panel select, .form-panel textarea'));
+}
+
+function fieldReviewed(el) {
+  if (el.dataset.reviewed !== '1') return false;
+  if (el.id === 'side') return !!el.value; // side must be chosen, not just tapped
+  return true;
+}
+
+function paintField(el) {
+  el.classList.remove('required-empty', 'filled');
+  el.classList.add(fieldReviewed(el) ? 'filled' : 'required-empty');
+}
+
+function unreviewedFields() {
+  return allFormFields().filter(function(el) { return isReviewable(el) && !fieldReviewed(el); });
+}
+
+function fieldLabel(el) {
+  var f = el.closest('.field');
+  var lab = f ? f.querySelector('label') : null;
+  var txt = lab ? lab.textContent.replace(/\*/g, '').trim() : '';
+  return txt || el.id || 'field';
+}
+
+function updateReviewCount() {
+  var chip = document.getElementById('review-count');
+  if (!chip) return;
+  var n = unreviewedFields().length;
+  if (n === 0) {
+    chip.className = 'review-chip done';
+    chip.textContent = 'All fields reviewed';
+  } else {
+    chip.className = 'review-chip pending';
+    chip.textContent = n + (n === 1 ? ' field not yet reviewed' : ' fields not yet reviewed');
+  }
+}
+
+/* Repaint every field. Fields that are currently hidden lose their coloring so
+   a section that gets switched away does not leave stray amber behind. */
+function markBookingFields() {
+  allFormFields().forEach(function(el) {
+    if (isReviewable(el)) paintField(el);
+    else el.classList.remove('required-empty', 'filled');
+  });
+  updateReviewCount();
+}
+
+function confirmField(el) {
+  if (!el || el.type === 'checkbox' || el.type === 'button') return;
+  el.dataset.reviewed = '1';
+  if (isReviewable(el)) paintField(el);
+  updateReviewCount();
+}
+
+function clearReviewState() {
+  allFormFields().forEach(function(el) {
+    delete el.dataset.reviewed;
+    el.classList.remove('required-empty', 'filled');
+  });
+  markBookingFields();
+}
+
+function markSide() { markBookingFields(); }
 
 function todayStr() {
   var d = new Date();
@@ -670,6 +760,7 @@ function onAdmitChange() {
     ADMIT_REASONS.forEach(function(a) { var el = document.getElementById(a[0]); if (el) el.checked = false; });
     var o = document.getElementById('admit-reason'); if (o) o.value = '';
   }
+  markBookingFields();
 }
 function admitReasonLines() {
   var out = [];
@@ -698,6 +789,7 @@ function switchProcedure(val) {
     var sec = document.getElementById('sec-' + val);
     if (sec) sec.classList.add('active');
   }
+  markBookingFields(); // the newly revealed section's fields start amber
 }
 
 function getCheckedDiagnoses(prefix, items) {
@@ -749,7 +841,7 @@ function renderBookingDoc(proc, side) {
   var rows = [
     ['Patient', v('patient-name') || '—'],
     ['DOB', v('patient-dob') || '—'],
-    ['Date of Surgery', v('dos') || '—'],
+    ['Date of Surgery', v('dos') || 'To be scheduled by office'],
     ['Location', v('location')],
     ['Side', side],
     ['Workers Comp', ck('workers-comp') ? 'Yes' : 'No'],
@@ -798,6 +890,29 @@ function generateBooking() {
     alert('Please select a procedure.');
     return;
   }
+  if (!v('side')) {
+    alert('Select the surgical side before generating the booking.');
+    var sideEl = document.getElementById('side');
+    sideEl.focus();
+    try { sideEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
+    return;
+  }
+
+  // Anything still amber has never been looked at. Warn, name the fields, and
+  // let it through only on a deliberate confirm - blank is sometimes correct.
+  var pending = unreviewedFields();
+  if (pending.length) {
+    var shown = pending.slice(0, 8).map(fieldLabel);
+    var msg = pending.length + (pending.length === 1 ? ' field has' : ' fields have')
+      + ' not been reviewed:\n\n  ' + shown.join('\n  ')
+      + (pending.length > 8 ? '\n  ...and ' + (pending.length - 8) + ' more' : '')
+      + '\n\nGenerate the booking anyway?';
+    if (!confirm(msg)) {
+      pending[0].focus();
+      try { pending[0].scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
+      return;
+    }
+  }
 
   var side = v('side');
   var lines = [];
@@ -808,7 +923,7 @@ function generateBooking() {
   lines.push('');
   lines.push('Patient: ' + v('patient-name'));
   if (v('patient-dob')) lines.push('DOB: ' + v('patient-dob'));
-  lines.push('Date of Surgery: ' + v('dos'));
+  lines.push('Date of Surgery: ' + (v('dos') || 'TO BE SCHEDULED BY OFFICE'));
   lines.push('Location: ' + v('location'));
   lines.push('Side: ' + side);
   lines.push('Workers Comp: ' + (ck('workers-comp') ? 'Yes' : 'No'));
@@ -1296,7 +1411,7 @@ function bookingSubject() {
   // name and date of birth are what the office needs to pull the chart
   if (name) bits.push(name + (dob ? ' (DOB ' + dob + ')' : ''));
   bits.push(side + ' ' + proc);
-  if (dos) bits.push('DOS ' + dos);
+  bits.push(dos ? 'DOS ' + dos : 'DATE TBD');
   return bits.join(' - ');
 }
 
@@ -1403,9 +1518,10 @@ function printReport() {
 function resetForm() {
   document.getElementById('patient-name').value = '';
   document.getElementById('patient-dob').value = '';
-  document.getElementById('dos').value = todayStr();
+  document.getElementById('dos').value = '';
   document.getElementById('location').selectedIndex = 0;
   document.getElementById('side').selectedIndex = 0;
+  markSide();
   document.getElementById('workers-comp').checked = false;
   document.getElementById('rep-company').value = '';
   document.getElementById('rep-other').value = '';
@@ -1431,14 +1547,28 @@ function resetForm() {
   document.querySelectorAll('.procedure-section input[type="checkbox"]').forEach(function(el) {
     el.checked = el.defaultChecked;
   });
+
+  // clearing the form also clears the review state, so every field goes back to amber
+  clearReviewState();
 }
 
 // Initialize date on load
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('dos').value = todayStr();
   document.getElementById('rep-company').addEventListener('change', function() {
     document.getElementById('rep-other-field').style.display = this.value === 'Other' ? 'block' : 'none';
+    markBookingFields();
   });
+
+  // Touching a field at all - typing, choosing, tabbing through, or opening a
+  // native picker - counts as reviewing it, so a preset you agree with still
+  // needs one deliberate tap before it turns green.
+  allFormFields().forEach(function(el) {
+    ['input', 'change', 'blur', 'click'].forEach(function(evt) {
+      el.addEventListener(evt, function() { confirmField(this); });
+    });
+  });
+
+  markBookingFields();
 });
 document.addEventListener('DOMContentLoaded', loadStaffEmail);
 </script>
