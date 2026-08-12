@@ -486,6 +486,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="rcr-dx-ac"><label for="rcr-dx-ac">AC Joint Osteoarthritis</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-dx-labral"><label for="rcr-dx-labral">Superior Labral Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-dx-antlabral"><label for="rcr-dx-antlabral">Anterior Labral Tear</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-dx-postlabral"><label for="rcr-dx-postlabral">Posterior Labral Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-dx-synovitis"><label for="rcr-dx-synovitis">Synovitis</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-dx-other" onchange="updateRcrSections()"><label for="rcr-dx-other">Other:</label><input type="text" id="rcr-dx-other-text" class="other-text" style="display:none"></div>
 </div>
@@ -499,6 +500,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="rcr-postdx-ac"><label for="rcr-postdx-ac">AC Joint Osteoarthritis</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-postdx-labral"><label for="rcr-postdx-labral">Superior Labral Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-postdx-antlabral"><label for="rcr-postdx-antlabral">Anterior Labral Tear</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-postdx-postlabral"><label for="rcr-postdx-postlabral">Posterior Labral Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-postdx-synovitis"><label for="rcr-postdx-synovitis">Synovitis</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-postdx-other" onchange="document.getElementById('rcr-postdx-other-text').style.display=this.checked?'inline-block':'none';"><label for="rcr-postdx-other">Other:</label><input type="text" id="rcr-postdx-other-text" class="other-text" style="display:none"></div>
 </div>
@@ -514,6 +516,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="rcr-proc-dcr"><label for="rcr-proc-dcr">Distal Clavicle Resection</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-proc-tenodesis"><label for="rcr-proc-tenodesis">Open Subpectoral Biceps Tenodesis</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-proc-labral" onchange="updateRcrSections()"><label for="rcr-proc-labral">Anterior Labral Repair (29806)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-proc-postlabral" onchange="updateRcrSections()"><label for="rcr-proc-postlabral">Posterior Labral Repair (29806)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-proc-other" onchange="updateRcrSections()"><label for="rcr-proc-other">Other:</label><input type="text" id="rcr-proc-other-text" class="other-text" style="display:none"></div>
 </div>
 
@@ -565,6 +568,15 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 
 <div class="row">
 <div class="field"><label>Bone Quality</label><select id="rcr-bone-quality"><option value="good">Good</option><option value="osteoporotic">Osteoporotic</option><option value="poor">Poor</option></select></div>
+</div>
+
+<div id="rcr-postlabral-section" class="conditional-section" style="display:none">
+<div class="section-title">Posterior Labral Repair Details</div>
+<div class="row">
+<div class="field field-small"><label>Anchors (#)</label><input type="number" id="rcr-plab-anchors"></div>
+<div class="field field-med"><label>Anchor Size/Type</label><input id="rcr-plab-anchor-type"></div>
+<div class="field field-small"><label>Start Position</label><input id="rcr-plab-start-pos"></div>
+</div>
 </div>
 
 <div id="rcr-labral-section" class="conditional-section" style="display:none">
@@ -1024,6 +1036,12 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="scr-proc-decompression"><label for="scr-proc-decompression">Subacromial Decompression</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scr-proc-tenotomy"><label for="scr-proc-tenotomy">Biceps Tenotomy</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scr-proc-tenodesis"><label for="scr-proc-tenodesis">Biceps Tenodesis</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scr-proc-acromioplasty"><label for="scr-proc-acromioplasty">Acromioplasty</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scr-proc-dcr"><label for="scr-proc-dcr">Distal Clavicle Resection (29824)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scr-proc-debridement"><label for="scr-proc-debridement">Extensive Glenohumeral Debridement (29823)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scr-proc-looseb"><label for="scr-proc-looseb">Loose Body Removal (29819)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scr-proc-capsrel"><label for="scr-proc-capsrel">Capsular Release (29825)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scr-proc-biopsy"><label for="scr-proc-biopsy">Biopsy for Culture</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scr-proc-other" onchange="document.getElementById('scr-proc-other-text').style.display=this.checked?'inline-block':'none';"><label for="scr-proc-other">Other:</label><input type="text" id="scr-proc-other-text" class="other-text" style="display:none"></div>
 </div>
 
@@ -1122,6 +1140,14 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="acj-proc-reconstruction"><label for="acj-proc-reconstruction">AC Joint Reconstruction</label></div>
 <div class="checkbox-item"><input type="checkbox" id="acj-proc-dcr"><label for="acj-proc-dcr">Distal Clavicle Excision</label></div>
+<div class="checkbox-item"><input type="checkbox" id="acj-proc-decompression"><label for="acj-proc-decompression">Subacromial Decompression (29826)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="acj-proc-acromioplasty"><label for="acj-proc-acromioplasty">Acromioplasty</label></div>
+<div class="checkbox-item"><input type="checkbox" id="acj-proc-tenotomy"><label for="acj-proc-tenotomy">Arthroscopic Biceps Tenotomy</label></div>
+<div class="checkbox-item"><input type="checkbox" id="acj-proc-tenodesis"><label for="acj-proc-tenodesis">Open Subpectoral Biceps Tenodesis (23430)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="acj-proc-debridement"><label for="acj-proc-debridement">Extensive Glenohumeral Debridement (29823)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="acj-proc-looseb"><label for="acj-proc-looseb">Loose Body Removal (29819)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="acj-proc-capsrel"><label for="acj-proc-capsrel">Capsular Release (29825)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="acj-proc-biopsy"><label for="acj-proc-biopsy">Biopsy for Culture</label></div>
 <div class="checkbox-item"><input type="checkbox" id="acj-proc-other" onchange="document.getElementById('acj-proc-other-text').style.display=this.checked?'inline-block':'none';"><label for="acj-proc-other">Other:</label><input type="text" id="acj-proc-other-text" class="other-text" style="display:none"></div>
 </div>
 
@@ -1210,6 +1236,14 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="mua-proc-mua"><label for="mua-proc-mua">Manipulation Under Anesthesia</label></div>
 <div class="checkbox-item"><input type="checkbox" id="mua-proc-lysis"><label for="mua-proc-lysis">Arthroscopic Lysis of Adhesions</label></div>
 <div class="checkbox-item"><input type="checkbox" id="mua-proc-release"><label for="mua-proc-release">Capsular Release</label></div>
+<div class="checkbox-item"><input type="checkbox" id="mua-proc-decompression"><label for="mua-proc-decompression">Subacromial Decompression (29826)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="mua-proc-acromioplasty"><label for="mua-proc-acromioplasty">Acromioplasty</label></div>
+<div class="checkbox-item"><input type="checkbox" id="mua-proc-dcr"><label for="mua-proc-dcr">Distal Clavicle Resection (29824)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="mua-proc-tenotomy"><label for="mua-proc-tenotomy">Arthroscopic Biceps Tenotomy</label></div>
+<div class="checkbox-item"><input type="checkbox" id="mua-proc-tenodesis"><label for="mua-proc-tenodesis">Open Subpectoral Biceps Tenodesis (23430)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="mua-proc-debridement"><label for="mua-proc-debridement">Extensive Glenohumeral Debridement (29823)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="mua-proc-looseb"><label for="mua-proc-looseb">Loose Body Removal (29819)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="mua-proc-biopsy"><label for="mua-proc-biopsy">Biopsy for Culture</label></div>
 <div class="checkbox-item"><input type="checkbox" id="mua-proc-other" onchange="document.getElementById('mua-proc-other-text').style.display=this.checked?'inline-block':'none';"><label for="mua-proc-other">Other:</label><input type="text" id="mua-proc-other-text" class="other-text" style="display:none"></div>
 </div>
 
@@ -1392,6 +1426,12 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="bten-proc-tenodesis"><label for="bten-proc-tenodesis">Open Subpectoral Biceps Tenodesis</label></div>
 <div class="checkbox-item"><input type="checkbox" id="bten-proc-tenotomy"><label for="bten-proc-tenotomy">Arthroscopic Biceps Tenotomy</label></div>
 <div class="checkbox-item"><input type="checkbox" id="bten-proc-decompression"><label for="bten-proc-decompression">Subacromial Decompression</label></div>
+<div class="checkbox-item"><input type="checkbox" id="bten-proc-acromioplasty"><label for="bten-proc-acromioplasty">Acromioplasty</label></div>
+<div class="checkbox-item"><input type="checkbox" id="bten-proc-dcr"><label for="bten-proc-dcr">Distal Clavicle Resection (29824)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="bten-proc-debridement"><label for="bten-proc-debridement">Extensive Glenohumeral Debridement (29823)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="bten-proc-looseb"><label for="bten-proc-looseb">Loose Body Removal (29819)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="bten-proc-capsrel"><label for="bten-proc-capsrel">Capsular Release (29825)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="bten-proc-biopsy"><label for="bten-proc-biopsy">Biopsy for Culture</label></div>
 <div class="checkbox-item"><input type="checkbox" id="bten-proc-other" onchange="document.getElementById('bten-proc-other-text').style.display=this.checked?'inline-block':'none';"><label for="bten-proc-other">Other:</label><input type="text" id="bten-proc-other-text" class="other-text" style="display:none"></div>
 </div>
 
@@ -1529,6 +1569,7 @@ var DX_PROC = {
   'rcr-dx-biceps': ['rcr-proc-tenodesis'],
   'rcr-dx-ac': ['rcr-proc-dcr'],
   'rcr-dx-antlabral': ['rcr-proc-arthroscopy', 'rcr-proc-labral'],
+  'rcr-dx-postlabral': ['rcr-proc-arthroscopy', 'rcr-proc-postlabral'],
   'rcr-dx-synovitis': ['rcr-proc-debridement'],
   'rcr-dx-labral': ['rcr-proc-debridement'],
   'scope-dx-pain': ['scope-proc-arthroscopy'],
@@ -1744,6 +1785,46 @@ function printReport() {
 
 // Codes appear only in the "with codes" build of this tool (flag flipped at build time)
 var INCLUDE_CODES = false;
+
+/* ---- shared arthroscopic add-ons: one definition used by several templates ---- */
+var ADDON_PROC_NAME = {
+  decompression: 'Arthroscopic Subacromial Decompression',
+  acromioplasty: 'Acromioplasty',
+  dcr: 'Arthroscopic Distal Clavicle Resection',
+  tenotomy: 'Arthroscopic Biceps Tenotomy',
+  tenodesis: 'Open Subpectoral Biceps Tenodesis',
+  debridement: 'Arthroscopic Extensive Glenohumeral Debridement',
+  looseb: 'Arthroscopic Loose Body Removal',
+  capsrel: 'Arthroscopic Capsular Release',
+  biopsy: 'Arthroscopic Biopsy for Culture'
+};
+var ADDON_TEXT = {
+  decompression: 'SUBACROMIAL DECOMPRESSION:\nThe arthroscope was redirected into the subacromial space. A bursectomy was performed with an arthroscopic shaver to allow adequate visualization, with perihumeral debridement and release of the subdeltoid adhesions.',
+  acromioplasty: 'ACROMIOPLASTY:\nThe undersurface of the acromion was identified and an acromioplasty performed with a burr, creating a flat acromial undersurface and a smooth space for the rotator cuff to glide.',
+  dcr: 'DISTAL CLAVICLE RESECTION:\nThe acromioclavicular joint was identified and the distal clavicle exposed. Approximately 8 to 10 mm of distal clavicle was resected with a burr, preserving the superior and posterior acromioclavicular ligaments. Adequate resection was confirmed arthroscopically through a full range of motion without impingement.',
+  tenotomy: 'BICEPS TENOTOMY:\nThe long head of the biceps was inspected and found to be degenerative. Using a radiofrequency device, the tendon was released at its origin and allowed to retract into the bicipital groove.',
+  tenodesis: 'OPEN SUBPECTORAL BICEPS TENODESIS:\nAn incision was made at the inferior border of the pectoralis major. Dissection was carried down to the bicipital groove and the biceps tendon delivered into the wound. The tendon was prepared and secured to the proximal humerus at the subpectoral position, restoring appropriate length-tension. The wound was irrigated and closed in layers.',
+  debridement: 'GLENOHUMERAL DEBRIDEMENT:\nExtensive debridement of the glenohumeral joint was performed with an arthroscopic shaver, addressing the degenerative labral and chondral tissue and inflamed synovium until a stable rim of tissue remained.',
+  looseb: 'LOOSE BODY REMOVAL:\nLoose bodies were identified within the glenohumeral joint and removed with an arthroscopic grasper. The joint was then inspected and no further loose bodies were identified.',
+  capsrel: 'CAPSULAR RELEASE:\nA circumferential capsular release was performed with an arthroscopic elevator and radiofrequency device, taking care to protect the axillary nerve inferiorly. Motion was reassessed and found to be substantially improved.',
+  biopsy: 'ARTHROSCOPIC BIOPSY FOR CULTURE:\nA GraftNet autologous tissue collector was placed in line with the arthroscopic shaver suction. Representative synovial and capsular tissue was shaved from multiple sites within the joint and collected in the GraftNet. The collected tissue was sent for aerobic, anaerobic, fungal, and acid-fast culture. The laboratory was specifically instructed to hold the anaerobic cultures for a minimum of fourteen days for Cutibacterium acnes, formerly Propionibacterium acnes, which is characteristically slow-growing. Antibiotic management will be tailored once speciation and sensitivities are available.'
+};
+var ADDON_KEYS = {"scr": ["acromioplasty", "dcr", "debridement", "looseb", "capsrel", "biopsy"], "acj": ["decompression", "acromioplasty", "tenotomy", "tenodesis", "debridement", "looseb", "capsrel", "biopsy"], "mua": ["decompression", "acromioplasty", "dcr", "tenotomy", "tenodesis", "debridement", "looseb", "biopsy"], "bten": ["acromioplasty", "dcr", "debridement", "looseb", "capsrel", "biopsy"]};
+function addonProcs(pfx, side) {
+  var out = [];
+  (ADDON_KEYS[pfx] || []).forEach(function(k) {
+    if (ck(pfx + '-proc-' + k)) out.push(side + ' ' + ADDON_PROC_NAME[k]);
+  });
+  return out;
+}
+function addonSections(pfx) {
+  var out = [];
+  (ADDON_KEYS[pfx] || []).forEach(function(k) {
+    if (ck(pfx + '-proc-' + k)) out.push(ADDON_TEXT[k]);
+  });
+  return out;
+}
+
 // ICD-10 codes (from Dr. Rolf's Billing Coder) matched from the diagnosis lines
 var ICD_MAP = [
   [/Cuff Tear Arthropathy/i, 'M19.011', 'M19.012', 'Rotator cuff arthropathy'],
@@ -1892,6 +1973,7 @@ function updateInstSections() {
 function updateRcrSections() {
   document.getElementById('rcr-acromioplasty-section').style.display = ck('rcr-proc-acromioplasty') ? 'block' : 'none';
   document.getElementById('rcr-labral-section').style.display = ck('rcr-proc-labral') ? 'block' : 'none';
+  document.getElementById('rcr-postlabral-section').style.display = ck('rcr-proc-postlabral') ? 'block' : 'none';
   document.getElementById('rcr-dx-other-text').style.display = ck('rcr-dx-other') ? 'inline-block' : 'none';
   document.getElementById('rcr-proc-other-text').style.display = ck('rcr-proc-other') ? 'inline-block' : 'none';
 }
@@ -2269,6 +2351,7 @@ function generateRCR() {
   if (ck('rcr-dx-ac')) preDx.push(s + ' Acromioclavicular Joint Osteoarthritis');
   if (ck('rcr-dx-labral')) preDx.push(s + ' Superior Labral Tear');
   if (ck('rcr-dx-antlabral')) preDx.push(s + ' Anterior Labral Tear');
+  if (ck('rcr-dx-postlabral')) preDx.push(s + ' Posterior Labral Tear');
   if (ck('rcr-dx-synovitis')) preDx.push(s + ' Synovitis');
   if (ck('rcr-dx-other') && v('rcr-dx-other-text').trim()) preDx.push(s + ' ' + v('rcr-dx-other-text'));
   var postDx = [];
@@ -2279,6 +2362,7 @@ function generateRCR() {
   if (ck('rcr-postdx-ac')) postDx.push(s + ' Acromioclavicular Joint Osteoarthritis');
   if (ck('rcr-postdx-labral')) postDx.push(s + ' Superior Labral Tear');
   if (ck('rcr-postdx-antlabral')) postDx.push(s + ' Anterior Labral Tear');
+  if (ck('rcr-postdx-postlabral')) postDx.push(s + ' Posterior Labral Tear');
   if (ck('rcr-postdx-synovitis')) postDx.push(s + ' Synovitis');
   if (ck('rcr-postdx-other') && v('rcr-postdx-other-text').trim()) postDx.push(s + ' ' + v('rcr-postdx-other-text'));
   var procs = [];
@@ -2291,6 +2375,7 @@ function generateRCR() {
   if (ck('rcr-proc-dcr')) procs.push(s + ' Arthroscopic Distal Clavicle Resection');
   if (ck('rcr-proc-tenodesis')) procs.push(s + ' Open Subpectoral Biceps Tenodesis');
   if (ck('rcr-proc-labral')) procs.push(s + ' Arthroscopic Anterior Labral (Bankart) Repair with Capsulorrhaphy');
+  if (ck('rcr-proc-postlabral')) procs.push(s + ' Arthroscopic Posterior Labral Repair with Capsulorrhaphy');
   if (ck('rcr-proc-other') && v('rcr-proc-other-text').trim()) procs.push(s + ' ' + v('rcr-proc-other-text'));
   var findings = [];
   var fn = 1;
@@ -2314,6 +2399,9 @@ function generateRCR() {
   if (ck('rcr-proc-tenotomy')) descSections.push('ARTHROSCOPIC BICEPS TENOTOMY:\nUsing a side-effect radiofrequency device, the biceps tendon was tenotomized and allowed to retract distally into the bicipital groove.');
   if (ck('rcr-proc-labral')) {
     descSections.push('ARTHROSCOPIC ANTERIOR LABRAL REPAIR AND CAPSULORRHAPHY:\nThe anterior labrum was found to be detached from the glenoid rim. The labrum and capsule were sharply elevated off the glenoid neck with an arthroscopic elevator until the subscapularis muscle fibers were visualized and the labrum floated freely to its anatomic position. The anterior glenoid neck was decorticated with a shaver and burr to a bleeding bony bed. Working from inferior to superior, ' + v('rcr-lab-anchors') + ' ' + v('rcr-lab-anchor-type') + ' suture anchors were placed on the glenoid face at the articular margin, beginning at the ' + v('rcr-lab-start-pos') + " o'clock position. At each anchor, the capsulolabral tissue was penetrated with a suture passing device incorporating an appropriate capsular plication, and the labrum was secured to the glenoid rim, recreating the anterior bumper and retensioning the anteroinferior capsule. The repair was probed and found to be secure with excellent bumper restoration.");
+  }
+  if (ck('rcr-proc-postlabral')) {
+    descSections.push('ARTHROSCOPIC POSTERIOR LABRAL REPAIR AND CAPSULORRHAPHY:\nThe posterior labrum was found to be detached from the glenoid rim. The labrum and capsule were elevated off the posterior glenoid neck with an arthroscopic elevator until the tissue floated freely to its anatomic position, and the posterior glenoid neck was decorticated with a shaver and burr to a bleeding bony bed. Working from inferior to superior, ' + v('rcr-plab-anchors') + ' ' + v('rcr-plab-anchor-type') + ' suture anchors were placed on the glenoid face at the articular margin, beginning at the ' + v('rcr-plab-start-pos') + " o'clock position. At each anchor, the capsulolabral tissue was penetrated with a suture passing device incorporating an appropriate capsular plication, and the labrum was secured to the glenoid rim, recreating the posterior bumper and retensioning the posteroinferior capsule. The repair was probed and found to be secure.");
   }
   descSections.push('ARTHROSCOPIC SUBACROMIAL DECOMPRESSION:\nThe subacromial space was entered. There were massive amounts of hyperemia, erythema, and bursitis with adhesions in the subdeltoid and subacromial regions. There was significant narrowing of the acromiohumeral interval and a thick, fibrotic coracoacromial ligament contributing to outlet impingement. Using a motorized shaver and a side-effect radiofrequency device, the bursa was removed from lateral to medial and anterior to posterior. A perihumeral debridement was performed along with decompression of the subdeltoid adhesions.');
   if (ck('rcr-proc-acromioplasty')) descSections.push('ACROMIOPLASTY:\nThe acromion was flattened in the same sequence of steps as the arthroscopic subacromial decompression. It was converted from a type ' + v('rcr-acromion-type') + ' to a type I acromion.');
@@ -2572,6 +2660,7 @@ function generateSCR() {
   if (ck('scr-proc-decompression')) procs.push(s + ' Arthroscopic Subacromial Decompression');
   if (ck('scr-proc-tenotomy')) procs.push(s + ' Arthroscopic Biceps Tenotomy');
   if (ck('scr-proc-tenodesis')) procs.push(s + ' Open Subpectoral Biceps Tenodesis');
+  addonProcs('scr', s).forEach(function(x){ procs.push(x); });
   if (ck('scr-proc-other') && v('scr-proc-other-text').trim()) procs.push(s + ' ' + v('scr-proc-other-text'));
 
   var implantParts = [];
@@ -2585,6 +2674,7 @@ function generateSCR() {
   if (ck('scr-proc-tenotomy')) descSections.push('ARTHROSCOPIC BICEPS TENOTOMY:\nUsing a side-effect radiofrequency device, the biceps tendon was tenotomized and allowed to retract distally into the bicipital groove.');
   descSections.push('SUPERIOR CAPSULAR RECONSTRUCTION:\nThe superior glenoid was prepared with a shaver and burr to create a bleeding bone bed at the superior glenoid neck. The greater tuberosity footprint was similarly prepared. A ' + v('scr-graft-type') + (v('scr-graft-size').trim() ? ' (' + v('scr-graft-size') + ')' : '') + ' was prepared on the back table. ' + v('scr-medial-num') + ' ' + v('scr-medial-type') + ' suture anchors were placed at the superior glenoid. Sutures were passed through the medial edge of the graft in a mattress configuration. The graft was shuttled into the joint and secured to the superior glenoid. ' + v('scr-lateral-num') + ' ' + v('scr-lateral-type') + ' anchors were placed in the greater tuberosity, and the lateral edge of the graft was secured to the tuberosity footprint, restoring the superior capsule. The graft was tensioned with the arm in neutral rotation. The repair was probed and found to be secure with excellent superior coverage.');
   if (ck('scr-proc-tenodesis')) descSections.push('OPEN SUBPECTORAL BICEPS TENODESIS:\nInstruments were removed and an approximately 3 cm incision was made at the anterior/inferior axillary fold. Sharp dissection was employed through subcutaneous tissue down to the fascia overlying the pectoralis major. The subpectoral interval was defined and the arm internally rotated. Retractors were used to elevate the pectoralis major, and the biceps tendon was delivered in a retrograde fashion out of the bicipital groove. The adjacent bone was cleared with electrocautery and roughened with an osteotome. A single 1.8 mm Arthrex FiberTak anchor double loaded with #2 suture tape was placed at that point, and the biceps tendon was tenodesed against the bone in an onlay fashion using alternating simple sutures and lasso loop technique with the aid of a penetrating device. The excess tendon was removed with scissors.');
+  addonSections('scr').forEach(function(x){ descSections.push(x); });
   descSections.push('CLOSURE:\nPortal sites were closed in interrupted fashion with Monocryl, reinforced with Steri-Strips. The shoulder was dressed sterilely and placed in a shoulder immobilizer and Cryocuff, and the patient was transferred to the recovery room in satisfactory condition having tolerated the procedure well. All counts were correct.');
 
   var report = patientHeader('scr') +
@@ -2623,6 +2713,7 @@ function generateACJoint() {
   var procs = [];
   if (ck('acj-proc-reconstruction')) procs.push(s + ' AC Joint Reconstruction');
   if (ck('acj-proc-dcr')) procs.push(s + ' Distal Clavicle Excision');
+  addonProcs('acj', s).forEach(function(x){ procs.push(x); });
   if (ck('acj-proc-other') && v('acj-proc-other-text').trim()) procs.push(s + ' ' + v('acj-proc-other-text'));
 
   var descSections = [];
@@ -2633,6 +2724,7 @@ function generateACJoint() {
   if (ck('acj-proc-dcr')) {
     descSections.push('DISTAL CLAVICLE EXCISION:\nThe distal clavicle was resected to decompress the acromioclavicular joint. The superior, anterior, and posterior acromioclavicular ligaments were preserved to maintain stability. The resection was confirmed by direct visualization.');
   }
+  addonSections('acj').forEach(function(x){ descSections.push(x); });
   descSections.push('CLOSURE:\nThe wound was irrigated. The deltotrapezial fascia was closed with #0 Vicryl. The dermis was closed with 2-0 Vicryl, and the skin with running 3-0 Monocryl reinforced with Steri-Strips. Sterile dressing, sling, and Cryocuff were applied. The patient was transferred to the PACU in stable condition having tolerated the procedure well.');
 
   var report = patientHeader('acj') +
@@ -2673,6 +2765,7 @@ function generateMUA() {
   if (ck('mua-proc-mua')) procs.push(s + ' Manipulation Under Anesthesia');
   if (ck('mua-proc-lysis')) procs.push(s + ' Arthroscopic Lysis of Adhesions');
   if (ck('mua-proc-release')) procs.push(s + ' Arthroscopic Capsular Release');
+  addonProcs('mua', s).forEach(function(x){ procs.push(x); });
   if (ck('mua-proc-other') && v('mua-proc-other-text').trim()) procs.push(s + ' ' + v('mua-proc-other-text'));
 
   var descSections = [];
@@ -2686,6 +2779,7 @@ function generateMUA() {
   if (ck('mua-proc-release')) {
     descSections.push('CAPSULAR RELEASE:\nUsing a radiofrequency device, a circumferential capsular release was performed under direct arthroscopic visualization. The capsule was released from the anteroinferior to the posteroinferior glenoid, taking care to protect the axillary nerve. Improved range of motion was confirmed after release.');
   }
+  addonSections('mua').forEach(function(x){ descSections.push(x); });
 
   var report = patientHeader('mua') +
     'PREOPERATIVE DIAGNOSIS:\n' + preDx.join('\n') + '\n\n' +
@@ -2770,6 +2864,7 @@ function generateBicepsTenodesis() {
   if (ck('bten-proc-tenodesis')) procs.push(s + ' Open Subpectoral Biceps Tenodesis');
   if (ck('bten-proc-tenotomy')) procs.push(s + ' Arthroscopic Biceps Tenotomy');
   if (ck('bten-proc-decompression')) procs.push(s + ' Arthroscopic Subacromial Decompression');
+  addonProcs('bten', s).forEach(function(x){ procs.push(x); });
   if (ck('bten-proc-other') && v('bten-proc-other-text').trim()) procs.push(s + ' ' + v('bten-proc-other-text'));
 
   var descSections = [];
@@ -2778,6 +2873,7 @@ function generateBicepsTenodesis() {
   if (ck('bten-proc-decompression')) descSections.push('ARTHROSCOPIC SUBACROMIAL DECOMPRESSION:\nThe subacromial space was entered. Using a motorized shaver and a side-effect radiofrequency device, the bursa was removed from lateral to medial and anterior to posterior. A perihumeral debridement was performed along with decompression of the subdeltoid adhesions.');
   if (ck('bten-proc-tenotomy')) descSections.push('ARTHROSCOPIC BICEPS TENOTOMY:\nUsing a side-effect radiofrequency device, the biceps tendon was tenotomized and allowed to retract distally into the bicipital groove.');
   if (ck('bten-proc-tenodesis')) descSections.push('OPEN SUBPECTORAL BICEPS TENODESIS:\nInstruments were removed and an approximately 3 cm incision was made at the anterior/inferior axillary fold. Sharp dissection was employed through subcutaneous tissue down to the fascia overlying the pectoralis major. The subpectoral interval was defined and the arm internally rotated. Retractors were used to elevate the pectoralis major, and the biceps tendon was delivered in a retrograde fashion out of the bicipital groove. The adjacent bone was cleared with electrocautery and roughened with an osteotome. A single ' + v('bten-implant') + ' was placed at that point, and the biceps tendon was tenodesed against the bone in an onlay fashion using alternating simple sutures and lasso loop technique with the aid of a penetrating device. The excess tendon was removed with scissors.');
+  addonSections('bten').forEach(function(x){ descSections.push(x); });
   descSections.push('CLOSURE:\nIncisions were closed with running 3-0 subcuticular Monocryl suture reinforced with Steri-Strips. Portal sites were closed in interrupted fashion with Monocryl, reinforced with Steri-Strips. The shoulder was dressed sterilely and placed in a sling and Cryocuff, and the patient was transferred to the recovery room in satisfactory condition having tolerated the procedure well. All counts were correct.');
 
   var report = patientHeader('bten') +
