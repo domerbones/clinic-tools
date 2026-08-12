@@ -119,8 +119,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Implants</div>
 <div class="row">
 <div class="field field-small"><label>Stem (mm)</label><select id="tsa-stem"><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8" selected>8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option></select></div>
-<div class="field field-small"><label>Head &Oslash; (mm)</label><select id="tsa-head-diam"><option>38</option><option>40</option><option selected>42</option><option>44</option><option>46</option><option>48</option><option>50</option><option>52</option></select></div>
-<div class="field field-small"><label>Head Ht (mm)</label><select id="tsa-head-ht"><option selected>15</option><option>18</option><option>21</option></select></div>
+<div class="field field-small"><label>Head &Oslash; (mm)</label><select id="tsa-head-diam" onchange="syncHeadHeights()"><option>36</option><option>39</option><option selected>42</option><option>45</option><option>48</option><option>51</option><option>54</option><option>57</option></select></div>
+<div class="field field-small"><label>Head Ht (mm)</label><select id="tsa-head-ht"></select></div>
 <div class="field field-small"><label>Glenoid Size</label><select id="tsa-glenoid-size"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></div>
 <div class="field"><label>Glenoid Type</label><select id="tsa-glenoid-type"><option value="3-peg monoblock glenoid">3-Peg Monoblock</option><option value="4-peg modular glenoid with trabecular metal post" selected>4-Peg Modular w/ TM post</option><option value="3-peg modular glenoid with trabecular metal post">3-Peg Modular w/ TM post</option><option value="2-peg monoblock glenoid">2-Peg Monoblock</option><option value="4-peg modular augmented glenoid with trabecular metal post">4-Peg Augmented w/ TM post</option><option value="4-peg modular posterior augmented glenoid with trabecular metal post">4-Peg Posterior Augmented w/ TM post</option></select></div>
 </div>
@@ -1836,9 +1836,35 @@ function updatePhumSections() {
   document.getElementById('phum-fibular-section').style.display = ck('phum-fibular') ? 'block' : 'none';
 }
 
+// --- Identity humeral heads: each diameter has its own three heights, so the
+// height list is rebuilt whenever the diameter changes (prevents documenting a
+// head combination the system does not make) ---
+var IDENTITY_HEADS = {
+  '36': [14, 16, 19],
+  '39': [14, 17, 20],
+  '42': [15, 18, 21],
+  '45': [16, 19, 22],
+  '48': [17, 20, 23],
+  '51': [18, 21, 24],
+  '54': [19, 22, 25],
+  '57': [20, 23, 26]
+};
+function syncHeadHeights() {
+  var d = document.getElementById('tsa-head-diam');
+  var h = document.getElementById('tsa-head-ht');
+  if (!d || !h) return;
+  var prev = h.value;
+  var opts = IDENTITY_HEADS[d.value] || [];
+  h.innerHTML = opts.map(function(v) { return '<option value="' + v + '">' + v + '</option>'; }).join('');
+  // keep the surgeon's height if this diameter also offers it, else default to the middle
+  if (opts.indexOf(parseInt(prev, 10)) >= 0) h.value = prev;
+  else h.value = String(opts[1]);
+}
+
 // --- DOMContentLoaded ---
 
 document.addEventListener('DOMContentLoaded', function() {
+  syncHeadHeights();
   var today = todayStr();
   document.querySelectorAll('input[type="date"]').forEach(function(el) { el.value = today; });
 
@@ -1959,7 +1985,7 @@ v('tsa-findings') + '\n\n' +
 'HUMERAL PREPARATION:\n' +
 'The humeral head was dislocated anteriorly and marginal osteophytes were removed. Sequential broaching was performed, and the humeral head was resected along the anatomic neck line.\n\n' +
 'GLENOID PREPARATION AND IMPLANTATION:\n' +
-'The labrum was excised. The glenoid was reamed centrally and peripherally, and peg holes were drilled. The trial component was inserted and confirmed for fit. Phenylephrine soaked sponge was used to assist with hemostasis and the pedicles. Palacos-G cement was pressurized into the peripheral peg holes; the final glenoid component was seated and fixed with excellent stability. Excess cement was removed.\n\n' +
+'The labrum was excised. Remaining articular cartilage was removed from the glenoid face with a Cobb elevator. The glenoid was reamed centrally and peripherally, and peg holes were drilled. The trial component was inserted and confirmed for fit. Phenylephrine soaked sponge was used to assist with hemostasis and the pedicles. Palacos-G cement was pressurized into the peripheral peg holes; the final glenoid component was seated and fixed with excellent stability. Excess cement was removed.\n\n' +
 'FINAL HUMERAL IMPLANTATION:\n' +
 'Sequential broaches were advanced to the final size. The final Identity ' + v('tsa-stem') + ' mm micro stem and ' + v('tsa-head-diam') + ' x ' + v('tsa-head-ht') + ' mm humeral head were assembled and inserted with excellent stability. Confirmed humeral head was placed to restore anatomic fit.\n\n' +
 'LESSER TUBEROSITY OSTEOTOMY REPAIR:\n' +
@@ -2023,9 +2049,9 @@ v('rtsa-findings') + '\n\n' +
 'SUBSCAPULARIS MANAGEMENT:\n' +
 'The axillary nerve was identified and protected. A Cobra retractor was placed between the nerve and the subscapularis. The subscapularis was peeled from the lesser tuberosity and tagged with three #2 Ethibond sutures.\n\n' +
 'HUMERAL PREPARATION:\n' +
-'With external rotation and extension, the humeral head was dislocated anteriorly. Marginal osteophytes were removed. The canal was opened and sequentially reamed to the appropriate size. The humeral head was resected with a jig, and trial stems placed. A conical reamer was utilized.\n\n' +
+'With external rotation and extension, the humeral head was dislocated anteriorly. Marginal osteophytes were removed. The canal was opened and sequentially reamed to the appropriate size. The humeral head was resected with a jig, and trial stems placed.\n\n' +
 'GLENOID PREPARATION AND IMPLANTATION:\n' +
-'The humeral head was displaced posteriorly and held with a femoral neck retractor. The axillary nerve was visualized. The capsule was released inferiorly and along the deep surface of the subscapularis into its fossa. The coracohumeral ligament was released from the coracoid base. The subscapularis was retracted into its fossa, and the anterior glenoid rim exposed. A guidewire was placed, and the glenoid was reamed. The central hole was prepared, and the baseplate impacted. Screws were placed into the scapular body and the base of the coracoid' + (v('rtsa-screw-periph1') !== 'N/A' || v('rtsa-screw-periph2') !== 'N/A' ? ', and additional peripheral screws were placed' : '') + '. Set screws were secured, and the glenosphere was impacted and confirmed seated uniformly with a right-angle clamp.\n\n' +
+'The humeral head was displaced posteriorly and held with a femoral neck retractor. The axillary nerve was visualized. The capsule was released inferiorly and along the deep surface of the subscapularis into its fossa. The coracohumeral ligament was released from the coracoid base. The subscapularis was retracted into its fossa, and the anterior glenoid rim exposed. Remaining articular cartilage was removed from the glenoid face with a Cobb elevator. The central guidewire was placed in the desired position and its position confirmed. The central drill was advanced over the guidewire. The glenoid was reamed, followed by the clearance reamer and then the impacting reamer. The central guide pin was removed and the baseplate was impacted into position. Screws were placed into the scapular body and the base of the coracoid' + (v('rtsa-screw-periph1') !== 'N/A' || v('rtsa-screw-periph2') !== 'N/A' ? ', and additional peripheral screws were placed' : '') + '. Set screws were secured, and the glenosphere was impacted and confirmed seated uniformly with a right-angle clamp.\n\n' +
 'FINAL IMPLANTATION AND SUBSCAPULARIS REPAIR:\n' +
 'The humeral metaphysis was dislocated anteriorly. Trial components were inserted, and stability and range of motion confirmed. The trial was removed. Four BroadBand tape sutures were passed through bone tunnels in the proximal humeral metaphysis lateral to the lesser tuberosity at the bicipital groove. The final stem was inserted in ' + v('rtsa-retro') + '° of retroversion after irrigation. ' + subscapClosure + '\n\n' +
 'RANGE OF MOTION ASSESSMENT:\n' +
