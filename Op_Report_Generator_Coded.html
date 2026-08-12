@@ -640,24 +640,16 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="clav-dx-mid-disp-r"><label for="clav-dx-mid-disp-r">Displaced fracture of shaft of right clavicle (S42.021A)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="clav-dx-mid-disp-l"><label for="clav-dx-mid-disp-l">Displaced fracture of shaft of left clavicle (S42.022A)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="clav-dx-mid-nondisp-r"><label for="clav-dx-mid-nondisp-r">Nondisplaced fracture of shaft of right clavicle (S42.024A)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="clav-dx-mid-nondisp-l"><label for="clav-dx-mid-nondisp-l">Nondisplaced fracture of shaft of left clavicle (S42.025A)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="clav-dx-lat-disp-r"><label for="clav-dx-lat-disp-r">Displaced fracture of lateral end of right clavicle (S42.031A)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="clav-dx-lat-disp-l"><label for="clav-dx-lat-disp-l">Displaced fracture of lateral end of left clavicle (S42.032A)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="clav-dx-lat-nondisp-r"><label for="clav-dx-lat-nondisp-r">Nondisplaced fracture of lateral end of right clavicle (S42.034A)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="clav-dx-lat-nondisp-l"><label for="clav-dx-lat-nondisp-l">Nondisplaced fracture of lateral end of left clavicle (S42.035A)</label></div>
 </div>
 
 <div class="section-title">Postoperative Diagnosis</div>
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="clav-postdx-mid-disp-r"><label for="clav-postdx-mid-disp-r">Displaced fracture of shaft of right clavicle (S42.021A)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="clav-postdx-mid-disp-l"><label for="clav-postdx-mid-disp-l">Displaced fracture of shaft of left clavicle (S42.022A)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="clav-postdx-mid-nondisp-r"><label for="clav-postdx-mid-nondisp-r">Nondisplaced fracture of shaft of right clavicle (S42.024A)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="clav-postdx-mid-nondisp-l"><label for="clav-postdx-mid-nondisp-l">Nondisplaced fracture of shaft of left clavicle (S42.025A)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="clav-postdx-lat-disp-r"><label for="clav-postdx-lat-disp-r">Displaced fracture of lateral end of right clavicle (S42.031A)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="clav-postdx-lat-disp-l"><label for="clav-postdx-lat-disp-l">Displaced fracture of lateral end of left clavicle (S42.032A)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="clav-postdx-lat-nondisp-r"><label for="clav-postdx-lat-nondisp-r">Nondisplaced fracture of lateral end of right clavicle (S42.034A)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="clav-postdx-lat-nondisp-l"><label for="clav-postdx-lat-nondisp-l">Nondisplaced fracture of lateral end of left clavicle (S42.035A)</label></div>
 </div>
 
 <div class="section-title">Patient & Procedure</div>
@@ -680,7 +672,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Fracture Description</div>
 <div class="row">
 <div class="field field-med"><label>Fracture Type</label><select id="clav-frac-type"><option value="simple">Simple</option><option value="comminuted">Comminuted</option></select></div>
-<div class="field field-med"><label>Displacement</label><select id="clav-frac-disp"><option value="displaced">Displaced</option><option value="non-displaced">Non-displaced</option></select></div>
+<div class="field field-med"><label>Displacement</label><select id="clav-frac-disp"><option value="displaced">Displaced</option><option value="displaced and shortened">Displaced &amp; shortened</option><option value="comminuted and displaced">Comminuted &amp; displaced</option></select></div>
 </div>
 
 <div class="section-title">Implants</div>
@@ -2358,21 +2350,13 @@ function generateClavicle() {
   var preDx = [];
   if (ck('clav-dx-mid-disp-r')) preDx.push('Displaced fracture of shaft of right clavicle (S42.021A)');
   if (ck('clav-dx-mid-disp-l')) preDx.push('Displaced fracture of shaft of left clavicle (S42.022A)');
-  if (ck('clav-dx-mid-nondisp-r')) preDx.push('Nondisplaced fracture of shaft of right clavicle (S42.024A)');
-  if (ck('clav-dx-mid-nondisp-l')) preDx.push('Nondisplaced fracture of shaft of left clavicle (S42.025A)');
   if (ck('clav-dx-lat-disp-r')) preDx.push('Displaced fracture of lateral end of right clavicle (S42.031A)');
   if (ck('clav-dx-lat-disp-l')) preDx.push('Displaced fracture of lateral end of left clavicle (S42.032A)');
-  if (ck('clav-dx-lat-nondisp-r')) preDx.push('Nondisplaced fracture of lateral end of right clavicle (S42.034A)');
-  if (ck('clav-dx-lat-nondisp-l')) preDx.push('Nondisplaced fracture of lateral end of left clavicle (S42.035A)');
   var postDx = [];
   if (ck('clav-postdx-mid-disp-r')) postDx.push('Displaced fracture of shaft of right clavicle (S42.021A)');
   if (ck('clav-postdx-mid-disp-l')) postDx.push('Displaced fracture of shaft of left clavicle (S42.022A)');
-  if (ck('clav-postdx-mid-nondisp-r')) postDx.push('Nondisplaced fracture of shaft of right clavicle (S42.024A)');
-  if (ck('clav-postdx-mid-nondisp-l')) postDx.push('Nondisplaced fracture of shaft of left clavicle (S42.025A)');
   if (ck('clav-postdx-lat-disp-r')) postDx.push('Displaced fracture of lateral end of right clavicle (S42.031A)');
   if (ck('clav-postdx-lat-disp-l')) postDx.push('Displaced fracture of lateral end of left clavicle (S42.032A)');
-  if (ck('clav-postdx-lat-nondisp-r')) postDx.push('Nondisplaced fracture of lateral end of right clavicle (S42.034A)');
-  if (ck('clav-postdx-lat-nondisp-l')) postDx.push('Nondisplaced fracture of lateral end of left clavicle (S42.035A)');
 
   var report = patientHeader('clav') +
     'PREOPERATIVE DIAGNOSIS:\n' + preDx.join('\n') + '\n\n' +
@@ -2542,7 +2526,7 @@ function generateScope() {
   if (ck('scope-proc-synovectomy')) descSections.push('SYNOVECTOMY:\nAn extensive synovectomy was performed using a motorized shaver, removing all pathologic synovial tissue from the glenohumeral joint.');
   if (ck('scope-proc-decompression')) descSections.push('ARTHROSCOPIC SUBACROMIAL DECOMPRESSION:\nThe subacromial space was entered. There were massive amounts of hyperemia, erythema, and bursitis with adhesions in the subdeltoid and subacromial regions. Using a motorized shaver and a side-effect radiofrequency device, the bursa was removed from lateral to medial and anterior to posterior. A perihumeral debridement was performed along with decompression of the subdeltoid adhesions.');
   if (ck('scope-proc-acromioplasty')) descSections.push('ACROMIOPLASTY:\nThe acromion was flattened using an arthroscopic burr, converting it to a flat type I acromion.');
-  if (ck('scope-proc-biopsy')) descSections.push('ARTHROSCOPIC BIOPSY FOR CULTURE:\nA GraftNet autologous tissue collector was placed in line with the arthroscopic shaver suction. Representative synovial and capsular tissue was shaved from multiple sites within the joint and collected in the GraftNet. The collected tissue was sent for aerobic, anaerobic, fungal, and acid-fast culture. The laboratory was specifically instructed to hold the anaerobic cultures for a minimum of fourteen days for Cutibacterium acnes, formerly Propionibacterium acnes, which is characteristically slow-growing. The patient will be placed on doxycycline for two weeks as empiric prophylaxis pending final culture results, with antibiotic therapy to be tailored once speciation and sensitivities are available.');
+  if (ck('scope-proc-biopsy')) descSections.push('ARTHROSCOPIC BIOPSY FOR CULTURE:\nA GraftNet autologous tissue collector was placed in line with the arthroscopic shaver suction. Representative synovial and capsular tissue was shaved from multiple sites within the joint and collected in the GraftNet. The collected tissue was sent for aerobic, anaerobic, fungal, and acid-fast culture. The laboratory was specifically instructed to hold the anaerobic cultures for a minimum of fourteen days for Cutibacterium acnes, formerly Propionibacterium acnes, which is characteristically slow-growing. Antibiotic management will be tailored once speciation and sensitivities are available.');
   if (ck('scope-proc-tenotomy')) descSections.push('ARTHROSCOPIC BICEPS TENOTOMY:\nUsing a side-effect radiofrequency device, the biceps tendon was tenotomized and allowed to retract distally into the bicipital groove.');
   descSections.push('CLOSURE:\nPortal sites were closed in interrupted fashion with Monocryl, reinforced with Steri-Strips. The shoulder was dressed sterilely and placed in a sling and Cryocuff, and the patient was transferred to the recovery room in satisfactory condition having tolerated the procedure well. All counts were correct.');
 
