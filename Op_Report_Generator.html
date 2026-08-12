@@ -925,6 +925,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="scope-proc-decompression"><label for="scope-proc-decompression">Subacromial Decompression</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scope-proc-acromioplasty"><label for="scope-proc-acromioplasty">Acromioplasty</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scope-proc-tenotomy"><label for="scope-proc-tenotomy">Biceps Tenotomy</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scope-proc-biopsy"><label for="scope-proc-biopsy">Biopsy for Culture</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scope-proc-other" onchange="document.getElementById('scope-proc-other-text').style.display=this.checked?'inline-block':'none';"><label for="scope-proc-other">Other:</label><input type="text" id="scope-proc-other-text" class="other-text" style="display:none"></div>
 </div>
 
@@ -1797,6 +1798,7 @@ var CPT_MAP = [
   [/Biceps Tenotomy/i, '29822 — Arthroscopic debridement, limited (biceps tenotomy)'],
   [/Subacromial Decompression|Acromioplasty/i, '+29826 — Arthroscopic subacromial decompression / acromioplasty (add-on code)'],
   [/Extensive Glenohumeral Debridement|Synovectomy|Chondroplasty/i, '29823 — Arthroscopic debridement, extensive'],
+  [/Biopsy for Culture|Synovial Biopsy/i, '29805 — Diagnostic shoulder arthroscopy with synovial biopsy (not separately billable when a surgical arthroscopy is performed in the same shoulder)'],
   [/Loose Body/i, '29819 — Arthroscopic removal of loose body'],
   [/Distal Clavicle Resection/i, '29824 — Arthroscopic distal clavicle resection'],
   [/Distal Clavicle Excision/i, '23120 — Open distal clavicle excision'],
@@ -2344,7 +2346,7 @@ function generateRCR() {
     'INDICATIONS:\nThis is a ' + v('rcr-age') + '-year-old ' + v('rcr-sex') + ' who presents for shoulder arthroscopy. The patient\'s preoperative exam and imaging studies were consistent with the above noted diagnoses. I discussed in detail with the patient the nature of the procedure including risks, benefits, prognosis, and alternatives. Informed consent was obtained. Prior to surgery the appropriate site was identified by the patient and marked with my initials. A time-out was taken to verify the correct patient, the correct site, and the correct procedure.\n\n' +
     'OPERATIVE FINDINGS:\n' + findings.join('\n') + '\n\n' +
     'DESCRIPTION OF PROCEDURE:\n\n' + descSections.join('\n\n') + '\n\n' +
-    'DISPOSITION:\nThe patient will remain in the shoulder immobilizer for ' + v('rcr-immobilizer-weeks') + ' weeks. Passive range of motion of the shoulder will begin in ' + v('rcr-passive-rom-weeks') + ' weeks per protocol on doctorrolf.com. The patient will go to physical therapy for an initial wound check and then not return for ' + v('rcr-pt-return-weeks') + ' weeks. Active range of motion will begin in ' + v('rcr-active-rom-weeks') + ' weeks.\n\n' +
+    'DISPOSITION:\nThe patient will remain in the shoulder immobilizer for ' + v('rcr-immobilizer-weeks') + ' weeks. Passive range of motion of the shoulder will begin in ' + v('rcr-passive-rom-weeks') + ' weeks per protocol. The patient will go to physical therapy for an initial wound check and then not return for ' + v('rcr-pt-return-weeks') + ' weeks. Active range of motion will begin in ' + v('rcr-active-rom-weeks') + ' weeks.\n\n' +
     'PAIN MANAGEMENT PLAN:\nMultimodal regimen with ' + v('rcr-block') + ', sling, cryotherapy, ' + painMeds('rcr') + ', and oral analgesics.\n\n' +
     'PROGNOSIS:\nThe patient has a ' + v('rcr-prognosis') + ' prognosis for pain-free return to active function.';
 
@@ -2517,6 +2519,7 @@ function generateScope() {
   if (ck('scope-proc-decompression')) procs.push(s + ' Arthroscopic Subacromial Decompression');
   if (ck('scope-proc-acromioplasty')) procs.push(s + ' Acromioplasty');
   if (ck('scope-proc-tenotomy')) procs.push(s + ' Arthroscopic Biceps Tenotomy');
+  if (ck('scope-proc-biopsy')) procs.push(s + ' Arthroscopic Biopsy for Culture');
   if (ck('scope-proc-other') && v('scope-proc-other-text').trim()) procs.push(s + ' ' + v('scope-proc-other-text'));
 
   var findings = [];
@@ -2539,6 +2542,7 @@ function generateScope() {
   if (ck('scope-proc-synovectomy')) descSections.push('SYNOVECTOMY:\nAn extensive synovectomy was performed using a motorized shaver, removing all pathologic synovial tissue from the glenohumeral joint.');
   if (ck('scope-proc-decompression')) descSections.push('ARTHROSCOPIC SUBACROMIAL DECOMPRESSION:\nThe subacromial space was entered. There were massive amounts of hyperemia, erythema, and bursitis with adhesions in the subdeltoid and subacromial regions. Using a motorized shaver and a side-effect radiofrequency device, the bursa was removed from lateral to medial and anterior to posterior. A perihumeral debridement was performed along with decompression of the subdeltoid adhesions.');
   if (ck('scope-proc-acromioplasty')) descSections.push('ACROMIOPLASTY:\nThe acromion was flattened using an arthroscopic burr, converting it to a flat type I acromion.');
+  if (ck('scope-proc-biopsy')) descSections.push('ARTHROSCOPIC BIOPSY FOR CULTURE:\nA GraftNet autologous tissue collector was placed in line with the arthroscopic shaver suction. Representative synovial and capsular tissue was shaved from multiple sites within the joint and collected in the GraftNet. The collected tissue was sent for aerobic, anaerobic, fungal, and acid-fast culture. The laboratory was specifically instructed to hold the anaerobic cultures for a minimum of fourteen days for Cutibacterium acnes, formerly Propionibacterium acnes, which is characteristically slow-growing. The patient will be placed on doxycycline for two weeks as empiric prophylaxis pending final culture results, with antibiotic therapy to be tailored once speciation and sensitivities are available.');
   if (ck('scope-proc-tenotomy')) descSections.push('ARTHROSCOPIC BICEPS TENOTOMY:\nUsing a side-effect radiofrequency device, the biceps tendon was tenotomized and allowed to retract distally into the bicipital groove.');
   descSections.push('CLOSURE:\nPortal sites were closed in interrupted fashion with Monocryl, reinforced with Steri-Strips. The shoulder was dressed sterilely and placed in a sling and Cryocuff, and the patient was transferred to the recovery room in satisfactory condition having tolerated the procedure well. All counts were correct.');
 
