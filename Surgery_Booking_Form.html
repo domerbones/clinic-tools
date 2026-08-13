@@ -169,7 +169,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="tsa-vs-rsa"><label for="tsa-vs-rsa"><b>TSA vs RSA</b> - reverse implants also on standby; final decision intraoperative</label></div>
 </div>
 <div class="row">
-<div class="field field-med"><label>Follow Up</label><select id="tsa-followup"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option></select></div>
+<div class="field field-med"><label>Follow Up</label><select id="tsa-followup" onchange="onFollowupChange('tsa')"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option><option value="Other">Other &mdash; see note</option></select></div>
+<div class="field" id="tsa-followup-other-field" style="display:none"><label>Follow Up &mdash; other</label><input id="tsa-followup-other"></div>
 </div>
 <div class="row">
 <div class="field"><label>Implant System</label><input id="tsa-implant" value="Zimmer Biomet Identity"></div>
@@ -209,7 +210,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="hemi-dx-fx"><label for="hemi-dx-fx">Proximal humerus fracture</label></div>
 </div>
 <div class="row">
-<div class="field field-med"><label>Follow Up</label><select id="hemi-followup"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option></select></div>
+<div class="field field-med"><label>Follow Up</label><select id="hemi-followup" onchange="onFollowupChange('hemi')"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option><option value="Other">Other &mdash; see note</option></select></div>
+<div class="field" id="hemi-followup-other-field" style="display:none"><label>Follow Up &mdash; other</label><input id="hemi-followup-other"></div>
 </div>
 <div class="row">
 <div class="field"><label>Implant System</label><input id="hemi-implant" value="Zimmer Biomet Identity"></div>
@@ -243,7 +245,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="rtsa-vs-tsa"><label for="rtsa-vs-tsa"><b>RSA vs TSA</b> - anatomic implants also on standby; final decision intraoperative</label></div>
 </div>
 <div class="row">
-<div class="field field-med"><label>Follow Up</label><select id="rtsa-followup"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option></select></div>
+<div class="field field-med"><label>Follow Up</label><select id="rtsa-followup" onchange="onFollowupChange('rtsa')"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option><option value="Other">Other &mdash; see note</option></select></div>
+<div class="field" id="rtsa-followup-other-field" style="display:none"><label>Follow Up &mdash; other</label><input id="rtsa-followup-other"></div>
 </div>
 <div class="row">
 <div class="field"><label>Implant System</label><input id="rtsa-implant" value="Zimmer Biomet Identity"></div>
@@ -282,7 +285,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="rev-tsa-rem-glen"><label for="rev-tsa-rem-glen">Glenoid component</label></div>
 </div>
 <div class="row">
-<div class="field field-med"><label>Follow Up</label><select id="rev-tsa-followup"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option></select></div>
+<div class="field field-med"><label>Follow Up</label><select id="rev-tsa-followup" onchange="onFollowupChange('rev-tsa')"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option><option value="Other">Other &mdash; see note</option></select></div>
+<div class="field" id="rev-tsa-followup-other-field" style="display:none"><label>Follow Up &mdash; other</label><input id="rev-tsa-followup-other"></div>
 </div>
 <div class="section-title">Special Instruments</div>
 <div class="checkbox-group">
@@ -324,7 +328,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="rev-rtsa-rem-glen"><label for="rev-rtsa-rem-glen">Glenoid component</label></div>
 </div>
 <div class="row">
-<div class="field field-med"><label>Follow Up</label><select id="rev-rtsa-followup"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option></select></div>
+<div class="field field-med"><label>Follow Up</label><select id="rev-rtsa-followup" onchange="onFollowupChange('rev-rtsa')"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option><option value="Other">Other &mdash; see note</option></select></div>
+<div class="field" id="rev-rtsa-followup-other-field" style="display:none"><label>Follow Up &mdash; other</label><input id="rev-rtsa-followup-other"></div>
 </div>
 <div class="section-title">Special Instruments</div>
 <div class="checkbox-group">
@@ -368,6 +373,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="bankart-bk-debridement"><label for="bankart-bk-debridement">Extensive Glenohumeral Debridement</label></div>
 <div class="checkbox-item"><input type="checkbox" id="bankart-bk-looseb"><label for="bankart-bk-looseb">Loose Body Removal (29819)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="bankart-bk-capsrel"><label for="bankart-bk-capsrel">Capsular Release (29825)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="bankart-bk-subscap"><label for="bankart-bk-subscap">Subscapularis Repair (29827)</label></div>
 </div>
 <div class="section-title">Reps</div>
 <div class="row">
@@ -399,6 +405,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="rcr-bk-debridement"><label for="rcr-bk-debridement">Extensive Glenohumeral Debridement</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-bk-looseb"><label for="rcr-bk-looseb">Loose Body Removal (29819)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-bk-capsrel"><label for="rcr-bk-capsrel">Capsular Release (29825)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-bk-subscap"><label for="rcr-bk-subscap">Subscapularis Repair (29827)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-carm"><label for="rcr-carm">C-arm needed</label></div>
 </div>
 <div class="row">
@@ -434,6 +441,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="slap-bk-debridement"><label for="slap-bk-debridement">Extensive Glenohumeral Debridement</label></div>
 <div class="checkbox-item"><input type="checkbox" id="slap-bk-looseb"><label for="slap-bk-looseb">Loose Body Removal (29819)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="slap-bk-capsrel"><label for="slap-bk-capsrel">Capsular Release (29825)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="slap-bk-subscap"><label for="slap-bk-subscap">Subscapularis Repair (29827)</label></div>
 </div>
 <div class="section-title">Reps</div>
 <div class="row">
@@ -465,6 +473,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="scope-bk-debridement"><label for="scope-bk-debridement">Extensive Glenohumeral Debridement</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scope-bk-looseb"><label for="scope-bk-looseb">Loose Body Removal (29819)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scope-bk-capsrel"><label for="scope-bk-capsrel">Capsular Release (29825)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scope-bk-subscap"><label for="scope-bk-subscap">Subscapularis Repair (29827)</label></div>
 </div>
 <div class="section-title">Reps</div>
 <div class="row">
@@ -496,6 +505,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="scr-bk-debridement"><label for="scr-bk-debridement">Extensive Glenohumeral Debridement</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scr-bk-looseb"><label for="scr-bk-looseb">Loose Body Removal (29819)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scr-bk-capsrel"><label for="scr-bk-capsrel">Capsular Release (29825)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scr-bk-subscap"><label for="scr-bk-subscap">Subscapularis Repair (29827)</label></div>
 </div>
 <div class="row">
 <div class="field"><label>Graft Type</label><input id="scr-graft" value="Dermal allograft"></div>
@@ -864,6 +874,18 @@ function todayStr() {
 
 // section id -> the field id prefix used inside that panel
 var PROC_PREFIX = {'tsa': 'tsa', 'hemi': 'hemi', 'rtsa': 'rtsa', 'rev-tsa': 'rev-tsa', 'rev-rtsa': 'rev-rtsa', 'bankart': 'bankart', 'slap': 'slap', 'rcr': 'rcr', 'scope': 'scope', 'scr': 'scr', 'acj': 'acj', 'mua': 'mua', 'orif-clav': 'clav', 'orif-phum': 'phum', 'hw-removal': 'hw', 'biceps-tenodesis': 'bten', 'latarjet': 'latarjet', 'distal-biceps': 'distal-biceps'};
+/* "Other" on a Follow Up dropdown reveals a free-text box, and the typed text is
+   what prints - the literal word "Other" is never sent to the office. */
+function onFollowupChange(pfx){
+  var f=document.getElementById(pfx+'-followup-other-field');
+  if(f) f.style.display = (v(pfx+'-followup')==='Other') ? 'block' : 'none';
+  if(typeof markBookingFields==='function') markBookingFields();
+}
+function followupText(pfx){
+  var val0=v(pfx+'-followup');
+  if(val0!=='Other') return val0;
+  return v(pfx+'-followup-other').trim() || 'Other - see note';
+}
 function getProcReps(prefix) {
   var reps = [];
   for (var i = 1; i <= 3; i++) {
@@ -1311,7 +1333,8 @@ var SCOPE_ADDONS = [
   ['tenodesis','Open Subpectoral Biceps Tenodesis','23430'],
   ['debridement','Extensive Glenohumeral Debridement',''],
   ['looseb','Loose Body Removal','29819'],
-  ['capsrel','Capsular Release','29825']
+  ['capsrel','Capsular Release','29825'],
+  ['subscap','Subscapularis Repair','29827']
 ];
 function addonChecks(prefix) {
   return SCOPE_ADDONS.filter(function(a){ var el=document.getElementById(prefix+'-bk-'+a[0]); return el && el.checked; });
@@ -1418,6 +1441,16 @@ function getCPTLines(proc) {
   if (['rcr','bankart','scope','scr','slap'].indexOf(proc) >= 0) {
     addonChecks(proc).forEach(function(a){ if (a[2]) cpt.push(a[2] + ' - ' + a[1]); });
   }
+  // A subscapularis repair carries the same 29827 the cuff panels already list,
+  // so collapse duplicate codes rather than printing the number twice.
+  var seenCode = {};
+  cpt = cpt.filter(function(line){
+    var code = (line.match(/^\+?(\d{5})/) || [])[1];
+    if (!code) return true;
+    if (seenCode[code]) return false;
+    seenCode[code] = 1;
+    return true;
+  });
   return cpt;
 }
 
@@ -1431,7 +1464,7 @@ function getProcedureDetails(proc, side) {
   switch(proc) {
     case 'hemi':
       if (ck('hemi-ct')) details.push('CT Scan for PSI Planning: Yes');
-      details.push('Follow Up: ' + v('hemi-followup'));
+      details.push('Follow Up: ' + followupText('hemi'));
       details.push('Implant System: ' + v('hemi-implant'));
       if (ck('hemi-vs-tsa')) details.push('*** HEMI vs TSA - HAVE GLENOID COMPONENTS AVAILABLE. Final construct decided intraoperatively. ***');
       if (v('hemi-special-equip')) details.push('Special Equipment: ' + v('hemi-special-equip'));
@@ -1440,7 +1473,7 @@ function getProcedureDetails(proc, side) {
       break;
     case 'tsa':
       if (ck('tsa-ct')) details.push('CT Scan for PSI Planning: Yes');
-      details.push('Follow Up: ' + v('tsa-followup'));
+      details.push('Follow Up: ' + followupText('tsa'));
       details.push('Implant System: ' + v('tsa-implant'));
       if (ck('tsa-vs-rsa')) details.push('*** TSA vs RSA - HAVE BOTH ANATOMIC AND REVERSE IMPLANTS AVAILABLE. Final construct decided intraoperatively. ***');
       if (v('tsa-special-equip')) details.push('Special Equipment: ' + v('tsa-special-equip'));
@@ -1449,7 +1482,7 @@ function getProcedureDetails(proc, side) {
       break;
     case 'rtsa':
       if (ck('rtsa-ct')) details.push('CT Scan for PSI Planning: Yes');
-      details.push('Follow Up: ' + v('rtsa-followup'));
+      details.push('Follow Up: ' + followupText('rtsa'));
       details.push('Implant System: ' + v('rtsa-implant'));
       if (ck('rtsa-vs-tsa')) details.push('*** RSA vs TSA - HAVE BOTH REVERSE AND ANATOMIC IMPLANTS AVAILABLE. Final construct decided intraoperatively. ***');
       if (v('rtsa-special-equip')) details.push('Special Equipment: ' + v('rtsa-special-equip'));
@@ -1459,7 +1492,7 @@ function getProcedureDetails(proc, side) {
     case 'rev-tsa':
       details.push('*** PLEASE OBTAIN PRIOR OPERATIVE REPORT ***');
       if (ck('rev-tsa-ct')) details.push('CT Scan for PSI Planning: Yes');
-      details.push('Follow Up: ' + v('rev-tsa-followup'));
+      details.push('Follow Up: ' + followupText('rev-tsa'));
       var revTsaInstr = [];
       if (ck('rev-tsa-osteotome')) revTsaInstr.push('Flexible osteotome');
       if (ck('rev-tsa-shukla')) revTsaInstr.push('Shukla shoulder removal set');
@@ -1472,7 +1505,7 @@ function getProcedureDetails(proc, side) {
     case 'rev-rtsa':
       details.push('*** PLEASE OBTAIN PRIOR OPERATIVE REPORT ***');
       if (ck('rev-rtsa-ct')) details.push('CT Scan for PSI Planning: Yes');
-      details.push('Follow Up: ' + v('rev-rtsa-followup'));
+      details.push('Follow Up: ' + followupText('rev-rtsa'));
       var revRtsaInstr = [];
       if (ck('rev-rtsa-osteotome')) revRtsaInstr.push('Flexible osteotome');
       if (ck('rev-rtsa-shukla')) revRtsaInstr.push('Shukla shoulder removal set');
@@ -1729,6 +1762,11 @@ function resetForm() {
   document.getElementById('workers-comp').checked = false;
   document.getElementById('block-type').selectedIndex = 0;
   document.getElementById('procedure-select').selectedIndex = 0;
+
+  ['tsa','hemi','rtsa','rev-tsa','rev-rtsa'].forEach(function(pfx){
+    var f=document.getElementById(pfx+'-followup-other-field'); if(f) f.style.display='none';
+    var i=document.getElementById(pfx+'-followup-other'); if(i) i.value='';
+  });
 
   // Hide all procedure sections
   document.querySelectorAll('.procedure-section').forEach(function(s) {

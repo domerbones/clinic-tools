@@ -106,12 +106,14 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
   body { background: #fff; }
   .hp-doc { border-top: none; page-break-before: always; margin-top: 0; padding-top: 0; }
   .hp-doc table, .hp-doc h3 { page-break-inside: avoid; }
-  body.pp-provider * { visibility: hidden; }
-  body.pp-provider #plan, body.pp-provider #plan * { visibility: visible; }
-  body.pp-provider #plan { position: absolute; left: 0; top: 0; width: 100%; }
-  body.pp-patient * { visibility: hidden; }
-  body.pp-patient #patient, body.pp-patient #patient * { visibility: visible; }
-  body.pp-patient #patient { position: absolute; left: 0; top: 0; width: 100%; }
+  /* Everything outside the printed block is removed from the layout, not just
+     made invisible - visibility:hidden leaves the boxes behind and those empty
+     boxes were spilling onto extra sheets of paper. */
+  .print-hide { display: none !important; }
+  body.pp-provider #plan, body.pp-patient #patient {
+    position: static; left: auto; top: auto; width: auto;
+    margin: 0; padding: 0; border: 0; box-shadow: none; min-height: 0;
+  }
 }
 </style>
 </head>
@@ -664,7 +666,24 @@ function generate(){
 
 function copyPlan(){ removeHandoutDocs(); var text=document.getElementById('plan').innerText; var done=function(){ var m=document.getElementById('copy-msg'); if(m){m.style.display='inline'; setTimeout(function(){m.style.display='none';},2000);} }; if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(function(){fb(text);done();}); } else { fb(text); done(); } }
 function fb(text){ var ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.left='-9999px'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); }
-function printAs(cls){ document.body.classList.add(cls); window.print(); document.body.classList.remove(cls); }
+/* Walk up from the block being printed and drop every sibling along the way.
+   Removing those boxes is what keeps a one-page summary to one page. */
+function printAs(cls){
+  var target=document.getElementById(cls==='pp-patient' ? 'patient' : 'plan');
+  var hidden=[];
+  var n=target;
+  while(n && n!==document.body && n.parentNode){
+    var par=n.parentNode;
+    Array.prototype.forEach.call(par.children, function(ch){
+      if(ch!==n && ch.tagName!=='SCRIPT'){ ch.classList.add('print-hide'); hidden.push(ch); }
+    });
+    n=par;
+  }
+  document.body.classList.add(cls);
+  window.print();
+  document.body.classList.remove(cls);
+  hidden.forEach(function(el){ el.classList.remove('print-hide'); });
+}
 // ---- merged print: embedded handouts (same set as the Clinic Encounter Sheet) ----
 // maps section tokens -> HANDOUT_HTML keys; tokens without an embedded handout are skipped
 var HANDOUT_KEY = {
