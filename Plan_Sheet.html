@@ -167,7 +167,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 
 <script>
 var SECTIONS = [
-  { key:'dx', title:'Diagnosis', drop:true, lat:true, nSided:29,
+  { key:'dx', title:'Diagnosis', drop:true, lat:true, nSided:30,
     groups:[
       {label:'Rotator cuff', tokens:['RCI','RCT','pRCT','IrrRTC','?RCT']},
       {label:'Arthritis', tokens:['GHoa','ACoa','RCA']},
@@ -175,13 +175,14 @@ var SECTIONS = [
       {label:'Biceps', tokens:['BT','Brupture','DBrupture']},
       {label:'Fracture', tokens:['PHfx','ClavicleFX']},
       {label:'Cervical spine', tokens:['Cradic','Neck']},
-      {label:'Pain / strain', tokens:['Px','Shoulder pain','sprain','strain','Periscap strain']}
+      {label:'Pain / strain', tokens:['Px','Shoulder pain','sprain','strain','Periscap strain']},
+      {label:'Status post', tokens:['S/P','hxTSA','hxRSA','hxPHORIF']}
     ], items:[
     ['Px','pain'],['Shoulder pain','shoulder pain'],['sprain','shoulder sprain'],['strain','shoulder strain'],['Periscap strain','periscapular strain'],['RCI','rotator cuff impingement'],['RCT','rotator cuff tear'],['pRCT','partial-thickness rotator cuff tear'],
     ['RCA','rotator cuff arthropathy'],['GHoa','glenohumeral osteoarthritis'],['ACoa','AC joint osteoarthritis'],['Adcap','adhesive capsulitis'],['SLAP','SLAP tear'],
     ['ALT','anterior labral tear'],['PLT','posterior labral tear'],['PHfx','proximal humerus fracture'],['BT','biceps tendinitis'],['Brupture','biceps rupture'],
     ['CT','calcific tendinitis'],['D/L','dislocation / instability'],['ClavicleFX','clavicle fracture'],['IrrRTC','irreparable rotator cuff tear'],['GHBL','glenohumeral bone loss'],
-    ['?RCT','possible rotator cuff tear'],['?SLAP','possible SLAP tear'],['S/P','status post'],['DBrupture','distal biceps rupture'],['hxTSA','history of total shoulder arthroplasty'],['hxRSA','history of reverse total shoulder arthroplasty'],
+    ['?RCT','possible rotator cuff tear'],['?SLAP','possible SLAP tear'],['S/P','status post'],['DBrupture','distal biceps rupture'],['hxTSA','status post total shoulder arthroplasty'],['hxRSA','status post reverse total shoulder arthroplasty'],['hxPHORIF','status post proximal humerus fixation'],
     ['Cradic','cervical radiculopathy'],['Neck','neck pain']
   ]},
   { key:'postop', title:'Post-op', grid2:true, items:[
