@@ -103,7 +103,6 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="row">
 <div class="field"><label>Patient Name</label><input type="text" id="patient-name"></div>
 <div class="field"><label>DOB</label><input type="text" id="patient-dob" placeholder="mm/dd/yyyy"></div>
-<div class="field field-med"><label>Date of Surgery <span style="font-weight:normal;color:#666;">(office schedules)</span></label><input type="date" id="dos"></div>
 </div>
 <div class="row">
 <div class="field field-med"><label>Location</label><select id="location"><option value="Beacon ASC" selected>Beacon ASC</option><option value="Good Samaritan">Good Samaritan</option><option value="Margaret Mary">Margaret Mary</option></select></div>
@@ -132,11 +131,6 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="field field-med"><label>Position</label><div class="static-field">Beach Chair</div></div>
 </div>
 
-<div class="section-title">Rep</div>
-<div class="row">
-<div class="field field-med"><label>Rep Company</label><select id="rep-company"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
-<div class="field" id="rep-other-field" style="display:none"><label>Other Company</label><input id="rep-other"></div>
-</div>
 
 <div class="section-title">Procedure Selection</div>
 <div class="row">
@@ -186,6 +180,16 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="row">
 <div class="field"><label>Additional Equipment</label><textarea id="tsa-equip"></textarea></div>
 </div>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="tsa-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="tsa-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="tsa-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
 </div>
 
 <!-- rTSA -->
@@ -209,6 +213,16 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 <div class="row">
 <div class="field"><label>Additional Equipment</label><textarea id="rtsa-equip"></textarea></div>
+</div>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="rtsa-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="rtsa-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="rtsa-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
 </div>
 </div>
 
@@ -242,6 +256,16 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="row">
 <div class="field"><label>Additional Equipment</label><textarea id="rev-tsa-equip"></textarea></div>
 </div>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="rev-tsa-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="rev-tsa-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="rev-tsa-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
 </div>
 
 <!-- Revision rTSA -->
@@ -273,6 +297,16 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 <div class="row">
 <div class="field"><label>Additional Equipment</label><textarea id="rev-rtsa-equip"></textarea></div>
+</div>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="rev-rtsa-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="rev-rtsa-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="rev-rtsa-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
 </div>
 </div>
 
@@ -448,6 +482,16 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="row">
 <div class="field"><label>Additional Equipment</label><textarea id="acj-equip"></textarea></div>
 </div>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="acj-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="acj-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="acj-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
 </div>
 
 <!-- MUA -->
@@ -457,6 +501,16 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <p class="icd-info">CPT: 23700 Manipulation under anesthesia</p>
 <div class="row">
 <div class="field"><label>Additional Equipment</label><textarea id="mua-equip"></textarea></div>
+</div>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="mua-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="mua-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="mua-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
 </div>
 </div>
 
@@ -482,6 +536,16 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 <div class="row">
 <div class="field"><label>Additional Equipment</label><textarea id="clav-equip"></textarea></div>
+</div>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="clav-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="clav-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="clav-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
 </div>
 </div>
 
@@ -520,6 +584,16 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="row">
 <div class="field"><label>Additional Equipment</label><textarea id="phum-equip"></textarea></div>
 </div>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="phum-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="phum-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="phum-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
 </div>
 
 <!-- Hardware Removal -->
@@ -534,6 +608,16 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="row">
 <div class="field"><label>Additional Equipment</label><textarea id="hw-equip"></textarea></div>
 </div>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="hw-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="hw-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="hw-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
 </div>
 
 <!-- Biceps Tenodesis (Standalone) -->
@@ -546,6 +630,16 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 <div class="row">
 <div class="field"><label>Additional Equipment</label><textarea id="bten-equip"></textarea></div>
+</div>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="bten-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="bten-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="bten-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
 </div>
 </div>
 
@@ -560,6 +654,16 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="row">
 <div class="field"><label>Additional Equipment</label><textarea id="latarjet-equip"></textarea></div>
 </div>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="latarjet-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="latarjet-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="latarjet-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
 </div>
 
 <!-- Distal Biceps Repair -->
@@ -572,6 +676,16 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 <div class="row">
 <div class="field"><label>Additional Equipment</label><textarea id="distal-biceps-equip"></textarea></div>
+</div>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="distal-biceps-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="distal-biceps-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="distal-biceps-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
 </div>
 </div>
 
@@ -597,7 +711,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 </div>
 <span class="copied-msg" id="copy-msg">Copied to clipboard!</span>
-<span class="copied-msg" id="email-msg">Email opened. If the body is blank, paste from the clipboard.</span>
+<span class="copied-msg" id="email-msg">Email opened with the full booking form. Also on your clipboard if anything looks cut off.</span>
 <div style="margin:6px 0 10px;font-size:13px;"><label for="staff-email" style="font-weight:bold;color:#1B3A6B;">Send to:</label> <input id="staff-email" type="email" placeholder="scheduler@beaconortho.com" style="padding:6px;min-width:260px;" oninput="rememberStaffEmail()"><span style="color:#666;"> &nbsp;saved on this device</span>&nbsp;&nbsp;<label for="mail-app" style="font-weight:bold;color:#1B3A6B;">Open in:</label> <select id="mail-app" style="padding:6px;" onchange="rememberMailApp()"><option value="outlookweb" selected>Outlook (web)</option><option value="outlookapp">Outlook (phone app)</option><option value="default">Default mail app</option></select></div>
 <span class="copied-msg" id="copy-reset-msg">Copied &amp; Reset!</span>
 <div class="booking-doc" id="booking-doc"></div>
@@ -707,6 +821,8 @@ function todayStr() {
   return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 }
 
+// section id -> the field id prefix used inside that panel
+var PROC_PREFIX = {'tsa': 'tsa', 'rtsa': 'rtsa', 'rev-tsa': 'rev-tsa', 'rev-rtsa': 'rev-rtsa', 'bankart': 'bankart', 'slap': 'slap', 'rcr': 'rcr', 'scope': 'scope', 'scr': 'scr', 'acj': 'acj', 'mua': 'mua', 'orif-clav': 'clav', 'orif-phum': 'phum', 'hw-removal': 'hw', 'biceps-tenodesis': 'bten', 'latarjet': 'latarjet', 'distal-biceps': 'distal-biceps'};
 function getProcReps(prefix) {
   var reps = [];
   for (var i = 1; i <= 3; i++) {
@@ -835,20 +951,16 @@ function esc(s) {
 
 // Build the clean, printable booking-form document (HTML) from the current inputs.
 function renderBookingDoc(proc, side) {
-  var repCo = v('rep-company');
-  if (repCo === 'Other') repCo = v('rep-other') || 'Other';
-  var repStr = repCo || '—';
   var rows = [
     ['Patient', v('patient-name') || '—'],
     ['DOB', v('patient-dob') || '—'],
-    ['Date of Surgery', v('dos') || 'To be scheduled by office'],
+    ['Date of Surgery', 'To be scheduled by office'],
     ['Location', v('location')],
     ['Side', side],
     ['Workers Comp', ck('workers-comp') ? 'Yes' : 'No'],
     ['Position', 'Beach Chair'],
     ['Block Type', v('block-type')],
-    ['Admission Status', admitSummary()],
-    ['Rep', repStr]
+    ['Admission Status', admitSummary()]
   ];
   var h = '';
   h += '<div class="doc-header"><div class="doc-practice">Beacon Orthopaedics</div>';
@@ -923,7 +1035,9 @@ function generateBooking() {
   lines.push('');
   lines.push('Patient: ' + v('patient-name'));
   if (v('patient-dob')) lines.push('DOB: ' + v('patient-dob'));
-  lines.push('Date of Surgery: ' + (v('dos') || 'TO BE SCHEDULED BY OFFICE'));
+  // The surgeon never sets the date; the office does. The row stays so staff have
+  // a labeled place to write it, but there is no field to fill in or forget.
+  lines.push('Date of Surgery: TO BE SCHEDULED BY OFFICE');
   lines.push('Location: ' + v('location'));
   lines.push('Side: ' + side);
   lines.push('Workers Comp: ' + (ck('workers-comp') ? 'Yes' : 'No'));
@@ -934,11 +1048,6 @@ function generateBooking() {
   if (admitLines.length) {
     lines.push('Reason for admission:');
     admitLines.forEach(function(x) { lines.push('  - ' + x); });
-  }
-  var repCo = v('rep-company');
-  if (repCo === 'Other') repCo = v('rep-other') || 'Other';
-  if (repCo) {
-    lines.push('Rep: ' + repCo);
   }
   lines.push('');
   lines.push('Procedure: ' + withSide(side, getProcedureName(proc)));
@@ -1294,31 +1403,21 @@ function getProcedureDetails(proc, side) {
       if (v('rev-rtsa-equip').trim()) details.push('Additional Equipment: ' + v('rev-rtsa-equip').trim());
       break;
     case 'bankart':
-      var bankartReps = getProcReps('bankart');
-      if (bankartReps.length > 0) details.push('Reps: ' + bankartReps.join('; '));
       if (v('bankart-equip').trim()) details.push('Additional Equipment: ' + v('bankart-equip').trim());
       break;
     case 'rcr':
       if (ck('rcr-carm')) details.push('C-arm: Yes');
       if (v('rcr-graft')) details.push('Graft/Patch: ' + v('rcr-graft'));
-      var rcrReps = getProcReps('rcr');
-      if (rcrReps.length > 0) details.push('Reps: ' + rcrReps.join('; '));
       if (v('rcr-equip').trim()) details.push('Additional Equipment: ' + v('rcr-equip').trim());
       break;
     case 'slap':
-      var slapReps = getProcReps('slap');
-      if (slapReps.length > 0) details.push('Reps: ' + slapReps.join('; '));
       if (v('slap-equip').trim()) details.push('Additional Equipment: ' + v('slap-equip').trim());
       break;
     case 'scope':
-      var scopeReps = getProcReps('scope');
-      if (scopeReps.length > 0) details.push('Reps: ' + scopeReps.join('; '));
       if (v('scope-equip').trim()) details.push('Additional Equipment: ' + v('scope-equip').trim());
       break;
     case 'scr':
       details.push('Graft Type: ' + v('scr-graft'));
-      var scrReps = getProcReps('scr');
-      if (scrReps.length > 0) details.push('Reps: ' + scrReps.join('; '));
       if (v('scr-equip').trim()) details.push('Additional Equipment: ' + v('scr-equip').trim());
       break;
     case 'acj':
@@ -1359,6 +1458,11 @@ function getProcedureDetails(proc, side) {
       if (v('distal-biceps-equip').trim()) details.push('Additional Equipment: ' + v('distal-biceps-equip').trim());
       break;
   }
+  // Every panel carries its own rep slots, so the reps line is emitted once here
+  // rather than being hand-written into each case.
+  var reps = getProcReps(PROC_PREFIX[proc] || proc);
+  if (reps.length > 0) details.push('Reps: ' + reps.join('; '));
+
   return details;
 }
 
@@ -1387,10 +1491,13 @@ function fallbackCopy(text) {
 /* ---- Email the booking to the office ----
    Built as a mailto: link so it uses whatever mail app the device already has
    signed in, with no server and no patient data leaving the device except
-   through the user's own mail client. Long forms exceed what some mail clients
-   accept in a mailto body, so the full text is always copied to the clipboard
-   first and the body is only inlined when it is short enough to survive. */
-var MAILTO_BODY_LIMIT = 1600;
+   through the user's own mail client. The complete booking form always goes in
+   the body; the clipboard copy stays as a backstop in case a mail client trims
+   a long URL on its own. */
+// Encoded-length ceiling for the mail URL. The longest booking the form can
+// produce (revision arthroplasty, every add-on and admission reason checked)
+// encodes to roughly 3,900 characters, so this leaves generous headroom.
+var MAILTO_BODY_LIMIT = 12000;
 
 function rememberStaffEmail() {
   try { localStorage.setItem('rolfStaffEmail', document.getElementById('staff-email').value.trim()); } catch (e) {}
@@ -1413,24 +1520,34 @@ function bookingSubject() {
   var name = v('patient-name').trim();
   var proc = getProcedureName(v('procedure-select')) || 'Surgery';
   var side = v('side');
-  var dos  = v('dos');
   var dob  = v('patient-dob').trim();
   var bits = ['Surgery Booking'];
   // name and date of birth are what the office needs to pull the chart
   if (name) bits.push(name + (dob ? ' (DOB ' + dob + ')' : ''));
   bits.push(side + ' ' + proc);
-  bits.push(dos ? 'DOS ' + dos : 'DATE TBD');
+  bits.push('DATE TBD');
   return bits.join(' - ');
+}
+
+/* The emailed body is the complete booking form, never a stub. The only thing
+   stripped is the rows of "=" rules: they carry no information and each one
+   costs about 120 characters once URL-encoded, which is the budget that used to
+   force the truncation in the first place. */
+function emailBody(text) {
+  return text.split('\n')
+    .filter(function(line) { return !/^=+$/.test(line.trim()); })
+    .join('\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }
 
 function buildMailto(text) {
   var to = (document.getElementById('staff-email').value || '').trim();
   var subject = bookingSubject();
-  var short = text.length <= MAILTO_BODY_LIMIT;
-  var body = short
-    ? text
-    : 'The full booking form was copied to your clipboard - please paste it here before sending.\n\n'
-      + text.slice(0, 400) + '\n... (truncated, paste the full form)';
+  var body = emailBody(text);
+  // Nothing realistic reaches this ceiling; it exists only so an absurd booking
+  // warns instead of silently producing a URL the mail client refuses to open.
+  var short = encodeURIComponent(body).length <= MAILTO_BODY_LIMIT;
   var app = (document.getElementById('mail-app') || {}).value || 'outlookweb';
   var url;
   if (app === 'outlookweb') {
@@ -1526,14 +1643,10 @@ function printReport() {
 function resetForm() {
   document.getElementById('patient-name').value = '';
   document.getElementById('patient-dob').value = '';
-  document.getElementById('dos').value = '';
   document.getElementById('location').selectedIndex = 0;
   document.getElementById('side').selectedIndex = 0;
   markSide();
   document.getElementById('workers-comp').checked = false;
-  document.getElementById('rep-company').value = '';
-  document.getElementById('rep-other').value = '';
-  document.getElementById('rep-other-field').style.display = 'none';
   document.getElementById('block-type').selectedIndex = 0;
   document.getElementById('procedure-select').selectedIndex = 0;
 
@@ -1556,17 +1669,23 @@ function resetForm() {
     el.checked = el.defaultChecked;
   });
 
+  // Reset dropdowns inside procedure sections back to their marked default.
+  // Without this a rep, implant, or graft choice survives Clear Form and rides
+  // along onto the next patient's booking.
+  document.querySelectorAll('.procedure-section select').forEach(function(sel) {
+    var idx = 0;
+    for (var j = 0; j < sel.options.length; j++) {
+      if (sel.options[j].defaultSelected) { idx = j; break; }
+    }
+    sel.selectedIndex = idx;
+  });
+
   // clearing the form also clears the review state, so every field goes back to amber
   clearReviewState();
 }
 
 // Initialize date on load
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('rep-company').addEventListener('change', function() {
-    document.getElementById('rep-other-field').style.display = this.value === 'Other' ? 'block' : 'none';
-    markBookingFields();
-  });
-
   // Touching a field at all - typing, choosing, tabbing through, or opening a
   // native picker - counts as reviewing it, so a preset you agree with still
   // needs one deliberate tap before it turns green.
