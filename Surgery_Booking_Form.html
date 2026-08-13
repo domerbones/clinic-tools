@@ -138,6 +138,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <select id="procedure-select" onchange="switchProcedure(this.value)">
 <option value="">-- Select Procedure --</option>
 <option value="tsa">Total Shoulder Arthroplasty (TSA)</option>
+<option value="hemi">Shoulder Hemiarthroplasty</option>
 <option value="rtsa">Reverse Total Shoulder Arthroplasty (rTSA)</option>
 <option value="rev-tsa">Revision Total Shoulder Arthroplasty</option>
 <option value="rev-rtsa">Revision Reverse Total Shoulder Arthroplasty</option>
@@ -189,6 +190,46 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 <div class="row">
 <div class="field field-med"><label>Rep 3 Company</label><select id="tsa-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+</div>
+
+<!-- Hemiarthroplasty -->
+<div class="procedure-section" id="sec-hemi">
+<div class="section-title">Shoulder Hemiarthroplasty</div>
+<p class="icd-info">ICD-10: M19.011 Primary osteoarthritis, right shoulder / M19.012 Primary osteoarthritis, left shoulder</p>
+<p class="icd-info">CPT: 23470 Hemiarthroplasty, glenohumeral joint</p>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="hemi-vs-tsa" checked><label for="hemi-vs-tsa"><b>Hemi vs TSA</b> - glenoid components also on standby; final decision intraoperative</label></div>
+<div class="checkbox-item"><input type="checkbox" id="hemi-ct" checked><label for="hemi-ct">CT scan for PSI planning needed</label></div>
+</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="hemi-dx-oa" checked><label for="hemi-dx-oa">Primary osteoarthritis</label></div>
+<div class="checkbox-item"><input type="checkbox" id="hemi-dx-avn"><label for="hemi-dx-avn">Avascular necrosis, humeral head</label></div>
+<div class="checkbox-item"><input type="checkbox" id="hemi-dx-post"><label for="hemi-dx-post">Post-traumatic arthritis</label></div>
+<div class="checkbox-item"><input type="checkbox" id="hemi-dx-fx"><label for="hemi-dx-fx">Proximal humerus fracture</label></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Follow Up</label><select id="hemi-followup"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option></select></div>
+</div>
+<div class="row">
+<div class="field"><label>Implant System</label><input id="hemi-implant" value="Zimmer Biomet Identity"></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Special Equipment</label><select id="hemi-special-equip"><option value="">-- None --</option><option value="Femoral head allograft">Femoral head allograft</option><option value="Long stem">Long stem</option><option value="Revision stem system">Revision stem system</option><option value="Fracture stem">Fracture stem</option><option value="Other">Other</option></select></div>
+<div class="field field-med"><label>Graft</label><select id="hemi-graft"><option value="">-- None --</option><option value="Femoral head allograft">Femoral head allograft</option><option value="Cancellous bone chips">Cancellous bone chips</option><option value="Dermal allograft">Dermal allograft</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="hemi-equip"></textarea></div>
+</div>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="hemi-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="hemi-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="hemi-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
 </div>
 </div>
 
@@ -822,7 +863,7 @@ function todayStr() {
 }
 
 // section id -> the field id prefix used inside that panel
-var PROC_PREFIX = {'tsa': 'tsa', 'rtsa': 'rtsa', 'rev-tsa': 'rev-tsa', 'rev-rtsa': 'rev-rtsa', 'bankart': 'bankart', 'slap': 'slap', 'rcr': 'rcr', 'scope': 'scope', 'scr': 'scr', 'acj': 'acj', 'mua': 'mua', 'orif-clav': 'clav', 'orif-phum': 'phum', 'hw-removal': 'hw', 'biceps-tenodesis': 'bten', 'latarjet': 'latarjet', 'distal-biceps': 'distal-biceps'};
+var PROC_PREFIX = {'tsa': 'tsa', 'hemi': 'hemi', 'rtsa': 'rtsa', 'rev-tsa': 'rev-tsa', 'rev-rtsa': 'rev-rtsa', 'bankart': 'bankart', 'slap': 'slap', 'rcr': 'rcr', 'scope': 'scope', 'scr': 'scr', 'acj': 'acj', 'mua': 'mua', 'orif-clav': 'clav', 'orif-phum': 'phum', 'hw-removal': 'hw', 'biceps-tenodesis': 'bten', 'latarjet': 'latarjet', 'distal-biceps': 'distal-biceps'};
 function getProcReps(prefix) {
   var reps = [];
   for (var i = 1; i <= 3; i++) {
@@ -921,6 +962,7 @@ function getCheckedDiagnoses(prefix, items) {
 function getProcedureName(val) {
   var names = {
     'tsa': 'Total Shoulder Arthroplasty (TSA)',
+    'hemi': 'Shoulder Hemiarthroplasty',
     'rtsa': 'Reverse Total Shoulder Arthroplasty (rTSA)',
     'rev-tsa': 'Revision Total Shoulder Arthroplasty',
     'rev-rtsa': 'Revision Reverse Total Shoulder Arthroplasty',
@@ -942,6 +984,7 @@ function getProcedureName(val) {
   // Arthroplasty booked with the alternate construct on standby
   if (val === 'tsa' && ck('tsa-vs-rsa')) nm = 'Total Shoulder Arthroplasty vs Reverse Total Shoulder Arthroplasty (TSA planned)';
   if (val === 'rtsa' && ck('rtsa-vs-tsa')) nm = 'Reverse Total Shoulder Arthroplasty vs Total Shoulder Arthroplasty (RSA planned)';
+  if (val === 'hemi' && ck('hemi-vs-tsa')) nm = 'Shoulder Hemiarthroplasty vs Total Shoulder Arthroplasty (hemiarthroplasty planned)';
   return nm;
 }
 
@@ -1101,6 +1144,30 @@ function getDiagnosisLines(proc, side) {
       if (ck('tsa-vs-rsa')) {
         if (side === 'Right' || side === 'Bilateral') dx.push('M75.101 - Rotator cuff tear, right shoulder (if reverse required)');
         if (side === 'Left' || side === 'Bilateral') dx.push('M75.102 - Rotator cuff tear, left shoulder (if reverse required)');
+      }
+      break;
+    case 'hemi':
+      // hemiarthroplasty covers several distinct indications, so the diagnosis
+      // list is driven by the boxes checked rather than assumed to be primary OA
+      if (ck('hemi-dx-oa')) {
+        if (side === 'Right' || side === 'Bilateral') dx.push('M19.011 - Primary osteoarthritis, right shoulder');
+        if (side === 'Left' || side === 'Bilateral') dx.push('M19.012 - Primary osteoarthritis, left shoulder');
+      }
+      if (ck('hemi-dx-avn')) {
+        if (side === 'Right' || side === 'Bilateral') dx.push('M87.021 - Idiopathic aseptic necrosis, right humerus');
+        if (side === 'Left' || side === 'Bilateral') dx.push('M87.022 - Idiopathic aseptic necrosis, left humerus');
+      }
+      if (ck('hemi-dx-post')) {
+        if (side === 'Right' || side === 'Bilateral') dx.push('M19.111 - Post-traumatic osteoarthritis, right shoulder');
+        if (side === 'Left' || side === 'Bilateral') dx.push('M19.112 - Post-traumatic osteoarthritis, left shoulder');
+      }
+      if (ck('hemi-dx-fx')) {
+        if (side === 'Right' || side === 'Bilateral') dx.push('S42.201A - Unspecified fracture of upper end of right humerus, initial encounter');
+        if (side === 'Left' || side === 'Bilateral') dx.push('S42.202A - Unspecified fracture of upper end of left humerus, initial encounter');
+      }
+      if (!dx.length) {
+        if (side === 'Right' || side === 'Bilateral') dx.push('M19.011 - Primary osteoarthritis, right shoulder');
+        if (side === 'Left' || side === 'Bilateral') dx.push('M19.012 - Primary osteoarthritis, left shoulder');
       }
       break;
     case 'rtsa':
@@ -1282,6 +1349,10 @@ function getSurgeryList(proc, side) {
 function getCPTLines(proc) {
   var cpt = [];
   switch(proc) {
+    case 'hemi':
+      cpt.push('23470 - Arthroplasty, glenohumeral joint; hemiarthroplasty');
+      if (ck('hemi-vs-tsa')) cpt.push('23472 - Total shoulder arthroplasty (if a glenoid component is used)');
+      break;
     case 'tsa':
       cpt.push('23472 - Total shoulder arthroplasty');
       if (ck('tsa-vs-rsa')) cpt.push('23472 also covers reverse if the construct is changed intraoperatively');
@@ -1358,6 +1429,15 @@ function getProcedureDetails(proc, side) {
   if (allProcs.length) details.push('Procedures: ' + allProcs.join(', '));
 
   switch(proc) {
+    case 'hemi':
+      if (ck('hemi-ct')) details.push('CT Scan for PSI Planning: Yes');
+      details.push('Follow Up: ' + v('hemi-followup'));
+      details.push('Implant System: ' + v('hemi-implant'));
+      if (ck('hemi-vs-tsa')) details.push('*** HEMI vs TSA - HAVE GLENOID COMPONENTS AVAILABLE. Final construct decided intraoperatively. ***');
+      if (v('hemi-special-equip')) details.push('Special Equipment: ' + v('hemi-special-equip'));
+      if (v('hemi-graft')) details.push('Graft: ' + v('hemi-graft'));
+      if (v('hemi-equip').trim()) details.push('Additional Equipment: ' + v('hemi-equip').trim());
+      break;
     case 'tsa':
       if (ck('tsa-ct')) details.push('CT Scan for PSI Planning: Yes');
       details.push('Follow Up: ' + v('tsa-followup'));
