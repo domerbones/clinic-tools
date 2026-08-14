@@ -83,6 +83,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 .static-field { padding: 8px 10px; background: #f0f4f8; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; color: #666; }
 .revision-note { background: #FFF3E0; border: 2px solid #E8A838; border-radius: 6px; padding: 12px 16px; margin: 12px 0; font-weight: bold; color: #C62828; font-size: 14px; }
 .icd-info { font-size: 12px; color: #888; margin-bottom: 8px; font-style: italic; }
+@media print{.build-stamp{display:none!important}}
 </style>
 </head>
 <body>
@@ -1817,5 +1818,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 document.addEventListener('DOMContentLoaded', loadStaffEmail);
 </script>
+<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build 4700fd281177</div>
 </body>
 </html>

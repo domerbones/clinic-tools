@@ -133,6 +133,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; font-si
   .no-print { display: none !important; }
   .output-box { border: 1px solid #333; }
 }
+@media print{.build-stamp{display:none!important}}
 </style>
 </head>
 <body>
@@ -1636,5 +1637,6 @@ function init() {
 
 init();
 </script>
+<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build 4700fd281177</div>
 </body>
 </html>
