@@ -82,7 +82,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="tab active" data-tab="tsa" onclick="switchTab('tsa')">Total Shoulder (TSA)</div>
 <div class="tab" data-tab="rtsa" onclick="switchTab('rtsa')">Reverse Shoulder (rTSA)</div>
 <div class="tab" data-tab="inst" onclick="switchTab('inst')">Instability</div>
-<div class="tab" data-tab="rcr" onclick="switchTab('rcr')">RCR</div>
+<div class="tab" data-tab="rcr" onclick="switchTab('rcr')">Arthroscopy / RCR</div>
 <div class="tab" data-tab="clav" onclick="switchTab('clav')">Clavicle ORIF</div>
 <div class="tab" data-tab="phum" onclick="switchTab('phum')">Prox Humerus ORIF</div>
 <div class="tab" data-tab="scope" onclick="switchTab('scope')">Scope/Debridement</div>
@@ -509,7 +509,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Procedures</div>
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="rcr-proc-arthroscopy"><label for="rcr-proc-arthroscopy">Arthroscopy</label></div>
-<div class="checkbox-item"><input type="checkbox" id="rcr-proc-rcr"><label for="rcr-proc-rcr">Rotator Cuff Repair</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-proc-rcr" onchange="updateRcrSections()"><label for="rcr-proc-rcr">Rotator Cuff Repair</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-proc-decompression"><label for="rcr-proc-decompression">Subacromial Decompression</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-proc-acromioplasty" onchange="updateRcrSections()"><label for="rcr-proc-acromioplasty">Acromioplasty</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-proc-debridement"><label for="rcr-proc-debridement">Extensive Debridement</label></div>
@@ -518,6 +518,12 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="rcr-proc-tenodesis"><label for="rcr-proc-tenodesis">Open Subpectoral Biceps Tenodesis</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-proc-labral" onchange="updateRcrSections()"><label for="rcr-proc-labral">Anterior Labral Repair (29806)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-proc-postlabral" onchange="updateRcrSections()"><label for="rcr-proc-postlabral">Posterior Labral Repair (29806)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-proc-chondroplasty"><label for="rcr-proc-chondroplasty">Chondroplasty</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-proc-synovectomy"><label for="rcr-proc-synovectomy">Synovectomy</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-proc-loosebody"><label for="rcr-proc-loosebody">Loose Body Removal (29819)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-proc-capsrel"><label for="rcr-proc-capsrel">Capsular Release (29825)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-proc-biopsy"><label for="rcr-proc-biopsy">Biopsy for Culture</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-proc-slap" onchange="updateRcrSections()"><label for="rcr-proc-slap">SLAP Repair (29807)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-proc-other" onchange="updateRcrSections()"><label for="rcr-proc-other">Other:</label><input type="text" id="rcr-proc-other-text" class="other-text" style="display:none"></div>
 </div>
 
@@ -563,7 +569,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 
 <div id="rcr-acromioplasty-section" class="conditional-section" style="display:none">
 <div class="row">
-<div class="field field-small"><label>Acromion Type</label><input id="rcr-acromion-type"></div>
+<div class="field"><label>Acromion Type (converted to type I)</label><select id="rcr-acromion-type"><option value="II" selected>Type II &mdash; curved</option><option value="III">Type III &mdash; hooked</option><option value="I">Type I &mdash; already flat</option></select></div>
 </div>
 </div>
 
@@ -589,6 +595,15 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 </div>
 
+<div id="rcr-slap-section" class="conditional-section" style="display:none">
+<div class="section-title">SLAP Repair Details</div>
+<div class="row">
+<div class="field field-small"><label>Anchors (#)</label><input type="number" id="rcr-slap-anchors"></div>
+<div class="field field-med"><label>Anchor Size/Type</label><input id="rcr-slap-anchor-type" value="Arthrex 3.0 mm SutureTak"></div>
+</div>
+</div>
+
+<div id="rcr-rcr-section" class="conditional-section" style="display:none">
 <div class="section-title">Rotator Cuff Repair Details</div>
 <div class="row">
 <div class="field field-small"><label>Medial Anchor #</label><input type="number" id="rcr-medial-num"></div>
@@ -606,11 +621,13 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="field"><label>Lateral Anchor Type</label><select id="rcr-lateral-type"><option value="Arthrex 4.75 mm SwiveLock">Arthrex 4.75 mm SwiveLock</option><option value="Zimmer Biomet 4.75 mm Genie">Zimmer Biomet 4.75 mm Genie</option><option value="Stryker 4.75 mm AlphaVent">Stryker 4.75 mm AlphaVent</option></select></div>
 </div>
 
+</div>
+
 <div class="section-title">Disposition</div>
 <div class="row">
 <div class="field field-small"><label>Immobilizer (wks)</label><input id="rcr-immobilizer-weeks" value="6"></div>
-<div class="field field-small"><label>Passive ROM (wks)</label><input id="rcr-passive-rom-weeks" value="3"></div>
-<div class="field field-small"><label>PT Return (wks)</label><input id="rcr-pt-return-weeks" value="3"></div>
+<div id="rcr-rcrrom-section" class="conditional-section" style="display:none"><div class="field field-small"><label>Passive ROM (wks)</label><input id="rcr-passive-rom-weeks" value="3"></div>
+<div class="field field-small"><label>PT Return (wks)</label><input id="rcr-pt-return-weeks" value="3"></div></div>
 <div class="field field-small"><label>Active ROM (wks)</label><input id="rcr-active-rom-weeks" value="6"></div>
 </div>
 
@@ -1530,7 +1547,16 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 var currentTab = 'tsa';
 var lastReport = '';
 
-function v(id) { return document.getElementById(id).value; }
+function v(id) {
+  var el = document.getElementById(id);
+  if (!el) return '';
+  // findings dropdowns: "Other..." resolves to the companion free-text box
+  if (el.tagName === 'SELECT' && el.value === '__other__') {
+    var t = document.getElementById(id + '-other');
+    return t && t.value.trim() ? t.value.trim() : '';
+  }
+  return el.value;
+}
 
 /* Assemble the arthritis-findings sentence from the dropdowns into the editable
    findings box. pfx is 'tsa' or 'rtsa'. Users can still hand-edit the box after. */
@@ -1987,6 +2013,9 @@ function updateInstSections() {
 
 function updateRcrSections() {
   document.getElementById('rcr-acromioplasty-section').style.display = ck('rcr-proc-acromioplasty') ? 'block' : 'none';
+  document.getElementById('rcr-rcr-section').style.display = ck('rcr-proc-rcr') ? 'block' : 'none';
+  document.getElementById('rcr-slap-section').style.display = ck('rcr-proc-slap') ? 'block' : 'none';
+  document.getElementById('rcr-rcrrom-section').style.display = ck('rcr-proc-rcr') ? 'contents' : 'none';
   document.getElementById('rcr-labral-section').style.display = ck('rcr-proc-labral') ? 'block' : 'none';
   document.getElementById('rcr-postlabral-section').style.display = ck('rcr-proc-postlabral') ? 'block' : 'none';
   document.getElementById('rcr-dx-other-text').style.display = ck('rcr-dx-other') ? 'inline-block' : 'none';
@@ -2009,6 +2038,31 @@ function headStr() {
 document.addEventListener('DOMContentLoaded', function() {
   var today = todayStr();
   document.querySelectorAll('input[type="date"]').forEach(function(el) { el.value = today; });
+
+  // Every dropdown inside a *Findings* section gets an "Other..." choice with a
+  // free-text box, so unusual findings never have to squeeze into a preset.
+  document.querySelectorAll('.section-title').forEach(function(st) {
+    if (!/findings/i.test(st.textContent)) return;
+    var n = st.nextElementSibling;
+    while (n && !n.classList.contains('section-title')) {
+      n.querySelectorAll('select').forEach(function(sel) {
+        if (sel.id.slice(-4) === '-dvt' || sel.id.slice(-9) === '-protocol') return;
+        if (sel.querySelector('option[value="__other__"]')) return;
+        var o = document.createElement('option');
+        o.value = '__other__'; o.textContent = 'Other\u2026';
+        sel.appendChild(o);
+        var t = document.createElement('input');
+        t.id = sel.id + '-other'; t.className = 'other-text';
+        t.placeholder = 'describe finding'; t.style.display = 'none'; t.style.marginTop = '4px';
+        sel.parentNode.appendChild(t);
+        sel.addEventListener('change', function() {
+          t.style.display = (sel.value === '__other__') ? '' : 'none';
+          if (sel.value === '__other__') t.focus();
+        });
+      });
+      n = n.nextElementSibling;
+    }
+  });
 
   // Amber = not yet reviewed. Green = you looked at it. Touching a field at all
   // (opening a dropdown, typing, tabbing through) counts as confirming it, so a
@@ -2357,6 +2411,31 @@ function generateInstability() {
 }
 
 function generateRCR() {
+  // Delayed passive ROM applies only to cuff repairs; everything else moves
+  // immediately, and a biceps tenodesis keeps the elbow flexed at 90 degrees.
+  function rcrDisposition() {
+    var t = 'DISPOSITION:\nThe patient will remain in the shoulder immobilizer for ' + v('rcr-immobilizer-weeks') + ' weeks. ';
+    if (ck('rcr-proc-rcr')) {
+      t += 'Passive range of motion of the shoulder will begin in ' + v('rcr-passive-rom-weeks') + ' weeks per protocol. The patient will go to physical therapy for an initial wound check and then not return for ' + v('rcr-pt-return-weeks') + ' weeks. ';
+      if (ck('rcr-proc-tenodesis')) t += 'The elbow will be kept flexed at 90 degrees to protect the biceps tenodesis. ';
+    } else if (ck('rcr-proc-tenodesis')) {
+      t += 'Immediate passive range of motion of the shoulder is permitted with the elbow flexed at 90 degrees to protect the biceps tenodesis. ';
+    } else {
+      t += 'Immediate passive range of motion of the shoulder is permitted. ';
+    }
+    t += 'Active range of motion will begin in ' + v('rcr-active-rom-weeks') + ' weeks.';
+    return t;
+  }
+  // Anchors are only listed for procedures that actually place them.
+  function rcrImplants() {
+    var parts = [];
+    if (ck('rcr-proc-rcr')) parts.push(v('rcr-medial-num') + ' ' + v('rcr-medial-type') + ', ' + v('rcr-lateral-num') + ' ' + v('rcr-lateral-type'));
+    if (ck('rcr-proc-slap') && String(v('rcr-slap-anchors')).trim()) parts.push(v('rcr-slap-anchors') + ' ' + v('rcr-slap-anchor-type') + ' (SLAP)');
+    if (ck('rcr-proc-labral') && String(v('rcr-lab-anchors')).trim()) parts.push(v('rcr-lab-anchors') + ' ' + v('rcr-lab-anchor-type') + ' (anterior labrum)');
+    if (ck('rcr-proc-postlabral') && String(v('rcr-plab-anchors')).trim()) parts.push(v('rcr-plab-anchors') + ' ' + v('rcr-plab-anchor-type') + ' (posterior labrum)');
+    if (ck('rcr-proc-tenodesis')) parts.push('1 Arthrex FiberTak 1.8 mm double-loaded anchor');
+    return parts.length ? parts.join(', ') : 'None';
+  }
   var s = v('rcr-side');
   var preDx = [];
   if (ck('rcr-dx-pain')) preDx.push(s + ' Shoulder Pain');
@@ -2391,6 +2470,12 @@ function generateRCR() {
   if (ck('rcr-proc-tenodesis')) procs.push(s + ' Open Subpectoral Biceps Tenodesis');
   if (ck('rcr-proc-labral')) procs.push(s + ' Arthroscopic Anterior Labral (Bankart) Repair with Capsulorrhaphy');
   if (ck('rcr-proc-postlabral')) procs.push(s + ' Arthroscopic Posterior Labral Repair with Capsulorrhaphy');
+  if (ck('rcr-proc-slap')) procs.push(s + ' Arthroscopic SLAP Repair');
+  if (ck('rcr-proc-chondroplasty')) procs.push(s + ' Arthroscopic Chondroplasty');
+  if (ck('rcr-proc-synovectomy')) procs.push(s + ' Arthroscopic Synovectomy');
+  if (ck('rcr-proc-loosebody')) procs.push(s + ' Arthroscopic Loose Body Removal');
+  if (ck('rcr-proc-capsrel')) procs.push(s + ' Arthroscopic Capsular Release');
+  if (ck('rcr-proc-biopsy')) procs.push(s + ' Arthroscopic Biopsy for Culture');
   if (ck('rcr-proc-other') && v('rcr-proc-other-text').trim()) procs.push(s + ' ' + v('rcr-proc-other-text'));
   var findings = [];
   var fn = 1;
@@ -2401,8 +2486,10 @@ function generateRCR() {
   findings.push(fn++ + '. The biceps was ' + v('rcr-biceps-finding') + '.');
   findings.push(fn++ + '. The labrum was ' + v('rcr-labrum') + '.');
   var cuffLine = fn++ + '. The rotator cuff was ' + v('rcr-cuff') + '.';
-  if (v('rcr-tear-shape')) cuffLine += ' The tear shape was ' + v('rcr-tear-shape') + '.';
-  cuffLine += ' The quality of tissue was ' + v('rcr-tissue-quality') + '.';
+  if (ck('rcr-proc-rcr')) {
+    if (v('rcr-tear-shape')) cuffLine += ' The tear shape was ' + v('rcr-tear-shape') + '.';
+    cuffLine += ' The quality of tissue was ' + v('rcr-tissue-quality') + '.';
+  }
   findings.push(cuffLine);
   if (ck('rcr-dx-synovitis')) findings.push(fn++ + '. There was extensive synovitis throughout the glenohumeral joint.');
   if (ck('rcr-proc-acromioplasty')) findings.push(fn++ + '. There was an anterior hooked acromion with extensive bursitis, erythema, and hyperemia in the subacromial space.');
@@ -2418,9 +2505,15 @@ function generateRCR() {
   if (ck('rcr-proc-postlabral')) {
     descSections.push('ARTHROSCOPIC POSTERIOR LABRAL REPAIR AND CAPSULORRHAPHY:\nThe posterior labrum was found to be detached from the glenoid rim. The labrum and capsule were elevated off the posterior glenoid neck with an arthroscopic elevator until the tissue floated freely to its anatomic position, and the posterior glenoid neck was decorticated with a shaver and burr to a bleeding bony bed. Working from inferior to superior, ' + v('rcr-plab-anchors') + ' ' + v('rcr-plab-anchor-type') + ' suture anchors were placed on the glenoid face at the articular margin, beginning at the ' + v('rcr-plab-start-pos') + " o'clock position. At each anchor, the capsulolabral tissue was penetrated with a suture passing device incorporating an appropriate capsular plication, and the labrum was secured to the glenoid rim, recreating the posterior bumper and retensioning the posteroinferior capsule. The repair was probed and found to be secure.");
   }
-  descSections.push('ARTHROSCOPIC SUBACROMIAL DECOMPRESSION:\nThe subacromial space was entered. There were massive amounts of hyperemia, erythema, and bursitis with adhesions in the subdeltoid and subacromial regions. There was significant narrowing of the acromiohumeral interval and a thick, fibrotic coracoacromial ligament contributing to outlet impingement. Using a motorized shaver and a side-effect radiofrequency device, the bursa was removed from lateral to medial and anterior to posterior. A perihumeral debridement was performed along with decompression of the subdeltoid adhesions.');
+  if (ck('rcr-proc-chondroplasty')) descSections.push('CHONDROPLASTY:\nAreas of damaged articular cartilage were identified. Using an arthroscopic shaver, the unstable cartilage flaps were debrided and the chondral surfaces smoothened and stabilized.');
+  if (ck('rcr-proc-synovectomy')) descSections.push('SYNOVECTOMY:\nAn extensive synovectomy was performed using a motorized shaver, removing all pathologic synovial tissue from the glenohumeral joint.');
+  if (ck('rcr-proc-loosebody')) descSections.push('LOOSE BODY REMOVAL:\nMultiple loose bodies were identified and removed from the glenohumeral joint using an arthroscopic grasper. The joint was thoroughly irrigated and inspected to confirm complete removal of all loose bodies.');
+  if (ck('rcr-proc-capsrel')) descSections.push('CAPSULAR RELEASE:\nA circumferential capsular release was performed with an arthroscopic elevator and radiofrequency device, taking care to protect the axillary nerve inferiorly. Motion was reassessed and found to be substantially improved.');
+  if (ck('rcr-proc-biopsy')) descSections.push('ARTHROSCOPIC BIOPSY FOR CULTURE:\nA GraftNet autologous tissue collector was placed in line with the arthroscopic shaver suction. Representative synovial and capsular tissue was shaved from multiple sites within the joint and collected in the GraftNet. The collected tissue was sent for aerobic, anaerobic, fungal, and acid-fast culture. The laboratory was specifically instructed to hold the anaerobic cultures for a minimum of fourteen days for Cutibacterium acnes, formerly Propionibacterium acnes, which is characteristically slow-growing. Antibiotic management will be tailored once speciation and sensitivities are available.');
+  if (ck('rcr-proc-slap')) descSections.push('SLAP REPAIR:\nThe superior labrum was detached from the glenoid rim at the biceps anchor. The superior glenoid neck was prepared with a shaver and burr to a bleeding bony bed. ' + v('rcr-slap-anchors') + ' ' + v('rcr-slap-anchor-type') + ' suture anchors were placed at the superior glenoid rim and the labrum secured, restoring a stable biceps anchor. The repair was probed and found to be secure.');
+  if (ck('rcr-proc-decompression')) descSections.push('ARTHROSCOPIC SUBACROMIAL DECOMPRESSION:\nThe subacromial space was entered. There were massive amounts of hyperemia, erythema, and bursitis with adhesions in the subdeltoid and subacromial regions. There was significant narrowing of the acromiohumeral interval and a thick, fibrotic coracoacromial ligament contributing to outlet impingement. Using a motorized shaver and a side-effect radiofrequency device, the bursa was removed from lateral to medial and anterior to posterior. A perihumeral debridement was performed along with decompression of the subdeltoid adhesions.');
   if (ck('rcr-proc-acromioplasty')) descSections.push('ACROMIOPLASTY:\nThe acromion was flattened in the same sequence of steps as the arthroscopic subacromial decompression. It was converted from a type ' + v('rcr-acromion-type') + ' to a type I acromion.');
-  descSections.push('ARTHROSCOPIC ROTATOR CUFF REPAIR:\nThe rotator cuff tear was full thickness in its extent. An arthroscopic shaver device was introduced and the greater tuberosity was abraded down to a gently bleeding bone bed in order to facilitate healing of soft tissue back to bone. ' + v('rcr-medial-num') + ' ' + v('rcr-medial-type') + ' were placed at a 45-degree angle adjacent to the articular cartilage in the greater tuberosity. The sutures were passed through the rotator cuff in a ' + v('rcr-suture-config') + ' configuration. ' + (ck('rcr-luggage') ? (v('rcr-luggage-num') ? v('rcr-luggage-num') + ' ' : '') + 'luggage tag sutures were placed to secure the tendon edge. ' : '') + 'Using arthroscopic knot-tying techniques, the rotator cuff was repaired back to the greater tuberosity with excellent compression onto the tuberosity.\n\nThe lateral part of the rotator cuff remained in poor contact with bone; therefore, a second row of anchors was placed. The first-row suture limbs were passed through ' + v('rcr-lateral-num') + ' ' + v('rcr-lateral-type') + ' lateral row anchors inserted in the greater tuberosity. As they were inserted, they exerted a compression effect onto the underlying rotator cuff, restoring the rotator cuff footprint in an anatomic fashion. Care was taken not to overtension the rotator cuff during its repair.');
+  if (ck('rcr-proc-rcr')) descSections.push('ARTHROSCOPIC ROTATOR CUFF REPAIR:\nThe rotator cuff tear was full thickness in its extent. An arthroscopic shaver device was introduced and the greater tuberosity was abraded down to a gently bleeding bone bed in order to facilitate healing of soft tissue back to bone. ' + v('rcr-medial-num') + ' ' + v('rcr-medial-type') + ' were placed at a 45-degree angle adjacent to the articular cartilage in the greater tuberosity. The sutures were passed through the rotator cuff in a ' + v('rcr-suture-config') + ' configuration. ' + (ck('rcr-luggage') ? (v('rcr-luggage-num') ? v('rcr-luggage-num') + ' ' : '') + 'luggage tag sutures were placed to secure the tendon edge. ' : '') + 'Using arthroscopic knot-tying techniques, the rotator cuff was repaired back to the greater tuberosity with excellent compression onto the tuberosity.\n\nThe lateral part of the rotator cuff remained in poor contact with bone; therefore, a second row of anchors was placed. The first-row suture limbs were passed through ' + v('rcr-lateral-num') + ' ' + v('rcr-lateral-type') + ' lateral row anchors inserted in the greater tuberosity. As they were inserted, they exerted a compression effect onto the underlying rotator cuff, restoring the rotator cuff footprint in an anatomic fashion. Care was taken not to overtension the rotator cuff during its repair.');
   if (ck('rcr-proc-dcr')) descSections.push('ARTHROSCOPIC DISTAL CLAVICLE RESECTION:\nUnder direct visualization, the acromioclavicular joint was arthritic. The tissue along with the thickened, fibrotic acromioclavicular joint meniscus was debrided. A high-speed burr was introduced and the distal clavicle was resected to decompress the acromioclavicular joint such that there was no impingement with the acromion. This was a smooth, symmetric resection confirmed by arthroscopic visualization from multiple viewing portals. The acromioclavicular joint ligaments were left intact superiorly, anteriorly, and posteriorly to maintain acromioclavicular joint stability.');
   if (ck('rcr-proc-tenodesis')) descSections.push('OPEN SUBPECTORAL BICEPS TENODESIS:\nInstruments were removed and an approximately 3 cm incision was made at the anterior/inferior axillary fold. Sharp dissection was employed through subcutaneous tissue down to the fascia overlying the pectoralis major. The subpectoral interval was defined and the arm internally rotated. Retractors were used to elevate the pectoralis major, and the biceps tendon was delivered in a retrograde fashion out of the bicipital groove. The adjacent bone was cleared with electrocautery and roughened with an osteotome. A single 1.8 mm Arthrex FiberTak anchor double loaded with #2 suture tape was placed at that point, and the biceps tendon was tenodesed against the bone in an onlay fashion using alternating simple sutures and lasso loop technique with the aid of a penetrating device. The excess tendon was removed with scissors.');
   descSections.push('CLOSURE:\nIncisions were closed with running 3-0 subcuticular Monocryl suture reinforced with Steri-Strips. Portal sites were closed in interrupted fashion with Monocryl, reinforced with Steri-Strips. The shoulder was dressed sterilely and placed in a sling and Cryocuff, and the patient was transferred to the recovery room in satisfactory condition having tolerated the procedure well. All counts were correct.');
@@ -2436,12 +2529,12 @@ function generateRCR() {
     'ESTIMATED BLOOD LOSS: ' + v('rcr-ebl') + '\n' +
     'COMPLICATIONS: ' + complicationText('rcr') + '\n' +
     'ANTIBIOTICS: ' + v('rcr-abx') + '\n' +
-    'IMPLANTS: ' + v('rcr-medial-num') + ' ' + v('rcr-medial-type') + ', ' + v('rcr-lateral-num') + ' ' + v('rcr-lateral-type') + (ck('rcr-proc-tenodesis') ? ', 1 Arthrex FiberTak 1.8 mm double-loaded anchor' : '') + '\n\n' +
+    'IMPLANTS: ' + rcrImplants() + '\n\n' +
     'PHYSICIAN ASSISTANT STATEMENT:\nThe use of a Physician Assistant was essential in this procedure in order to facilitate the shoulder surgery, minimize risks of poor wound healing and wound infection, and improve safety and efficiency. The Physician Assistant assisted with arm positioning, retraction, suture management, and hemostasis.\n\n' +
     'INDICATIONS:\nThis is a ' + v('rcr-age') + '-year-old ' + v('rcr-sex') + ' who presents for shoulder arthroscopy. The patient\'s preoperative exam and imaging studies were consistent with the above noted diagnoses. I discussed in detail with the patient the nature of the procedure including risks, benefits, prognosis, and alternatives. Informed consent was obtained. Prior to surgery the appropriate site was identified by the patient and marked with my initials. A time-out was taken to verify the correct patient, the correct site, and the correct procedure.\n\n' +
     'OPERATIVE FINDINGS:\n' + findings.join('\n') + '\n\n' +
     'DESCRIPTION OF PROCEDURE:\n\n' + descSections.join('\n\n') + '\n\n' +
-    'DISPOSITION:\nThe patient will remain in the shoulder immobilizer for ' + v('rcr-immobilizer-weeks') + ' weeks. Passive range of motion of the shoulder will begin in ' + v('rcr-passive-rom-weeks') + ' weeks per protocol. The patient will go to physical therapy for an initial wound check and then not return for ' + v('rcr-pt-return-weeks') + ' weeks. Active range of motion will begin in ' + v('rcr-active-rom-weeks') + ' weeks.\n\n' +
+    rcrDisposition() + '\n\n' +
     'PAIN MANAGEMENT PLAN:\nMultimodal regimen with ' + v('rcr-block') + ', sling, cryotherapy, ' + painMeds('rcr') + ', and oral analgesics.\n\n' +
     'PROGNOSIS:\nThe patient has a ' + v('rcr-prognosis') + ' prognosis for pain-free return to active function.';
 
@@ -2918,6 +3011,6 @@ function generateBicepsTenodesis() {
   showReport(report);
 }
 </script>
-<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build 2355220a6f83</div>
+<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build a89681b66fb7</div>
 </body>
 </html>
