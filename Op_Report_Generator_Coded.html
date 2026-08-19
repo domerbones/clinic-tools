@@ -603,8 +603,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 </div>
 
-<div id="rcr-rcr-section" class="conditional-section" style="display:none">
-<div class="section-title">Rotator Cuff Repair Details</div>
+<div id="rcr-rcr-section">
+<div class="section-title">Rotator Cuff Repair Details <small style="font-weight:normal;color:#888">(in the report only if Rotator Cuff Repair is selected)</small></div>
 <div class="row">
 <div class="field field-small"><label>Medial Anchor #</label><input type="number" id="rcr-medial-num"></div>
 <div class="field"><label>Medial Anchor Type</label><select id="rcr-medial-type"><option value="Zimmer Biomet 4.5 mm double-loaded anchors">Zimmer Biomet 4.5 mm Double-Loaded</option><option value="Stryker Iconix 4.5 mm double-loaded anchors">Stryker Iconix 4.5 mm Double-Loaded</option><option value="Stryker Iconix 4.5 mm triple-loaded anchors">Stryker Iconix 4.5 mm Triple-Loaded</option><option value="Arthrex 4.75 mm Corkscrew FT triple-loaded anchors">Arthrex 4.75 mm Corkscrew FT Triple-Loaded</option></select></div>
@@ -626,7 +626,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Disposition</div>
 <div class="row">
 <div class="field field-small"><label>Immobilizer (wks)</label><input id="rcr-immobilizer-weeks" value="6"></div>
-<div id="rcr-rcrrom-section" class="conditional-section" style="display:none"><div class="field field-small"><label>Passive ROM (wks)</label><input id="rcr-passive-rom-weeks" value="3"></div>
+<div id="rcr-rcrrom-section" style="display:contents"><div class="field field-small"><label>Passive ROM (wks)</label><input id="rcr-passive-rom-weeks" value="3"></div>
 <div class="field field-small"><label>PT Return (wks)</label><input id="rcr-pt-return-weeks" value="3"></div></div>
 <div class="field field-small"><label>Active ROM (wks)</label><input id="rcr-active-rom-weeks" value="6"></div>
 </div>
@@ -1695,6 +1695,7 @@ function markFields(panelId) {
     if (el.type === 'button' || el.type === 'checkbox') return;
     var cs = el.closest('.conditional-section');
     if (cs && cs.style.display === 'none') return;
+    if (el.closest('#rcr-rcr-section, #rcr-rcrrom-section') && !ck('rcr-proc-rcr')) { el.classList.remove('required-empty', 'filled'); return; }
     if (el.classList.contains('other-text') && el.style.display === 'none') return;
     // A preset value is not the same as a reviewed value: a field stays amber
     // until it has been touched, so nothing gets documented unexamined.
@@ -1711,6 +1712,7 @@ function checkIncomplete(panelId) {
     if (el.type === 'checkbox' || el.type === 'button') return;
     var cs = el.closest('.conditional-section');
     if (cs && cs.style.display === 'none') return;
+    if (el.closest('#rcr-rcr-section, #rcr-rcrrom-section') && !ck('rcr-proc-rcr')) return;
     if (el.classList.contains('other-text') && el.style.display === 'none') return;
     if (!el.value || el.value.trim() === '' || el.dataset.confirmed !== '1') missing++;
   });
@@ -2013,9 +2015,8 @@ function updateInstSections() {
 
 function updateRcrSections() {
   document.getElementById('rcr-acromioplasty-section').style.display = ck('rcr-proc-acromioplasty') ? 'block' : 'none';
-  document.getElementById('rcr-rcr-section').style.display = ck('rcr-proc-rcr') ? 'block' : 'none';
   document.getElementById('rcr-slap-section').style.display = ck('rcr-proc-slap') ? 'block' : 'none';
-  document.getElementById('rcr-rcrrom-section').style.display = ck('rcr-proc-rcr') ? 'contents' : 'none';
+
   document.getElementById('rcr-labral-section').style.display = ck('rcr-proc-labral') ? 'block' : 'none';
   document.getElementById('rcr-postlabral-section').style.display = ck('rcr-proc-postlabral') ? 'block' : 'none';
   document.getElementById('rcr-dx-other-text').style.display = ck('rcr-dx-other') ? 'inline-block' : 'none';
@@ -3011,6 +3012,6 @@ function generateBicepsTenodesis() {
   showReport(report);
 }
 </script>
-<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build a89681b66fb7</div>
+<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build cab193e9bc6d</div>
 </body>
 </html>
