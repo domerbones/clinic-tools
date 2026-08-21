@@ -759,7 +759,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <button class="btn btn-secondary" onclick="copyReport()">Copy to Clipboard</button>
 <button class="btn btn-secondary" onclick="copyAndReset()">Copy &amp; Reset</button>
 <button class="btn btn-outline" onclick="printReport()">Print</button>
-<button class="btn btn-outline" onclick="document.getElementById('output-panel').classList.remove('active')">Close</button>
+<button class="btn btn-outline" onclick="closeOutput()">Close</button>
 </div>
 </div>
 <span class="copied-msg" id="copy-msg">Copied to clipboard!</span>
@@ -1148,12 +1148,21 @@ function generateBooking() {
   var report = lines.join('\n');
   document.getElementById('report-output').textContent = report;
   document.getElementById('booking-doc').innerHTML = renderBookingDoc(proc, side);
-  document.getElementById('output-panel').style.display = 'block';
   document.getElementById('output-panel').className = 'output-panel active';
   try { document.getElementById('output-panel').scrollIntoView({ behavior: 'smooth' }); } catch(e) { document.getElementById('output-panel').scrollIntoView(true); }
   } catch(err) {
     alert('Error generating form: ' + err.message);
   }
+}
+
+// Close must undo everything that opened the panel - the class AND any inline
+// display left behind - or the panel stays on screen and the button looks dead.
+function closeOutput() {
+  var p = document.getElementById('output-panel');
+  if (!p) return;
+  p.classList.remove('active');
+  p.style.display = '';
+  try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) { window.scrollTo(0, 0); }
 }
 
 function getDiagnosisLines(proc, side) {
@@ -1818,6 +1827,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 document.addEventListener('DOMContentLoaded', loadStaffEmail);
 </script>
-<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build da65c96f9d63</div>
+<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build f6dfb9f44f57</div>
 </body>
 </html>
