@@ -1880,6 +1880,13 @@ var ADDON_TEXT = {
   postlabral: 'ARTHROSCOPIC POSTERIOR LABRAL REPAIR AND CAPSULORRHAPHY:\\nThe posterior labrum was found to be detached from the glenoid rim. The labrum and capsule were elevated off the posterior glenoid neck with an arthroscopic elevator until the tissue floated freely to its anatomic position, and the posterior glenoid neck was decorticated with a shaver and burr to a bleeding bony bed. Working from inferior to superior, suture anchors were placed on the glenoid face at the articular margin. At each anchor, the capsulolabral tissue was penetrated with a suture passing device incorporating an appropriate capsular plication, and the labrum was secured to the glenoid rim, recreating the posterior bumper and retensioning the posteroinferior capsule. The repair was probed and found to be secure.'
 };
 var ADDON_KEYS = {"scr": ["acromioplasty", "dcr", "debridement", "looseb", "capsrel", "biopsy", "antlabral", "postlabral"], "acj": ["decompression", "acromioplasty", "tenotomy", "tenodesis", "debridement", "looseb", "capsrel", "biopsy", "antlabral", "postlabral"], "mua": ["decompression", "acromioplasty", "dcr", "tenotomy", "tenodesis", "debridement", "looseb", "biopsy", "antlabral", "postlabral"], "bten": ["acromioplasty", "dcr", "debridement", "looseb", "capsrel", "biopsy", "antlabral", "postlabral"]};
+// Dr. Rolf uses the same anchor for every biceps tenodesis, whichever tab the
+// tenodesis was performed on. One place to change it if the implant changes.
+var BICEPS_ANCHOR = '1 Arthrex FiberTak 1.8 mm double-loaded anchor';
+function bicepsAnchorFor(pfx) {
+  var cb = document.getElementById(pfx + '-proc-tenodesis');
+  return (cb && cb.checked) ? BICEPS_ANCHOR : '';
+}
 function addonProcs(pfx, side) {
   var out = [];
   (ADDON_KEYS[pfx] || []).forEach(function(k) {
@@ -2340,6 +2347,23 @@ v('rtsa-findings') + '\n\n' +
 }
 
 function generateInstability() {
+  // Anchors are listed only for the repairs actually performed. The free-text
+  // Implants box still carries anything the checkboxes do not cover.
+  function instImplants() {
+    var parts = [];
+    var typed = v('inst-implants').trim();
+    if (typed) parts.push(typed);
+    if (ck('inst-proc-anterior') && String(v('inst-ant-anchors')).trim())
+      parts.push(v('inst-ant-anchors') + ' ' + v('inst-ant-anchor-type') + ' (anterior labrum)');
+    if (ck('inst-proc-posterior') && String(v('inst-post-anchors')).trim())
+      parts.push(v('inst-post-anchors') + ' ' + v('inst-post-anchor-type') + ' (posterior labrum)');
+    if (ck('inst-proc-slap') && String(v('inst-slap-anchors')).trim())
+      parts.push(v('inst-slap-anchors') + ' ' + v('inst-slap-anchor-type') + ' (SLAP)');
+    if (ck('inst-proc-remplissage') && String(v('inst-remp-anchors')).trim())
+      parts.push(v('inst-remp-anchors') + ' anchors (remplissage)');
+    if (bicepsAnchorFor('inst')) parts.push(bicepsAnchorFor('inst'));
+    return parts.length ? parts.join(', ') : 'None';
+  }
   var s = v('inst-side');
   var preDx = [];
   if (ck('inst-dx-instability')) preDx.push(s + ' Shoulder Recurrent Anterior Instability');
@@ -2428,7 +2452,7 @@ function generateInstability() {
     'ESTIMATED BLOOD LOSS: ' + v('inst-ebl') + '\n' +
     'COMPLICATIONS: ' + complicationText('inst') + '\n' +
     'ANTIBIOTICS: ' + v('inst-abx') + '\n' +
-    'IMPLANTS: ' + v('inst-implants') + '\n\n' +
+    'IMPLANTS: ' + instImplants() + '\n\n' +
     'PHYSICIAN ASSISTANT STATEMENT:\nThe use of a Physician Assistant was essential in this procedure in order to facilitate the shoulder surgery, minimize risks of poor wound healing and wound infection, and improve safety and efficiency. The Physician Assistant assisted with arm positioning, retraction, suture management, and hemostasis.\n\n' +
     'INDICATIONS:\nThis is a ' + v('inst-age') + '-year-old ' + v('inst-sex') + ' with recurrent ' + s.toLowerCase() + ' anterior glenohumeral instability and MRI-confirmed anterior labral pathology.' + gblSentence + ' I discussed in detail with the patient the nature of the procedure including risks, benefits, prognosis, and alternatives, including recurrent instability, stiffness, infection, neurovascular injury, and need for further surgery. Informed consent was obtained. Prior to surgery the appropriate site was identified by the patient and marked with my initials. A time-out was taken to verify the correct patient, the correct site, and the correct procedure.\n\n' +
     'OPERATIVE FINDINGS:\n' + findings.join('\n') + '\n\n' +
@@ -2463,7 +2487,7 @@ function generateRCR() {
     if (ck('rcr-proc-slap') && String(v('rcr-slap-anchors')).trim()) parts.push(v('rcr-slap-anchors') + ' ' + v('rcr-slap-anchor-type') + ' (SLAP)');
     if (ck('rcr-proc-labral') && String(v('rcr-lab-anchors')).trim()) parts.push(v('rcr-lab-anchors') + ' ' + v('rcr-lab-anchor-type') + ' (anterior labrum)');
     if (ck('rcr-proc-postlabral') && String(v('rcr-plab-anchors')).trim()) parts.push(v('rcr-plab-anchors') + ' ' + v('rcr-plab-anchor-type') + ' (posterior labrum)');
-    if (ck('rcr-proc-tenodesis')) parts.push('1 Arthrex FiberTak 1.8 mm double-loaded anchor');
+    if (ck('rcr-proc-tenodesis')) parts.push(BICEPS_ANCHOR);
     return parts.length ? parts.join(', ') : 'None';
   }
   var s = v('rcr-side');
@@ -2809,6 +2833,7 @@ function generateSCR() {
   implantParts.push(v('scr-graft-type') + (v('scr-graft-size').trim() ? ' (' + v('scr-graft-size') + ')' : ''));
   if (v('scr-medial-num').trim()) implantParts.push(v('scr-medial-num') + ' ' + v('scr-medial-type') + ' medial anchors');
   if (v('scr-lateral-num').trim()) implantParts.push(v('scr-lateral-num') + ' ' + v('scr-lateral-type') + ' lateral anchors');
+  if (bicepsAnchorFor('scr')) implantParts.push(bicepsAnchorFor('scr'));
 
   var descSections = [];
   descSections.push('POSITIONING AND PREPARATION:\nThe patient was taken to the operating room and placed on the operating table in the beach chair position. After adequate anesthesia was obtained, the patient was placed in the seated position. All bony prominences were well padded. The arm was elevated, prepped, and draped in the usual sterile fashion. Preoperative antibiotics were administered intravenously as noted above. Arthroscopy was then performed through standard portals, with findings as noted above.');
@@ -2830,7 +2855,7 @@ function generateSCR() {
     'ESTIMATED BLOOD LOSS: ' + v('scr-ebl') + '\n' +
     'COMPLICATIONS: ' + complicationText('scr') + '\n' +
     'ANTIBIOTICS: ' + v('scr-abx') + '\n' +
-    'IMPLANTS: ' + implantParts.join(', ') + '\n\n' +
+    'IMPLANTS: ' + (implantParts.length ? implantParts.join(', ') : 'None') + '\n\n' +
     'PHYSICIAN ASSISTANT STATEMENT:\nThe use of a Physician Assistant was essential in this procedure in order to facilitate the shoulder surgery, minimize risks of poor wound healing and wound infection, and improve safety and efficiency. The Physician Assistant assisted with arm positioning, retraction, suture management, graft preparation, and hemostasis.\n\n' +
     'INDICATIONS:\nThis is a ' + v('scr-age') + '-year-old ' + v('scr-sex') + ' with a chronic ' + s.toLowerCase() + ' irreparable rotator cuff tear with failed conservative management. The patient\'s preoperative exam and imaging studies were consistent with the above noted diagnoses. I discussed in detail with the patient the nature of the procedure including risks, benefits, prognosis, and alternatives. Informed consent was obtained. Prior to surgery the appropriate site was identified by the patient and marked with my initials. A time-out was taken to verify the correct patient, the correct site, and the correct procedure.\n\n' +
     'OPERATIVE FINDINGS:\n1. The rotator cuff demonstrated ' + v('scr-cuff-finding') + '.\n2. The subscapularis was ' + v('scr-subscap-finding') + '.\n3. The articular cartilage of the glenoid ' + v('scr-glenoid-cart') + '.\n4. The articular cartilage of the humeral head ' + v('scr-humeral-cart') + '.\n5. The biceps was ' + v('scr-biceps-finding') + '.\n\n' +
@@ -2879,6 +2904,7 @@ function generateACJoint() {
     'IV FLUIDS: ' + v('acj-ivf') + ' mL\n' +
     'ESTIMATED BLOOD LOSS: ' + v('acj-ebl') + '\n' +
     'COMPLICATIONS: ' + complicationText('acj') + '\n' +
+    (bicepsAnchorFor('acj') ? 'IMPLANTS: ' + bicepsAnchorFor('acj') + '\n' : '') +
     'ANTIBIOTICS: ' + v('acj-abx') + '\n\n' +
     'PHYSICIAN ASSISTANT STATEMENT:\nThe use of a Physician Assistant was essential in this procedure in order to facilitate the shoulder surgery, minimize risks of poor wound healing and wound infection, and improve safety and efficiency. The Physician Assistant assisted with arm positioning, retraction, and hemostasis.\n\n' +
     'INDICATIONS:\nThis is a ' + v('acj-age') + '-year-old ' + v('acj-sex') + ' with a ' + s.toLowerCase() + ' AC joint injury. The patient\'s preoperative exam and imaging studies were consistent with the above noted diagnoses. I discussed in detail with the patient the nature of the procedure including risks, benefits, prognosis, and alternatives. Informed consent was obtained. Prior to surgery the appropriate site was identified by the patient and marked with my initials. A time-out was taken to verify the correct patient, the correct site, and the correct procedure.\n\n' +
@@ -2933,6 +2959,7 @@ function generateMUA() {
     'IV FLUIDS: ' + v('mua-ivf') + ' mL\n' +
     'ESTIMATED BLOOD LOSS: ' + v('mua-ebl') + '\n' +
     'COMPLICATIONS: ' + complicationText('mua') + '\n' +
+    (bicepsAnchorFor('mua') ? 'IMPLANTS: ' + bicepsAnchorFor('mua') + '\n' : '') +
     'ANTIBIOTICS: ' + v('mua-abx') + '\n\n' +
     'PHYSICIAN ASSISTANT STATEMENT:\nThe use of a Physician Assistant was essential in this procedure in order to facilitate the shoulder surgery, minimize risks of poor wound healing and wound infection, and improve safety and efficiency. The Physician Assistant assisted with arm positioning and documentation of range of motion.\n\n' +
     'INDICATIONS:\nThis is a ' + v('mua-age') + '-year-old ' + v('mua-sex') + ' with ' + s.toLowerCase() + ' shoulder stiffness unresponsive to conservative management including physical therapy. The patient\'s preoperative exam and imaging studies were consistent with the above noted diagnoses. I discussed in detail with the patient the nature of the procedure including risks, benefits, prognosis, and alternatives including fracture, dislocation, nerve injury, and recurrent stiffness. Informed consent was obtained. Prior to surgery the appropriate site was identified by the patient and marked with my initials. A time-out was taken to verify the correct patient, the correct site, and the correct procedure.\n\n' +
@@ -3041,6 +3068,6 @@ function generateBicepsTenodesis() {
   showReport(report);
 }
 </script>
-<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build d6bde0cdd450</div>
+<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build 422d54e4875b</div>
 </body>
 </html>
