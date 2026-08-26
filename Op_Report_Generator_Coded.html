@@ -50,6 +50,13 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 .output-panel { display: none; background: white; border-radius: 8px; padding: 30px; margin-top: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 .output-panel.active { display: block; }
 .output-panel pre { white-space: pre-wrap; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.6; background: #fafafa; padding: 20px; border-radius: 6px; border: 1px solid #e0e0e0; }
+.output-panel pre[contenteditable='true'] { outline: none; cursor: text; }
+.output-panel pre[contenteditable='true']:hover { border-color: #b9c5d4; }
+.output-panel pre[contenteditable='true']:focus { border-color: #1B3A6B; box-shadow: 0 0 0 3px rgba(27,58,107,.10); background: #fff; }
+.edit-hint { font-size: 12px; color: #7a8899; margin: 0 0 6px; display: flex; align-items: center; gap: 8px; }
+.dirty-tag { display: none; background: #FBF0DC; color: #8A5910; border-radius: 10px; padding: 1px 8px; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.dirty-tag.on { display: inline-block; }
+@media print { .edit-hint { display: none !important; } }
 
 /* Print: show only the generated report, hide the form/buttons. Works on iOS without a pop-up. */
 @media print {
@@ -1539,13 +1546,31 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 <span class="copied-msg" id="copy-msg">Copied to clipboard!</span>
 <span class="copied-msg" id="copy-reset-msg">Copied &amp; Reset!</span>
-<pre id="report-output"></pre>
+<div class="edit-hint" id="edit-hint">Click into the report to edit it before copying. <span class="dirty-tag" id="dirty-tag">edited</span></div>
+<pre id="report-output" contenteditable="true" spellcheck="true" aria-label="Generated operative report, editable" oninput="markReportEdited()"></pre>
 </div>
 </div>
 
 <script>
 var currentTab = 'tsa';
 var lastReport = '';
+// The report is editable after it is generated. Track hand edits so a second
+// Generate cannot silently throw them away.
+var reportEdited = false;
+function markReportEdited() {
+  reportEdited = true;
+  var t = document.getElementById('dirty-tag');
+  if (t) t.classList.add('on');
+}
+function clearReportEdited() {
+  reportEdited = false;
+  var t = document.getElementById('dirty-tag');
+  if (t) t.classList.remove('on');
+}
+function confirmOverwrite() {
+  if (!reportEdited) return true;
+  return confirm('You have edited this report by hand.\n\nGenerating again replaces it with a fresh report and discards those edits.\n\nContinue?');
+}
 
 function v(id) {
   var el = document.getElementById(id);
@@ -1810,6 +1835,8 @@ function copyAndReset() {
 
 function recallLastReport() {
   if (lastReport) {
+    if (!confirmOverwrite()) return;
+    clearReportEdited();
     document.getElementById('report-output').textContent = lastReport;
     document.getElementById('output-panel').classList.add('active');
     document.getElementById('output-panel').scrollIntoView({ behavior: 'smooth' });
@@ -1997,7 +2024,9 @@ function showReport(report) {
       }
     }
   }
+  if (!confirmOverwrite()) return;
   lastReport = report;
+  clearReportEdited();
   document.getElementById('report-output').textContent = report;
   document.getElementById('output-panel').classList.add('active');
   document.getElementById('output-panel').scrollIntoView({ behavior: 'smooth' });
@@ -3012,6 +3041,6 @@ function generateBicepsTenodesis() {
   showReport(report);
 }
 </script>
-<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build 29ba3d01d27b</div>
+<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build d6bde0cdd450</div>
 </body>
 </html>
