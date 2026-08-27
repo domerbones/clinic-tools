@@ -156,6 +156,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <option value="biceps-tenodesis">Biceps Tenodesis (Standalone)</option>
 <option value="latarjet">Latarjet</option>
 <option value="distal-biceps">Distal Biceps Repair</option>
+<option value="other">Other / Custom Procedure</option>
 </select>
 </div>
 </div>
@@ -566,6 +567,53 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 </div>
 
+<!-- Other / Custom Procedure -->
+<div class="procedure-section" id="sec-other">
+<div class="section-title">Other / Custom Procedure</div>
+<p class="icd-info">For cases that do not match a preset. Type the procedure and code exactly as they should reach the office.</p>
+<div class="row">
+<div class="field" style="min-width:100%"><label>Procedure Description</label><input type="text" id="other-proc-desc" placeholder="e.g. Arthroscopic capsular release with lysis of adhesions"></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>CPT Code(s)</label><input type="text" id="other-cpt" placeholder="e.g. 29825"></div>
+<div class="field field-med"><label>ICD-10 Code</label><input type="text" id="other-icd" placeholder="e.g. M24.611"></div>
+</div>
+<div class="row">
+<div class="field" style="min-width:100%"><label>Diagnosis</label><input type="text" id="other-dx" placeholder="e.g. Adhesive capsulitis with post-traumatic stiffness"></div>
+</div>
+
+<div class="section-title">Implants Needed</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="other-imp-fibertak"><label for="other-imp-fibertak">Arthrex FiberTak 1.8 mm double-loaded anchor</label></div>
+<div class="checkbox-item"><input type="checkbox" id="other-imp-swivelock"><label for="other-imp-swivelock">Arthrex SwiveLock 4.75 mm</label></div>
+<div class="checkbox-item"><input type="checkbox" id="other-imp-suturetak"><label for="other-imp-suturetak">Arthrex SutureTak</label></div>
+<div class="checkbox-item"><input type="checkbox" id="other-imp-zb45"><label for="other-imp-zb45">Zimmer Biomet 4.5 mm double-loaded anchor</label></div>
+<div class="checkbox-item"><input type="checkbox" id="other-imp-plate"><label for="other-imp-plate">Plate and screws</label></div>
+<div class="checkbox-item"><input type="checkbox" id="other-imp-graft"><label for="other-imp-graft">Allograft / dermal graft</label></div>
+<div class="checkbox-item"><input type="checkbox" id="other-imp-none"><label for="other-imp-none">No implants needed</label></div>
+</div>
+<div class="row">
+<div class="field" style="min-width:100%"><label>Other implants / instrumentation</label><textarea id="other-imp-text" placeholder="Anything not listed above, plus sizes or quantities"></textarea></div>
+</div>
+
+<div class="row">
+<div class="checkbox-item"><input type="checkbox" id="other-carm"><label for="other-carm">C-arm needed</label></div>
+</div>
+<div class="row">
+<div class="field" style="min-width:100%"><label>Additional Equipment / Notes for the office</label><textarea id="other-equip"></textarea></div>
+</div>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="other-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="other-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="other-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+</div>
+
 <!-- ORIF Clavicle -->
 <div class="procedure-section" id="sec-orif-clav">
 <div class="section-title">ORIF Clavicle Fracture</div>
@@ -874,7 +922,7 @@ function todayStr() {
 }
 
 // section id -> the field id prefix used inside that panel
-var PROC_PREFIX = {'tsa': 'tsa', 'hemi': 'hemi', 'rtsa': 'rtsa', 'rev-tsa': 'rev-tsa', 'rev-rtsa': 'rev-rtsa', 'bankart': 'bankart', 'slap': 'slap', 'rcr': 'rcr', 'scope': 'scope', 'scr': 'scr', 'acj': 'acj', 'mua': 'mua', 'orif-clav': 'clav', 'orif-phum': 'phum', 'hw-removal': 'hw', 'biceps-tenodesis': 'bten', 'latarjet': 'latarjet', 'distal-biceps': 'distal-biceps'};
+var PROC_PREFIX = {'tsa': 'tsa', 'hemi': 'hemi', 'rtsa': 'rtsa', 'rev-tsa': 'rev-tsa', 'rev-rtsa': 'rev-rtsa', 'bankart': 'bankart', 'slap': 'slap', 'rcr': 'rcr', 'scope': 'scope', 'scr': 'scr', 'acj': 'acj', 'mua': 'mua', 'orif-clav': 'clav', 'orif-phum': 'phum', 'hw-removal': 'hw', 'other': 'other', 'biceps-tenodesis': 'bten', 'latarjet': 'latarjet', 'distal-biceps': 'distal-biceps'};
 /* "Other" on a Follow Up dropdown reveals a free-text box, and the typed text is
    what prints - the literal word "Other" is never sent to the office. */
 function onFollowupChange(pfx){
@@ -1001,9 +1049,12 @@ function getProcedureName(val) {
     'hw-removal': 'Hardware Removal',
     'biceps-tenodesis': 'Biceps Tenodesis (Standalone)',
     'latarjet': 'Latarjet',
-    'distal-biceps': 'Distal Biceps Repair'
+    'distal-biceps': 'Distal Biceps Repair',
+    'other': 'Other / Custom Procedure'
   };
   var nm = names[val] || '';
+  // On a custom booking the typed description IS the procedure name
+  if (val === 'other') nm = v('other-proc-desc').trim() || 'Other / Custom Procedure';
   // Arthroplasty booked with the alternate construct on standby
   if (val === 'tsa' && ck('tsa-vs-rsa')) nm = 'Total Shoulder Arthroplasty vs Reverse Total Shoulder Arthroplasty (TSA planned)';
   if (val === 'rtsa' && ck('rtsa-vs-tsa')) nm = 'Reverse Total Shoulder Arthroplasty vs Total Shoulder Arthroplasty (RSA planned)';
@@ -1265,6 +1316,10 @@ function getDiagnosisLines(proc, side) {
       if (side === 'Right' || side === 'Bilateral') dx.push('M75.01 - Adhesive capsulitis, right shoulder');
       if (side === 'Left' || side === 'Bilateral') dx.push('M75.02 - Adhesive capsulitis, left shoulder');
       break;
+    case 'other':
+      var od = v('other-dx').trim(), oi = v('other-icd').trim();
+      if (oi || od) dx.push((oi ? oi + ' - ' : '') + (od || 'see procedure description'));
+      break;
     case 'orif-clav':
       var clavDx = [
         {id:'021A', label:'S42.021A - Displaced fracture of shaft of right clavicle'},
@@ -1429,6 +1484,9 @@ function getCPTLines(proc) {
     case 'mua':
       cpt.push('23700 - Manipulation under anesthesia');
       break;
+    case 'other':
+      if (v('other-cpt').trim()) cpt.push(v('other-cpt').trim());
+      break;
     case 'orif-clav':
       cpt.push('23515 - ORIF clavicle');
       break;
@@ -1548,6 +1606,20 @@ function getProcedureDetails(proc, side) {
       break;
     case 'mua':
       if (v('mua-equip').trim()) details.push('Additional Equipment: ' + v('mua-equip').trim());
+      break;
+    case 'other':
+      var imps = [];
+      if (ck('other-imp-fibertak')) imps.push('Arthrex FiberTak 1.8 mm double-loaded anchor');
+      if (ck('other-imp-swivelock')) imps.push('Arthrex SwiveLock 4.75 mm');
+      if (ck('other-imp-suturetak')) imps.push('Arthrex SutureTak');
+      if (ck('other-imp-zb45')) imps.push('Zimmer Biomet 4.5 mm double-loaded anchor');
+      if (ck('other-imp-plate')) imps.push('Plate and screws');
+      if (ck('other-imp-graft')) imps.push('Allograft / dermal graft');
+      if (v('other-imp-text').trim()) imps.push(v('other-imp-text').trim());
+      if (ck('other-imp-none') && !imps.length) imps.push('None');
+      details.push('IMPLANTS NEEDED: ' + (imps.length ? imps.join('; ') : 'NOT SPECIFIED'));
+      if (ck('other-carm')) details.push('C-arm needed');
+      if (v('other-equip').trim()) details.push('Additional Equipment: ' + v('other-equip').trim());
       break;
     case 'orif-clav':
       if (ck('clav-carm')) details.push('C-arm: Yes');
@@ -1827,6 +1899,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 document.addEventListener('DOMContentLoaded', loadStaffEmail);
 </script>
-<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build 422d54e4875b</div>
+<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build c6dcd68bdb65</div>
 </body>
 </html>
