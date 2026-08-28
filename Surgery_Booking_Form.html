@@ -65,12 +65,21 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 .doc-note { color: #C62828; font-weight: bold; }
 .doc-footer { margin-top: 24px; padding-top: 10px; border-top: 1px solid #ccc; font-size: 13px; color: #333; }
 
+/* Hand-editing the generated booking form */
+.edit-hint { font-size: 12px; color: #666; margin: 4px 2px 6px; }
+.edit-hint .dirty-tag { display: none; margin-left: 8px; background: #E8A838; color: #3a2a00; font-weight: bold; border-radius: 10px; padding: 1px 8px; font-size: 11px; }
+.edit-hint .dirty-tag.on { display: inline-block; }
+#booking-doc { border: 1px dashed transparent; border-radius: 6px; }
+#booking-doc:hover { border-color: #d0d7e2; }
+#booking-doc:focus { outline: none; border-color: #1B3A6B; box-shadow: 0 0 0 2px rgba(27,58,107,0.10); }
+
 /* Print: show only the formatted booking document, hide everything else. Works on iOS without a pop-up. */
 @media print {
   body { background: #fff; }
   body * { visibility: hidden; }
   #booking-doc, #booking-doc * { visibility: visible; }
-  #booking-doc { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; }
+  #booking-doc { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; border: none !important; }
+  .edit-hint { display: none !important; }
 }
 .copied-msg { display: none; color: #2E7D32; font-weight: bold; margin-left: 12px; font-size: 14px; }
 .checkbox-group { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-bottom: 12px; padding: 8px 0; }
@@ -814,7 +823,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <span class="copied-msg" id="email-msg">Email opened with the full booking form. Also on your clipboard if anything looks cut off.</span>
 <div style="margin:6px 0 10px;font-size:13px;"><label for="staff-email" style="font-weight:bold;color:#1B3A6B;">Send to:</label> <input id="staff-email" type="email" placeholder="scheduler@beaconortho.com" style="padding:6px;min-width:260px;" oninput="rememberStaffEmail()"><span style="color:#666;"> &nbsp;saved on this device</span>&nbsp;&nbsp;<label for="mail-app" style="font-weight:bold;color:#1B3A6B;">Open in:</label> <select id="mail-app" style="padding:6px;" onchange="rememberMailApp()"><option value="outlookweb" selected>Outlook (web)</option><option value="outlookapp">Outlook (phone app)</option><option value="default">Default mail app</option></select></div>
 <span class="copied-msg" id="copy-reset-msg">Copied &amp; Reset!</span>
-<div class="booking-doc" id="booking-doc"></div>
+<div class="edit-hint" id="edit-hint">Click into the booking form below to edit it before sending. Copy, email and print all use your edits.<span class="dirty-tag" id="dirty-tag">edited</span></div>
+<div class="booking-doc" id="booking-doc" contenteditable="true" spellcheck="true" aria-label="Generated booking form, editable" oninput="markBookingEdited()"></div>
 <pre id="report-output" style="display:none;"></pre>
 </div>
 
@@ -1197,6 +1207,8 @@ function generateBooking() {
   lines.push('========================================');
 
   var report = lines.join('\n');
+  if (!confirmBookingOverwrite()) return;
+  clearBookingEdited();
   document.getElementById('report-output').textContent = report;
   document.getElementById('booking-doc').innerHTML = renderBookingDoc(proc, side);
   document.getElementById('output-panel').className = 'output-panel active';
@@ -1736,6 +1748,38 @@ function emailBody(text) {
     .trim();
 }
 
+// --- Hand editing of the generated booking form -------------------------
+// #booking-doc is what the surgeon sees and prints; #report-output is the
+// hidden plain-text twin that feeds copy/email. If he edits the visible one,
+// every outbound path has to read the edit instead of the stale twin.
+var bookingEdited = false;
+
+function markBookingEdited() {
+  bookingEdited = true;
+  var t = document.getElementById('dirty-tag');
+  if (t) t.classList.add('on');
+}
+
+function clearBookingEdited() {
+  bookingEdited = false;
+  var t = document.getElementById('dirty-tag');
+  if (t) t.classList.remove('on');
+}
+
+function confirmBookingOverwrite() {
+  if (!bookingEdited) return true;
+  return confirm('You have edited this booking form by hand.\n\nGenerating again replaces it and discards those edits.\n\nContinue?');
+}
+
+// Single source of truth for anything leaving this page.
+function bookingText() {
+  if (bookingEdited) {
+    var d = document.getElementById('booking-doc');
+    if (d) return (d.innerText || d.textContent || '').replace(/\n{3,}/g, '\n\n').trim();
+  }
+  return document.getElementById('report-output').textContent;
+}
+
 function buildMailto(text) {
   var to = (document.getElementById('staff-email').value || '').trim();
   var subject = bookingSubject();
@@ -1766,7 +1810,7 @@ function buildMailto(text) {
 }
 
 function emailBooking() {
-  var text = document.getElementById('report-output').textContent;
+  var text = bookingText();
   if (!text.trim()) { alert('Generate the booking form first.'); return; }
   // an emailed booking is useless to the office without both identifiers
   var missing = [];
@@ -1792,7 +1836,7 @@ function emailBooking() {
 }
 
 function copyReport() {
-  var text = document.getElementById('report-output').textContent;
+  var text = bookingText();
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(function() {
       showMsg('copy-msg');
@@ -1807,7 +1851,7 @@ function copyReport() {
 }
 
 function copyAndReset() {
-  var text = document.getElementById('report-output').textContent;
+  var text = bookingText();
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(function() {
       resetForm();
@@ -1836,6 +1880,7 @@ function printReport() {
 }
 
 function resetForm() {
+  clearBookingEdited();
   document.getElementById('patient-name').value = '';
   document.getElementById('patient-dob').value = '';
   document.getElementById('location').selectedIndex = 0;
@@ -1899,6 +1944,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 document.addEventListener('DOMContentLoaded', loadStaffEmail);
 </script>
-<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build c6dcd68bdb65</div>
+
+<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build 3b285369e1dd</div>
 </body>
 </html>
