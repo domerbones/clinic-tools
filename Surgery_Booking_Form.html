@@ -117,7 +117,14 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="row">
 <div class="field field-med"><label>Location</label><select id="location"><option value="Beacon ASC" selected>Beacon ASC</option><option value="Good Samaritan">Good Samaritan</option><option value="Margaret Mary">Margaret Mary</option></select></div>
 <div class="field field-small"><label>Side <span style="color:#C62828;">*</span></label><select id="side" onchange="markSide()"><option value="" selected>-- Select --</option><option value="Right">Right</option><option value="Left">Left</option><option value="Bilateral">Bilateral</option></select></div>
-<div class="field field-med"><label>Block Type</label><select id="block-type"><option value="Interscalene block">Interscalene block</option><option value="Interscalene block with indwelling catheter">Interscalene block with indwelling catheter</option><option value="Interscalene block using Exparel">Interscalene block using Exparel</option></select></div>
+<div class="field field-med"><label>Block Type</label><select id="block-type" onchange="document.getElementById('block-other-field').style.display = this.value === '__other__' ? 'block' : 'none';">
+<option value="Interscalene block" selected>Interscalene block</option>
+<option value="Interscalene block with indwelling catheter">Interscalene block with indwelling catheter</option>
+<option value="Interscalene block using Exparel">Interscalene block using Exparel</option>
+<option value="No block">No block</option>
+<option value="__other__">Other...</option>
+</select></div>
+<div class="field field-med" id="block-other-field" style="display:none"><label>Specify block</label><input type="text" id="block-other-text" placeholder="Block type"></div>
 </div>
 <div class="row">
 <div class="field field-med"><label>Admission Status</label><select id="admit-status" onchange="onAdmitChange()"><option value="Outpatient (same day discharge)">Outpatient (same day discharge)</option><option value="23-hour observation">23-hour observation</option><option value="Inpatient">Inpatient</option></select></div>
@@ -376,15 +383,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="bankart-slap"><label for="bankart-slap">29807 Arthroscopic SLAP repair (if applicable)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="bankart-remplissage"><label for="bankart-remplissage">Remplissage</label></div>
-<div class="checkbox-item"><input type="checkbox" id="bankart-bk-decompression"><label for="bankart-bk-decompression">Subacromial Decompression (29826)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="bankart-bk-acromioplasty"><label for="bankart-bk-acromioplasty">Acromioplasty</label></div>
-<div class="checkbox-item"><input type="checkbox" id="bankart-bk-dcr"><label for="bankart-bk-dcr">Distal Clavicle Resection (29824)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="bankart-bk-tenotomy"><label for="bankart-bk-tenotomy">Arthroscopic Biceps Tenotomy</label></div>
-<div class="checkbox-item"><input type="checkbox" id="bankart-bk-tenodesis"><label for="bankart-bk-tenodesis">Open Subpectoral Biceps Tenodesis (23430)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="bankart-bk-debridement"><label for="bankart-bk-debridement">Extensive Glenohumeral Debridement</label></div>
-<div class="checkbox-item"><input type="checkbox" id="bankart-bk-looseb"><label for="bankart-bk-looseb">Loose Body Removal (29819)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="bankart-bk-capsrel"><label for="bankart-bk-capsrel">Capsular Release (29825)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="bankart-bk-subscap"><label for="bankart-bk-subscap">Subscapularis Repair (29827)</label></div>
+<div class="addon-slot" data-pfx="bankart" style="display:contents"></div>
 </div>
 <div class="section-title">Reps</div>
 <div class="row">
@@ -408,15 +407,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <p class="icd-info">CPT: 29827 Arthroscopic rotator cuff repair; +29826 Add-on for extensive debridement</p>
 <div class="section-title">Additional Procedures</div>
 <div class="checkbox-group">
-<div class="checkbox-item"><input type="checkbox" id="rcr-bk-decompression"><label for="rcr-bk-decompression">Subacromial Decompression (29826)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="rcr-bk-acromioplasty"><label for="rcr-bk-acromioplasty">Acromioplasty</label></div>
-<div class="checkbox-item"><input type="checkbox" id="rcr-bk-dcr"><label for="rcr-bk-dcr">Distal Clavicle Resection (29824)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="rcr-bk-tenotomy"><label for="rcr-bk-tenotomy">Arthroscopic Biceps Tenotomy</label></div>
-<div class="checkbox-item"><input type="checkbox" id="rcr-bk-tenodesis"><label for="rcr-bk-tenodesis">Open Subpectoral Biceps Tenodesis (23430)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="rcr-bk-debridement"><label for="rcr-bk-debridement">Extensive Glenohumeral Debridement</label></div>
-<div class="checkbox-item"><input type="checkbox" id="rcr-bk-looseb"><label for="rcr-bk-looseb">Loose Body Removal (29819)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="rcr-bk-capsrel"><label for="rcr-bk-capsrel">Capsular Release (29825)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="rcr-bk-subscap"><label for="rcr-bk-subscap">Subscapularis Repair (29827)</label></div>
+<div class="addon-slot" data-pfx="rcr" style="display:contents"></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-carm"><label for="rcr-carm">C-arm needed</label></div>
 </div>
 <div class="row">
@@ -444,15 +435,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <p class="icd-info">CPT: 29807 Arthroscopic SLAP repair</p>
 <div class="section-title">Procedures This Case (check all)</div>
 <div class="checkbox-group">
-<div class="checkbox-item"><input type="checkbox" id="slap-bk-decompression"><label for="slap-bk-decompression">Subacromial Decompression (29826)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="slap-bk-acromioplasty"><label for="slap-bk-acromioplasty">Acromioplasty</label></div>
-<div class="checkbox-item"><input type="checkbox" id="slap-bk-dcr"><label for="slap-bk-dcr">Distal Clavicle Resection (29824)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="slap-bk-tenotomy"><label for="slap-bk-tenotomy">Arthroscopic Biceps Tenotomy</label></div>
-<div class="checkbox-item"><input type="checkbox" id="slap-bk-tenodesis"><label for="slap-bk-tenodesis">Open Subpectoral Biceps Tenodesis (23430)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="slap-bk-debridement"><label for="slap-bk-debridement">Extensive Glenohumeral Debridement</label></div>
-<div class="checkbox-item"><input type="checkbox" id="slap-bk-looseb"><label for="slap-bk-looseb">Loose Body Removal (29819)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="slap-bk-capsrel"><label for="slap-bk-capsrel">Capsular Release (29825)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="slap-bk-subscap"><label for="slap-bk-subscap">Subscapularis Repair (29827)</label></div>
+<div class="addon-slot" data-pfx="slap" style="display:contents"></div>
 </div>
 <div class="section-title">Reps</div>
 <div class="row">
@@ -476,15 +459,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <p class="icd-info">CPT: 29819 Arthroscopic removal loose body; 29822/29823 Debridement limited/extensive; 29826 Subacromial decompression</p>
 <div class="section-title">Procedures This Case (check all)</div>
 <div class="checkbox-group">
-<div class="checkbox-item"><input type="checkbox" id="scope-bk-decompression"><label for="scope-bk-decompression">Subacromial Decompression (29826)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="scope-bk-acromioplasty"><label for="scope-bk-acromioplasty">Acromioplasty</label></div>
-<div class="checkbox-item"><input type="checkbox" id="scope-bk-dcr"><label for="scope-bk-dcr">Distal Clavicle Resection (29824)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="scope-bk-tenotomy"><label for="scope-bk-tenotomy">Arthroscopic Biceps Tenotomy</label></div>
-<div class="checkbox-item"><input type="checkbox" id="scope-bk-tenodesis"><label for="scope-bk-tenodesis">Open Subpectoral Biceps Tenodesis (23430)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="scope-bk-debridement"><label for="scope-bk-debridement">Extensive Glenohumeral Debridement</label></div>
-<div class="checkbox-item"><input type="checkbox" id="scope-bk-looseb"><label for="scope-bk-looseb">Loose Body Removal (29819)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="scope-bk-capsrel"><label for="scope-bk-capsrel">Capsular Release (29825)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="scope-bk-subscap"><label for="scope-bk-subscap">Subscapularis Repair (29827)</label></div>
+<div class="addon-slot" data-pfx="scope" style="display:contents"></div>
 </div>
 <div class="section-title">Reps</div>
 <div class="row">
@@ -508,15 +483,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <p class="icd-info">CPT: 29827 (used for SCR)</p>
 <div class="section-title">Additional Procedures (check all)</div>
 <div class="checkbox-group">
-<div class="checkbox-item"><input type="checkbox" id="scr-bk-decompression"><label for="scr-bk-decompression">Subacromial Decompression (29826)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="scr-bk-acromioplasty"><label for="scr-bk-acromioplasty">Acromioplasty</label></div>
-<div class="checkbox-item"><input type="checkbox" id="scr-bk-dcr"><label for="scr-bk-dcr">Distal Clavicle Resection (29824)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="scr-bk-tenotomy"><label for="scr-bk-tenotomy">Arthroscopic Biceps Tenotomy</label></div>
-<div class="checkbox-item"><input type="checkbox" id="scr-bk-tenodesis"><label for="scr-bk-tenodesis">Open Subpectoral Biceps Tenodesis (23430)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="scr-bk-debridement"><label for="scr-bk-debridement">Extensive Glenohumeral Debridement</label></div>
-<div class="checkbox-item"><input type="checkbox" id="scr-bk-looseb"><label for="scr-bk-looseb">Loose Body Removal (29819)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="scr-bk-capsrel"><label for="scr-bk-capsrel">Capsular Release (29825)</label></div>
-<div class="checkbox-item"><input type="checkbox" id="scr-bk-subscap"><label for="scr-bk-subscap">Subscapularis Repair (29827)</label></div>
+<div class="addon-slot" data-pfx="scr" style="display:contents"></div>
 </div>
 <div class="row">
 <div class="field"><label>Graft Type</label><input id="scr-graft" value="Dermal allograft"></div>
@@ -924,6 +891,14 @@ function clearReviewState() {
   markBookingFields();
 }
 
+// Block Type resolves "Other..." to the free-text field, so both the printed
+// document and the plain-text twin show the same thing.
+function blockText() {
+  var val = v('block-type');
+  if (val === '__other__') return v('block-other-text').trim() || 'Other (not specified)';
+  return val;
+}
+
 function markSide() { markBookingFields(); }
 
 function todayStr() {
@@ -1086,7 +1061,7 @@ function renderBookingDoc(proc, side) {
     ['Side', side],
     ['Workers Comp', ck('workers-comp') ? 'Yes' : 'No'],
     ['Position', 'Beach Chair'],
-    ['Block Type', v('block-type')],
+    ['Block Type', blockText()],
     ['Admission Status', admitSummary()]
   ];
   var h = '';
@@ -1169,7 +1144,7 @@ function generateBooking() {
   lines.push('Side: ' + side);
   lines.push('Workers Comp: ' + (ck('workers-comp') ? 'Yes' : 'No'));
   lines.push('Position: Beach Chair');
-  lines.push('Block Type: ' + v('block-type'));
+  lines.push('Block Type: ' + blockText());
   lines.push('Admission Status: ' + admitSummary());
   var admitLines = admitReasonLines();
   if (admitLines.length) {
@@ -1402,6 +1377,9 @@ function getDiagnosisLines(proc, side) {
   return dx;
 }
 
+/* One list drives the Additional Procedures block on every arthroscopic panel.
+   Add a procedure here and it appears on all of them. Anterior and posterior
+   labral repair share 29806; getCPTLines already collapses duplicate codes. */
 var SCOPE_ADDONS = [
   ['decompression','Subacromial Decompression','29826'],
   ['acromioplasty','Acromioplasty',''],
@@ -1411,10 +1389,37 @@ var SCOPE_ADDONS = [
   ['debridement','Extensive Glenohumeral Debridement',''],
   ['looseb','Loose Body Removal','29819'],
   ['capsrel','Capsular Release','29825'],
-  ['subscap','Subscapularis Repair','29827']
+  ['subscap','Subscapularis Repair','29827'],
+  ['slaprep','Arthroscopic SLAP Repair','29807'],
+  ['antlabral','Arthroscopic Anterior Labral (Bankart) Repair','29806'],
+  ['postlabral','Arthroscopic Posterior Labral Repair','29806'],
+  ['remplissage','Remplissage',''],
+  ['biopsy','Arthroscopic Biopsy for Culture','']
 ];
+/* A panel never offers its own primary procedure as an add-on. The Bankart
+   panel already carries its own SLAP and remplissage boxes, so they are
+   suppressed here rather than duplicated. */
+var ADDON_EXCLUDE = {
+  bankart: ['antlabral','slaprep','remplissage'],
+  slap:    ['slaprep']
+};
+function addonsFor(pfx) {
+  var skip = ADDON_EXCLUDE[pfx] || [];
+  return SCOPE_ADDONS.filter(function(a){ return skip.indexOf(a[0]) < 0; });
+}
+function renderAddonSlots() {
+  document.querySelectorAll('.addon-slot').forEach(function(slot) {
+    var pfx = slot.getAttribute('data-pfx');
+    slot.innerHTML = addonsFor(pfx).map(function(a) {
+      var id = pfx + '-bk-' + a[0];
+      var label = a[1] + (a[2] ? ' (' + a[2] + ')' : '');
+      return '<div class="checkbox-item"><input type="checkbox" id="' + id +
+             '"><label for="' + id + '">' + label + '</label></div>';
+    }).join('');
+  });
+}
 function addonChecks(prefix) {
-  return SCOPE_ADDONS.filter(function(a){ var el=document.getElementById(prefix+'-bk-'+a[0]); return el && el.checked; });
+  return addonsFor(prefix).filter(function(a){ var el=document.getElementById(prefix+'-bk-'+a[0]); return el && el.checked; });
 }
 function revRemoval(pre) {
   var hum = ck(pre+'-rem-hum'), glen = ck(pre+'-rem-glen');
@@ -1887,7 +1892,9 @@ function resetForm() {
   document.getElementById('side').selectedIndex = 0;
   markSide();
   document.getElementById('workers-comp').checked = false;
-  document.getElementById('block-type').selectedIndex = 0;
+  document.getElementById('block-type').value = 'Interscalene block';
+  document.getElementById('block-other-text').value = '';
+  document.getElementById('block-other-field').style.display = 'none';
   document.getElementById('procedure-select').selectedIndex = 0;
 
   ['tsa','hemi','rtsa','rev-tsa','rev-rtsa'].forEach(function(pfx){
@@ -1943,8 +1950,9 @@ document.addEventListener('DOMContentLoaded', function() {
   markBookingFields();
 });
 document.addEventListener('DOMContentLoaded', loadStaffEmail);
+document.addEventListener('DOMContentLoaded', renderAddonSlots);
 </script>
 
-<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build 2d50b020ac0c</div>
+<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build 989228479ddb</div>
 </body>
 </html>
