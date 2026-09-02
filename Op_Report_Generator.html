@@ -336,6 +336,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="inst-dx-bankart"><label for="inst-dx-bankart">Anterior Labral Tear With Bankart</label></div>
 <div class="checkbox-item"><input type="checkbox" id="inst-dx-posterior"><label for="inst-dx-posterior">Posterior Labral Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="inst-dx-hillsachs"><label for="inst-dx-hillsachs">Hill-Sachs Lesion</label></div>
+<div class="checkbox-item"><input type="checkbox" id="inst-dx-bicepsrupture"><label for="inst-dx-bicepsrupture">Biceps Rupture (Long Head)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="inst-dx-partialcuff"><label for="inst-dx-partialcuff">Partial-Thickness Rotator Cuff Tear</label></div>
 </div>
 
 <div class="section-title">Postoperative Diagnosis</div>
@@ -344,6 +346,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="inst-postdx-bankart"><label for="inst-postdx-bankart">Anterior Labral Tear With Bankart</label></div>
 <div class="checkbox-item"><input type="checkbox" id="inst-postdx-posterior"><label for="inst-postdx-posterior">Posterior Labral Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="inst-postdx-hillsachs"><label for="inst-postdx-hillsachs">Hill-Sachs Lesion</label></div>
+<div class="checkbox-item"><input type="checkbox" id="inst-postdx-bicepsrupture"><label for="inst-postdx-bicepsrupture">Biceps Rupture (Long Head)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="inst-postdx-partialcuff"><label for="inst-postdx-partialcuff">Partial-Thickness Rotator Cuff Tear</label></div>
 </div>
 
 <div class="section-title">Procedures</div>
@@ -496,6 +500,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="rcr-dx-antlabral"><label for="rcr-dx-antlabral">Anterior Labral Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-dx-postlabral"><label for="rcr-dx-postlabral">Posterior Labral Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-dx-synovitis"><label for="rcr-dx-synovitis">Synovitis</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-dx-bicepsrupture"><label for="rcr-dx-bicepsrupture">Biceps Rupture (Long Head)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-dx-partialcuff"><label for="rcr-dx-partialcuff">Partial-Thickness Rotator Cuff Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-dx-other" onchange="updateRcrSections()"><label for="rcr-dx-other">Other:</label><input type="text" id="rcr-dx-other-text" class="other-text" style="display:none"></div>
 </div>
 
@@ -510,6 +516,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="rcr-postdx-antlabral"><label for="rcr-postdx-antlabral">Anterior Labral Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-postdx-postlabral"><label for="rcr-postdx-postlabral">Posterior Labral Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-postdx-synovitis"><label for="rcr-postdx-synovitis">Synovitis</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-postdx-bicepsrupture"><label for="rcr-postdx-bicepsrupture">Biceps Rupture (Long Head)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="rcr-postdx-partialcuff"><label for="rcr-postdx-partialcuff">Partial-Thickness Rotator Cuff Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rcr-postdx-other" onchange="document.getElementById('rcr-postdx-other-text').style.display=this.checked?'inline-block':'none';"><label for="rcr-postdx-other">Other:</label><input type="text" id="rcr-postdx-other-text" class="other-text" style="display:none"></div>
 </div>
 
@@ -930,6 +938,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="scope-dx-labral"><label for="scope-dx-labral">Labral Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scope-dx-synovitis"><label for="scope-dx-synovitis">Synovitis</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scope-dx-impingement"><label for="scope-dx-impingement">Impingement</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scope-dx-bicepsrupture"><label for="scope-dx-bicepsrupture">Biceps Rupture (Long Head)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scope-dx-partialcuff"><label for="scope-dx-partialcuff">Partial-Thickness Rotator Cuff Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scope-dx-other" onchange="document.getElementById('scope-dx-other-text').style.display=this.checked?'inline-block':'none';"><label for="scope-dx-other">Other:</label><input type="text" id="scope-dx-other-text" class="other-text" style="display:none"></div>
 </div>
 
@@ -941,6 +951,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="scope-postdx-labral"><label for="scope-postdx-labral">Labral Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scope-postdx-synovitis"><label for="scope-postdx-synovitis">Synovitis</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scope-postdx-impingement"><label for="scope-postdx-impingement">Impingement</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scope-postdx-bicepsrupture"><label for="scope-postdx-bicepsrupture">Biceps Rupture (Long Head)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scope-postdx-partialcuff"><label for="scope-postdx-partialcuff">Partial-Thickness Rotator Cuff Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scope-postdx-other" onchange="document.getElementById('scope-postdx-other-text').style.display=this.checked?'inline-block':'none';"><label for="scope-postdx-other">Other:</label><input type="text" id="scope-postdx-other-text" class="other-text" style="display:none"></div>
 </div>
 
@@ -1044,6 +1056,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="scr-dx-pain"><label for="scr-dx-pain">Shoulder Pain</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scr-dx-impingement"><label for="scr-dx-impingement">Impingement</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scr-dx-biceps"><label for="scr-dx-biceps">Biceps Tendinosis</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scr-dx-bicepsrupture"><label for="scr-dx-bicepsrupture">Biceps Rupture (Long Head)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scr-dx-partialcuff"><label for="scr-dx-partialcuff">Partial-Thickness Rotator Cuff Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scr-dx-other" onchange="document.getElementById('scr-dx-other-text').style.display=this.checked?'inline-block':'none';"><label for="scr-dx-other">Other:</label><input type="text" id="scr-dx-other-text" class="other-text" style="display:none"></div>
 </div>
 
@@ -1053,6 +1067,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="scr-postdx-pain"><label for="scr-postdx-pain">Shoulder Pain</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scr-postdx-impingement"><label for="scr-postdx-impingement">Impingement</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scr-postdx-biceps"><label for="scr-postdx-biceps">Biceps Tendinosis</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scr-postdx-bicepsrupture"><label for="scr-postdx-bicepsrupture">Biceps Rupture (Long Head)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="scr-postdx-partialcuff"><label for="scr-postdx-partialcuff">Partial-Thickness Rotator Cuff Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="scr-postdx-other" onchange="document.getElementById('scr-postdx-other-text').style.display=this.checked?'inline-block':'none';"><label for="scr-postdx-other">Other:</label><input type="text" id="scr-postdx-other-text" class="other-text" style="display:none"></div>
 </div>
 
@@ -1155,6 +1171,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="acj-dx-separation"><label for="acj-dx-separation">AC Joint Separation</label></div>
 <div class="checkbox-item"><input type="checkbox" id="acj-dx-dislocation"><label for="acj-dx-dislocation">AC Joint Dislocation (Rockwood Type III/IV/V)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="acj-dx-bicepsrupture"><label for="acj-dx-bicepsrupture">Biceps Rupture (Long Head)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="acj-dx-partialcuff"><label for="acj-dx-partialcuff">Partial-Thickness Rotator Cuff Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="acj-dx-other" onchange="document.getElementById('acj-dx-other-text').style.display=this.checked?'inline-block':'none';"><label for="acj-dx-other">Other:</label><input type="text" id="acj-dx-other-text" class="other-text" style="display:none"></div>
 </div>
 
@@ -1162,6 +1180,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="acj-postdx-separation"><label for="acj-postdx-separation">AC Joint Separation</label></div>
 <div class="checkbox-item"><input type="checkbox" id="acj-postdx-dislocation"><label for="acj-postdx-dislocation">AC Joint Dislocation (Rockwood Type III/IV/V)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="acj-postdx-bicepsrupture"><label for="acj-postdx-bicepsrupture">Biceps Rupture (Long Head)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="acj-postdx-partialcuff"><label for="acj-postdx-partialcuff">Partial-Thickness Rotator Cuff Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="acj-postdx-other" onchange="document.getElementById('acj-postdx-other-text').style.display=this.checked?'inline-block':'none';"><label for="acj-postdx-other">Other:</label><input type="text" id="acj-postdx-other-text" class="other-text" style="display:none"></div>
 </div>
 
@@ -1251,6 +1271,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="mua-dx-adhesive"><label for="mua-dx-adhesive">Adhesive Capsulitis</label></div>
 <div class="checkbox-item"><input type="checkbox" id="mua-dx-stiffness"><label for="mua-dx-stiffness">Shoulder Stiffness</label></div>
 <div class="checkbox-item"><input type="checkbox" id="mua-dx-postsurg"><label for="mua-dx-postsurg">Post-surgical Stiffness</label></div>
+<div class="checkbox-item"><input type="checkbox" id="mua-dx-bicepsrupture"><label for="mua-dx-bicepsrupture">Biceps Rupture (Long Head)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="mua-dx-partialcuff"><label for="mua-dx-partialcuff">Partial-Thickness Rotator Cuff Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="mua-dx-other" onchange="document.getElementById('mua-dx-other-text').style.display=this.checked?'inline-block':'none';"><label for="mua-dx-other">Other:</label><input type="text" id="mua-dx-other-text" class="other-text" style="display:none"></div>
 </div>
 
@@ -1259,6 +1281,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="mua-postdx-adhesive"><label for="mua-postdx-adhesive">Adhesive Capsulitis</label></div>
 <div class="checkbox-item"><input type="checkbox" id="mua-postdx-stiffness"><label for="mua-postdx-stiffness">Shoulder Stiffness</label></div>
 <div class="checkbox-item"><input type="checkbox" id="mua-postdx-postsurg"><label for="mua-postdx-postsurg">Post-surgical Stiffness</label></div>
+<div class="checkbox-item"><input type="checkbox" id="mua-postdx-bicepsrupture"><label for="mua-postdx-bicepsrupture">Biceps Rupture (Long Head)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="mua-postdx-partialcuff"><label for="mua-postdx-partialcuff">Partial-Thickness Rotator Cuff Tear</label></div>
 <div class="checkbox-item"><input type="checkbox" id="mua-postdx-other" onchange="document.getElementById('mua-postdx-other-text').style.display=this.checked?'inline-block':'none';"><label for="mua-postdx-other">Other:</label><input type="text" id="mua-postdx-other-text" class="other-text" style="display:none"></div>
 </div>
 
@@ -2370,11 +2394,15 @@ function generateInstability() {
   if (ck('inst-dx-bankart')) preDx.push(s + ' Shoulder Anterior Labral Tear With Bankart');
   if (ck('inst-dx-posterior')) preDx.push(s + ' Shoulder Posterior Labral Tear');
   if (ck('inst-dx-hillsachs')) preDx.push(s + ' Hill-Sachs lesion');
+  if (ck('inst-dx-bicepsrupture')) preDx.push(s + ' Long Head Biceps Tendon Rupture');
+  if (ck('inst-dx-partialcuff')) preDx.push(s + ' Partial-Thickness Rotator Cuff Tear');
   var postDx = [];
   if (ck('inst-postdx-instability')) postDx.push(s + ' Shoulder Recurrent Anterior Instability');
   if (ck('inst-postdx-bankart')) postDx.push(s + ' Shoulder Anterior Labral Tear With Bankart');
   if (ck('inst-postdx-posterior')) postDx.push(s + ' Shoulder Posterior Labral Tear');
   if (ck('inst-postdx-hillsachs')) postDx.push(s + ' Hill-Sachs lesion');
+  if (ck('inst-postdx-bicepsrupture')) postDx.push(s + ' Long Head Biceps Tendon Rupture');
+  if (ck('inst-postdx-partialcuff')) postDx.push(s + ' Partial-Thickness Rotator Cuff Tear');
   var procs = [s + ' Shoulder Arthroscopy'];
   if (ck('inst-proc-anterior')) procs.push(s + ' Shoulder Arthroscopic Anterior Labral (Bankart) Repair with Capsulorrhaphy');
   if (ck('inst-proc-posterior')) procs.push(s + ' Shoulder Arthroscopic Posterior Labral Repair with Capsulorrhaphy');
@@ -2501,6 +2529,8 @@ function generateRCR() {
   if (ck('rcr-dx-antlabral')) preDx.push(s + ' Anterior Labral Tear');
   if (ck('rcr-dx-postlabral')) preDx.push(s + ' Posterior Labral Tear');
   if (ck('rcr-dx-synovitis')) preDx.push(s + ' Synovitis');
+  if (ck('rcr-dx-bicepsrupture')) preDx.push(s + ' Long Head Biceps Tendon Rupture');
+  if (ck('rcr-dx-partialcuff')) preDx.push(s + ' Partial-Thickness Rotator Cuff Tear');
   if (ck('rcr-dx-other') && v('rcr-dx-other-text').trim()) preDx.push(s + ' ' + v('rcr-dx-other-text'));
   var postDx = [];
   if (ck('rcr-postdx-pain')) postDx.push(s + ' Shoulder Pain');
@@ -2512,6 +2542,8 @@ function generateRCR() {
   if (ck('rcr-postdx-antlabral')) postDx.push(s + ' Anterior Labral Tear');
   if (ck('rcr-postdx-postlabral')) postDx.push(s + ' Posterior Labral Tear');
   if (ck('rcr-postdx-synovitis')) postDx.push(s + ' Synovitis');
+  if (ck('rcr-postdx-bicepsrupture')) postDx.push(s + ' Long Head Biceps Tendon Rupture');
+  if (ck('rcr-postdx-partialcuff')) postDx.push(s + ' Partial-Thickness Rotator Cuff Tear');
   if (ck('rcr-postdx-other') && v('rcr-postdx-other-text').trim()) postDx.push(s + ' ' + v('rcr-postdx-other-text'));
   var procs = [];
   if (ck('rcr-proc-arthroscopy')) procs.push(s + ' Arthroscopy');
@@ -2735,6 +2767,8 @@ function generateScope() {
   if (ck('scope-dx-labral')) preDx.push(s + ' Labral Tear');
   if (ck('scope-dx-synovitis')) preDx.push(s + ' Synovitis');
   if (ck('scope-dx-impingement')) preDx.push(s + ' Impingement');
+  if (ck('scope-dx-bicepsrupture')) preDx.push(s + ' Long Head Biceps Tendon Rupture');
+  if (ck('scope-dx-partialcuff')) preDx.push(s + ' Partial-Thickness Rotator Cuff Tear');
   if (ck('scope-dx-other') && v('scope-dx-other-text').trim()) preDx.push(s + ' ' + v('scope-dx-other-text'));
   var postDx = [];
   if (ck('scope-postdx-pain')) postDx.push(s + ' Shoulder Pain');
@@ -2743,6 +2777,8 @@ function generateScope() {
   if (ck('scope-postdx-labral')) postDx.push(s + ' Labral Tear');
   if (ck('scope-postdx-synovitis')) postDx.push(s + ' Synovitis');
   if (ck('scope-postdx-impingement')) postDx.push(s + ' Impingement');
+  if (ck('scope-postdx-bicepsrupture')) postDx.push(s + ' Long Head Biceps Tendon Rupture');
+  if (ck('scope-postdx-partialcuff')) postDx.push(s + ' Partial-Thickness Rotator Cuff Tear');
   if (ck('scope-postdx-other') && v('scope-postdx-other-text').trim()) postDx.push(s + ' ' + v('scope-postdx-other-text'));
   var procs = [];
   if (ck('scope-proc-arthroscopy')) procs.push(s + ' Arthroscopy');
@@ -2813,12 +2849,16 @@ function generateSCR() {
   if (ck('scr-dx-pain')) preDx.push(s + ' Shoulder Pain');
   if (ck('scr-dx-impingement')) preDx.push(s + ' Impingement');
   if (ck('scr-dx-biceps')) preDx.push(s + ' Biceps Tendinosis');
+  if (ck('scr-dx-bicepsrupture')) preDx.push(s + ' Long Head Biceps Tendon Rupture');
+  if (ck('scr-dx-partialcuff')) preDx.push(s + ' Partial-Thickness Rotator Cuff Tear');
   if (ck('scr-dx-other') && v('scr-dx-other-text').trim()) preDx.push(s + ' ' + v('scr-dx-other-text'));
   var postDx = [];
   if (ck('scr-postdx-irreparable')) postDx.push(s + ' Irreparable Rotator Cuff Tear');
   if (ck('scr-postdx-pain')) postDx.push(s + ' Shoulder Pain');
   if (ck('scr-postdx-impingement')) postDx.push(s + ' Impingement');
   if (ck('scr-postdx-biceps')) postDx.push(s + ' Biceps Tendinosis');
+  if (ck('scr-postdx-bicepsrupture')) postDx.push(s + ' Long Head Biceps Tendon Rupture');
+  if (ck('scr-postdx-partialcuff')) postDx.push(s + ' Partial-Thickness Rotator Cuff Tear');
   if (ck('scr-postdx-other') && v('scr-postdx-other-text').trim()) postDx.push(s + ' ' + v('scr-postdx-other-text'));
   var procs = [];
   if (ck('scr-proc-arthroscopy')) procs.push(s + ' Arthroscopy');
@@ -2872,10 +2912,14 @@ function generateACJoint() {
   var preDx = [];
   if (ck('acj-dx-separation')) preDx.push(s + ' AC Joint Separation');
   if (ck('acj-dx-dislocation')) preDx.push(s + ' AC Joint Dislocation');
+  if (ck('acj-dx-bicepsrupture')) preDx.push(s + ' Long Head Biceps Tendon Rupture');
+  if (ck('acj-dx-partialcuff')) preDx.push(s + ' Partial-Thickness Rotator Cuff Tear');
   if (ck('acj-dx-other') && v('acj-dx-other-text').trim()) preDx.push(s + ' ' + v('acj-dx-other-text'));
   var postDx = [];
   if (ck('acj-postdx-separation')) postDx.push(s + ' AC Joint Separation');
   if (ck('acj-postdx-dislocation')) postDx.push(s + ' AC Joint Dislocation');
+  if (ck('acj-postdx-bicepsrupture')) postDx.push(s + ' Long Head Biceps Tendon Rupture');
+  if (ck('acj-postdx-partialcuff')) postDx.push(s + ' Partial-Thickness Rotator Cuff Tear');
   if (ck('acj-postdx-other') && v('acj-postdx-other-text').trim()) postDx.push(s + ' ' + v('acj-postdx-other-text'));
   var procs = [];
   if (ck('acj-proc-reconstruction')) procs.push(s + ' AC Joint Reconstruction');
@@ -2923,11 +2967,15 @@ function generateMUA() {
   if (ck('mua-dx-adhesive')) preDx.push(s + ' Adhesive Capsulitis');
   if (ck('mua-dx-stiffness')) preDx.push(s + ' Shoulder Stiffness');
   if (ck('mua-dx-postsurg')) preDx.push(s + ' Post-surgical Stiffness');
+  if (ck('mua-dx-bicepsrupture')) preDx.push(s + ' Long Head Biceps Tendon Rupture');
+  if (ck('mua-dx-partialcuff')) preDx.push(s + ' Partial-Thickness Rotator Cuff Tear');
   if (ck('mua-dx-other') && v('mua-dx-other-text').trim()) preDx.push(s + ' ' + v('mua-dx-other-text'));
   var postDx = [];
   if (ck('mua-postdx-adhesive')) postDx.push(s + ' Adhesive Capsulitis');
   if (ck('mua-postdx-stiffness')) postDx.push(s + ' Shoulder Stiffness');
   if (ck('mua-postdx-postsurg')) postDx.push(s + ' Post-surgical Stiffness');
+  if (ck('mua-postdx-bicepsrupture')) postDx.push(s + ' Long Head Biceps Tendon Rupture');
+  if (ck('mua-postdx-partialcuff')) postDx.push(s + ' Partial-Thickness Rotator Cuff Tear');
   if (ck('mua-postdx-other') && v('mua-postdx-other-text').trim()) postDx.push(s + ' ' + v('mua-postdx-other-text'));
   var procs = [];
   if (ck('mua-proc-mua')) procs.push(s + ' Manipulation Under Anesthesia');
@@ -3069,6 +3117,6 @@ function generateBicepsTenodesis() {
 }
 </script>
 
-<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build 989228479ddb</div>
+<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build b585c2a52ec6</div>
 </body>
 </html>
