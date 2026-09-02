@@ -98,6 +98,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="tab" data-tab="mua" onclick="switchTab('mua')">MUA</div>
 <div class="tab" data-tab="hwrem" onclick="switchTab('hwrem')">Hardware Removal</div>
 <div class="tab" data-tab="bten" onclick="switchTab('bten')">Biceps Tenodesis</div>
+<div class="tab" data-tab="dtri" onclick="switchTab('dtri')">Distal Triceps</div>
 </div>
 
 <!-- TSA FORM -->
@@ -1554,6 +1555,145 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 </div>
 
+
+<div class="form-panel" id="panel-dtri">
+<p class="defaults-note">Check applicable diagnoses and procedures, then fill in the details. Fixation method drives the technique paragraph.</p>
+
+<div class="section-title" style="margin-top:0">Patient Information</div>
+<div class="row">
+<div class="field field-med"><label>Date of Surgery</label><input type="date" id="dtri-dos"></div>
+</div>
+
+<div class="section-title">Preoperative Diagnosis</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="dtri-dx-complete"><label for="dtri-dx-complete">Distal Triceps Tendon Rupture (Complete)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-dx-partial"><label for="dtri-dx-partial">Partial-Thickness Distal Triceps Tear</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-dx-chronic"><label for="dtri-dx-chronic">Chronic Distal Triceps Insufficiency</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-dx-avulsion"><label for="dtri-dx-avulsion">Olecranon Avulsion Fracture With Triceps Rupture</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-dx-bursitis"><label for="dtri-dx-bursitis">Olecranon Bursitis</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-dx-spur"><label for="dtri-dx-spur">Olecranon Enthesophyte</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-dx-other" onchange="document.getElementById('dtri-dx-other-text').style.display=this.checked?'inline-block':'none';"><label for="dtri-dx-other">Other:</label><input type="text" id="dtri-dx-other-text" class="other-text" style="display:none"></div>
+</div>
+
+<div class="section-title">Postoperative Diagnosis</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="dtri-postdx-complete"><label for="dtri-postdx-complete">Distal Triceps Tendon Rupture (Complete)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-postdx-partial"><label for="dtri-postdx-partial">Partial-Thickness Distal Triceps Tear</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-postdx-chronic"><label for="dtri-postdx-chronic">Chronic Distal Triceps Insufficiency</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-postdx-avulsion"><label for="dtri-postdx-avulsion">Olecranon Avulsion Fracture With Triceps Rupture</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-postdx-bursitis"><label for="dtri-postdx-bursitis">Olecranon Bursitis</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-postdx-spur"><label for="dtri-postdx-spur">Olecranon Enthesophyte</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-postdx-other" onchange="document.getElementById('dtri-postdx-other-text').style.display=this.checked?'inline-block':'none';"><label for="dtri-postdx-other">Other:</label><input type="text" id="dtri-postdx-other-text" class="other-text" style="display:none"></div>
+</div>
+
+<div class="section-title">Procedures</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="dtri-proc-repair" checked><label for="dtri-proc-repair">Open Distal Triceps Repair (24342)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-proc-bursectomy"><label for="dtri-proc-bursectomy">Olecranon Bursectomy</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-proc-spur"><label for="dtri-proc-spur">Olecranon Enthesophyte Excision</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-proc-ulnar"><label for="dtri-proc-ulnar">Ulnar Nerve Decompression</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-proc-graft"><label for="dtri-proc-graft">Tendon Graft Augmentation</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-proc-other" onchange="document.getElementById('dtri-proc-other-text').style.display=this.checked?'inline-block':'none';"><label for="dtri-proc-other">Other:</label><input type="text" id="dtri-proc-other-text" class="other-text" style="display:none"></div>
+</div>
+
+<div class="section-title">Patient &amp; Procedure</div>
+<div class="row">
+<div class="field field-small"><label>Side</label><select id="dtri-side"><option>Right</option><option>Left</option></select></div>
+<div class="field field-small"><label>Age</label><input type="number" id="dtri-age"></div>
+<div class="field field-small"><label>Sex</label><select id="dtri-sex"><option>male</option><option>female</option></select></div>
+<div class="field"><label>Assistant</label><input id="dtri-assistant" value="Russel Lee Reynolds, PA-C"></div>
+</div>
+
+<div class="section-title">Fixation</div>
+<div class="row">
+<div class="field field-med"><label>Method</label><select id="dtri-fix" onchange="dtriFixToggle()"><option value="tunnels" selected>Transosseous bone tunnels</option><option value="anchors">Suture anchors</option></select></div>
+<div class="field field-med"><label>Tendon preparation</label><select id="dtri-stitch"><option value="Krackow locking stitch" selected>Krackow locking stitch</option><option value="running whipstitch">Running whipstitch</option></select></div>
+<div class="field field-med"><label>Suture</label><input id="dtri-suture" value="No. 2 FiberWire"></div>
+<div class="field field-small"><label>Elbow flexion at repair (deg)</label><input id="dtri-flex" value="30"></div>
+</div>
+
+<div id="dtri-tunnel-fields" style="display:contents">
+<div class="row">
+<div class="field field-small"><label>Tunnels</label><select id="dtri-tunnel-num"><option>2</option><option>3</option><option>4</option></select></div>
+<div class="field field-med"><label>Tunnel configuration</label><select id="dtri-tunnel-config"><option value="crossing (cruciate)" selected>Crossing (cruciate)</option><option value="parallel">Parallel</option></select></div>
+<div class="field field-small"><label>Drill (mm)</label><input id="dtri-tunnel-drill" value="2.0"></div>
+</div>
+</div>
+
+<div id="dtri-anchor-fields" style="display:none">
+<div class="row">
+<div class="field field-small"><label>Anchors</label><select id="dtri-anchor-num"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></div>
+<div class="field"><label>Anchor</label><select id="dtri-anchor-type" onchange="document.getElementById('dtri-anchor-other').style.display=this.value==='__other__'?'inline-block':'none';"><option value="Zimmer Biomet 4.5 mm Double-Loaded">Zimmer Biomet 4.5 mm Double-Loaded</option><option value="Arthrex 4.75 mm Corkscrew FT Triple-Loaded" selected>Arthrex 4.75 mm Corkscrew FT Triple-Loaded</option><option value="Arthrex FiberTak 1.8 mm double-loaded">Arthrex FiberTak 1.8 mm double-loaded</option><option value="Stryker Iconix 4.5 mm Double-Loaded">Stryker Iconix 4.5 mm Double-Loaded</option><option value="Stryker Iconix 4.5 mm Triple-Loaded">Stryker Iconix 4.5 mm Triple-Loaded</option><option value="__other__">Other&hellip;</option></select><input type="text" id="dtri-anchor-other" class="other-text" style="display:none" placeholder="Anchor"></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Construct</label><select id="dtri-anchor-row" onchange="dtriRowToggle()"><option value="single" selected>Single row</option><option value="double">Double row (knotless anatomic)</option></select></div>
+<div id="dtri-row2-fields" style="display:none">
+<div class="field field-small"><label>Lateral anchors</label><select id="dtri-lat-num"><option selected>2</option><option>1</option><option>3</option></select></div>
+<div class="field"><label>Lateral anchor</label><select id="dtri-lat-type" onchange="document.getElementById('dtri-lat-other').style.display=this.value==='__other__'?'inline-block':'none';"><option value="Arthrex 4.75 mm SwiveLock" selected>Arthrex 4.75 mm SwiveLock</option><option value="Zimmer Biomet 4.75 mm Genie">Zimmer Biomet 4.75 mm Genie</option><option value="Stryker 4.75 mm AlphaVent">Stryker 4.75 mm AlphaVent</option><option value="__other__">Other&hellip;</option></select><input type="text" id="dtri-lat-other" class="other-text" style="display:none" placeholder="Anchor"></div>
+</div>
+</div>
+</div>
+
+<div class="section-title">Anesthesia &amp; Meds</div>
+<div class="row">
+<div class="field field-med"><label>Block Type</label><select id="dtri-block"><option value="supraclavicular block" selected>Supraclavicular block</option><option value="infraclavicular block">Infraclavicular block</option><option value="axillary block">Axillary block</option><option value="no regional block">No block, general only</option></select></div>
+<div class="field field-small"><label>Tourniquet (min)</label><input id="dtri-tq" value="45"></div>
+<div class="field field-small"><label>IV Fluids (mL)</label><input type="number" id="dtri-ivf"></div>
+<div class="field field-med"><label>Antibiotics</label><input id="dtri-abx" value="Ancef"></div>
+<div class="field field-med"><label>EBL</label><select id="dtri-ebl"><option value="Minimal" selected>Minimal</option><option value="&lt;50 mL">&lt;50 mL</option><option value="50-100 mL">50-100 mL</option><option value="100-200 mL">100-200 mL</option></select></div>
+<div class="field field-med"><label>Complications</label><select id="dtri-complications" onchange="document.getElementById('dtri-complications-other-text').style.display=this.value==='Other'?'inline-block':'none';"><option value="None" selected>None</option><option value="Superficial wound drainage">Superficial wound drainage</option><option value="Ulnar nerve irritation">Ulnar nerve irritation</option><option value="Intraoperative fracture">Intraoperative fracture</option><option value="Excessive bleeding">Excessive bleeding</option><option value="Other">Other</option></select><input type="text" id="dtri-complications-other-text" class="other-text" style="display:none"></div>
+</div>
+
+<div class="section-title">Operative Findings</div>
+<div class="row">
+<div class="field"><label>Tear</label><select id="dtri-finding-tear" onchange="buildFindings('dtri')"><option value="a complete avulsion of the distal triceps tendon from its olecranon insertion" selected>Complete avulsion from olecranon</option><option value="a high-grade partial-thickness tear of the distal triceps involving the deep tendinous portion with an intact superficial lateral expansion">High-grade partial, deep tendinous</option><option value="a partial-thickness tear of the distal triceps involving less than 50% of the footprint">Partial, under 50% of footprint</option><option value="a chronic retracted rupture of the distal triceps with interposed scar tissue">Chronic retracted rupture</option><option value="__other__">Other&hellip;</option></select><input type="text" id="dtri-finding-tear-other" class="other-text" style="display:none"></div>
+<div class="field field-small"><label>Retraction (cm)</label><input id="dtri-retraction" value="2"></div>
+</div>
+<div class="row">
+<div class="field"><label>Tendon quality</label><select id="dtri-finding-quality" onchange="buildFindings('dtri')"><option value="good tendon quality amenable to primary repair" selected>Good, primary repair</option><option value="fair tendon quality with some attritional change at the tendon end">Fair, attritional</option><option value="poor tendon quality requiring debridement back to healthy tissue">Poor, required debridement</option><option value="__other__">Other&hellip;</option></select><input type="text" id="dtri-finding-quality-other" class="other-text" style="display:none"></div>
+<div class="field"><label>Olecranon footprint</label><select id="dtri-finding-footprint" onchange="buildFindings('dtri')"><option value="a bare olecranon footprint with residual tendon fibers and fibrous tissue" selected>Bare with residual fibers</option><option value="an enthesophyte at the triceps insertion">Enthesophyte at insertion</option><option value="a clean cancellous footprint after debridement">Clean cancellous bed</option><option value="__other__">Other&hellip;</option></select><input type="text" id="dtri-finding-footprint-other" class="other-text" style="display:none"></div>
+</div>
+<div class="row">
+<div class="field"><label>Olecranon bursa</label><select id="dtri-finding-bursa" onchange="buildFindings('dtri')"><option value="a thickened, inflamed olecranon bursa" selected>Thickened and inflamed</option><option value="a normal olecranon bursa">Normal</option><option value="__other__">Other&hellip;</option></select><input type="text" id="dtri-finding-bursa-other" class="other-text" style="display:none"></div>
+<div class="field"><label>Ulnar nerve</label><select id="dtri-finding-ulnar" onchange="buildFindings('dtri')"><option value="an ulnar nerve that was identified, stable, and protected throughout the case" selected>Identified, stable, protected</option><option value="an ulnar nerve that was adherent within the cubital tunnel and required decompression">Adherent, required decompression</option><option value="__other__">Other&hellip;</option></select><input type="text" id="dtri-finding-ulnar-other" class="other-text" style="display:none"></div>
+</div>
+
+<div class="section-title">Pain Management</div>
+<div class="row">
+<div class="field" style="min-width:100%"><label>Additional meds (after block, brace, cryo)</label>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="dtri-pain-journavx" checked><label for="dtri-pain-journavx">Journavx</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-pain-tylenol" checked><label for="dtri-pain-tylenol">Tylenol</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-pain-meloxicam" checked><label for="dtri-pain-meloxicam">Meloxicam</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-pain-neurontin"><label for="dtri-pain-neurontin">Neurontin</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-pain-oxycodone"><label for="dtri-pain-oxycodone">Oxycodone</label></div>
+<div class="checkbox-item"><input type="checkbox" id="dtri-pain-other" onchange="document.getElementById('dtri-pain-other-text').style.display=this.checked?'inline-block':'none';"><label for="dtri-pain-other">Other:</label><input type="text" id="dtri-pain-other-text" class="other-text" style="display:none"></div>
+</div></div>
+</div>
+
+<div class="section-title">Disposition</div>
+<div class="row">
+<div class="field field-med"><label>Immobilization</label><select id="dtri-immob"><option value="a posterior splint at 30 degrees of flexion" selected>Posterior splint at 30 degrees</option><option value="a hinged elbow brace locked in extension">Hinged brace locked in extension</option><option value="a hinged elbow brace">Hinged elbow brace</option></select></div>
+<div class="field field-small"><label>Splint (wks)</label><input id="dtri-splint-weeks" value="2"></div>
+<div class="field field-small"><label>Safe arc to (deg)</label><input id="dtri-safe-arc" value="60"></div>
+<div class="field field-small"><label>Active ROM (wks)</label><input id="dtri-active-weeks" value="6"></div>
+<div class="field field-small"><label>Strengthening (wks)</label><input id="dtri-strength-weeks" value="12"></div>
+<div class="field field-med"><label>Follow-up</label><input id="dtri-followup" value="10 days"></div>
+</div>
+
+<div class="section-title">Prognosis</div>
+<div class="row">
+<div class="field"><label>Prognosis</label><select id="dtri-prognosis"><option value="good" selected>Good</option><option value="excellent">Excellent</option><option value="fair">Fair</option><option value="guarded">Guarded</option></select></div>
+</div>
+
+<div class="btn-row">
+<button class="btn btn-primary" onclick="markFields('panel-dtri'); var m=checkIncomplete('panel-dtri'); if(m>0){document.getElementById('dtri-incomplete').textContent=m+' field(s) still empty';document.getElementById('dtri-incomplete').style.display='inline';} else {document.getElementById('dtri-incomplete').style.display='none';} generateDistalTriceps();">Generate Report</button>
+<button class="btn btn-outline" onclick="clearForm('dtri'); markFields('panel-dtri');">Clear Form</button>
+<span class="copied-msg" id="dtri-copied">Copied to clipboard!</span>
+<span class="incomplete-msg" id="dtri-incomplete"></span>
+</div>
+</div>
+
 <!-- RECALL LAST REPORT BUTTON (always visible) -->
 <div class="recall-row">
 <button class="btn btn-outline" id="recall-btn" style="display:none;" onclick="recallLastReport()">Recall Last Report</button>
@@ -1928,6 +2068,7 @@ function addonSections(pfx) {
 
 // ICD-10 codes (from Dr. Rolf's Billing Coder) matched from the diagnosis lines
 var ICD_MAP = [
+  [/Distal Triceps Tendon Rupture|Distal Triceps Tear|Distal Triceps Insufficiency/i, 'S46.311A', 'S46.312A', 'Strain of muscle, fascia and tendon of triceps'],
   [/Cuff Tear Arthropathy/i, 'M19.011', 'M19.012', 'Rotator cuff arthropathy'],
   [/Osteoarthritis/i, 'M19.011', 'M19.012', 'Primary osteoarthritis, shoulder'],
   [/Partial.*Rotator Cuff Tear|Rotator Cuff Tear.*Partial/i, 'M75.111', 'M75.112', 'Incomplete rotator cuff tear'],
@@ -1969,6 +2110,7 @@ var CPT_MAP = [
   [/Superior Capsular Reconstruction/i, '29806 — Arthroscopic capsulorrhaphy (AANA-recommended code for SCR)'],
   [/Rotator Cuff Repair/i, '29827 — Arthroscopic rotator cuff repair'],
   [/Biceps Tenodesis/i, '23430 — Biceps tenodesis'],
+  [/Distal Triceps Repair/i, '24342 — Reinsertion of ruptured distal triceps tendon'],
   [/Biceps Tenotomy/i, '29822 — Arthroscopic debridement, limited (biceps tenotomy)'],
   [/Subacromial Decompression|Acromioplasty/i, '+29826 — Arthroscopic subacromial decompression / acromioplasty (add-on code)'],
   [/Extensive Glenohumeral Debridement|Synovectomy|Chondroplasty/i, '29823 — Arthroscopic debridement, extensive'],
@@ -3062,6 +3204,131 @@ function generateHardwareRemoval() {
   showReport(report);
 }
 
+/* ---- Open distal triceps repair ------------------------------------------
+   Two fixation constructs live on one tab: transosseous bone tunnels and
+   suture anchors. Only the selected one contributes to the report, and only
+   its fields are shown. ---------------------------------------------------- */
+function dtriFixToggle() {
+  var anchors = v('dtri-fix') === 'anchors';
+  document.getElementById('dtri-anchor-fields').style.display = anchors ? 'contents' : 'none';
+  document.getElementById('dtri-tunnel-fields').style.display = anchors ? 'none' : 'contents';
+}
+function dtriRowToggle() {
+  document.getElementById('dtri-row2-fields').style.display =
+    v('dtri-anchor-row') === 'double' ? 'contents' : 'none';
+}
+function dtriAnchorName() {
+  var t = v('dtri-anchor-type');
+  return t === '__other__' ? (v('dtri-anchor-other').trim() || 'suture anchor') : t;
+}
+function dtriLatName() {
+  var t = v('dtri-lat-type');
+  return t === '__other__' ? (v('dtri-lat-other').trim() || 'knotless anchor') : t;
+}
+function dtriImplants() {
+  if (v('dtri-fix') !== 'anchors') return 'None. Transosseous suture fixation.';
+  var out = [v('dtri-anchor-num') + ' ' + dtriAnchorName()];
+  if (v('dtri-anchor-row') === 'double') out.push(v('dtri-lat-num') + ' ' + dtriLatName());
+  return out.join('; ');
+}
+
+function generateDistalTriceps() {
+  var s = v('dtri-side');
+  var DX = [['complete', 'Distal Triceps Tendon Rupture (Complete)'],
+            ['partial',  'Partial-Thickness Distal Triceps Tear'],
+            ['chronic',  'Chronic Distal Triceps Insufficiency'],
+            ['avulsion', 'Olecranon Avulsion Fracture With Triceps Rupture'],
+            ['bursitis', 'Olecranon Bursitis'],
+            ['spur',     'Olecranon Enthesophyte']];
+  var preDx = [], postDx = [];
+  DX.forEach(function(d) {
+    if (ck('dtri-dx-' + d[0])) preDx.push(s + ' ' + d[1]);
+    if (ck('dtri-postdx-' + d[0])) postDx.push(s + ' ' + d[1]);
+  });
+  if (ck('dtri-dx-other') && v('dtri-dx-other-text').trim()) preDx.push(s + ' ' + v('dtri-dx-other-text'));
+  if (ck('dtri-postdx-other') && v('dtri-postdx-other-text').trim()) postDx.push(s + ' ' + v('dtri-postdx-other-text'));
+
+  var procs = [];
+  if (ck('dtri-proc-repair')) procs.push(s + ' Open Distal Triceps Repair');
+  if (ck('dtri-proc-bursectomy')) procs.push(s + ' Olecranon Bursectomy');
+  if (ck('dtri-proc-spur')) procs.push(s + ' Olecranon Enthesophyte Excision');
+  if (ck('dtri-proc-ulnar')) procs.push(s + ' Ulnar Nerve Decompression');
+  if (ck('dtri-proc-graft')) procs.push(s + ' Tendon Graft Augmentation');
+  if (ck('dtri-proc-other') && v('dtri-proc-other-text').trim()) procs.push(s + ' ' + v('dtri-proc-other-text'));
+
+  var stitch = v('dtri-stitch'), suture = v('dtri-suture'), flex = v('dtri-flex');
+
+  var d = [];
+  d.push('POSITIONING AND PREPARATION:\nThe patient was taken to the operating room and general anesthesia was induced on the stretcher. The patient was then carefully log-rolled into the prone position onto chest rolls. All bony prominences were well padded and the eyes and airway were checked and protected. The operative arm was positioned on a padded arm board with the shoulder abducted and the elbow flexed over the edge of the support. The extremity was prepped and draped in the usual sterile fashion, and a sterile tourniquet was applied to the proximal arm within the sterile field. Preoperative antibiotics were administered intravenously as noted above.');
+
+  d.push('APPROACH:\nA posterior midline incision was made over the distal triceps, centered on the olecranon and curved slightly laterally over the tip so as not to leave a scar directly over the point of the elbow. Sharp dissection was carried through subcutaneous tissue and full-thickness fasciocutaneous flaps were elevated. The ulnar nerve was identified medially and protected throughout the case. The distal triceps and its insertion were exposed, and hematoma and interposed fibrous tissue were debrided.');
+
+  if (ck('dtri-proc-bursectomy')) d.push('OLECRANON BURSECTOMY:\nThe thickened olecranon bursa was excised in its entirety with sharp dissection, taking care to preserve the overlying skin flap and its blood supply.');
+  if (ck('dtri-proc-ulnar')) d.push('ULNAR NERVE DECOMPRESSION:\nThe cubital tunnel was opened and the ulnar nerve decompressed from the arcade of Struthers proximally to the two heads of the flexor carpi ulnaris distally. The nerve was left in situ without transposition and was confirmed to be stable through a full range of elbow motion.');
+  if (ck('dtri-proc-spur')) d.push('ENTHESOPHYTE EXCISION:\nThe enthesophyte at the triceps insertion was excised with an osteotome and the resulting surface smoothed with a rasp.');
+
+  d.push('PREPARATION OF THE TENDON AND FOOTPRINT:\nThe retracted tendon end was identified and mobilized, and the degenerative tendon edge was freshened back to healthy tissue. A ' + stitch + ' was placed in the tendon end using ' + suture + '. The olecranon footprint was debrided of residual soft tissue with a curette and rongeur down to a bleeding cancellous bed, preserving the cortical margins.');
+
+  if (v('dtri-fix') === 'anchors') {
+    var t = 'SUTURE ANCHOR REPAIR:\n' + v('dtri-anchor-num') + ' ' + dtriAnchorName() +
+      ' anchors were placed at the anatomic footprint of the triceps on the olecranon under direct visualization. ' +
+      'The limbs of the ' + stitch + ' were passed through the tendon and the tendon was reduced anatomically onto the prepared footprint with the elbow held at ' + flex + ' degrees of flexion.';
+    if (v('dtri-anchor-row') === 'double') {
+      t += ' The medial row limbs were then carried distally over the tendon and secured with ' + v('dtri-lat-num') + ' ' + dtriLatName() +
+           ' in a knotless fashion, compressing the tendon across the footprint and restoring the anatomic insertion.';
+    } else {
+      t += ' The sutures were tied sequentially, seating the tendon flush against the footprint.';
+    }
+    t += ' The repair was inspected and found to be secure.';
+    d.push(t);
+  } else {
+    d.push('TRANSOSSEOUS BONE TUNNEL REPAIR:\n' + v('dtri-tunnel-num') + ' transosseous tunnels were created in the olecranon in a ' +
+      v('dtri-tunnel-config') + ' configuration using a ' + v('dtri-tunnel-drill') + ' mm drill, exiting distally on the dorsal cortex. ' +
+      'A suture passer was used to shuttle the limbs of the ' + stitch + ' through the tunnels. With the elbow held at ' + flex +
+      ' degrees of flexion, the tendon was reduced anatomically onto the prepared footprint and the sutures were tied sequentially over the intervening bone bridge. ' +
+      'The repair was inspected and found to be secure, with the tendon seated flush against the footprint.');
+  }
+
+  if (ck('dtri-proc-graft')) d.push('GRAFT AUGMENTATION:\nGiven the tissue quality, the repair was augmented with a tendon graft, which was secured proximally to the triceps musculotendinous unit and distally to the olecranon and incorporated into the repair construct.');
+
+  d.push('RANGE OF MOTION CHECK:\nThe elbow was taken through a gentle passive range of motion. The repair remained secure to ' + v('dtri-safe-arc') + ' degrees of flexion, and this was recorded as the safe arc for the early postoperative protocol.');
+
+  d.push('CLOSURE:\nThe tourniquet was released and hemostasis was obtained. The wound was irrigated copiously. The triceps fascia was reapproximated with 0 Vicryl, the subcutaneous tissue with 2-0 Vicryl, and the skin with a running 3-0 subcuticular Monocryl reinforced with Steri-Strips. A sterile dressing was applied and the elbow was placed in ' + v('dtri-immob') + ' with a Cryocuff. The patient was returned supine, awakened, and transferred to the recovery room in satisfactory condition having tolerated the procedure well. All counts were correct.');
+
+  var report = patientHeader('dtri') +
+    'PREOPERATIVE DIAGNOSIS:\n' + preDx.join('\n') + '\n\n' +
+    'POSTOPERATIVE DIAGNOSIS:\n' + postDx.join('\n') + '\n\n' +
+    'PROCEDURE(S) PERFORMED: ' + s + ' Elbow:\n' + procs.join('\n') + '\n\n' +
+    'SURGEON: Robert H. Rolf, MD\n' +
+    'ASSISTANT: ' + asstText('dtri') + '\n' +
+    'ANESTHESIA: General with ' + v('dtri-block') + '\n' +
+    'POSITION: Prone\n' +
+    'TOURNIQUET TIME: ' + v('dtri-tq') + ' minutes\n' +
+    'IV FLUIDS: ' + v('dtri-ivf') + ' mL\n' +
+    'ESTIMATED BLOOD LOSS: ' + v('dtri-ebl') + '\n' +
+    'COMPLICATIONS: ' + complicationText('dtri') + '\n' +
+    'ANTIBIOTICS: ' + v('dtri-abx') + '\n' +
+    'IMPLANTS: ' + dtriImplants() + '\n\n' +
+    'PHYSICIAN ASSISTANT STATEMENT:\nThe use of a Physician Assistant was essential in this procedure in order to facilitate the elbow surgery, minimize risks of poor wound healing and wound infection, and improve safety and efficiency. The Physician Assistant assisted with positioning, retraction, suture management, and hemostasis.\n\n' +
+    'INDICATIONS:\nThis is a ' + v('dtri-age') + '-year-old ' + v('dtri-sex') + ' who presents for repair of a distal triceps tendon rupture. The patient\'s preoperative exam and imaging studies were consistent with the above noted diagnoses. I discussed in detail with the patient the nature of the procedure including risks, benefits, prognosis, and alternatives. Informed consent was obtained. Prior to surgery the appropriate site was identified by the patient and marked with my initials. A time-out was taken to verify the correct patient, the correct site, and the correct procedure.\n\n' +
+    'OPERATIVE FINDINGS:\n' +
+    '1. There was ' + v('dtri-finding-tear') + ', retracted approximately ' + v('dtri-retraction') + ' cm.\n' +
+    '2. There was ' + v('dtri-finding-quality') + '.\n' +
+    '3. There was ' + v('dtri-finding-footprint') + '.\n' +
+    '4. There was ' + v('dtri-finding-bursa') + '.\n' +
+    '5. There was ' + v('dtri-finding-ulnar') + '.\n\n' +
+    'DESCRIPTION OF PROCEDURE:\n\n' + d.join('\n\n') + '\n\n' +
+    'DISPOSITION:\nThe elbow will remain in ' + v('dtri-immob') + ' for ' + v('dtri-splint-weeks') +
+    ' weeks. Protected passive and active-assisted motion within the safe arc to ' + v('dtri-safe-arc') +
+    ' degrees begins thereafter, with unrestricted active motion at ' + v('dtri-active-weeks') +
+    ' weeks and resistive strengthening at ' + v('dtri-strength-weeks') + ' weeks. No resisted elbow extension until cleared. Follow-up in ' + v('dtri-followup') + '.\n\n' +
+    'PAIN MANAGEMENT PLAN:\nMultimodal regimen with ' + v('dtri-block') + ', bracing, cryotherapy, ' + painMeds('dtri') + ', and oral analgesics.\n\n' +
+    'PROGNOSIS:\nThe patient has a ' + v('dtri-prognosis') + ' prognosis for return to active function.';
+
+  showReport(report);
+}
+document.addEventListener('DOMContentLoaded', function() { dtriFixToggle(); dtriRowToggle(); });
+
 function generateBicepsTenodesis() {
   var s = v('bten-side');
   var preDx = [];
@@ -3117,6 +3384,6 @@ function generateBicepsTenodesis() {
 }
 </script>
 
-<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build b585c2a52ec6</div>
+<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build 6068a8e37d99</div>
 </body>
 </html>
