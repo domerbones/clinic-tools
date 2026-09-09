@@ -90,6 +90,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="tab" data-tab="rtsa" onclick="switchTab('rtsa')">Reverse Shoulder (rTSA)</div>
 <div class="tab" data-tab="inst" onclick="switchTab('inst')">Instability</div>
 <div class="tab" data-tab="rcr" onclick="switchTab('rcr')">Arthroscopy / RCR</div>
+<div class="tab" data-tab="arth" onclick="switchTab('arth')">Arthroscopy (New)</div>
 <div class="tab" data-tab="clav" onclick="switchTab('clav')">Clavicle ORIF</div>
 <div class="tab" data-tab="phum" onclick="switchTab('phum')">Prox Humerus ORIF</div>
 <div class="tab" data-tab="scope" onclick="switchTab('scope')">Scope/Debridement</div>
@@ -676,6 +677,259 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <span class="incomplete-msg" id="rcr-incomplete"></span>
 </div>
 </div>
+
+<!-- CONSOLIDATED ARTHROSCOPY FORM -->
+<div class="form-panel" id="panel-arth">
+<p class="defaults-note">Check applicable diagnoses and procedures, then fill in the details.</p>
+
+<div class="section-title" style="margin-top:0">Patient Information</div>
+<div class="row">
+<div class="field field-med"><label>Date of Surgery</label><input type="date" id="arth-dos"></div>
+</div>
+
+<div class="section-title">Preoperative Diagnosis</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="arth-dx-pain"><label for="arth-dx-pain">Shoulder Pain</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-dx-cuff-tear"><label for="arth-dx-cuff-tear">Rotator Cuff Tear</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-dx-impingement"><label for="arth-dx-impingement">Impingement</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-dx-biceps"><label for="arth-dx-biceps">Biceps Tendinosis</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-dx-ac"><label for="arth-dx-ac">AC Joint Osteoarthritis</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-dx-labral"><label for="arth-dx-labral">Superior Labral Tear</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-dx-antlabral"><label for="arth-dx-antlabral">Anterior Labral Tear</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-dx-postlabral"><label for="arth-dx-postlabral">Posterior Labral Tear</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-dx-synovitis"><label for="arth-dx-synovitis">Synovitis</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-dx-bicepsrupture"><label for="arth-dx-bicepsrupture">Biceps Rupture (Long Head)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-dx-partialcuff"><label for="arth-dx-partialcuff">Partial-Thickness Rotator Cuff Tear</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-dx-other" onchange="updateArthSections()"><label for="arth-dx-other">Other:</label><input type="text" id="arth-dx-other-text" class="other-text" style="display:none"></div>
+</div>
+
+<div class="section-title">Postoperative Diagnosis</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="arth-postdx-pain"><label for="arth-postdx-pain">Shoulder Pain</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-postdx-cuff-tear"><label for="arth-postdx-cuff-tear">Rotator Cuff Tear</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-postdx-impingement"><label for="arth-postdx-impingement">Impingement</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-postdx-biceps"><label for="arth-postdx-biceps">Biceps Tendinosis</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-postdx-ac"><label for="arth-postdx-ac">AC Joint Osteoarthritis</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-postdx-labral"><label for="arth-postdx-labral">Superior Labral Tear</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-postdx-antlabral"><label for="arth-postdx-antlabral">Anterior Labral Tear</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-postdx-postlabral"><label for="arth-postdx-postlabral">Posterior Labral Tear</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-postdx-synovitis"><label for="arth-postdx-synovitis">Synovitis</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-postdx-bicepsrupture"><label for="arth-postdx-bicepsrupture">Biceps Rupture (Long Head)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-postdx-partialcuff"><label for="arth-postdx-partialcuff">Partial-Thickness Rotator Cuff Tear</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-postdx-other" onchange="document.getElementById('arth-postdx-other-text').style.display=this.checked?'inline-block':'none';"><label for="arth-postdx-other">Other:</label><input type="text" id="arth-postdx-other-text" class="other-text" style="display:none"></div>
+</div>
+
+<div class="section-title">Procedures</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-arthroscopy"><label for="arth-proc-arthroscopy">Arthroscopy</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-rcr" onchange="updateArthSections()"><label for="arth-proc-rcr">Rotator Cuff Repair</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-decompression"><label for="arth-proc-decompression">Subacromial Decompression</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-acromioplasty" onchange="updateArthSections()"><label for="arth-proc-acromioplasty">Acromioplasty</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-debridement"><label for="arth-proc-debridement">Extensive Debridement</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-tenotomy"><label for="arth-proc-tenotomy">Biceps Tenotomy</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-dcr"><label for="arth-proc-dcr">Distal Clavicle Resection</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-tenodesis"><label for="arth-proc-tenodesis">Open Subpectoral Biceps Tenodesis</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-labral" onchange="updateArthSections()"><label for="arth-proc-labral">Anterior Labral Repair (29806)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-postlabral" onchange="updateArthSections()"><label for="arth-proc-postlabral">Posterior Labral Repair (29806)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-chondroplasty"><label for="arth-proc-chondroplasty">Chondroplasty</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-synovectomy"><label for="arth-proc-synovectomy">Synovectomy</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-loosebody"><label for="arth-proc-loosebody">Loose Body Removal (29819)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-capsrel"><label for="arth-proc-capsrel">Capsular Release (29825)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-biopsy"><label for="arth-proc-biopsy">Biopsy for Culture</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-slap" onchange="updateArthSections()"><label for="arth-proc-slap">SLAP Repair (29807)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-scr" onchange="updateArthSections()"><label for="arth-proc-scr">Superior Capsular Reconstruction</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-subscap" onchange="updateArthSections()"><label for="arth-proc-subscap">Subscapularis Repair (29827)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-remplissage" onchange="updateArthSections()"><label for="arth-proc-remplissage">Remplissage</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-mua" onchange="updateArthSections()"><label for="arth-proc-mua">Manipulation Under Anesthesia</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-lysis"><label for="arth-proc-lysis">Lysis of Adhesions</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-acjrecon" onchange="updateArthSections()"><label for="arth-proc-acjrecon">AC Joint Reconstruction (open)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-other" onchange="updateArthSections()"><label for="arth-proc-other">Other:</label><input type="text" id="arth-proc-other-text" class="other-text" style="display:none"></div>
+</div>
+
+<div class="section-title">Patient & Procedure</div>
+<div class="row">
+<div class="field field-small"><label>Side</label><select id="arth-side"><option>Right</option><option>Left</option></select></div>
+<div class="field field-small"><label>Age</label><input type="number" id="arth-age"></div>
+<div class="field field-small"><label>Sex</label><select id="arth-sex"><option>male</option><option>female</option></select></div>
+<div class="field"><label>Assistant</label><input id="arth-assistant" value="Russel Lee Reynolds, PA-C"></div>
+</div>
+
+<div class="section-title">Anesthesia & Meds</div>
+<div class="row">
+<div class="field field-med"><label>Block Type</label><select id="arth-block"><option value="interscalene block">Interscalene block</option><option value="interscalene block with indwelling catheter">Interscalene block with indwelling catheter</option><option value="interscalene block using Exparel">Interscalene block using Exparel</option></select></div>
+<div class="field field-small"><label>IV Fluids (mL)</label><input type="number" id="arth-ivf"></div>
+<div class="field field-med"><label>EBL</label><select id="arth-ebl"><option value="Minimal" selected>Minimal</option><option value="<50 mL">&lt;50 mL</option><option value="50-100 mL">50-100 mL</option><option value="100-200 mL">100-200 mL</option><option value=">200 mL">&gt;200 mL</option></select></div>
+<div class="field field-med"><label>Antibiotics</label><input id="arth-abx" value="Ancef"></div>
+<div class="field field-med"><label>Complications</label><select id="arth-complications" onchange="document.getElementById('arth-complications-other-text').style.display=this.value==='Other'?'inline-block':'none';"><option value="None" selected>None</option><option value="Superficial wound drainage">Superficial wound drainage</option><option value="Intraoperative fracture">Intraoperative fracture</option><option value="Nerve injury">Nerve injury</option><option value="Excessive bleeding">Excessive bleeding</option><option value="Other">Other</option></select><input type="text" id="arth-complications-other-text" class="other-text" style="display:none"></div>
+</div>
+
+<div class="section-title">Operative Findings</div>
+<div class="row">
+<div class="field"><label>EUA</label><input id="arth-eua" value="a stable, supple shoulder"></div>
+</div>
+<div class="row">
+<div class="field"><label>Glenoid Cartilage</label><select id="arth-glenoid-cart"><option value="was intact" selected>Intact</option><option value="demonstrated grade I chondromalacia">Grade I chondromalacia</option><option value="demonstrated grade II chondromalacia">Grade II chondromalacia</option><option value="demonstrated grade III chondromalacia">Grade III chondromalacia</option><option value="demonstrated grade IV chondromalacia with exposed subchondral bone">Grade IV — exposed bone</option><option value="demonstrated diffuse thinning and fibrillation">Diffuse thinning / fibrillation</option></select></div>
+<div class="field"><label>Humeral Head Cartilage</label><select id="arth-humeral-cart"><option value="was intact" selected>Intact</option><option value="demonstrated grade I chondromalacia">Grade I chondromalacia</option><option value="demonstrated grade II chondromalacia">Grade II chondromalacia</option><option value="demonstrated grade III chondromalacia">Grade III chondromalacia</option><option value="demonstrated grade IV chondromalacia with exposed subchondral bone">Grade IV — exposed bone</option><option value="demonstrated diffuse thinning and fibrillation">Diffuse thinning / fibrillation</option></select></div>
+</div>
+<div class="row">
+<div class="field"><label>Subscapularis</label><select id="arth-subscap"><option value="intact">Intact</option><option value="partial tear of the upper border">Partial tear - upper border</option><option value="frayed upper border">Frayed upper border</option><option value="full-thickness tear">Full-thickness tear</option></select></div>
+<div class="field"><label>Biceps</label><select id="arth-biceps-finding"><option value="intact">Intact</option><option value="inflamed and thickened" selected>Inflamed and thickened</option><option value="frayed">Frayed</option><option value="ruptured">Ruptured</option><option value="previously tenotomized">Previously tenotomized</option></select></div>
+</div>
+<div class="row">
+<div class="field"><label>Labrum</label><select id="arth-labrum"><option value="intact" selected>Intact</option><option value="frayed and debrided until smoothened">Frayed — debrided</option><option value="degenerative">Degenerative</option><option value="torn superiorly consistent with a SLAP lesion">SLAP tear</option><option value="torn anteriorly">Anterior tear</option><option value="torn posteriorly">Posterior tear</option></select></div>
+</div>
+<div class="row">
+<div class="field"><label>Rotator Cuff</label><select id="arth-cuff"><option value="">-- select --</option><option value="full-thickness tear of the supraspinatus">Full-thickness tear - Supraspinatus</option><option value="full-thickness tear involving both the supraspinatus and infraspinatus">Full-thickness tear - Supraspinatus + Infraspinatus</option><option value="partial-thickness tear of the supraspinatus">Partial-thickness tear - Supraspinatus</option><option value="intact">Intact</option></select></div>
+</div>
+<div class="row">
+<div class="field"><label>Tear Shape</label><select id="arth-tear-shape"><option value="">-- none --</option><option value="crescent">Crescent</option><option value="L-shaped">L-shaped</option><option value="U-shaped">U-shaped</option><option value="massive contracted">Massive contracted</option></select></div>
+<div class="field"><label>Tissue Quality</label><select id="arth-tissue-quality"><option value="good">Good</option><option value="fair">Fair</option><option value="poor">Poor</option></select></div>
+</div>
+
+<div id="arth-acromioplasty-section" class="conditional-section" style="display:none">
+<div class="row">
+<div class="field"><label>Acromion Type (converted to type I)</label><select id="arth-acromion-type"><option value="II" selected>Type II &mdash; curved</option><option value="III">Type III &mdash; hooked</option><option value="I">Type I &mdash; already flat</option></select></div>
+</div>
+</div>
+
+<div class="row">
+<div class="field"><label>Bone Quality</label><select id="arth-bone-quality"><option value="good">Good</option><option value="osteoporotic">Osteoporotic</option><option value="poor">Poor</option></select></div>
+</div>
+
+<div id="arth-postlabral-section" class="conditional-section" style="display:none">
+<div class="section-title">Posterior Labral Repair Details</div>
+<div class="row">
+<div class="field field-small"><label>Anchors (#)</label><input type="number" id="arth-plab-anchors"></div>
+<div class="field field-med"><label>Anchor Size/Type</label><input id="arth-plab-anchor-type"></div>
+<div class="field field-small"><label>Start Position</label><input id="arth-plab-start-pos"></div>
+</div>
+</div>
+
+<div id="arth-labral-section" class="conditional-section" style="display:none">
+<div class="section-title">Anterior Labral Repair Details</div>
+<div class="row">
+<div class="field field-small"><label>Anchors (#)</label><input type="number" id="arth-lab-anchors"></div>
+<div class="field field-med"><label>Anchor Size/Type</label><input id="arth-lab-anchor-type"></div>
+<div class="field field-small"><label>Start Position</label><input id="arth-lab-start-pos"></div>
+</div>
+</div>
+
+<div id="arth-slap-section" class="conditional-section" style="display:none">
+<div class="section-title">SLAP Repair Details</div>
+<div class="row">
+<div class="field field-small"><label>Anchors (#)</label><input type="number" id="arth-slap-anchors"></div>
+<div class="field field-med"><label>Anchor Size/Type</label><input id="arth-slap-anchor-type" value="Arthrex 3.0 mm SutureTak"></div>
+</div>
+</div>
+
+<div id="arth-scr-section" class="conditional-section" style="display:none">
+<div class="section-title">Superior Capsular Reconstruction Details</div>
+<div class="row">
+<div class="field field-med"><label>Graft Type</label><input id="arth-graft-type" value="dermal allograft"></div>
+<div class="field field-med"><label>Graft Size</label><input id="arth-graft-size"></div>
+</div>
+<div class="row">
+<div class="field field-small"><label>Glenoid Anchor #</label><input type="number" id="arth-scr-medial-num"></div>
+<div class="field field-med"><label>Glenoid Anchor Type</label><input id="arth-scr-medial-type" value="Arthrex 3.0 mm SutureTak"></div>
+<div class="field field-small"><label>Tuberosity Anchor #</label><input type="number" id="arth-scr-lateral-num"></div>
+<div class="field field-med"><label>Tuberosity Anchor Type</label><input id="arth-scr-lateral-type" value="Arthrex 4.75 mm SwiveLock"></div>
+</div>
+</div>
+
+<div id="arth-subscap-section" class="conditional-section" style="display:none">
+<div class="section-title">Subscapularis Repair Details</div>
+<div class="row">
+<div class="field field-small"><label>Anchors (#)</label><input type="number" id="arth-subscap-anchors"></div>
+<div class="field field-med"><label>Anchor Size/Type</label><input id="arth-subscap-anchor-type" value="Arthrex 4.75 mm SwiveLock"></div>
+<div class="field field-med"><label>Tear Extent</label><select id="arth-subscap-extent"><option value="upper border">Upper border</option><option value="upper one-third">Upper one-third</option><option value="upper one-half">Upper one-half</option><option value="full-thickness">Full-thickness</option></select></div>
+</div>
+</div>
+
+<div id="arth-remp-section" class="conditional-section" style="display:none">
+<div class="section-title">Remplissage Details</div>
+<div class="row">
+<div class="field field-small"><label>Anchors (#)</label><input type="number" id="arth-remp-anchors"></div>
+<div class="field"><label>Hill-Sachs Description</label><input id="arth-hillsachs-desc" value="an engaging Hill-Sachs lesion"></div>
+</div>
+</div>
+
+<div id="arth-mua-section" class="conditional-section" style="display:none">
+<div class="section-title">Manipulation Under Anesthesia Details</div>
+<div class="row">
+<div class="field field-small"><label>Pre FF</label><input id="arth-pre-ff"></div>
+<div class="field field-small"><label>Pre ER</label><input id="arth-pre-er"></div>
+<div class="field field-small"><label>Pre IR</label><input id="arth-pre-ir"></div>
+</div>
+<div class="row">
+<div class="field field-small"><label>Post FF</label><input id="arth-post-ff"></div>
+<div class="field field-small"><label>Post ER</label><input id="arth-post-er"></div>
+<div class="field field-small"><label>Post IR</label><input id="arth-post-ir"></div>
+</div>
+</div>
+
+<div id="arth-acjrecon-section" class="conditional-section" style="display:none">
+<div class="section-title">AC Joint Reconstruction Details</div>
+<div class="row">
+<div class="field field-med"><label>Graft Type</label><input id="arth-acj-graft-type"></div>
+<div class="field field-med"><label>Fixation</label><input id="arth-acj-fixation"></div>
+</div>
+</div>
+
+<div id="arth-cuffdetail-section">
+<div class="section-title">Rotator Cuff Repair Details <small style="font-weight:normal;color:#888">(in the report only if Rotator Cuff Repair is selected)</small></div>
+<div class="row">
+<div class="field field-small"><label>Medial Anchor #</label><input type="number" id="arth-medial-num"></div>
+<div class="field"><label>Medial Anchor Type</label><select id="arth-medial-type"><option value="Zimmer Biomet 4.5 mm double-loaded anchors">Zimmer Biomet 4.5 mm Double-Loaded</option><option value="Stryker Iconix 4.5 mm double-loaded anchors">Stryker Iconix 4.5 mm Double-Loaded</option><option value="Stryker Iconix 4.5 mm triple-loaded anchors">Stryker Iconix 4.5 mm Triple-Loaded</option><option value="Arthrex 4.75 mm Corkscrew FT triple-loaded anchors">Arthrex 4.75 mm Corkscrew FT Triple-Loaded</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Suture Configuration</label><select id="arth-suture-config"><option value="simple">Simple</option><option value="mattress" selected>Mattress</option></select></div>
+</div>
+<div class="row">
+<div class="checkbox-item"><input type="checkbox" id="arth-luggage"><label for="arth-luggage">Luggage tags placed</label></div>
+<div class="field field-small"><label>Luggage Tag #</label><input type="number" id="arth-luggage-num"></div>
+</div>
+<div class="row">
+<div class="field field-small"><label>Lateral Anchor #</label><input type="number" id="arth-lateral-num"></div>
+<div class="field"><label>Lateral Anchor Type</label><select id="arth-lateral-type"><option value="Arthrex 4.75 mm SwiveLock">Arthrex 4.75 mm SwiveLock</option><option value="Zimmer Biomet 4.75 mm Genie">Zimmer Biomet 4.75 mm Genie</option><option value="Stryker 4.75 mm AlphaVent">Stryker 4.75 mm AlphaVent</option></select></div>
+</div>
+
+</div>
+
+<div class="section-title">Disposition</div>
+<div class="row">
+<div class="field field-small"><label>Immobilizer (wks)</label><input id="arth-immobilizer-weeks" value="6"></div>
+<div id="arth-rcrrom-section" style="display:contents"><div class="field field-small"><label>Passive ROM (wks)</label><input id="arth-passive-rom-weeks" value="3"></div>
+<div class="field field-small"><label>PT Return (wks)</label><input id="arth-pt-return-weeks" value="3"></div></div>
+<div class="field field-small"><label>Active ROM (wks)</label><input id="arth-active-rom-weeks" value="6"></div>
+</div>
+
+<div class="section-title">Pain Management</div>
+<div class="row">
+<div class="field" style="min-width:100%"><label>Additional meds (after block, sling, cryo)</label>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="arth-pain-journavx" checked><label for="arth-pain-journavx">Journavx</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-pain-tylenol" checked><label for="arth-pain-tylenol">Tylenol</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-pain-meloxicam" checked><label for="arth-pain-meloxicam">Meloxicam</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-pain-neurontin"><label for="arth-pain-neurontin">Neurontin</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-pain-oxycodone"><label for="arth-pain-oxycodone">Oxycodone</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-pain-aspirin"><label for="arth-pain-aspirin">Aspirin 81 mg</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-pain-other" onchange="document.getElementById('arth-pain-other-text').style.display=this.checked?'inline-block':'none';"><label for="arth-pain-other">Other:</label><input type="text" id="arth-pain-other-text" class="other-text" style="display:none"></div>
+</div></div>
+</div>
+
+<div class="section-title">Prognosis</div>
+<div class="row">
+<div class="field"><label>Prognosis</label><select id="arth-prognosis"><option value="good" selected>Good</option><option value="excellent">Excellent</option><option value="fair">Fair</option><option value="guarded">Guarded</option></select></div>
+</div>
+
+<div class="btn-row">
+<button class="btn btn-primary" onclick="markFields('panel-arth'); var m=checkIncomplete('panel-arth'); if(m>0){document.getElementById('arth-incomplete').textContent=m+' field(s) still empty';document.getElementById('arth-incomplete').style.display='inline';} else {document.getElementById('arth-incomplete').style.display='none';} generateArthroscopy();">Generate Report</button>
+<button class="btn btn-outline" onclick="clearForm('arth'); markFields('panel-arth');">Clear Form</button>
+<span class="copied-msg" id="arth-copied">Copied to clipboard!</span>
+<span class="incomplete-msg" id="arth-incomplete"></span>
+</div>
+</div>
+
 
 <!-- CLAVICLE ORIF FORM -->
 <div class="form-panel" id="panel-clav">
@@ -1648,7 +1902,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 
 <div class="section-title">Anesthesia &amp; Meds</div>
 <div class="row">
-<div class="field field-med"><label>Block Type</label><select id="dtri-block"><option value="supraclavicular block" selected>Supraclavicular block</option><option value="infraclavicular block">Infraclavicular block</option><option value="axillary block">Axillary block</option><option value="no regional block">No block, general only</option></select></div>
+<div class="field field-med"><label>Block Type</label><select id="dtri-block"><option value="interscalene block" selected>Interscalene block</option><option value="interscalene block with indwelling catheter">Interscalene block with indwelling catheter</option><option value="interscalene block using Exparel">Interscalene block using Exparel</option><option value="supraclavicular block">Supraclavicular block</option><option value="infraclavicular block">Infraclavicular block</option><option value="axillary block">Axillary block</option><option value="no regional block">No block, general only</option></select></div>
 <div class="field field-small"><label>Tourniquet (min)</label><input id="dtri-tq" value="45"></div>
 <div class="field field-small"><label>IV Fluids (mL)</label><input type="number" id="dtri-ivf"></div>
 <div class="field field-med"><label>Antibiotics</label><input id="dtri-abx" value="Ancef"></div>
@@ -2122,6 +2376,8 @@ var CPT_MAP = [
   [/Reverse Total Shoulder Arthroplasty/i, '23472 — Reverse total shoulder arthroplasty'],
   [/Total Shoulder Arthroplasty/i, '23472 — Total shoulder arthroplasty'],
   [/Superior Capsular Reconstruction/i, '29806 — Arthroscopic capsulorrhaphy (AANA-recommended code for SCR)'],
+  [/Subscapularis Repair/i, '29827 — Arthroscopic rotator cuff repair (subscapularis)'],
+  [/Acromioclavicular Joint Reconstruction|AC Joint Reconstruction/i, '23552 — Open treatment of acromioclavicular dislocation with fascial graft (use 23550 if no graft)'],
   [/Rotator Cuff Repair/i, '29827 — Arthroscopic rotator cuff repair'],
   [/Biceps Tenodesis/i, '23430 — Biceps tenodesis'],
   [/Distal Triceps Repair/i, '24342 — Reinsertion of ruptured distal triceps tendon'],
@@ -2783,6 +3039,171 @@ function generateRCR() {
   showReport(report);
 }
 
+function generateArthroscopy() {
+  // Delayed passive ROM applies only to cuff repairs; everything else moves
+  // immediately, and a biceps tenodesis keeps the elbow flexed at 90 degrees.
+  function arthDisposition() {
+    var t = 'DISPOSITION:\nThe patient will remain in the shoulder immobilizer for ' + v('arth-immobilizer-weeks') + ' weeks. ';
+    if (ck('arth-proc-rcr')) {
+      t += 'Passive range of motion of the shoulder will begin in ' + v('arth-passive-rom-weeks') + ' weeks per protocol. The patient will go to physical therapy for an initial wound check and then not return for ' + v('arth-pt-return-weeks') + ' weeks. ';
+      if (ck('arth-proc-tenodesis')) t += 'The elbow will be kept flexed at 90 degrees to protect the biceps tenodesis. ';
+    } else if (ck('arth-proc-tenodesis')) {
+      t += 'Immediate passive range of motion of the shoulder is permitted with the elbow flexed at 90 degrees to protect the biceps tenodesis. ';
+    } else {
+      t += 'Immediate passive range of motion of the shoulder is permitted. ';
+    }
+    t += 'Active range of motion will begin in ' + v('arth-active-rom-weeks') + ' weeks.';
+    return t;
+  }
+  // Anchors are only listed for procedures that actually place them.
+  function arthImplants() {
+    var parts = [];
+    if (ck('arth-proc-rcr')) parts.push(v('arth-medial-num') + ' ' + v('arth-medial-type') + ', ' + v('arth-lateral-num') + ' ' + v('arth-lateral-type'));
+    if (ck('arth-proc-slap') && String(v('arth-slap-anchors')).trim()) parts.push(v('arth-slap-anchors') + ' ' + v('arth-slap-anchor-type') + ' (SLAP)');
+    if (ck('arth-proc-labral') && String(v('arth-lab-anchors')).trim()) parts.push(v('arth-lab-anchors') + ' ' + v('arth-lab-anchor-type') + ' (anterior labrum)');
+    if (ck('arth-proc-postlabral') && String(v('arth-plab-anchors')).trim()) parts.push(v('arth-plab-anchors') + ' ' + v('arth-plab-anchor-type') + ' (posterior labrum)');
+    if (ck('arth-proc-scr')) parts.push(v('arth-scr-medial-num') + ' ' + v('arth-scr-medial-type') + ' (glenoid), ' + v('arth-scr-lateral-num') + ' ' + v('arth-scr-lateral-type') + ' (greater tuberosity)');
+    if (ck('arth-proc-subscap') && String(v('arth-subscap-anchors')).trim()) parts.push(v('arth-subscap-anchors') + ' ' + v('arth-subscap-anchor-type') + ' (subscapularis)');
+    if (ck('arth-proc-remplissage') && String(v('arth-remp-anchors')).trim()) parts.push(v('arth-remp-anchors') + ' anchors (remplissage)');
+    if (ck('arth-proc-tenodesis')) parts.push(BICEPS_ANCHOR);
+    return parts.length ? parts.join(', ') : 'None';
+  }
+  var s = v('arth-side');
+  var preDx = [];
+  if (ck('arth-dx-pain')) preDx.push(s + ' Shoulder Pain');
+  if (ck('arth-dx-cuff-tear')) preDx.push(s + ' Rotator Cuff Tear');
+  if (ck('arth-dx-impingement')) preDx.push(s + ' Impingement');
+  if (ck('arth-dx-biceps')) preDx.push(s + ' Biceps Tendinosis');
+  if (ck('arth-dx-ac')) preDx.push(s + ' Acromioclavicular Joint Osteoarthritis');
+  if (ck('arth-dx-labral')) preDx.push(s + ' Superior Labral Tear');
+  if (ck('arth-dx-antlabral')) preDx.push(s + ' Anterior Labral Tear');
+  if (ck('arth-dx-postlabral')) preDx.push(s + ' Posterior Labral Tear');
+  if (ck('arth-dx-synovitis')) preDx.push(s + ' Synovitis');
+  if (ck('arth-dx-bicepsrupture')) preDx.push(s + ' Long Head Biceps Tendon Rupture');
+  if (ck('arth-dx-partialcuff')) preDx.push(s + ' Partial-Thickness Rotator Cuff Tear');
+  if (ck('arth-dx-other') && v('arth-dx-other-text').trim()) preDx.push(s + ' ' + v('arth-dx-other-text'));
+  var postDx = [];
+  if (ck('arth-postdx-pain')) postDx.push(s + ' Shoulder Pain');
+  if (ck('arth-postdx-cuff-tear')) postDx.push(s + ' Rotator Cuff Tear');
+  if (ck('arth-postdx-impingement')) postDx.push(s + ' Impingement');
+  if (ck('arth-postdx-biceps')) postDx.push(s + ' Biceps Tendinosis');
+  if (ck('arth-postdx-ac')) postDx.push(s + ' Acromioclavicular Joint Osteoarthritis');
+  if (ck('arth-postdx-labral')) postDx.push(s + ' Superior Labral Tear');
+  if (ck('arth-postdx-antlabral')) postDx.push(s + ' Anterior Labral Tear');
+  if (ck('arth-postdx-postlabral')) postDx.push(s + ' Posterior Labral Tear');
+  if (ck('arth-postdx-synovitis')) postDx.push(s + ' Synovitis');
+  if (ck('arth-postdx-bicepsrupture')) postDx.push(s + ' Long Head Biceps Tendon Rupture');
+  if (ck('arth-postdx-partialcuff')) postDx.push(s + ' Partial-Thickness Rotator Cuff Tear');
+  if (ck('arth-postdx-other') && v('arth-postdx-other-text').trim()) postDx.push(s + ' ' + v('arth-postdx-other-text'));
+  var procs = [];
+  if (ck('arth-proc-arthroscopy')) procs.push(s + ' Arthroscopy');
+  if (ck('arth-proc-rcr')) procs.push(s + ' Arthroscopic Rotator Cuff Repair');
+  if (ck('arth-proc-decompression')) procs.push(s + ' Arthroscopic Subacromial Decompression');
+  if (ck('arth-proc-acromioplasty')) procs.push(s + ' Acromioplasty');
+  if (ck('arth-proc-debridement')) procs.push(s + ' Arthroscopic Extensive Glenohumeral Debridement');
+  if (ck('arth-proc-tenotomy')) procs.push(s + ' Arthroscopic Biceps Tenotomy');
+  if (ck('arth-proc-dcr')) procs.push(s + ' Arthroscopic Distal Clavicle Resection');
+  if (ck('arth-proc-tenodesis')) procs.push(s + ' Open Subpectoral Biceps Tenodesis');
+  if (ck('arth-proc-labral')) procs.push(s + ' Arthroscopic Anterior Labral (Bankart) Repair with Capsulorrhaphy');
+  if (ck('arth-proc-postlabral')) procs.push(s + ' Arthroscopic Posterior Labral Repair with Capsulorrhaphy');
+  if (ck('arth-proc-slap')) procs.push(s + ' Arthroscopic SLAP Repair');
+  if (ck('arth-proc-chondroplasty')) procs.push(s + ' Arthroscopic Chondroplasty');
+  if (ck('arth-proc-synovectomy')) procs.push(s + ' Arthroscopic Synovectomy');
+  if (ck('arth-proc-loosebody')) procs.push(s + ' Arthroscopic Loose Body Removal');
+  if (ck('arth-proc-capsrel')) procs.push(s + ' Arthroscopic Capsular Release');
+  if (ck('arth-proc-biopsy')) procs.push(s + ' Arthroscopic Biopsy for Culture');
+  if (ck('arth-proc-scr')) procs.push(s + ' Arthroscopic Superior Capsular Reconstruction');
+  if (ck('arth-proc-subscap')) procs.push(s + ' Arthroscopic Subscapularis Repair');
+  if (ck('arth-proc-remplissage')) procs.push(s + ' Arthroscopic Remplissage');
+  if (ck('arth-proc-mua')) procs.push(s + ' Manipulation Under Anesthesia');
+  if (ck('arth-proc-lysis')) procs.push(s + ' Arthroscopic Lysis of Adhesions');
+  if (ck('arth-proc-acjrecon')) procs.push(s + ' Acromioclavicular Joint Reconstruction');
+  if (ck('arth-proc-other') && v('arth-proc-other-text').trim()) procs.push(s + ' ' + v('arth-proc-other-text'));
+  var findings = [];
+  var fn = 1;
+  findings.push(fn++ + '. Exam under anesthesia demonstrated ' + v('arth-eua') + '.');
+  findings.push(fn++ + '. The articular cartilage of the glenoid socket ' + v('arth-glenoid-cart') + '.');
+  findings.push(fn++ + '. The articular cartilage of the humeral head ' + v('arth-humeral-cart') + '.');
+  findings.push(fn++ + '. The subscapularis was ' + v('arth-subscap') + '.');
+  findings.push(fn++ + '. The biceps was ' + v('arth-biceps-finding') + '.');
+  findings.push(fn++ + '. The labrum was ' + v('arth-labrum') + '.');
+  var cuffLine = fn++ + '. The rotator cuff was ' + v('arth-cuff') + '.';
+  if (ck('arth-proc-rcr')) {
+    if (v('arth-tear-shape')) cuffLine += ' The tear shape was ' + v('arth-tear-shape') + '.';
+    cuffLine += ' The quality of tissue was ' + v('arth-tissue-quality') + '.';
+  }
+  findings.push(cuffLine);
+  if (ck('arth-dx-synovitis')) findings.push(fn++ + '. There was extensive synovitis throughout the glenohumeral joint.');
+  if (ck('arth-proc-acromioplasty')) findings.push(fn++ + '. There was an anterior hooked acromion with extensive bursitis, erythema, and hyperemia in the subacromial space.');
+  if (v('arth-bone-quality').trim()) findings.push(fn++ + '. The quality of bone was ' + v('arth-bone-quality') + '.');
+  if (ck('arth-dx-ac')) findings.push(fn++ + '. There was acromioclavicular osteoarthritis.');
+  var descSections = [];
+  descSections.push('POSITIONING AND PREPARATION:\nThe patient was taken to the operating room and placed on the operating table in the beach chair position. After adequate anesthesia was obtained, the patient was placed in the seated position. All bony prominences were well padded. The arm was elevated, prepped, and draped in the usual sterile fashion. Preoperative antibiotics were administered intravenously as noted above. Arthroscopy was then performed through standard portals, with findings as noted above.');
+  if (ck('arth-proc-mua')) descSections.push('MANIPULATION UNDER ANESTHESIA:\nPre-manipulation range of motion was documented as forward flexion ' + v('arth-pre-ff') + ' degrees, external rotation ' + v('arth-pre-er') + ' degrees, and internal rotation ' + v('arth-pre-ir') + '. With the patient under general anesthesia and complete muscle relaxation confirmed, the shoulder was gently and progressively manipulated. Forward flexion was performed first, followed by abduction, external rotation at the side, external rotation in abduction, internal rotation in abduction, and cross-body adduction. Audible and palpable releases were noted as adhesions were broken. The manipulation was performed in a controlled, sequential fashion to minimize the risk of fracture. Post-manipulation range of motion was forward flexion ' + v('arth-post-ff') + ' degrees, external rotation ' + v('arth-post-er') + ' degrees, and internal rotation ' + v('arth-post-ir') + '.');
+  if (ck('arth-proc-lysis')) descSections.push('ARTHROSCOPIC LYSIS OF ADHESIONS:\nDense adhesions were identified throughout the glenohumeral joint. Using an arthroscopic shaver and radiofrequency device, a thorough lysis of adhesions was performed, including release of the rotator interval, anterior capsule, inferior capsule, and posterior capsule as needed to restore motion.');
+  if (ck('arth-proc-debridement')) descSections.push('ARTHROSCOPIC EXTENSIVE DEBRIDEMENT OF THE GLENOHUMERAL JOINT:\nUsing an arthroscopic shaver device, an extensive debridement was performed. There were massive amounts of hyperemia, erythema, and synovitis throughout the entire glenohumeral joint, and all of these areas were aggressively debrided until smoothened. The entire surface of the glenoid labrum was debrided with the shaver device until smoothened.');
+  if (ck('arth-proc-tenotomy')) descSections.push('ARTHROSCOPIC BICEPS TENOTOMY:\nUsing a side-effect radiofrequency device, the biceps tendon was tenotomized and allowed to retract distally into the bicipital groove.');
+  if (ck('arth-proc-labral')) {
+    descSections.push('ARTHROSCOPIC ANTERIOR LABRAL REPAIR AND CAPSULORRHAPHY:\nThe anterior labrum was found to be detached from the glenoid rim. The labrum and capsule were sharply elevated off the glenoid neck with an arthroscopic elevator until the subscapularis muscle fibers were visualized and the labrum floated freely to its anatomic position. The anterior glenoid neck was decorticated with a shaver and burr to a bleeding bony bed. Working from inferior to superior, ' + v('arth-lab-anchors') + ' ' + v('arth-lab-anchor-type') + ' suture anchors were placed on the glenoid face at the articular margin, beginning at the ' + v('arth-lab-start-pos') + " o'clock position. At each anchor, the capsulolabral tissue was penetrated with a suture passing device incorporating an appropriate capsular plication, and the labrum was secured to the glenoid rim, recreating the anterior bumper and retensioning the anteroinferior capsule. The repair was probed and found to be secure with excellent bumper restoration.");
+  }
+  if (ck('arth-proc-postlabral')) {
+    descSections.push('ARTHROSCOPIC POSTERIOR LABRAL REPAIR AND CAPSULORRHAPHY:\nThe posterior labrum was found to be detached from the glenoid rim. The labrum and capsule were elevated off the posterior glenoid neck with an arthroscopic elevator until the tissue floated freely to its anatomic position, and the posterior glenoid neck was decorticated with a shaver and burr to a bleeding bony bed. Working from inferior to superior, ' + v('arth-plab-anchors') + ' ' + v('arth-plab-anchor-type') + ' suture anchors were placed on the glenoid face at the articular margin, beginning at the ' + v('arth-plab-start-pos') + " o'clock position. At each anchor, the capsulolabral tissue was penetrated with a suture passing device incorporating an appropriate capsular plication, and the labrum was secured to the glenoid rim, recreating the posterior bumper and retensioning the posteroinferior capsule. The repair was probed and found to be secure.");
+  }
+  if (ck('arth-proc-chondroplasty')) descSections.push('CHONDROPLASTY:\nAreas of damaged articular cartilage were identified. Using an arthroscopic shaver, the unstable cartilage flaps were debrided and the chondral surfaces smoothened and stabilized.');
+  if (ck('arth-proc-synovectomy')) descSections.push('SYNOVECTOMY:\nAn extensive synovectomy was performed using a motorized shaver, removing all pathologic synovial tissue from the glenohumeral joint.');
+  if (ck('arth-proc-loosebody')) descSections.push('LOOSE BODY REMOVAL:\nMultiple loose bodies were identified and removed from the glenohumeral joint using an arthroscopic grasper. The joint was thoroughly irrigated and inspected to confirm complete removal of all loose bodies.');
+  if (ck('arth-proc-capsrel')) descSections.push('CAPSULAR RELEASE:\nA circumferential capsular release was performed with an arthroscopic elevator and radiofrequency device, taking care to protect the axillary nerve inferiorly. Motion was reassessed and found to be substantially improved.');
+  if (ck('arth-proc-biopsy')) descSections.push('ARTHROSCOPIC BIOPSY FOR CULTURE:\nA GraftNet autologous tissue collector was placed in line with the arthroscopic shaver suction. Representative synovial and capsular tissue was shaved from multiple sites within the joint and collected in the GraftNet. The collected tissue was sent for aerobic, anaerobic, fungal, and acid-fast culture. The laboratory was specifically instructed to hold the anaerobic cultures for a minimum of fourteen days for Cutibacterium acnes, formerly Propionibacterium acnes, which is characteristically slow-growing. Antibiotic management will be tailored once speciation and sensitivities are available.');
+  if (ck('arth-proc-slap')) descSections.push('SLAP REPAIR:\nThe superior labrum was detached from the glenoid rim at the biceps anchor. The superior glenoid neck was prepared with a shaver and burr to a bleeding bony bed. ' + v('arth-slap-anchors') + ' ' + v('arth-slap-anchor-type') + ' suture anchors were placed at the superior glenoid rim and the labrum secured, restoring a stable biceps anchor. The repair was probed and found to be secure.');
+  if (ck('arth-proc-decompression')) descSections.push('ARTHROSCOPIC SUBACROMIAL DECOMPRESSION:\nThe subacromial space was entered. There were massive amounts of hyperemia, erythema, and bursitis with adhesions in the subdeltoid and subacromial regions. There was significant narrowing of the acromiohumeral interval and a thick, fibrotic coracoacromial ligament contributing to outlet impingement. Using a motorized shaver and a side-effect radiofrequency device, the bursa was removed from lateral to medial and anterior to posterior. A perihumeral debridement was performed along with decompression of the subdeltoid adhesions.');
+  if (ck('arth-proc-acromioplasty')) descSections.push('ACROMIOPLASTY:\nThe acromion was flattened in the same sequence of steps as the arthroscopic subacromial decompression. It was converted from a type ' + v('arth-acromion-type') + ' to a type I acromion.');
+  if (ck('arth-proc-rcr')) descSections.push('ARTHROSCOPIC ROTATOR CUFF REPAIR:\nThe rotator cuff tear was full thickness in its extent. An arthroscopic shaver device was introduced and the greater tuberosity was abraded down to a gently bleeding bone bed in order to facilitate healing of soft tissue back to bone. ' + v('arth-medial-num') + ' ' + v('arth-medial-type') + ' were placed at a 45-degree angle adjacent to the articular cartilage in the greater tuberosity. The sutures were passed through the rotator cuff in a ' + v('arth-suture-config') + ' configuration. ' + (ck('arth-luggage') ? (v('arth-luggage-num') ? v('arth-luggage-num') + ' ' : '') + 'luggage tag sutures were placed to secure the tendon edge. ' : '') + 'Using arthroscopic knot-tying techniques, the rotator cuff was repaired back to the greater tuberosity with excellent compression onto the tuberosity.\n\nThe lateral part of the rotator cuff remained in poor contact with bone; therefore, a second row of anchors was placed. The first-row suture limbs were passed through ' + v('arth-lateral-num') + ' ' + v('arth-lateral-type') + ' lateral row anchors inserted in the greater tuberosity. As they were inserted, they exerted a compression effect onto the underlying rotator cuff, restoring the rotator cuff footprint in an anatomic fashion. Care was taken not to overtension the rotator cuff during its repair.');
+  if (ck('arth-proc-dcr')) descSections.push('ARTHROSCOPIC DISTAL CLAVICLE RESECTION:\nUnder direct visualization, the acromioclavicular joint was arthritic. The tissue along with the thickened, fibrotic acromioclavicular joint meniscus was debrided. A high-speed burr was introduced and the distal clavicle was resected to decompress the acromioclavicular joint such that there was no impingement with the acromion. This was a smooth, symmetric resection confirmed by arthroscopic visualization from multiple viewing portals. The acromioclavicular joint ligaments were left intact superiorly, anteriorly, and posteriorly to maintain acromioclavicular joint stability.');
+  if (ck('arth-proc-tenodesis')) descSections.push('OPEN SUBPECTORAL BICEPS TENODESIS:\nInstruments were removed and an approximately 3 cm incision was made at the anterior/inferior axillary fold. Sharp dissection was employed through subcutaneous tissue down to the fascia overlying the pectoralis major. The subpectoral interval was defined and the arm internally rotated. Retractors were used to elevate the pectoralis major, and the biceps tendon was delivered in a retrograde fashion out of the bicipital groove. The adjacent bone was cleared with electrocautery and roughened with an osteotome. A single 1.8 mm Arthrex FiberTak anchor double loaded with #2 suture tape was placed at that point, and the biceps tendon was tenodesed against the bone in an onlay fashion using alternating simple sutures and lasso loop technique with the aid of a penetrating device. The excess tendon was removed with scissors.');
+  if (ck('arth-proc-subscap')) descSections.push('ARTHROSCOPIC SUBSCAPULARIS REPAIR:\nThe subscapularis was inspected and found to have a ' + v('arth-subscap-extent') + ' tear. The tendon was mobilized and the lesser tuberosity footprint was prepared to a bleeding bone bed with a shaver and burr. ' + v('arth-subscap-anchors') + ' ' + v('arth-subscap-anchor-type') + ' anchors were placed in the lesser tuberosity, and the subscapularis was secured to its footprint under appropriate tension. The repair was probed and found to be secure. The comma tissue and the medial sling of the biceps were respected throughout.');
+  if (ck('arth-proc-remplissage')) descSections.push('REMPLISSAGE:\nThe arthroscope was placed anteriorly and ' + v('arth-hillsachs-desc') + ' was visualized. ' + v('arth-remp-anchors') + ' anchors were placed into the defect and sutures passed through the infraspinatus and posterior capsule, which were tied in the subacromial space, completing the remplissage.');
+  if (ck('arth-proc-scr')) descSections.push('SUPERIOR CAPSULAR RECONSTRUCTION:\nThe superior glenoid was prepared with a shaver and burr to create a bleeding bone bed at the superior glenoid neck. The greater tuberosity footprint was similarly prepared. A ' + v('arth-graft-type') + (v('arth-graft-size').trim() ? ' (' + v('arth-graft-size') + ')' : '') + ' was prepared on the back table. ' + v('arth-scr-medial-num') + ' ' + v('arth-scr-medial-type') + ' suture anchors were placed at the superior glenoid. Sutures were passed through the medial edge of the graft in a mattress configuration. The graft was shuttled into the joint and secured to the superior glenoid. ' + v('arth-scr-lateral-num') + ' ' + v('arth-scr-lateral-type') + ' anchors were placed in the greater tuberosity, and the lateral edge of the graft was secured to the tuberosity footprint, restoring the superior capsule. The graft was tensioned with the arm in neutral rotation. The repair was probed and found to be secure with excellent superior coverage.');
+  if (ck('arth-proc-acjrecon')) descSections.push('AC JOINT RECONSTRUCTION:\nAn incision was made over the AC joint. The deltotrapezial fascia was incised and the AC joint exposed. The distal clavicle was identified and the AC joint was reduced. ' + (v('arth-acj-graft-type').trim() ? 'A ' + v('arth-acj-graft-type') + ' was used for reconstruction. ' : '') + (v('arth-acj-fixation').trim() ? 'Fixation was achieved with ' + v('arth-acj-fixation') + '. ' : '') + 'The AC joint reduction was confirmed clinically and fluoroscopically. The deltotrapezial fascia was repaired.');
+  descSections.push('CLOSURE:\nIncisions were closed with running 3-0 subcuticular Monocryl suture reinforced with Steri-Strips. Portal sites were closed in interrupted fashion with Monocryl, reinforced with Steri-Strips. The shoulder was dressed sterilely and placed in a sling and Cryocuff, and the patient was transferred to the recovery room in satisfactory condition having tolerated the procedure well. All counts were correct.');
+
+  var report = patientHeader('arth') +
+    'PREOPERATIVE DIAGNOSIS:\n' + preDx.join('\n') + '\n\n' +
+    'POSTOPERATIVE DIAGNOSIS:\n' + postDx.join('\n') + '\n\n' +
+    'PROCEDURE(S) PERFORMED: ' + s + ' Shoulder:\n' + procs.join('\n') + '\n\n' +
+    'SURGEON: Robert H. Rolf, MD\n' +
+    'ASSISTANT: ' + asstText('arth') + '\n' +
+    'ANESTHESIA: General with ' + v('arth-block') + '\n' +
+    'IV FLUIDS: ' + v('arth-ivf') + ' mL\n' +
+    'ESTIMATED BLOOD LOSS: ' + v('arth-ebl') + '\n' +
+    'COMPLICATIONS: ' + complicationText('arth') + '\n' +
+    'ANTIBIOTICS: ' + v('arth-abx') + '\n' +
+    'IMPLANTS: ' + arthImplants() + '\n\n' +
+    'PHYSICIAN ASSISTANT STATEMENT:\nThe use of a Physician Assistant was essential in this procedure in order to facilitate the shoulder surgery, minimize risks of poor wound healing and wound infection, and improve safety and efficiency. The Physician Assistant assisted with arm positioning, retraction, suture management, and hemostasis.\n\n' +
+    'INDICATIONS:\nThis is a ' + v('arth-age') + '-year-old ' + v('arth-sex') + ' who presents for shoulder arthroscopy. The patient\'s preoperative exam and imaging studies were consistent with the above noted diagnoses. I discussed in detail with the patient the nature of the procedure including risks, benefits, prognosis, and alternatives. Informed consent was obtained. Prior to surgery the appropriate site was identified by the patient and marked with my initials. A time-out was taken to verify the correct patient, the correct site, and the correct procedure.\n\n' +
+    'OPERATIVE FINDINGS:\n' + findings.join('\n') + '\n\n' +
+    'DESCRIPTION OF PROCEDURE:\n\n' + descSections.join('\n\n') + '\n\n' +
+    arthDisposition() + '\n\n' +
+    'PAIN MANAGEMENT PLAN:\nMultimodal regimen with ' + v('arth-block') + ', sling, cryotherapy, ' + painMeds('arth') + ', and oral analgesics.\n\n' +
+    'PROGNOSIS:\nThe patient has a ' + v('arth-prognosis') + ' prognosis for pain-free return to active function.';
+
+  showReport(report);
+}
+
+function updateArthSections() {
+  document.getElementById('arth-acromioplasty-section').style.display = ck('arth-proc-acromioplasty') ? 'block' : 'none';
+  document.getElementById('arth-slap-section').style.display = ck('arth-proc-slap') ? 'block' : 'none';
+
+  document.getElementById('arth-labral-section').style.display = ck('arth-proc-labral') ? 'block' : 'none';
+  document.getElementById('arth-postlabral-section').style.display = ck('arth-proc-postlabral') ? 'block' : 'none';
+  document.getElementById('arth-scr-section').style.display = ck('arth-proc-scr') ? 'block' : 'none';
+  document.getElementById('arth-subscap-section').style.display = ck('arth-proc-subscap') ? 'block' : 'none';
+  document.getElementById('arth-remp-section').style.display = ck('arth-proc-remplissage') ? 'block' : 'none';
+  document.getElementById('arth-mua-section').style.display = ck('arth-proc-mua') ? 'block' : 'none';
+  document.getElementById('arth-acjrecon-section').style.display = ck('arth-proc-acjrecon') ? 'block' : 'none';
+  document.getElementById('arth-dx-other-text').style.display = ck('arth-dx-other') ? 'inline-block' : 'none';
+  document.getElementById('arth-proc-other-text').style.display = ck('arth-proc-other') ? 'inline-block' : 'none';
+}
+
 function generateClavicle() {
   var s = v('clav-side');
   var preDx = [];
@@ -3398,6 +3819,6 @@ function generateBicepsTenodesis() {
 }
 </script>
 
-<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build 6da4a3457590</div>
+<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build f7ccb43c8c1a</div>
 </body>
 </html>
