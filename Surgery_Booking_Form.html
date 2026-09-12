@@ -1342,19 +1342,18 @@ function getDiagnosisLines(proc, side) {
    Add a procedure here and it appears on all of them. Anterior and posterior
    labral repair share 29806; getCPTLines already collapses duplicate codes. */
 var SCOPE_ADDONS = [
-  ['diagnostic','Diagnostic Arthroscopy','29805'],
   ['rcrepair','Arthroscopic Rotator Cuff Repair','29827'],
+  ['tenodesis','Open Subpectoral Biceps Tenodesis','23430'],
+  ['dcr','Distal Clavicle Resection','29824'],
+  ['decompression','Subacromial Decompression','29826'],
+  ['acromioplasty','Acromioplasty',''],
   ['subscap','Subscapularis Repair','29827'],
   ['scrrecon','Superior Capsular Reconstruction','29827'],
   ['antlabral','Arthroscopic Anterior Labral (Bankart) Repair','29806'],
   ['postlabral','Arthroscopic Posterior Labral Repair','29806'],
   ['slaprep','Arthroscopic SLAP Repair','29807'],
   ['remplissage','Remplissage',''],
-  ['decompression','Subacromial Decompression','29826'],
-  ['acromioplasty','Acromioplasty',''],
-  ['dcr','Distal Clavicle Resection','29824'],
   ['tenotomy','Arthroscopic Biceps Tenotomy','29822'],
-  ['tenodesis','Open Subpectoral Biceps Tenodesis','23430'],
   ['debridement','Extensive Glenohumeral Debridement','29823'],
   ['chondroplasty','Chondroplasty',''],
   ['synovectomy','Synovectomy',''],
@@ -1363,6 +1362,7 @@ var SCOPE_ADDONS = [
   ['lysis','Lysis of Adhesions','29825'],
   ['muaddon','Manipulation Under Anesthesia','23700'],
   ['acjrecon','AC Joint Reconstruction (open)','23552'],
+  ['diagnostic','Diagnostic Arthroscopy','29805'],
   ['biopsy','Arthroscopic Biopsy for Culture','']
 ];
 /* A panel never offers its own primary procedure as an add-on. The Bankart
@@ -1921,6 +1921,6 @@ document.addEventListener('DOMContentLoaded', loadStaffEmail);
 document.addEventListener('DOMContentLoaded', renderAddonSlots);
 </script>
 
-<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build 0da9ace156e5</div>
+<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build 47b3565eee74</div>
 </body>
 </html>
