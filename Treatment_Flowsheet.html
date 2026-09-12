@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: letter landscape; margin: 0.5in; }
+  body { font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 20px; background: white; }
+  .title { text-align: center; color: #193F84; font-size: 18px; font-weight: bold; margin-bottom: 4px; }
+  .subtitle { text-align: center; color: #888; font-size: 11px; margin-bottom: 18px; }
+  
+  .flow { display: flex; flex-direction: column; align-items: center; gap: 0; }
+  
+  .box { border-radius: 6px; padding: 8px 14px; text-align: center; font-size: 11px; line-height: 1.4; position: relative; }
+  .box-dark { background: #0F1F3D; color: white; font-weight: bold; font-size: 12px; min-width: 500px; }
+  .box-gold { background: #E8A838; color: #0F1F3D; font-weight: bold; font-size: 12px; min-width: 340px; }
+  .box-red { background: #C62828; color: white; font-weight: bold; }
+  .box-blue { background: #EBF5FB; border-left: 4px solid #193F84; text-align: left; }
+  .box-teal { background: #EBF5FB; border-left: 4px solid #1A8A8A; text-align: left; }
+  .box-green { background: #EBF5FB; border-left: 4px solid #2E7D32; text-align: left; }
+  .box-warn { background: #FFF3E0; border-left: 4px solid #C62828; text-align: left; }
+  
+  .arrow { width: 2px; height: 16px; background: #193F84; margin: 0 auto; }
+  .arrow-label { font-size: 10px; font-weight: bold; margin: 2px 0; }
+  .yes { color: #C62828; }
+  .no { color: #2E7D32; }
+  
+  .branch-container { display: flex; gap: 20px; justify-content: center; align-items: flex-start; margin-top: 0; width: 100%; }
+  .branch { display: flex; flex-direction: column; align-items: center; gap: 0; flex: 1; max-width: 320px; }
+  .branch-title { font-size: 11px; font-weight: bold; color: #193F84; margin-bottom: 6px; text-align: center; }
+  
+  .step-label { font-size: 9px; color: #1A8A8A; font-weight: bold; margin-bottom: 2px; }
+  .step-title { font-weight: bold; color: #193F84; font-size: 11px; }
+  .step-detail { color: #555; font-size: 9.5px; margin-top: 2px; }
+  
+  .horiz-line { width: 100%; height: 2px; background: #193F84; margin: 6px 0; }
+  .vert-connector { width: 2px; height: 10px; background: #193F84; margin: 0 auto; }
+  
+  .footer { text-align: center; color: #aaa; font-size: 8px; margin-top: 12px; }
+  .source { font-size: 8px; color: #999; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<div class="title">Treatment Algorithm: Massive Irreparable Rotator Cuff Tears Without Pseudoparalysis</div>
+<div class="subtitle">Evidence-Based Flowsheet | Active Forward Elevation >90&deg; | No Glenohumeral Arthritis (unless noted) | Literature 2020-2025</div>
+
+<div class="flow">
+  <!-- Step 1: Entry -->
+  <div class="box box-dark">
+    Confirmed Massive Irreparable Rotator Cuff Tear<br>
+    Active Forward Elevation >90&deg; &nbsp;|&nbsp; No Pseudoparalysis &nbsp;|&nbsp; Failed Conservative Management
+  </div>
+  <div class="arrow"></div>
+  
+  <!-- Step 2: Arthritis check -->
+  <div class="box box-gold">Glenohumeral Arthritis (Hamada &ge;3)?</div>
+  
+  <div style="display:flex; align-items:flex-start; gap: 0; width: 700px; justify-content: center;">
+    <!-- YES -->
+    <div style="display:flex; flex-direction:column; align-items:center; flex:1;">
+      <div class="arrow-label yes">&darr; Yes</div>
+      <div class="box box-red" style="width:180px;">Reverse Total Shoulder<br>Arthroplasty (rTSA)</div>
+      <div class="source">Standard indication with arthritis</div>
+    </div>
+    <!-- NO -->
+    <div style="display:flex; flex-direction:column; align-items:center; flex:1;">
+      <div class="arrow-label no">&darr; No Arthritis</div>
+      <div class="vert-connector"></div>
+    </div>
+  </div>
+
+  <!-- Step 3: Age/Demand -->
+  <div class="box box-gold" style="margin-top:4px;">Patient Age & Functional Demand</div>
+  
+  <!-- Three branches -->
+  <div style="width:100%; display:flex; justify-content:center; margin-top:2px;">
+    <div style="width:940px; height:2px; background:#193F84;"></div>
+  </div>
+  
+  <div class="branch-container" style="margin-top:0;">
+    
+    <!-- LEFT: Older / Low Demand -->
+    <div class="branch">
+      <div class="branch-title">Age >70 or Low Demand<br><span style="font-weight:normal;font-size:9px;color:#666;">Goal: Pain relief, simple recovery</span></div>
+      
+      <div class="box box-teal" style="width:280px; margin-bottom:6px;">
+        <div class="step-label">1st Line</div>
+        <div class="step-title">Arthroscopic Debridement + Biceps Tenotomy</div>
+        <div class="step-detail">Subacromial decompression, tuberoplasty<br>Reliable pain relief, minimal morbidity</div>
+      </div>
+      <div class="vert-connector"></div>
+      <div style="font-size:9px;color:#888;">If insufficient relief &darr;</div>
+      <div class="vert-connector"></div>
+      
+      <div class="box box-teal" style="width:280px; margin-bottom:6px;">
+        <div class="step-label">2nd Line</div>
+        <div class="step-title">Subacromial Balloon Spacer (InSpace)</div>
+        <div class="step-detail">&plusmn; Partial repair if tissue available<br>CS 34&rarr;68, ASES 35&rarr;83 at 2yr<br>5-year data shows sustained benefit</div>
+      </div>
+      <div class="vert-connector"></div>
+      
+      <div class="box box-warn" style="width:280px;">
+        <div style="font-weight:bold;color:#C62828;font-size:10px;">Salvage: rTSA</div>
+        <div class="step-detail">If joint-preserving options fail</div>
+      </div>
+    </div>
+    
+    <!-- CENTER: Moderate / Any Age with Reparable Portion -->
+    <div class="branch">
+      <div class="branch-title">Any Age | Partially Reducible Tissue<br><span style="font-weight:normal;font-size:9px;color:#666;">Goal: Maximize repair, preserve joint</span></div>
+      
+      <div class="box box-blue" style="width:280px; margin-bottom:6px;">
+        <div class="step-label">1st Line</div>
+        <div class="step-title">Partial Repair +/- Bioinductive Augmentation</div>
+        <div class="step-detail">Margin convergence, medialized footprint<br>REGENETEN patch: 68% retear reduction (RCT)<br>Biceps tenotomy/tenodesis as adjunct</div>
+      </div>
+      <div class="vert-connector"></div>
+      <div style="font-size:9px;color:#888;">If not reparable &darr;</div>
+      <div class="vert-connector"></div>
+      
+      <div class="box box-blue" style="width:280px; margin-bottom:6px;">
+        <div class="step-label">2nd Line</div>
+        <div class="step-title">Superior Capsular Reconstruction</div>
+        <div class="step-detail">Dermal allograft or LHB autograft<br>87-90% pseudoparalysis reversal<br>Technically demanding; declining use</div>
+      </div>
+      <div class="vert-connector"></div>
+      
+      <div class="box box-warn" style="width:280px;">
+        <div style="font-weight:bold;color:#C62828;font-size:10px;">Salvage: rTSA or Tendon Transfer</div>
+        <div class="step-detail">Based on age, demand, tear pattern</div>
+      </div>
+    </div>
+    
+    <!-- RIGHT: Young / High Demand -->
+    <div class="branch">
+      <div class="branch-title">Age <65 or High Demand<br><span style="font-weight:normal;font-size:9px;color:#666;">Goal: Restore biomechanics, long-term function</span></div>
+      
+      <div class="box box-green" style="width:280px; margin-bottom:6px;">
+        <div class="step-label">1st Line: Posterosuperior Tear</div>
+        <div class="step-title">Lower Trapezius Transfer (preferred)</div>
+        <div class="step-detail">Better ER vector than lat dorsi (biomechanical)<br>ASES improves 22-49 pts; requires allograft<br>Alt: Latissimus Dorsi Transfer (established)</div>
+      </div>
+      <div class="vert-connector"></div>
+      
+      <div class="box box-green" style="width:280px; margin-bottom:6px;">
+        <div class="step-label">1st Line: Anterosuperior Tear</div>
+        <div class="step-title">Pectoralis Major Transfer</div>
+        <div class="step-detail">For irreparable subscapularis component<br>Requires intact posterior cuff</div>
+      </div>
+      <div class="vert-connector"></div>
+      
+      <div class="box box-green" style="width:280px; margin-bottom:6px;">
+        <div class="step-label">Consider</div>
+        <div class="step-title">Partial Repair + Tendon Transfer</div>
+        <div class="step-detail">Combined approach for maximum restoration<br>Repair what is reducible + transfer for remainder</div>
+      </div>
+      <div class="vert-connector"></div>
+      
+      <div class="box box-warn" style="width:280px;">
+        <div style="font-weight:bold;color:#C62828;font-size:10px;">Salvage: rTSA (caution if age <60)</div>
+        <div class="step-detail">Risk of DECREASED FE if preop >90&deg;<br>High complication rate in young (26-39%)</div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<div class="footer" style="margin-top:10px;">
+  <strong style="color:#193F84;">Key Principle:</strong> <span style="color:#555;">If active FE >90&deg; and no arthritis, exhaust joint-preserving options before rTSA. rTSA may DECREASE elevation in this subgroup.</span><br>
+  <span style="color:#aaa;">Sources: Bi et al. AJSM 2024 (network meta-analysis), Kunze et al. AJSM 2024 (balloon spacer), REGENETEN RCT 2024, LTT systematic review 2025, Sheth & Shah AJSM 2023</span><br>
+  <span style="color:#ccc;">Beacon Orthopaedics & Sports Medicine | Confidential</span>
+</div>
+
+</body>
+</html>
