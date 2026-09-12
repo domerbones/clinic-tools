@@ -1,4 +1,4 @@
-const CACHE = "rolf-tools-6f07257314";
+const CACHE = "rolf-tools-0da9ace156e5";
 const ASSETS = [
   "./",
   "index.html",
@@ -7,8 +7,6 @@ const ASSETS = [
   "icon-512.png",
   "apple-touch-icon.png",
   "Op_Report_Generator_Coded.html",
-  "Clinic_Encounter_Sheet.html",
-  "Patient_Checkout_Sheet.html",
   "Plan_Sheet.html",
   "Billing_Coder.html",
   "Op_Report_Generator.html",
