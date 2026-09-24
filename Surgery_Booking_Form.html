@@ -677,6 +677,21 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 </div>
 
+<!-- Preoperative diagnosis picker: suggested codes follow the case; the office gets only what is checked -->
+<div id="dx-picker" style="display:none">
+<div class="section-title">Preoperative Diagnosis (ICD-10)</div>
+<p class="icd-info">Suggested codes follow the procedure, side, and procedures checked. Uncheck any you do not want on the booking. Add others from the list or type a code.</p>
+<div class="checkbox-group" id="dx-list" style="flex-direction:column;gap:6px"></div>
+<div class="row">
+<div class="field"><label>Add a diagnosis (uses the selected side)</label><select id="dx-add-sel" data-noreview="1" onchange="dxAddFromList()"><option value="">-- Select --</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>ICD-10 code</label><input type="text" id="dx-add-code" data-noreview="1" placeholder="e.g. M75.41"></div>
+<div class="field"><label>Description</label><input type="text" id="dx-add-text" data-noreview="1" placeholder="e.g. Impingement syndrome, right shoulder"></div>
+<div class="field field-small" style="display:flex;align-items:flex-end"><button class="btn btn-secondary" type="button" style="padding:9px 16px;font-size:13px" onclick="dxAddCustom()">Add</button></div>
+</div>
+</div>
+
 <div class="btn-row">
 <button class="btn btn-primary" onclick="generateBooking()">Generate Booking Form</button>
 <button class="btn btn-outline" onclick="resetForm()">Clear Form</button>
@@ -1121,7 +1136,7 @@ function closeOutput() {
   try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) { window.scrollTo(0, 0); }
 }
 
-function getDiagnosisLines(proc, side) {
+function suggestedDiagnosisLines(proc, side) {
   var dx = [];
   var s = side === 'Right' ? 'right' : 'left';
 
@@ -1337,6 +1352,189 @@ function getDiagnosisLines(proc, side) {
   }
   return dx;
 }
+
+
+/* ---------- Preoperative diagnosis picker ----------
+   suggestedDiagnosisLines() is the old automatic list. It now feeds a checkbox
+   list instead of the form directly, so a code can be dropped or added before
+   the booking goes to the office. Unchecks survive re-suggestion (keyed by
+   code); user-added codes stay until removed or the form is cleared. */
+var dxState = { items: [], off: {} };   // items: {code, text, on, src:'auto'|'user'}; off: codes the user unchecked
+
+/* Library for the "Add a diagnosis" dropdown: [rightCode, leftCode, text with {side}]
+   or [code, null, text] for unsided codes. */
+var DX_LIBRARY = [
+  ['Shoulder', [
+    ['M19.011','M19.012','Primary osteoarthritis, {side} shoulder'],
+    ['M19.111','M19.112','Post-traumatic osteoarthritis, {side} shoulder'],
+    ['M75.101','M75.102','Rotator cuff tear, {side} shoulder'],
+    ['M75.111','M75.112','Incomplete rotator cuff tear, {side} shoulder'],
+    ['M75.121','M75.122','Complete rotator cuff tear, {side} shoulder'],
+    ['S46.011A','S46.012A','Traumatic rotator cuff tear, {side} shoulder'],
+    ['M75.41','M75.42','Impingement syndrome, {side} shoulder'],
+    ['M75.51','M75.52','Bursitis, {side} shoulder'],
+    ['M75.01','M75.02','Adhesive capsulitis, {side} shoulder'],
+    ['M75.21','M75.22','Bicipital tendinitis, {side} shoulder'],
+    ['S46.111A','S46.112A','Strain of long head of biceps, {side} shoulder'],
+    ['M75.31','M75.32','Calcific tendinitis, {side} shoulder'],
+    ['S43.431A','S43.432A','Superior glenoid labrum (SLAP) lesion, {side} shoulder'],
+    ['M24.411','M24.412','Recurrent dislocation, {side} shoulder'],
+    ['S43.014A','S43.015A','Anterior dislocation of {side} humerus'],
+    ['S43.121A','S43.122A','Dislocation of {side} acromioclavicular joint, 100-200% (AC separation)'],
+    ['S43.131A','S43.132A','Dislocation of {side} acromioclavicular joint, greater than 200% (AC separation)'],
+    ['M24.11','M24.12','Loose body, {side} shoulder'],
+    ['M87.021','M87.022','Avascular necrosis, {side} humerus'],
+    ['M25.511','M25.512','Pain in {side} shoulder'],
+    ['M25.611','M25.612','Stiffness of {side} shoulder'],
+    ['S42.021A','S42.022A','Displaced fracture of shaft of {side} clavicle'],
+    ['S42.031A','S42.032A','Displaced fracture of lateral end of {side} clavicle'],
+    ['S42.201A','S42.202A','Fracture of upper end of {side} humerus'],
+    ['Z96.611','Z96.612','Presence of {side} artificial shoulder joint'],
+    ['T84.010A',null,'Mechanical loosening of internal prosthetic joint'],
+    ['T84.018A',null,'Other mechanical complication of internal prosthetic joint'],
+    ['T84.50XA',null,'Infection and inflammatory reaction due to internal joint prosthesis'],
+    ['T84.498A',null,'Other mechanical complication of internal fixation device'],
+    ['Z47.2',null,'Encounter for removal of internal fixation device']
+  ]],
+  ['Elbow', [
+    ['M19.021','M19.022','Primary osteoarthritis, {side} elbow'],
+    ['M77.11','M77.12','Lateral epicondylitis, {side} elbow'],
+    ['M77.01','M77.02','Medial epicondylitis, {side} elbow'],
+    ['S56.111A','S56.112A','Strain of flexor muscle at forearm level, {side} (distal biceps)'],
+    ['M25.521','M25.522','Pain in {side} elbow'],
+    ['M24.21','M24.22','Disorder of ligament, {side} elbow']
+  ]],
+  ['Knee', [
+    ['M17.11','M17.12','Unilateral primary osteoarthritis, {side} knee'],
+    ['M17.0',null,'Bilateral primary osteoarthritis of knee'],
+    ['M17.31','M17.32','Unilateral post-traumatic osteoarthritis, {side} knee'],
+    ['M23.221','M23.222','Tear of medial meniscus, posterior horn, {side} knee'],
+    ['M23.261','M23.262','Tear of lateral meniscus, {side} knee'],
+    ['S83.231A','S83.232A','Complex tear of medial meniscus, {side} knee, current'],
+    ['S83.281A','S83.282A','Other tear of lateral meniscus, {side} knee, current'],
+    ['S83.511A','S83.512A','Sprain of anterior cruciate ligament, {side} knee'],
+    ['S83.521A','S83.522A','Sprain of posterior cruciate ligament, {side} knee'],
+    ['S83.411A','S83.412A','Sprain of medial collateral ligament, {side} knee'],
+    ['S83.421A','S83.422A','Sprain of lateral collateral ligament, {side} knee'],
+    ['M22.41','M22.42','Chondromalacia patellae, {side} knee'],
+    ['M22.2X1','M22.2X2','Patellofemoral disorder, {side} knee'],
+    ['M22.01','M22.02','Recurrent dislocation of patella, {side} knee'],
+    ['M24.161','M24.162','Articular cartilage disorder, {side} knee'],
+    ['M23.41','M23.42','Loose body, {side} knee'],
+    ['M76.51','M76.52','Patellar tendinitis, {side} knee'],
+    ['M25.561','M25.562','Pain in {side} knee'],
+    ['M25.661','M25.662','Stiffness of {side} knee'],
+    ['Z96.651','Z96.652','Presence of {side} artificial knee joint']
+  ]],
+  ['Hip', [
+    ['M16.11','M16.12','Unilateral primary osteoarthritis, {side} hip'],
+    ['M24.151','M24.152','Hip labral tear (articular cartilage disorder), {side} hip'],
+    ['M25.851','M25.852','Femoroacetabular impingement, {side} hip'],
+    ['M70.61','M70.62','Trochanteric bursitis, {side} hip'],
+    ['M25.551','M25.552','Pain in {side} hip']
+  ]]
+];
+
+function dxCode(line) { return String(line).split(' - ')[0].trim(); }
+
+function dxPopulateLibrary() {
+  var sel = document.getElementById('dx-add-sel'); if (!sel || sel.options.length > 1) return;
+  var h = '<option value="">-- Select --</option>';
+  DX_LIBRARY.forEach(function(grp, gi) {
+    h += '<optgroup label="' + esc(grp[0]) + '">';
+    grp[1].forEach(function(e, ei) {
+      var label = e[1] ? e[0] + ' / ' + e[1] + ' - ' + e[2].replace('{side} ', '').replace(' of {side}', '').replace('{side}', '') : e[0] + ' - ' + e[2];
+      h += '<option value="' + gi + ':' + ei + '">' + esc(label) + '</option>';
+    });
+    h += '</optgroup>';
+  });
+  sel.innerHTML = h;
+}
+
+function dxAddItem(code, text) {
+  if (!code) return;
+  if (dxState.items.some(function(it) { return it.code === code; })) {
+    dxState.items.forEach(function(it) { if (it.code === code) it.on = true; }); delete dxState.off[code];
+  } else {
+    dxState.items.push({ code: code, text: code + ' - ' + text, on: true, src: 'user' });
+  }
+  renderDxPicker();
+}
+
+function dxAddFromList() {
+  var sel = document.getElementById('dx-add-sel'); var val = sel.value; if (!val) return;
+  var p = val.split(':'), e = DX_LIBRARY[+p[0]][1][+p[1]];
+  var side = v('side');
+  if (!e[1]) { dxAddItem(e[0], e[2]); }
+  else {
+    var R = (side === 'Right' || side === 'Bilateral' || side === ''), L = (side === 'Left' || side === 'Bilateral' || side === '');
+    if (R) dxAddItem(e[0], e[2].replace('{side}', 'right'));
+    if (L) dxAddItem(e[1], e[2].replace('{side}', 'left'));
+  }
+  sel.value = '';
+}
+
+function dxAddCustom() {
+  var c = v('dx-add-code').trim(), t = v('dx-add-text').trim();
+  if (!c && !t) return;
+  dxAddItem(c || '(no code)', t || 'see procedure description');
+  document.getElementById('dx-add-code').value = ''; document.getElementById('dx-add-text').value = '';
+}
+
+function dxRemove(i) { dxState.items.splice(i, 1); renderDxPicker(); }
+function dxToggle(i, on) {
+  var it = dxState.items[i]; if (!it) return;
+  it.on = on; if (on) delete dxState.off[it.code]; else dxState.off[it.code] = true;
+  markBookingEdited();
+}
+
+function renderDxPicker() {
+  var box = document.getElementById('dx-list'); if (!box) return;
+  var h = '';
+  dxState.items.forEach(function(it, i) {
+    h += '<div class="checkbox-item"><input type="checkbox" id="dxcb_' + i + '"' + (it.on ? ' checked' : '') +
+         ' onchange="dxToggle(' + i + ', this.checked)"><label for="dxcb_' + i + '">' + esc(it.text) + '</label>' +
+         (it.src === 'user' ? ' <a href="#" onclick="dxRemove(' + i + ');return false;" style="color:#C62828;font-size:12px;text-decoration:none" title="remove">&#10005;</a>' : '') + '</div>';
+  });
+  if (!h) h = '<div class="icd-info" style="margin:0">No suggested codes for this selection yet. Add one below.</div>';
+  box.innerHTML = h;
+}
+
+function refreshDxPicker() {
+  var box = document.getElementById('dx-picker'); if (!box) return;
+  var proc = v('procedure-select'), side = v('side');
+  if (!proc) { box.style.display = 'none'; dxState.items = dxState.items.filter(function(it) { return it.src === 'user'; }); return; }
+  box.style.display = 'block';
+  dxPopulateLibrary();
+  var sugg = suggestedDiagnosisLines(proc, side).filter(function(l) { return !/^\(No ICD-10/.test(l); });
+  var items = [];
+  sugg.forEach(function(l) {
+    var c = dxCode(l);
+    items.push({ code: c, text: l, on: !dxState.off[c], src: 'auto' });
+  });
+  dxState.items.forEach(function(it) {
+    if (it.src === 'user' && !items.some(function(x) { return x.code === it.code; })) items.push(it);
+  });
+  dxState.items = items;
+  renderDxPicker();
+}
+
+// The booking prints what is checked. Re-suggest first so a late add-on or
+// side change is never missed; unchecks are kept by code.
+function getDiagnosisLines(proc, side) {
+  refreshDxPicker();
+  var on = dxState.items.filter(function(it) { return it.on; }).map(function(it) { return it.text; });
+  if (!on.length) on.push('(No ICD-10 diagnosis selected)');
+  return on;
+}
+
+document.addEventListener('change', function(e) {
+  if (e.target && e.target.closest && e.target.closest('#dx-picker')) return;
+  refreshDxPicker();
+});
+document.addEventListener('input', function(e) {
+  if (e.target && (e.target.id === 'other-dx' || e.target.id === 'other-icd')) refreshDxPicker();
+});
 
 /* One list drives the Additional Procedures block on every arthroscopic panel.
    Add a procedure here and it appears on all of them. Anterior and posterior
@@ -1853,6 +2051,7 @@ function printReport() {
 
 function resetForm() {
   clearBookingEdited();
+  dxState.items = []; dxState.off = {};
   document.getElementById('patient-name').value = '';
   document.getElementById('patient-dob').value = '';
   document.getElementById('location').selectedIndex = 0;
@@ -1863,6 +2062,7 @@ function resetForm() {
   document.getElementById('block-other-text').value = '';
   document.getElementById('block-other-field').style.display = 'none';
   document.getElementById('procedure-select').selectedIndex = 0;
+  refreshDxPicker();
 
   ['tsa','hemi','rtsa','rev-tsa','rev-rtsa'].forEach(function(pfx){
     var f=document.getElementById(pfx+'-followup-other-field'); if(f) f.style.display='none';
@@ -1921,6 +2121,6 @@ document.addEventListener('DOMContentLoaded', loadStaffEmail);
 document.addEventListener('DOMContentLoaded', renderAddonSlots);
 </script>
 
-<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build 663db87cd3e5</div>
+<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build 0aeba31f5d18</div>
 </body>
 </html>
