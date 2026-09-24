@@ -184,6 +184,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Total Shoulder Arthroplasty</div>
 <p class="icd-info">ICD-10: M19.011 Primary osteoarthritis, right shoulder / M19.012 Primary osteoarthritis, left shoulder</p>
 <p class="icd-info">CPT: 23472 Total shoulder arthroplasty</p>
+<div class="section-title">Preoperative Diagnosis (check all that apply)</div>
+<div class="checkbox-group dx-group" data-proc="tsa"></div>
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="tsa-ct" checked><label for="tsa-ct">CT scan for PSI planning needed</label></div>
 <div class="checkbox-item"><input type="checkbox" id="tsa-vs-rsa"><label for="tsa-vs-rsa"><b>TSA vs RSA</b> - reverse implants also on standby; final decision intraoperative</label></div>
@@ -219,15 +221,11 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Shoulder Hemiarthroplasty</div>
 <p class="icd-info">ICD-10: M19.011 Primary osteoarthritis, right shoulder / M19.012 Primary osteoarthritis, left shoulder</p>
 <p class="icd-info">CPT: 23470 Hemiarthroplasty, glenohumeral joint</p>
+<div class="section-title">Preoperative Diagnosis (check all that apply)</div>
+<div class="checkbox-group dx-group" data-proc="hemi"></div>
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="hemi-vs-tsa" checked><label for="hemi-vs-tsa"><b>Hemi vs TSA</b> - glenoid components also on standby; final decision intraoperative</label></div>
 <div class="checkbox-item"><input type="checkbox" id="hemi-ct" checked><label for="hemi-ct">CT scan for PSI planning needed</label></div>
-</div>
-<div class="checkbox-group">
-<div class="checkbox-item"><input type="checkbox" id="hemi-dx-oa" checked><label for="hemi-dx-oa">Primary osteoarthritis</label></div>
-<div class="checkbox-item"><input type="checkbox" id="hemi-dx-avn"><label for="hemi-dx-avn">Avascular necrosis, humeral head</label></div>
-<div class="checkbox-item"><input type="checkbox" id="hemi-dx-post"><label for="hemi-dx-post">Post-traumatic arthritis</label></div>
-<div class="checkbox-item"><input type="checkbox" id="hemi-dx-fx"><label for="hemi-dx-fx">Proximal humerus fracture</label></div>
 </div>
 <div class="row">
 <div class="field field-med"><label>Follow Up</label><select id="hemi-followup" onchange="onFollowupChange('hemi')"><option value="Follow up after CT scan">Follow up after CT scan</option><option value="Do not follow up after CT scan">Do not follow up after CT scan</option><option value="OK to schedule surgery">OK to schedule surgery</option><option value="Other">Other &mdash; see note</option></select></div>
@@ -260,6 +258,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Reverse Total Shoulder Arthroplasty</div>
 <p class="icd-info">ICD-10: M75.101 Rotator cuff tear, right / M75.102 Rotator cuff tear, left; M19.011 OA right shoulder / M19.012 OA left shoulder</p>
 <p class="icd-info">CPT: 23472 Reverse total shoulder arthroplasty</p>
+<div class="section-title">Preoperative Diagnosis (check all that apply)</div>
+<div class="checkbox-group dx-group" data-proc="rtsa"></div>
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="rtsa-ct" checked><label for="rtsa-ct">CT scan for PSI planning needed</label></div>
 <div class="checkbox-item"><input type="checkbox" id="rtsa-vs-tsa"><label for="rtsa-vs-tsa"><b>RSA vs TSA</b> - anatomic implants also on standby; final decision intraoperative</label></div>
@@ -295,6 +295,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Revision Total Shoulder Arthroplasty</div>
 <p class="icd-info">ICD-10: T84.010A Mechanical loosening of internal prosthetic joint / T84.018A Other mechanical complication of internal prosthetic joint</p>
 <p class="icd-info">CPT: 23473 Revision, humeral or glenoid / 23474 Revision, humeral and glenoid / 23334 Removal of prosthesis, humeral or glenoid / 23335 Removal of prosthesis, humeral and glenoid</p>
+<div class="section-title">Preoperative Diagnosis (check all that apply)</div>
+<div class="checkbox-group dx-group" data-proc="rev-tsa"></div>
 <div class="revision-note">*** PLEASE OBTAIN PRIOR OPERATIVE REPORT ***</div>
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="rev-tsa-ct" checked><label for="rev-tsa-ct">CT scan for PSI planning needed</label></div>
@@ -338,6 +340,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Revision Reverse Total Shoulder Arthroplasty</div>
 <p class="icd-info">ICD-10: T84.010A Mechanical loosening of internal prosthetic joint / T84.018A Other mechanical complication of internal prosthetic joint</p>
 <p class="icd-info">CPT: 23473 Revision, humeral or glenoid / 23474 Revision, humeral and glenoid / 23334 Removal of prosthesis, humeral or glenoid / 23335 Removal of prosthesis, humeral and glenoid</p>
+<div class="section-title">Preoperative Diagnosis (check all that apply)</div>
+<div class="checkbox-group dx-group" data-proc="rev-rtsa"></div>
 <div class="revision-note">*** PLEASE OBTAIN PRIOR OPERATIVE REPORT ***</div>
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="rev-rtsa-ct" checked><label for="rev-rtsa-ct">CT scan for PSI planning needed</label></div>
@@ -381,6 +385,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Shoulder Arthroscopy</div>
 <p class="icd-info">ICD-10: M75.101/102 Complete rotator cuff tear R/L; M75.111/112 Incomplete rotator cuff tear R/L; S43.431A/432A Superior glenoid labrum lesion R/L; M24.111/112 Other articular cartilage disorder, shoulder R/L; M75.01/02 Adhesive capsulitis R/L; M19.011/012 Primary osteoarthritis, shoulder R/L</p>
 <p class="icd-info">CPT: taken from the procedures checked below and listed on the generated form.</p>
+<div class="section-title">Preoperative Diagnosis (check all that apply)</div>
+<div class="checkbox-group dx-group" data-proc="arth"></div>
 <div class="section-title">Procedures This Case (check all)</div>
 <div class="checkbox-group">
 <div class="addon-slot" data-pfx="arth" style="display:contents"></div>
@@ -410,6 +416,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Knee Arthroscopy</div>
 <p class="icd-info">ICD-10 follows the procedures checked: M23.221/222 Medial meniscus tear (old) R/L; M23.261/262 Lateral meniscus tear (old) R/L; S83.511A/512A ACL sprain R/L; S83.521A/522A PCL sprain R/L; M24.161/162 Articular cartilage disorder, knee R/L; M23.41/42 Loose body R/L; M67.51/52 Plica R/L; M22.2X1/2X2 Patellofemoral disorder R/L; M22.01/02 Recurrent patellar dislocation R/L; M25.661/662 Stiffness R/L; M65.861/862 Synovitis R/L; M17.11/12 Primary OA knee R/L</p>
 <p class="icd-info">CPT: taken from the procedures checked below. Both meniscectomies = 29880, both repairs = 29883. Chondroplasty with a meniscectomy is bundled (Medicare G0289). Coder to confirm.</p>
+<div class="section-title">Preoperative Diagnosis (check all that apply)</div>
+<div class="checkbox-group dx-group" data-proc="knee-arth"></div>
 <div class="section-title">Procedures This Case (check all)</div>
 <div class="checkbox-group">
 <div class="addon-slot" data-pfx="karth" style="display:contents"></div>
@@ -445,6 +453,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Total Knee Arthroplasty</div>
 <p class="icd-info">ICD-10: M17.11 Unilateral primary osteoarthritis, right knee / M17.12 left knee; M17.0 Bilateral primary osteoarthritis (bilateral cases)</p>
 <p class="icd-info">CPT: 27447 Arthroplasty, knee, condyle and plateau; medial AND lateral compartments (total knee)</p>
+<div class="section-title">Preoperative Diagnosis (check all that apply)</div>
+<div class="checkbox-group dx-group" data-proc="tka"></div>
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="tka-patella" checked><label for="tka-patella">Resurface patella</label></div>
 <div class="checkbox-item"><input type="checkbox" id="tka-tourniquet" checked><label for="tka-tourniquet">Tourniquet</label></div>
@@ -529,7 +539,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="procedure-section" id="sec-orif-clav">
 <div class="section-title">ORIF Clavicle Fracture</div>
 <p class="icd-info">CPT: 23515 ORIF clavicle</p>
-<div class="section-title">ICD-10 Diagnosis</div>
+<div class="section-title">Preoperative Diagnosis (check all that apply)</div>
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="clav-dx-021A"><label for="clav-dx-021A">S42.021A Displaced fracture of shaft of right clavicle</label></div>
 <div class="checkbox-item"><input type="checkbox" id="clav-dx-022A"><label for="clav-dx-022A">S42.022A Displaced fracture of shaft of left clavicle</label></div>
@@ -564,7 +574,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="procedure-section" id="sec-orif-phum">
 <div class="section-title">ORIF Proximal Humerus Fracture</div>
 <p class="icd-info">CPT: 23615 ORIF proximal humerus</p>
-<div class="section-title">ICD-10 Diagnosis</div>
+<div class="section-title">Preoperative Diagnosis (check all that apply)</div>
 <div class="checkbox-group">
 <div class="checkbox-item"><input type="checkbox" id="phum-dx-211A"><label for="phum-dx-211A">S42.211A Displaced fracture of surgical neck of right humerus</label></div>
 <div class="checkbox-item"><input type="checkbox" id="phum-dx-212A"><label for="phum-dx-212A">S42.212A Displaced fracture of surgical neck of left humerus</label></div>
@@ -612,6 +622,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Hardware Removal</div>
 <p class="icd-info">ICD-10: T84.498A Other mechanical complication of internal fixation; Z47.2 Encounter for removal of internal fixation device</p>
 <p class="icd-info">CPT: 20680 Removal of implant, deep</p>
+<div class="section-title">Preoperative Diagnosis (check all that apply)</div>
+<div class="checkbox-group dx-group" data-proc="hw-removal"></div>
 <div class="revision-note">*** PLEASE OBTAIN PRIOR OPERATIVE REPORT ***</div>
 <div class="row">
 <div class="field"><label>Location of Hardware</label><input type="text" id="hw-location"></div>
@@ -636,6 +648,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Latarjet</div>
 <p class="icd-info">ICD-10: M24.411 Recurrent dislocation right shoulder / M24.412 Recurrent dislocation left shoulder; S43.001A Anterior dislocation right shoulder</p>
 <p class="icd-info">CPT: 23460 Capsulorrhaphy, anterior, with bone block</p>
+<div class="section-title">Preoperative Diagnosis (check all that apply)</div>
+<div class="checkbox-group dx-group" data-proc="latarjet"></div>
 <div class="row">
 <div class="field"><label>Special Instruments</label><input id="latarjet-instruments" value="Latarjet-specific instrumentation"></div>
 </div>
@@ -659,6 +673,8 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Distal Biceps Repair</div>
 <p class="icd-info">ICD-10: S56.111A Strain of flexor muscle at forearm level right / S56.112A Strain of flexor muscle at forearm level left; S46.111A Strain of biceps tendon right</p>
 <p class="icd-info">CPT: 24342 Reinsertion of ruptured biceps tendon, distal</p>
+<div class="section-title">Preoperative Diagnosis (check all that apply)</div>
+<div class="checkbox-group dx-group" data-proc="distal-biceps"></div>
 <div class="row">
 <div class="field"><label>Implant</label><input id="distal-biceps-implant" value="Arthrex Biceps Button"></div>
 </div>
@@ -674,21 +690,6 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 <div class="row">
 <div class="field field-med"><label>Rep 3 Company</label><select id="distal-biceps-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
-</div>
-</div>
-
-<!-- Preoperative diagnosis picker: suggested codes follow the case; the office gets only what is checked -->
-<div id="dx-picker" style="display:none">
-<div class="section-title">Preoperative Diagnosis (ICD-10)</div>
-<p class="icd-info">Suggested codes follow the procedure, side, and procedures checked. Uncheck any you do not want on the booking. Add others from the list or type a code.</p>
-<div class="checkbox-group" id="dx-list" style="flex-direction:column;gap:6px"></div>
-<div class="row">
-<div class="field"><label>Add a diagnosis (uses the selected side)</label><select id="dx-add-sel" data-noreview="1" onchange="dxAddFromList()"><option value="">-- Select --</option></select></div>
-</div>
-<div class="row">
-<div class="field field-med"><label>ICD-10 code</label><input type="text" id="dx-add-code" data-noreview="1" placeholder="e.g. M75.41"></div>
-<div class="field"><label>Description</label><input type="text" id="dx-add-text" data-noreview="1" placeholder="e.g. Impingement syndrome, right shoulder"></div>
-<div class="field field-small" style="display:flex;align-items:flex-end"><button class="btn btn-secondary" type="button" style="padding:9px 16px;font-size:13px" onclick="dxAddCustom()">Add</button></div>
 </div>
 </div>
 
@@ -1136,7 +1137,7 @@ function closeOutput() {
   try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) { window.scrollTo(0, 0); }
 }
 
-function suggestedDiagnosisLines(proc, side) {
+function legacyDiagnosisLines(proc, side) {
   var dx = [];
   var s = side === 'Right' ? 'right' : 'left';
 
@@ -1354,187 +1355,163 @@ function suggestedDiagnosisLines(proc, side) {
 }
 
 
-/* ---------- Preoperative diagnosis picker ----------
-   suggestedDiagnosisLines() is the old automatic list. It now feeds a checkbox
-   list instead of the form directly, so a code can be dropped or added before
-   the booking goes to the office. Unchecks survive re-suggestion (keyed by
-   code); user-added codes stay until removed or the form is cleared. */
-var dxState = { items: [], off: {} };   // items: {code, text, on, src:'auto'|'user'}; off: codes the user unchecked
+/* ---------- Preoperative diagnosis checkboxes ----------
+   One list per procedure panel: [id, rightCode, leftCode, 'text with {side}', checkedByDefault].
+   Unsided codes use null for the left code. Side comes from the Side dropdown
+   when the form is generated; Bilateral prints both codes. */
+var DX_OPTIONS = {
+  'tsa': [
+    ['oa','M19.011','M19.012','Primary osteoarthritis, {side} shoulder',true],
+    ['ptoa','M19.111','M19.112','Post-traumatic osteoarthritis, {side} shoulder',false],
+    ['avn','M87.021','M87.022','Avascular necrosis, {side} humerus',false],
+    ['ra','M06.011','M06.012','Rheumatoid arthritis, {side} shoulder',false],
+    ['rct','M75.101','M75.102','Rotator cuff tear, {side} shoulder (if reverse required)',false]
+  ],
+  'hemi': [
+    ['oa','M19.011','M19.012','Primary osteoarthritis, {side} shoulder',true],
+    ['avn','M87.021','M87.022','Avascular necrosis, {side} humerus',false],
+    ['post','M19.111','M19.112','Post-traumatic osteoarthritis, {side} shoulder',false],
+    ['fx','S42.201A','S42.202A','Fracture of upper end of {side} humerus',false],
+    ['rct','M75.101','M75.102','Rotator cuff tear, {side} shoulder',false]
+  ],
+  'rtsa': [
+    ['rct','M75.101','M75.102','Rotator cuff tear, {side} shoulder',true],
+    ['oa','M19.011','M19.012','Primary osteoarthritis, {side} shoulder',true],
+    ['rctc','M75.121','M75.122','Complete rotator cuff tear, {side} shoulder',false],
+    ['fx','S42.201A','S42.202A','Fracture of upper end of {side} humerus',false],
+    ['ptoa','M19.111','M19.112','Post-traumatic osteoarthritis, {side} shoulder',false],
+    ['avn','M87.021','M87.022','Avascular necrosis, {side} humerus',false],
+    ['failed','T84.010A',null,'Mechanical loosening of prior prosthetic joint (failed arthroplasty)',false]
+  ],
+  'rev-tsa': [
+    ['loose','T84.010A',null,'Mechanical loosening of internal prosthetic joint',true],
+    ['mech','T84.018A',null,'Other mechanical complication of internal prosthetic joint',true],
+    ['infx','T84.50XA',null,'Infection and inflammatory reaction due to internal joint prosthesis',false],
+    ['disl','T84.028A',null,'Dislocation / instability of internal joint prosthesis',false],
+    ['ppfx','M97.31XA','M97.32XA','Periprosthetic fracture around {side} shoulder prosthesis',false],
+    ['rct','M75.101','M75.102','Rotator cuff tear, {side} shoulder (conversion to reverse)',false],
+    ['z','Z96.611','Z96.612','Presence of {side} artificial shoulder joint',false]
+  ],
+  'arth': [
+    ['rct','M75.101','M75.102','Rotator cuff tear, {side} shoulder',false],
+    ['prct','M75.111','M75.112','Incomplete rotator cuff tear, {side} shoulder',false],
+    ['crct','M75.121','M75.122','Complete rotator cuff tear, {side} shoulder',false],
+    ['trct','S46.011A','S46.012A','Traumatic rotator cuff tear, {side} shoulder',false],
+    ['imp','M75.41','M75.42','Impingement syndrome, {side} shoulder',false],
+    ['burs','M75.51','M75.52','Bursitis, {side} shoulder',false],
+    ['bt','M75.21','M75.22','Bicipital tendinitis, {side} shoulder',false],
+    ['slap','S43.431A','S43.432A','Superior glenoid labrum (SLAP) lesion, {side} shoulder',false],
+    ['instab','M24.411','M24.412','Recurrent dislocation, {side} shoulder',false],
+    ['antdisl','S43.014A','S43.015A','Anterior dislocation of {side} humerus',false],
+    ['adcap','M75.01','M75.02','Adhesive capsulitis, {side} shoulder',false],
+    ['oa','M19.011','M19.012','Primary osteoarthritis, {side} shoulder (GH / AC joint)',false],
+    ['loose','M24.11','M24.12','Loose body, {side} shoulder',false],
+    ['acsep','S43.121A','S43.122A','AC joint separation, {side} (100-200%)',false],
+    ['acsep3','S43.131A','S43.132A','AC joint separation, {side} (greater than 200%)',false],
+    ['calc','M75.31','M75.32','Calcific tendinitis, {side} shoulder',false]
+  ],
+  'knee-arth': [
+    ['mm','M23.221','M23.222','Tear of medial meniscus, posterior horn, {side} knee',false],
+    ['lm','M23.261','M23.262','Tear of lateral meniscus, {side} knee',false],
+    ['mmacute','S83.231A','S83.232A','Complex tear of medial meniscus, {side} knee, current injury',false],
+    ['lmacute','S83.281A','S83.282A','Other tear of lateral meniscus, {side} knee, current injury',false],
+    ['acl','S83.511A','S83.512A','Sprain of anterior cruciate ligament, {side} knee',false],
+    ['pcl','S83.521A','S83.522A','Sprain of posterior cruciate ligament, {side} knee',false],
+    ['mcl','S83.411A','S83.412A','Sprain of medial collateral ligament, {side} knee',false],
+    ['cart','M24.161','M24.162','Articular cartilage disorder, {side} knee',false],
+    ['loose','M23.41','M23.42','Loose body, {side} knee',false],
+    ['plica','M67.51','M67.52','Plica syndrome, {side} knee',false],
+    ['pf','M22.2X1','M22.2X2','Patellofemoral disorder, {side} knee',false],
+    ['patdisl','M22.01','M22.02','Recurrent dislocation of patella, {side} knee',false],
+    ['stiff','M25.661','M25.662','Stiffness of {side} knee',false],
+    ['synov','M65.861','M65.862','Synovitis, {side} knee',false],
+    ['oa','M17.11','M17.12','Primary osteoarthritis, {side} knee',false]
+  ],
+  'tka': [
+    ['oa','M17.11','M17.12','Unilateral primary osteoarthritis, {side} knee (M17.0 if bilateral)',true],
+    ['ptoa','M17.31','M17.32','Unilateral post-traumatic osteoarthritis, {side} knee',false],
+    ['ra','M06.861','M06.862','Rheumatoid arthritis, {side} knee',false],
+    ['avn','M87.051','M87.052','Avascular necrosis, {side} femur',false]
+  ],
+  'hw-removal': [
+    ['mech','T84.498A',null,'Other mechanical complication of internal fixation device',true],
+    ['z','Z47.2',null,'Encounter for removal of internal fixation device',true],
+    ['infx','T84.60XA',null,'Infection and inflammatory reaction due to internal fixation device',false],
+    ['disp','T84.128A',null,'Displacement of internal fixation device',false]
+  ],
+  'latarjet': [
+    ['instab','M24.411','M24.412','Recurrent dislocation, {side} shoulder',true],
+    ['antdisl','S43.014A','S43.015A','Anterior dislocation of {side} humerus',false],
+    ['boneloss','M24.811','M24.812','Glenoid bone loss (other specific joint derangement), {side} shoulder',false]
+  ],
+  'distal-biceps': [
+    ['rupt','S46.211A','S46.212A','Rupture / strain of distal biceps tendon, {side} arm',true],
+    ['flex','S56.111A','S56.112A','Strain of flexor muscle at forearm level, {side}',false],
+    ['spont','M66.821','M66.822','Spontaneous rupture of other tendons, {side} upper arm',false]
+  ]
+};
+DX_OPTIONS['rev-rtsa'] = DX_OPTIONS['rev-tsa'];
 
-/* Library for the "Add a diagnosis" dropdown: [rightCode, leftCode, text with {side}]
-   or [code, null, text] for unsided codes. */
-var DX_LIBRARY = [
-  ['Shoulder', [
-    ['M19.011','M19.012','Primary osteoarthritis, {side} shoulder'],
-    ['M19.111','M19.112','Post-traumatic osteoarthritis, {side} shoulder'],
-    ['M75.101','M75.102','Rotator cuff tear, {side} shoulder'],
-    ['M75.111','M75.112','Incomplete rotator cuff tear, {side} shoulder'],
-    ['M75.121','M75.122','Complete rotator cuff tear, {side} shoulder'],
-    ['S46.011A','S46.012A','Traumatic rotator cuff tear, {side} shoulder'],
-    ['M75.41','M75.42','Impingement syndrome, {side} shoulder'],
-    ['M75.51','M75.52','Bursitis, {side} shoulder'],
-    ['M75.01','M75.02','Adhesive capsulitis, {side} shoulder'],
-    ['M75.21','M75.22','Bicipital tendinitis, {side} shoulder'],
-    ['S46.111A','S46.112A','Strain of long head of biceps, {side} shoulder'],
-    ['M75.31','M75.32','Calcific tendinitis, {side} shoulder'],
-    ['S43.431A','S43.432A','Superior glenoid labrum (SLAP) lesion, {side} shoulder'],
-    ['M24.411','M24.412','Recurrent dislocation, {side} shoulder'],
-    ['S43.014A','S43.015A','Anterior dislocation of {side} humerus'],
-    ['S43.121A','S43.122A','Dislocation of {side} acromioclavicular joint, 100-200% (AC separation)'],
-    ['S43.131A','S43.132A','Dislocation of {side} acromioclavicular joint, greater than 200% (AC separation)'],
-    ['M24.11','M24.12','Loose body, {side} shoulder'],
-    ['M87.021','M87.022','Avascular necrosis, {side} humerus'],
-    ['M25.511','M25.512','Pain in {side} shoulder'],
-    ['M25.611','M25.612','Stiffness of {side} shoulder'],
-    ['S42.021A','S42.022A','Displaced fracture of shaft of {side} clavicle'],
-    ['S42.031A','S42.032A','Displaced fracture of lateral end of {side} clavicle'],
-    ['S42.201A','S42.202A','Fracture of upper end of {side} humerus'],
-    ['Z96.611','Z96.612','Presence of {side} artificial shoulder joint'],
-    ['T84.010A',null,'Mechanical loosening of internal prosthetic joint'],
-    ['T84.018A',null,'Other mechanical complication of internal prosthetic joint'],
-    ['T84.50XA',null,'Infection and inflammatory reaction due to internal joint prosthesis'],
-    ['T84.498A',null,'Other mechanical complication of internal fixation device'],
-    ['Z47.2',null,'Encounter for removal of internal fixation device']
-  ]],
-  ['Elbow', [
-    ['M19.021','M19.022','Primary osteoarthritis, {side} elbow'],
-    ['M77.11','M77.12','Lateral epicondylitis, {side} elbow'],
-    ['M77.01','M77.02','Medial epicondylitis, {side} elbow'],
-    ['S56.111A','S56.112A','Strain of flexor muscle at forearm level, {side} (distal biceps)'],
-    ['M25.521','M25.522','Pain in {side} elbow'],
-    ['M24.21','M24.22','Disorder of ligament, {side} elbow']
-  ]],
-  ['Knee', [
-    ['M17.11','M17.12','Unilateral primary osteoarthritis, {side} knee'],
-    ['M17.0',null,'Bilateral primary osteoarthritis of knee'],
-    ['M17.31','M17.32','Unilateral post-traumatic osteoarthritis, {side} knee'],
-    ['M23.221','M23.222','Tear of medial meniscus, posterior horn, {side} knee'],
-    ['M23.261','M23.262','Tear of lateral meniscus, {side} knee'],
-    ['S83.231A','S83.232A','Complex tear of medial meniscus, {side} knee, current'],
-    ['S83.281A','S83.282A','Other tear of lateral meniscus, {side} knee, current'],
-    ['S83.511A','S83.512A','Sprain of anterior cruciate ligament, {side} knee'],
-    ['S83.521A','S83.522A','Sprain of posterior cruciate ligament, {side} knee'],
-    ['S83.411A','S83.412A','Sprain of medial collateral ligament, {side} knee'],
-    ['S83.421A','S83.422A','Sprain of lateral collateral ligament, {side} knee'],
-    ['M22.41','M22.42','Chondromalacia patellae, {side} knee'],
-    ['M22.2X1','M22.2X2','Patellofemoral disorder, {side} knee'],
-    ['M22.01','M22.02','Recurrent dislocation of patella, {side} knee'],
-    ['M24.161','M24.162','Articular cartilage disorder, {side} knee'],
-    ['M23.41','M23.42','Loose body, {side} knee'],
-    ['M76.51','M76.52','Patellar tendinitis, {side} knee'],
-    ['M25.561','M25.562','Pain in {side} knee'],
-    ['M25.661','M25.662','Stiffness of {side} knee'],
-    ['Z96.651','Z96.652','Presence of {side} artificial knee joint']
-  ]],
-  ['Hip', [
-    ['M16.11','M16.12','Unilateral primary osteoarthritis, {side} hip'],
-    ['M24.151','M24.152','Hip labral tear (articular cartilage disorder), {side} hip'],
-    ['M25.851','M25.852','Femoroacetabular impingement, {side} hip'],
-    ['M70.61','M70.62','Trochanteric bursitis, {side} hip'],
-    ['M25.551','M25.552','Pain in {side} hip']
-  ]]
-];
+/* Checking a scope procedure ticks the diagnosis that goes with it. */
+var ADDON_DX = {
+  'arth': { rcrepair:['rct'], subscap:['rct'], scrrecon:['rct'], antlabral:['instab'], postlabral:['instab'], remplissage:['instab'],
+            slaprep:['slap'], capsrel:['adcap'], lysis:['adcap'], muaddon:['adcap'], decompression:['imp'], acromioplasty:['imp'],
+            tenotomy:['bt'], tenodesis:['bt'], looseb:['loose'], dcr:['oa'], acjrecon:['acsep'], debridement:['oa'],
+            chondroplasty:['oa'], synovectomy:['oa'], diagnostic:['oa'] },
+  'karth': { medmen:['mm'], medrep:['mm'], latmen:['lm'], latrep:['lm'], menxpl:['lm'], aclr:['acl'], pclr:['pcl'],
+             chondro:['cart'], microfx:['cart'], oats:['cart'], ocallo:['cart'], looseb:['loose'], plica:['plica'],
+             latrel:['pf'], mpfl:['patdisl'], lysis:['stiff'], muaknee:['stiff'], synov:['synov'], synovmaj:['synov'], diagnostic:['oa'] }
+};
+var ADDON_PROC = { 'arth': 'arth', 'karth': 'knee-arth' };
 
-function dxCode(line) { return String(line).split(' - ')[0].trim(); }
-
-function dxPopulateLibrary() {
-  var sel = document.getElementById('dx-add-sel'); if (!sel || sel.options.length > 1) return;
-  var h = '<option value="">-- Select --</option>';
-  DX_LIBRARY.forEach(function(grp, gi) {
-    h += '<optgroup label="' + esc(grp[0]) + '">';
-    grp[1].forEach(function(e, ei) {
-      var label = e[1] ? e[0] + ' / ' + e[1] + ' - ' + e[2].replace('{side} ', '').replace(' of {side}', '').replace('{side}', '') : e[0] + ' - ' + e[2];
-      h += '<option value="' + gi + ':' + ei + '">' + esc(label) + '</option>';
-    });
-    h += '</optgroup>';
+function dxLabel(o) {
+  var codes = o[2] ? o[1] + ' / ' + o[2] : o[1];
+  return codes + ' - ' + o[3].replace(' of {side}', '').replace('{side} ', '').replace(', {side}', '').replace('{side}', '');
+}
+function renderDxGroups() {
+  document.querySelectorAll('.dx-group').forEach(function(box) {
+    var proc = box.getAttribute('data-proc'), opts = DX_OPTIONS[proc] || [];
+    var h = opts.map(function(o) {
+      var id = proc + '-dx-' + o[0];
+      return '<div class="checkbox-item"><input type="checkbox" id="' + id + '"' + (o[4] ? ' checked' : '') +
+             '><label for="' + id + '">' + esc(dxLabel(o)) + '</label></div>';
+    }).join('');
+    h += '<div class="checkbox-item"><input type="checkbox" id="' + proc + '-dx-other"><label for="' + proc + '-dx-other">Other</label>' +
+         '<input type="text" class="other-text" id="' + proc + '-dx-other-text" placeholder="ICD-10 code - description" style="width:300px"></div>';
+    box.innerHTML = h;
   });
-  sel.innerHTML = h;
 }
-
-function dxAddItem(code, text) {
-  if (!code) return;
-  if (dxState.items.some(function(it) { return it.code === code; })) {
-    dxState.items.forEach(function(it) { if (it.code === code) it.on = true; }); delete dxState.off[code];
-  } else {
-    dxState.items.push({ code: code, text: code + ' - ' + text, on: true, src: 'user' });
-  }
-  renderDxPicker();
-}
-
-function dxAddFromList() {
-  var sel = document.getElementById('dx-add-sel'); var val = sel.value; if (!val) return;
-  var p = val.split(':'), e = DX_LIBRARY[+p[0]][1][+p[1]];
-  var side = v('side');
-  if (!e[1]) { dxAddItem(e[0], e[2]); }
-  else {
-    var R = (side === 'Right' || side === 'Bilateral' || side === ''), L = (side === 'Left' || side === 'Bilateral' || side === '');
-    if (R) dxAddItem(e[0], e[2].replace('{side}', 'right'));
-    if (L) dxAddItem(e[1], e[2].replace('{side}', 'left'));
-  }
-  sel.value = '';
-}
-
-function dxAddCustom() {
-  var c = v('dx-add-code').trim(), t = v('dx-add-text').trim();
-  if (!c && !t) return;
-  dxAddItem(c || '(no code)', t || 'see procedure description');
-  document.getElementById('dx-add-code').value = ''; document.getElementById('dx-add-text').value = '';
-}
-
-function dxRemove(i) { dxState.items.splice(i, 1); renderDxPicker(); }
-function dxToggle(i, on) {
-  var it = dxState.items[i]; if (!it) return;
-  it.on = on; if (on) delete dxState.off[it.code]; else dxState.off[it.code] = true;
-  markBookingEdited();
-}
-
-function renderDxPicker() {
-  var box = document.getElementById('dx-list'); if (!box) return;
-  var h = '';
-  dxState.items.forEach(function(it, i) {
-    h += '<div class="checkbox-item"><input type="checkbox" id="dxcb_' + i + '"' + (it.on ? ' checked' : '') +
-         ' onchange="dxToggle(' + i + ', this.checked)"><label for="dxcb_' + i + '">' + esc(it.text) + '</label>' +
-         (it.src === 'user' ? ' <a href="#" onclick="dxRemove(' + i + ');return false;" style="color:#C62828;font-size:12px;text-decoration:none" title="remove">&#10005;</a>' : '') + '</div>';
+function dxLinesFor(proc, side) {
+  var opts = DX_OPTIONS[proc]; if (!opts) return null;
+  var R = (side === 'Right' || side === 'Bilateral'), L = (side === 'Left' || side === 'Bilateral');
+  var dx = [];
+  opts.forEach(function(o) {
+    if (!ck(proc + '-dx-' + o[0])) return;
+    if (!o[2]) { dx.push(o[1] + ' - ' + o[3]); return; }
+    if (proc === 'tka' && o[0] === 'oa' && side === 'Bilateral') { dx.push('M17.0 - Bilateral primary osteoarthritis of knee'); return; }
+    var t = o[3].replace(' (M17.0 if bilateral)', '');
+    if (R) dx.push(o[1] + ' - ' + t.replace('{side}', 'right'));
+    if (L) dx.push(o[2] + ' - ' + t.replace('{side}', 'left'));
+    if (!R && !L) dx.push(o[1] + ' / ' + o[2] + ' - ' + t.replace('{side} ', '').replace('{side}', ''));
   });
-  if (!h) h = '<div class="icd-info" style="margin:0">No suggested codes for this selection yet. Add one below.</div>';
-  box.innerHTML = h;
+  if (ck(proc + '-dx-other')) { var ot = v(proc + '-dx-other-text').trim(); if (ot) dx.push(ot); }
+  if (!dx.length) dx.push('(No ICD-10 diagnosis selected)');
+  return dx;
 }
-
-function refreshDxPicker() {
-  var box = document.getElementById('dx-picker'); if (!box) return;
-  var proc = v('procedure-select'), side = v('side');
-  if (!proc) { box.style.display = 'none'; dxState.items = dxState.items.filter(function(it) { return it.src === 'user'; }); return; }
-  box.style.display = 'block';
-  dxPopulateLibrary();
-  var sugg = suggestedDiagnosisLines(proc, side).filter(function(l) { return !/^\(No ICD-10/.test(l); });
-  var items = [];
-  sugg.forEach(function(l) {
-    var c = dxCode(l);
-    items.push({ code: c, text: l, on: !dxState.off[c], src: 'auto' });
-  });
-  dxState.items.forEach(function(it) {
-    if (it.src === 'user' && !items.some(function(x) { return x.code === it.code; })) items.push(it);
-  });
-  dxState.items = items;
-  renderDxPicker();
-}
-
-// The booking prints what is checked. Re-suggest first so a late add-on or
-// side change is never missed; unchecks are kept by code.
 function getDiagnosisLines(proc, side) {
-  refreshDxPicker();
-  var on = dxState.items.filter(function(it) { return it.on; }).map(function(it) { return it.text; });
-  if (!on.length) on.push('(No ICD-10 diagnosis selected)');
-  return on;
+  var dx = dxLinesFor(proc, side);
+  return dx !== null ? dx : legacyDiagnosisLines(proc, side);
 }
-
 document.addEventListener('change', function(e) {
-  if (e.target && e.target.closest && e.target.closest('#dx-picker')) return;
-  refreshDxPicker();
+  var t = e.target; if (!t || !t.checked) return;
+  var m = /^(arth|karth)-bk-(.+)$/.exec(t.id || '');
+  if (m) {
+    var proc = ADDON_PROC[m[1]], ids = (ADDON_DX[m[1]] || {})[m[2]] || [];
+    ids.forEach(function(d) { var cb = document.getElementById(proc + '-dx-' + d); if (cb) cb.checked = true; });
+  }
+  if (t.id === 'tsa-vs-rsa') { var r = document.getElementById('tsa-dx-rct'); if (r) r.checked = true; }
 });
-document.addEventListener('input', function(e) {
-  if (e.target && (e.target.id === 'other-dx' || e.target.id === 'other-icd')) refreshDxPicker();
-});
+document.addEventListener('DOMContentLoaded', renderDxGroups);
 
 /* One list drives the Additional Procedures block on every arthroscopic panel.
    Add a procedure here and it appears on all of them. Anterior and posterior
@@ -2051,7 +2028,6 @@ function printReport() {
 
 function resetForm() {
   clearBookingEdited();
-  dxState.items = []; dxState.off = {};
   document.getElementById('patient-name').value = '';
   document.getElementById('patient-dob').value = '';
   document.getElementById('location').selectedIndex = 0;
@@ -2062,7 +2038,6 @@ function resetForm() {
   document.getElementById('block-other-text').value = '';
   document.getElementById('block-other-field').style.display = 'none';
   document.getElementById('procedure-select').selectedIndex = 0;
-  refreshDxPicker();
 
   ['tsa','hemi','rtsa','rev-tsa','rev-rtsa'].forEach(function(pfx){
     var f=document.getElementById(pfx+'-followup-other-field'); if(f) f.style.display='none';
@@ -2121,6 +2096,6 @@ document.addEventListener('DOMContentLoaded', loadStaffEmail);
 document.addEventListener('DOMContentLoaded', renderAddonSlots);
 </script>
 
-<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build 0aeba31f5d18</div>
+<div class="build-stamp" style="position:fixed;bottom:2px;right:6px;font-size:10px;color:#9aa3ad;z-index:9;pointer-events:none;">build 8ab414ac9593</div>
 </body>
 </html>
