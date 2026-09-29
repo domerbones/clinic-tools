@@ -1404,7 +1404,8 @@ var DX_OPTIONS = {
     ['instab','M24.411','M24.412','Recurrent dislocation, {side} shoulder',false],
     ['antdisl','S43.014A','S43.015A','Anterior dislocation of {side} humerus',false],
     ['adcap','M75.01','M75.02','Adhesive capsulitis, {side} shoulder',false],
-    ['oa','M19.011','M19.012','Primary osteoarthritis, {side} shoulder (GH / AC joint)',false],
+    ['oa','M19.011','M19.012','Glenohumeral arthritis, {side} shoulder',false],
+    ['acoa','M19.011','M19.012','AC joint arthritis, {side} shoulder',false],
     ['loose','M24.11','M24.12','Loose body, {side} shoulder',false],
     ['acsep','S43.121A','S43.122A','AC joint separation, {side} (100-200%)',false],
     ['acsep3','S43.131A','S43.132A','AC joint separation, {side} (greater than 200%)',false],
@@ -1456,7 +1457,7 @@ DX_OPTIONS['rev-rtsa'] = DX_OPTIONS['rev-tsa'];
 var ADDON_DX = {
   'arth': { rcrepair:['rct'], subscap:['rct'], scrrecon:['rct'], antlabral:['instab'], postlabral:['instab'], remplissage:['instab'],
             slaprep:['slap'], capsrel:['adcap'], lysis:['adcap'], muaddon:['adcap'], decompression:['imp'], acromioplasty:['imp'],
-            tenotomy:['bt'], tenodesis:['bt'], looseb:['loose'], dcr:['oa'], acjrecon:['acsep'], debridement:['oa'],
+            tenotomy:['bt'], tenodesis:['bt'], looseb:['loose'], dcr:['acoa'], acjrecon:['acsep'], debridement:['oa'],
             chondroplasty:['oa'], synovectomy:['oa'], diagnostic:['oa'] },
   'karth': { medmen:['mm'], medrep:['mm'], latmen:['lm'], latrep:['lm'], menxpl:['lm'], aclr:['acl'], pclr:['pcl'],
              chondro:['cart'], microfx:['cart'], oats:['cart'], ocallo:['cart'], looseb:['loose'], plica:['plica'],
@@ -1487,9 +1488,12 @@ function dxLinesFor(proc, side) {
   var dx = [];
   opts.forEach(function(o) {
     if (!ck(proc + '-dx-' + o[0])) return;
+    // GH and AC arthritis share M19.01x; merge their labels onto one line per code
+    if (o[0] === 'acoa' && ck(proc + '-dx-oa')) return;
     if (!o[2]) { dx.push(o[1] + ' - ' + o[3]); return; }
     if (proc === 'tka' && o[0] === 'oa' && side === 'Bilateral') { dx.push('M17.0 - Bilateral primary osteoarthritis of knee'); return; }
     var t = o[3].replace(' (M17.0 if bilateral)', '');
+    if (o[0] === 'oa' && proc === 'arth' && ck('arth-dx-acoa')) t = 'Glenohumeral and AC joint arthritis, {side} shoulder';
     if (R) dx.push(o[1] + ' - ' + t.replace('{side}', 'right'));
     if (L) dx.push(o[2] + ' - ' + t.replace('{side}', 'left'));
     if (!R && !L) dx.push(o[1] + ' / ' + o[2] + ' - ' + t.replace('{side} ', '').replace('{side}', ''));
