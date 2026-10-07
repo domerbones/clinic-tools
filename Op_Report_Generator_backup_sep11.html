@@ -93,8 +93,6 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="tab" data-tab="phum" onclick="switchTab('phum')">Prox Humerus ORIF</div>
 <div class="tab" data-tab="hwrem" onclick="switchTab('hwrem')">Hardware Removal</div>
 <div class="tab" data-tab="dtri" onclick="switchTab('dtri')">Distal Triceps</div>
-<div class="tab" data-tab="knee" onclick="switchTab('knee')">Knee Scope</div>
-<div class="tab" data-tab="stsa" onclick="switchTab('stsa')">Stemless TSA</div>
 </div>
 
 <!-- TSA FORM -->
@@ -160,11 +158,6 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 <div class="row">
 <div class="field" style="min-width:100%"><label>Intraoperative Findings (auto-built, editable)</label><textarea id="tsa-findings" rows="4">Advanced glenohumeral osteoarthritis was present with diffuse full-thickness cartilage loss involving the humeral head and glenoid, exposed eburnated subchondral bone, and a large inferior humeral osteophyte. The rotator cuff was intact.</textarea></div>
-</div>
-
-<div class="section-title">Glenoid Options</div>
-<div class="row">
-<div class="checkbox-item"><input type="checkbox" id="tsa-psi"><label for="tsa-psi">PSI guides used</label></div>
 </div>
 
 <div class="section-title">Intraop Details</div>
@@ -282,11 +275,6 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 <div class="row">
 <div class="field" style="min-width:100%"><label>Intraoperative Findings (auto-built, editable)</label><textarea id="rtsa-findings" rows="4">Advanced glenohumeral arthropathy was present with diffuse full-thickness cartilage loss involving the humeral head and glenoid and exposed subchondral bone. The rotator cuff was chronically torn and irreparable, supporting the indication for reverse shoulder arthroplasty.</textarea></div>
-</div>
-
-<div class="section-title">Glenoid Options</div>
-<div class="row">
-<div class="checkbox-item"><input type="checkbox" id="rtsa-psi"><label for="rtsa-psi">PSI guides used</label></div>
 </div>
 
 <div class="section-title">Intraop Details</div>
@@ -537,20 +525,12 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="field field-med"><label>Suture Configuration</label><select id="arth-suture-config"><option value="simple">Simple</option><option value="mattress" selected>Mattress</option></select></div>
 </div>
 <div class="row">
-<div class="field"><label>Repair Technique</label><select id="arth-repair-technique"><option value="standard" selected>Standard double-row</option><option value="additional-lateral">Standard + additional lateral</option><option value="knotless">Completely knotless</option></select></div>
-</div>
-<div class="row">
 <div class="checkbox-item"><input type="checkbox" id="arth-luggage"><label for="arth-luggage">Luggage tags placed</label></div>
 <div class="field field-small"><label>Luggage Tag #</label><input type="number" id="arth-luggage-num"></div>
 </div>
 <div class="row">
-<div class="checkbox-item"><input type="checkbox" id="arth-lateral-row" checked onchange="updateArthSections()"><label for="arth-lateral-row">Double-row repair (lateral anchors)</label></div>
-</div>
-<div id="arth-lateral-row-section" class="conditional-section">
-<div class="row">
 <div class="field field-small"><label>Lateral Anchor #</label><input type="number" id="arth-lateral-num"></div>
 <div class="field"><label>Lateral Anchor Type</label><select id="arth-lateral-type"><option value="Arthrex 4.75 mm SwiveLock">Arthrex 4.75 mm SwiveLock</option><option value="Zimmer Biomet 4.75 mm Genie">Zimmer Biomet 4.75 mm Genie</option><option value="Stryker 4.75 mm AlphaVent">Stryker 4.75 mm AlphaVent</option></select></div>
-</div>
 </div>
 
 </div>
@@ -1067,252 +1047,6 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <button class="btn btn-outline" onclick="clearForm('dtri'); markFields('panel-dtri');">Clear Form</button>
 <span class="copied-msg" id="dtri-copied">Copied to clipboard!</span>
 <span class="incomplete-msg" id="dtri-incomplete"></span>
-</div>
-</div>
-
-<!-- KNEE SCOPE FORM -->
-<div class="form-panel" id="panel-knee">
-<p class="defaults-note">Check applicable diagnoses and procedures, then fill in the details.</p>
-
-<div class="section-title" style="margin-top:0">Patient Information</div>
-<div class="row">
-<div class="field field-med"><label>Date of Surgery</label><input type="date" id="knee-dos"></div>
-</div>
-
-<div class="section-title">Preoperative Diagnosis</div>
-<div class="checkbox-group">
-<div class="checkbox-item"><input type="checkbox" id="knee-dx-mm" onchange="kneeDxSync(this)"><label for="knee-dx-mm">Medial Meniscus Tear</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-dx-lm" onchange="kneeDxSync(this)"><label for="knee-dx-lm">Lateral Meniscus Tear</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-dx-chondral" onchange="kneeDxSync(this)"><label for="knee-dx-chondral">Chondromalacia / Chondral Defect</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-dx-synovitis" onchange="kneeDxSync(this)"><label for="knee-dx-synovitis">Synovitis</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-dx-loose" onchange="kneeDxSync(this)"><label for="knee-dx-loose">Loose Body</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-dx-plica" onchange="kneeDxSync(this)"><label for="knee-dx-plica">Plica</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-dx-oa" onchange="kneeDxSync(this)"><label for="knee-dx-oa">Osteoarthritis</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-dx-other" onchange="kneeDxSync(this); document.getElementById('knee-dx-other-text').style.display=this.checked?'inline-block':'none';"><label for="knee-dx-other">Other:</label><input type="text" id="knee-dx-other-text" class="other-text" style="display:none"></div>
-</div>
-
-<div class="section-title">Postoperative Diagnosis</div>
-<div class="checkbox-group">
-<div class="checkbox-item"><input type="checkbox" id="knee-postdx-mm"><label for="knee-postdx-mm">Medial Meniscus Tear</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-postdx-lm"><label for="knee-postdx-lm">Lateral Meniscus Tear</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-postdx-chondral"><label for="knee-postdx-chondral">Chondromalacia / Chondral Defect</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-postdx-synovitis"><label for="knee-postdx-synovitis">Synovitis</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-postdx-loose"><label for="knee-postdx-loose">Loose Body</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-postdx-plica"><label for="knee-postdx-plica">Plica</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-postdx-oa"><label for="knee-postdx-oa">Osteoarthritis</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-postdx-other" onchange="document.getElementById('knee-postdx-other-text').style.display=this.checked?'inline-block':'none';"><label for="knee-postdx-other">Other:</label><input type="text" id="knee-postdx-other-text" class="other-text" style="display:none"></div>
-</div>
-
-<div class="section-title">Procedures</div>
-<div class="checkbox-group">
-<div class="checkbox-item"><input type="checkbox" id="knee-proc-diag"><label for="knee-proc-diag">Diagnostic Arthroscopy</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-proc-pmm"><label for="knee-proc-pmm">Partial Medial Meniscectomy</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-proc-plm"><label for="knee-proc-plm">Partial Lateral Meniscectomy</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-proc-chondro"><label for="knee-proc-chondro">Chondroplasty</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-proc-synov"><label for="knee-proc-synov">Synovectomy</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-proc-loose"><label for="knee-proc-loose">Loose Body Removal</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-proc-plica"><label for="knee-proc-plica">Plica Resection</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-proc-other" onchange="document.getElementById('knee-proc-other-text').style.display=this.checked?'inline-block':'none';"><label for="knee-proc-other">Other:</label><input type="text" id="knee-proc-other-text" class="other-text" style="display:none"></div>
-</div>
-
-<div class="section-title">Patient & Procedure</div>
-<div class="row">
-<div class="field field-small"><label>Side</label><select id="knee-side"><option>Right</option><option>Left</option></select></div>
-<div class="field field-small"><label>Age</label><input type="number" id="knee-age"></div>
-<div class="field field-small"><label>Sex</label><select id="knee-sex"><option>male</option><option>female</option></select></div>
-<div class="field"><label>Assistant</label><input id="knee-assistant" value="Russel Lee Reynolds, PA-C"></div>
-</div>
-
-<div class="section-title">Anesthesia & Meds</div>
-<div class="row">
-<div class="field field-small"><label>IV Fluids (mL)</label><input type="number" id="knee-ivf"></div>
-<div class="field field-med"><label>EBL</label><select id="knee-ebl"><option value="Minimal" selected>Minimal</option><option value="<50 mL">&lt;50 mL</option><option value="50-100 mL">50-100 mL</option><option value="100-200 mL">100-200 mL</option><option value=">200 mL">&gt;200 mL</option></select></div>
-<div class="field field-med"><label>Antibiotics</label><input id="knee-abx" value="Ancef"></div>
-<div class="field field-med"><label>Complications</label><select id="knee-complications" onchange="document.getElementById('knee-complications-other-text').style.display=this.value==='Other'?'inline-block':'none';"><option value="None" selected>None</option><option value="Superficial wound drainage">Superficial wound drainage</option><option value="Intraoperative fracture">Intraoperative fracture</option><option value="Nerve injury">Nerve injury</option><option value="Excessive bleeding">Excessive bleeding</option><option value="Other">Other</option></select><input type="text" id="knee-complications-other-text" class="other-text" style="display:none"></div>
-</div>
-
-<div class="section-title">Exam Under Anesthesia</div>
-<div class="row">
-<div class="field"><label>EUA</label><input id="knee-eua" value="a stable knee with no ligamentous laxity"></div>
-</div>
-
-<div class="section-title">Operative Findings</div>
-<div class="row">
-<div class="field"><label>Medial Meniscus</label><select id="knee-f-mm"><option value="intact" selected>Intact</option><option value="complex tear of the posterior horn">Complex tear - posterior horn</option><option value="horizontal tear of the posterior horn">Horizontal tear - posterior horn</option><option value="radial tear">Radial tear</option><option value="bucket-handle tear">Bucket-handle tear</option><option value="degenerative tear">Degenerative tear</option><option value="flap tear of the posterior horn">Flap tear - posterior horn</option></select></div>
-<div class="field"><label>Lateral Meniscus</label><select id="knee-f-lm"><option value="intact" selected>Intact</option><option value="complex tear of the posterior horn">Complex tear - posterior horn</option><option value="horizontal tear">Horizontal tear</option><option value="radial tear">Radial tear</option><option value="degenerative tear">Degenerative tear</option><option value="flap tear">Flap tear</option></select></div>
-</div>
-
-<div class="section-title">Cartilage Grading</div>
-<div class="row">
-<div class="field"><label>Medial Femoral Condyle</label><select id="knee-cart-mfc"><option value="intact" selected>Intact</option><option value="grade I chondromalacia">Grade I</option><option value="grade II chondromalacia">Grade II</option><option value="grade III chondromalacia">Grade III</option><option value="grade IV chondromalacia with exposed subchondral bone">Grade IV</option></select></div>
-<div class="field"><label>Medial Tibial Plateau</label><select id="knee-cart-mtp"><option value="intact" selected>Intact</option><option value="grade I chondromalacia">Grade I</option><option value="grade II chondromalacia">Grade II</option><option value="grade III chondromalacia">Grade III</option><option value="grade IV chondromalacia with exposed subchondral bone">Grade IV</option></select></div>
-</div>
-<div class="row">
-<div class="field"><label>Lateral Femoral Condyle</label><select id="knee-cart-lfc"><option value="intact" selected>Intact</option><option value="grade I chondromalacia">Grade I</option><option value="grade II chondromalacia">Grade II</option><option value="grade III chondromalacia">Grade III</option><option value="grade IV chondromalacia with exposed subchondral bone">Grade IV</option></select></div>
-<div class="field"><label>Lateral Tibial Plateau</label><select id="knee-cart-ltp"><option value="intact" selected>Intact</option><option value="grade I chondromalacia">Grade I</option><option value="grade II chondromalacia">Grade II</option><option value="grade III chondromalacia">Grade III</option><option value="grade IV chondromalacia with exposed subchondral bone">Grade IV</option></select></div>
-</div>
-<div class="row">
-<div class="field"><label>Trochlea</label><select id="knee-cart-troch"><option value="intact" selected>Intact</option><option value="grade I chondromalacia">Grade I</option><option value="grade II chondromalacia">Grade II</option><option value="grade III chondromalacia">Grade III</option><option value="grade IV chondromalacia with exposed subchondral bone">Grade IV</option></select></div>
-<div class="field"><label>Patella</label><select id="knee-cart-pat"><option value="intact" selected>Intact</option><option value="grade I chondromalacia">Grade I</option><option value="grade II chondromalacia">Grade II</option><option value="grade III chondromalacia">Grade III</option><option value="grade IV chondromalacia with exposed subchondral bone">Grade IV</option></select></div>
-</div>
-
-<div class="section-title">Ligaments</div>
-<div class="row">
-<div class="field"><label>ACL</label><select id="knee-f-acl"><option value="intact" selected>Intact</option><option value="lax">Lax</option><option value="partial tear">Partial tear</option><option value="complete tear">Complete tear</option></select></div>
-<div class="field"><label>PCL</label><select id="knee-f-pcl"><option value="intact" selected>Intact</option><option value="lax">Lax</option></select></div>
-</div>
-
-<div class="section-title">Pain Management</div>
-<div class="row">
-<div class="field" style="min-width:100%"><label>Additional meds</label>
-<div class="checkbox-group">
-<div class="checkbox-item"><input type="checkbox" id="knee-pain-journavx" checked><label for="knee-pain-journavx">Journavx</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-pain-tylenol" checked><label for="knee-pain-tylenol">Tylenol</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-pain-meloxicam" checked><label for="knee-pain-meloxicam">Meloxicam</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-pain-neurontin"><label for="knee-pain-neurontin">Neurontin</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-pain-oxycodone"><label for="knee-pain-oxycodone">Oxycodone</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-pain-aspirin"><label for="knee-pain-aspirin">Aspirin 81 mg</label></div>
-<div class="checkbox-item"><input type="checkbox" id="knee-pain-other" onchange="document.getElementById('knee-pain-other-text').style.display=this.checked?'inline-block':'none';"><label for="knee-pain-other">Other:</label><input type="text" id="knee-pain-other-text" class="other-text" style="display:none"></div>
-</div></div>
-</div>
-
-<div class="section-title">Disposition</div>
-<div class="row">
-<div class="field field-med"><label>Weight Bearing</label><select id="knee-wb"><option value="weight bearing as tolerated" selected>WBAT</option><option value="toe-touch weight bearing">Toe-touch WB</option><option value="non-weight bearing">Non-weight bearing</option></select></div>
-<div class="field field-med"><label>Brace</label><select id="knee-brace"><option value="none" selected>None</option><option value="hinged knee brace">Hinged knee brace</option><option value="knee immobilizer">Knee immobilizer</option></select></div>
-<div class="field field-med"><label>Follow-up</label><input id="knee-followup" value="10-14 days"></div>
-</div>
-
-<div class="section-title">Prognosis</div>
-<div class="row">
-<div class="field"><label>Prognosis</label><select id="knee-prognosis"><option value="good" selected>Good</option><option value="excellent">Excellent</option><option value="fair">Fair</option><option value="guarded">Guarded</option></select></div>
-</div>
-
-<div class="btn-row">
-<button class="btn btn-primary" onclick="markFields('panel-knee'); var m=checkIncomplete('panel-knee'); if(m>0){document.getElementById('knee-incomplete').textContent=m+' field(s) still empty';document.getElementById('knee-incomplete').style.display='inline';} else {document.getElementById('knee-incomplete').style.display='none';} generateKneeScope();">Generate Report</button>
-<button class="btn btn-outline" onclick="clearForm('knee'); markFields('panel-knee');">Clear Form</button>
-<span class="copied-msg" id="knee-copied">Copied to clipboard!</span>
-<span class="incomplete-msg" id="knee-incomplete"></span>
-</div>
-</div>
-
-<!-- STEMLESS TSA FORM -->
-<div class="form-panel" id="panel-stsa">
-<p class="defaults-note">Fields pre-filled with defaults. Edit as needed. Zimmer Biomet OsseoFit system.</p>
-
-<div class="section-title" style="margin-top:0">Patient Information</div>
-<div class="row">
-<div class="field field-med"><label>Date of Surgery</label><input type="date" id="stsa-dos"></div>
-</div>
-
-<div class="section-title">Patient & Procedure</div>
-<div class="row">
-<div class="field field-small"><label>Side</label><select id="stsa-side"><option>Right</option><option>Left</option></select></div>
-<div class="field field-small"><label>Age</label><input type="number" id="stsa-age"></div>
-<div class="field field-small"><label>Sex</label><select id="stsa-sex"><option>male</option><option>female</option></select></div>
-<div class="field"><label>Assistant</label><input id="stsa-assistant" value="Russel Lee Reynolds, PA-C"></div>
-</div>
-
-<div class="section-title">Anesthesia & Meds</div>
-<div class="row">
-<div class="field field-med"><label>Antibiotics</label><input id="stsa-abx" value="Ancef"></div>
-<div class="field field-med"><label>EBL</label><select id="stsa-ebl"><option value="Minimal" selected>Minimal</option><option value="<50 mL">&lt;50 mL</option><option value="50-100 mL">50-100 mL</option><option value="100-200 mL">100-200 mL</option><option value=">200 mL">&gt;200 mL</option></select></div>
-<div class="field field-small"><label>IV Fluids (mL)</label><input type="number" id="stsa-ivf"></div>
-<div class="field field-med"><label>Complications</label><select id="stsa-complications" onchange="document.getElementById('stsa-complications-other-text').style.display=this.value==='Other'?'inline-block':'none';"><option value="None" selected>None</option><option value="Superficial wound drainage">Superficial wound drainage</option><option value="Intraoperative fracture">Intraoperative fracture</option><option value="Nerve injury">Nerve injury</option><option value="Excessive bleeding">Excessive bleeding</option><option value="Other">Other</option></select><input type="text" id="stsa-complications-other-text" class="other-text" style="display:none"></div>
-</div>
-
-<div class="section-title">Implants</div>
-<div class="row">
-<div class="field field-small"><label>OsseoFit Size</label><select id="stsa-implant-size"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></div>
-<div class="field field-med"><label>Configuration</label><select id="stsa-config"><option value="Onlay" selected>Onlay</option><option value="Inlay">Inlay</option></select></div>
-</div>
-<div class="row">
-<div class="field field-med"><label>Humeral Head (&Oslash; x ht, mm)</label><select id="stsa-head"><option value="36x14">36 x 14</option><option value="36x16">36 x 16</option><option value="36x19">36 x 19</option><option value="39x14">39 x 14</option><option value="39x17">39 x 17</option><option value="39x20">39 x 20</option><option value="42x15">42 x 15</option><option value="42x18" selected>42 x 18</option><option value="42x21">42 x 21</option><option value="45x16">45 x 16</option><option value="45x19">45 x 19</option><option value="45x22">45 x 22</option><option value="48x17">48 x 17</option><option value="48x20">48 x 20</option><option value="48x23">48 x 23</option><option value="51x18">51 x 18</option><option value="51x21">51 x 21</option><option value="51x24">51 x 24</option><option value="54x19">54 x 19</option><option value="54x22">54 x 22</option><option value="54x25">54 x 25</option><option value="57x20">57 x 20</option><option value="57x23">57 x 23</option><option value="57x26">57 x 26</option></select></div>
-<div class="field field-small"><label>Offset Position</label><select id="stsa-offset"><option value="A">A</option><option value="B">B</option><option value="C" selected>C</option><option value="D">D</option><option value="E">E</option></select></div>
-</div>
-<div class="row">
-<div class="field field-small"><label>Glenoid Size</label><select id="stsa-glenoid-size"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></div>
-<div class="field"><label>Glenoid Type</label><select id="stsa-glenoid-type"><option value="3-peg monoblock glenoid">3-Peg Monoblock</option><option value="4-peg modular glenoid with trabecular metal post" selected>4-Peg Modular w/ TM post</option><option value="3-peg modular glenoid with trabecular metal post">3-Peg Modular w/ TM post</option><option value="2-peg monoblock glenoid">2-Peg Monoblock</option><option value="4-peg modular augmented glenoid with trabecular metal post">4-Peg Augmented w/ TM post</option><option value="4-peg modular posterior augmented glenoid with trabecular metal post">4-Peg Posterior Augmented w/ TM post</option></select></div>
-</div>
-
-<div class="section-title">Glenoid Options</div>
-<div class="row">
-<div class="checkbox-item"><input type="checkbox" id="stsa-psi"><label for="stsa-psi">PSI guides used</label></div>
-</div>
-
-<div class="section-title">Exam Under Anesthesia</div>
-<div class="row">
-<div class="field field-small"><label>ER at side (&deg;)</label><input id="stsa-eua-er"></div>
-<div class="field field-small"><label>Abduction (&deg;)</label><input id="stsa-eua-abd"></div>
-<div class="field field-small"><label>IR in abd (&deg;)</label><input id="stsa-eua-ir"></div>
-<div class="field field-small"><label>ER in abd (&deg;)</label><input id="stsa-eua-er-abd"></div>
-<div class="field field-small"><label>Fwd Flex (&deg;)</label><input id="stsa-eua-ff"></div>
-</div>
-<div class="row">
-<div class="field"><label>Biceps Status</label><select id="stsa-biceps-status" onchange="bicepsStatusChanged('stsa')"><option value="tenodesis">Intact — tenodesis performed</option><option value="ruptured">Ruptured — no tenodesis</option></select></div>
-<div class="field"><label>Biceps Tendon</label><input id="stsa-biceps" value="thickened and scarred within a stenotic bicipital groove"></div>
-</div>
-
-<div class="section-title">Arthritis Findings (build the sentence)</div>
-<div class="row">
-<div class="field field-small"><label>Severity</label><select id="stsa-f-sev" onchange="buildFindings('stsa')"><option selected>Advanced</option><option>Moderate</option><option>End-stage</option><option>Severe</option></select></div>
-<div class="field"><label>Diagnosis</label><select id="stsa-f-dx" onchange="buildFindings('stsa')"><option selected>glenohumeral osteoarthritis</option><option>post-traumatic glenohumeral arthritis</option><option>glenohumeral osteonecrosis (AVN)</option><option>inflammatory arthropathy</option></select></div>
-</div>
-<div class="row">
-<div class="field" style="min-width:100%"><label>Cartilage loss</label><select id="stsa-f-cart" onchange="buildFindings('stsa')"><option selected>diffuse full-thickness cartilage loss involving the humeral head and glenoid</option><option>full-thickness glenoid cartilage loss with humeral head involvement</option><option>eccentric posterior glenoid cartilage wear</option><option>bipolar full-thickness cartilage loss</option></select></div>
-</div>
-<div class="row">
-<div class="field"><label>Subchondral bone</label><select id="stsa-f-bone" onchange="buildFindings('stsa')"><option selected>exposed eburnated subchondral bone</option><option>exposed subchondral bone</option><option>sclerotic subchondral bone with subchondral cyst formation</option></select></div>
-<div class="field"><label>Osteophytes</label><select id="stsa-f-ost" onchange="buildFindings('stsa')"><option value="a large inferior humeral osteophyte" selected>a large inferior humeral osteophyte</option><option value="circumferential humeral osteophytes">circumferential humeral osteophytes</option><option value="marginal humeral osteophytes">marginal humeral osteophytes</option><option value="">none</option></select></div>
-</div>
-<div class="row">
-<div class="field"><label>Glenoid wear (Walch)</label><select id="stsa-f-walch" onchange="buildFindings('stsa')"><option selected value="">not specified</option><option value="concentric glenoid wear (Walch A1)">concentric (A1)</option><option value="central glenoid erosion (Walch A2)">central erosion (A2)</option><option value="posterior glenoid wear with mild retroversion (Walch B1)">posterior wear (B1)</option><option value="biconcave posterior glenoid wear with retroversion (Walch B2)">biconcave (B2)</option><option value="monoconcave posterior glenoid wear with severe retroversion (Walch B3)">monoconcave (B3)</option><option value="dysplastic glenoid with retroversion (Walch C)">dysplastic (C)</option></select></div>
-<div class="field"><label>Rotator cuff</label><select id="stsa-f-cuff" onchange="buildFindings('stsa')"><option selected>intact</option><option>thin but intact</option><option>notable for a focal partial-thickness tear</option></select></div>
-</div>
-<div class="row">
-<div class="field" style="min-width:100%"><label>Intraoperative Findings (auto-built, editable)</label><textarea id="stsa-findings" rows="4">Advanced glenohumeral osteoarthritis was present with diffuse full-thickness cartilage loss involving the humeral head and glenoid, exposed eburnated subchondral bone, and a large inferior humeral osteophyte. The rotator cuff was intact.</textarea></div>
-</div>
-
-<div class="section-title">Intraop Details</div>
-<div class="row">
-<div class="field field-small"><label>BB Sutures</label><select id="stsa-bb"><option>5</option><option>6</option></select></div>
-<div class="field"><label>Vancomycin</label><input id="stsa-vanco" value="1g powder"></div>
-</div>
-
-<div class="section-title">Final ROM / PT Limits</div>
-<div class="row">
-<div class="field field-small"><label>ER at side (&deg;)</label><input id="stsa-rom-er"></div>
-<div class="field field-small"><label>Fwd Flex (&deg;)</label><input id="stsa-rom-ff"></div>
-<div class="field field-small"><label>Abduction (&deg;)</label><input id="stsa-rom-abd"></div>
-<div class="field field-small"><label>ER in abd (&deg;)</label><input id="stsa-rom-er-abd"></div>
-<div class="field field-small"><label>IR in abd (&deg;)</label><input id="stsa-rom-ir"></div>
-</div>
-
-<div class="section-title">Pain Management</div>
-<div class="row">
-<div class="field" style="min-width:100%"><label>Additional meds (after block, sling, cryo)</label>
-<div class="checkbox-group">
-<div class="checkbox-item"><input type="checkbox" id="stsa-pain-journavx" checked><label for="stsa-pain-journavx">Journavx</label></div>
-<div class="checkbox-item"><input type="checkbox" id="stsa-pain-tylenol" checked><label for="stsa-pain-tylenol">Tylenol</label></div>
-<div class="checkbox-item"><input type="checkbox" id="stsa-pain-meloxicam" checked><label for="stsa-pain-meloxicam">Meloxicam</label></div>
-<div class="checkbox-item"><input type="checkbox" id="stsa-pain-neurontin"><label for="stsa-pain-neurontin">Neurontin</label></div>
-<div class="checkbox-item"><input type="checkbox" id="stsa-pain-oxycodone"><label for="stsa-pain-oxycodone">Oxycodone</label></div>
-<div class="checkbox-item"><input type="checkbox" id="stsa-pain-aspirin"><label for="stsa-pain-aspirin">Aspirin 81 mg</label></div>
-<div class="checkbox-item"><input type="checkbox" id="stsa-pain-other" onchange="document.getElementById('stsa-pain-other-text').style.display=this.checked?'inline-block':'none';"><label for="stsa-pain-other">Other:</label><input type="text" id="stsa-pain-other-text" class="other-text" style="display:none"></div>
-</div></div>
-</div>
-
-<div class="section-title">PT Protocol Limits</div>
-<div class="row">
-<div class="field field-small"><label>FF limit (&deg;)</label><input id="stsa-pt-ff"></div>
-<div class="field field-small"><label>ER limit (&deg;)</label><input id="stsa-pt-er"></div>
-</div>
-
-<div class="btn-row">
-<button class="btn btn-primary" onclick="markFields('panel-stsa'); var m=checkIncomplete('panel-stsa'); if(m>0){document.getElementById('stsa-incomplete').textContent=m+' field(s) still empty';document.getElementById('stsa-incomplete').style.display='inline';} else {document.getElementById('stsa-incomplete').style.display='none';} generateStemlessTSA();">Generate Report</button>
-<button class="btn btn-outline" onclick="clearForm('stsa'); markFields('panel-stsa');">Clear Form</button>
-<span class="copied-msg" id="stsa-copied">Copied to clipboard!</span>
-<span class="incomplete-msg" id="stsa-incomplete"></span>
 </div>
 </div>
 
@@ -1892,7 +1626,7 @@ document.addEventListener('DOMContentLoaded', function() {
     el.addEventListener('click', function() { confirmField(this); });
   });
 
-  var panels = ['arth','tsa','rtsa','clav','phum','hwrem','dtri','knee','stsa'];
+  var panels = ['arth','tsa','rtsa','clav','phum','hwrem','dtri'];
   panels.forEach(function(p) { markFields('panel-' + p); });
 
   // Sync the findings boxes with their dropdown defaults on load
@@ -1974,8 +1708,7 @@ var PROTOCOL_DEFAULT = {
   rcr:  'rotator cuff repair',
   scr:  'rotator cuff repair',
   inst: 'shoulder stabilization',
-  bten: 'open biceps tenodesis',
-  stsa: 'total shoulder replacement'
+  bten: 'open biceps tenodesis'
 };
 var DVT_OPTIONS = [
   'Aspirin 81 mg PO BID for 4 weeks',
@@ -1996,7 +1729,7 @@ function bicepsRuptured(p) { return v(p + '-biceps-status') === 'ruptured'; }
 function bicepsStatusChanged(p) {
   var inp = document.getElementById(p + '-biceps');
   if (bicepsRuptured(p)) { inp.value = 'ruptured with distal retraction'; }
-  else { inp.value = (p === 'tsa' || p === 'stsa') ? 'thickened and scarred within a stenotic bicipital groove' : 'thickened and scarred in a stenotic groove'; }
+  else { inp.value = (p === 'tsa') ? 'thickened and scarred within a stenotic bicipital groove' : 'thickened and scarred in a stenotic groove'; }
 }
 
 function generateTSA() {
@@ -2036,11 +1769,9 @@ v('tsa-findings') + '\n\n' +
 'LESSER TUBEROSITY OSTEOTOMY:\n' +
 'The axillary nerve was identified and protected. The lesser tuberosity was osteotomized with the attached subscapularis and tagged with #2 Ethibond sutures for later repair.\n\n' +
 'HUMERAL PREPARATION:\n' +
-'The humeral head was dislocated anteriorly and marginal osteophytes were removed. An opening reamer was placed and sequentially increased until good fit with the diaphysis was achieved. The intramedullary jig was then placed to resect the humeral head along the anatomic neck line. Sequential broaching was performed.\n\n' +
+'The humeral head was dislocated anteriorly and marginal osteophytes were removed. Sequential broaching was performed, and the humeral head was resected along the anatomic neck line.\n\n' +
 'GLENOID PREPARATION AND IMPLANTATION:\n' +
-(ck('tsa-psi')
-  ? 'The labrum was excised. Remaining articular cartilage was removed from the glenoid face with a Cobb elevator. The PSI guide was placed and two pins were placed into the glenoid. The glenoid was reamed to the depth according to the PSI planning. Peripheral peg holes were drilled. The trial component was inserted and confirmed for fit. Phenylephrine soaked sponge was used to assist with hemostasis and the pedicles. Palacos-G cement was pressurized into the peripheral peg holes; the final glenoid component was seated and fixed with excellent stability. Excess cement was removed.\n\n'
-  : 'The labrum was excised. Remaining articular cartilage was removed from the glenoid face with a Cobb elevator. The glenoid guide was placed and a central pin was placed. The glenoid was reamed, the central hole drilled, and the peripheral peg holes were drilled. The trial component was inserted and confirmed for fit. Phenylephrine soaked sponge was used to assist with hemostasis and the pedicles. Palacos-G cement was pressurized into the peripheral peg holes; the final glenoid component was seated and fixed with excellent stability. Excess cement was removed.\n\n') +
+'The labrum was excised. Remaining articular cartilage was removed from the glenoid face with a Cobb elevator. The glenoid was reamed centrally and peripherally, and peg holes were drilled. The trial component was inserted and confirmed for fit. Phenylephrine soaked sponge was used to assist with hemostasis and the pedicles. Palacos-G cement was pressurized into the peripheral peg holes; the final glenoid component was seated and fixed with excellent stability. Excess cement was removed.\n\n' +
 'FINAL HUMERAL IMPLANTATION:\n' +
 'Sequential broaches were advanced to the final size. The final Identity ' + v('tsa-stem') + ' mm micro stem and ' + headStr() + ' mm humeral head were assembled and inserted with excellent stability. Confirmed humeral head was placed to restore anatomic fit.\n\n' +
 'LESSER TUBEROSITY OSTEOTOMY REPAIR:\n' +
@@ -2104,12 +1835,9 @@ v('rtsa-findings') + '\n\n' +
 'SUBSCAPULARIS MANAGEMENT:\n' +
 'The axillary nerve was identified and protected. A Cobra retractor was placed between the nerve and the subscapularis. The subscapularis was peeled from the lesser tuberosity and tagged with three #2 Ethibond sutures.\n\n' +
 'HUMERAL PREPARATION:\n' +
-'With external rotation and extension, the humeral head was dislocated anteriorly. Marginal osteophytes were removed. An opening reamer was placed and sequentially increased until good fit with the diaphysis was achieved. The intramedullary jig was then placed to resect the humeral head at ' + v('rtsa-retro') + ' degrees of retroversion. Sequential broaching was performed. A conical reamer was utilized.\n\n' +
+'With external rotation and extension, the humeral head was dislocated anteriorly. Marginal osteophytes were removed. The canal was opened and sequentially reamed to the appropriate size. The humeral head was resected with a jig, and trial stems placed.\n\n' +
 'GLENOID PREPARATION AND IMPLANTATION:\n' +
-'The humeral head was displaced posteriorly and held with a femoral neck retractor. The axillary nerve was visualized. The capsule was released inferiorly and along the deep surface of the subscapularis into its fossa. The coracohumeral ligament was released from the coracoid base. The subscapularis was retracted into its fossa, and the anterior glenoid rim exposed. Remaining articular cartilage was removed from the glenoid face with a Cobb elevator. ' +
-(ck('rtsa-psi')
-  ? 'The PSI guide was placed and two pins were placed into the glenoid. The glenoid was reamed to the depth according to the PSI planning. An overreamer was used. An impacting reamer was used. The PSI guide was used to place the baseplate. The PSI guide was placed into the baseplate to drill the screws, and the screws were placed. Set screws were secured, and the glenosphere was impacted and confirmed seated uniformly with a right-angle clamp.\n\n'
-  : 'A guidewire was placed, and the glenoid was reamed. An overreamer was used. An impacting reamer was used. The glenoid baseplate was placed. The screws were drilled and placed. Set screws were secured, and the glenosphere was impacted and confirmed seated uniformly with a right-angle clamp.\n\n') +
+'The humeral head was displaced posteriorly and held with a femoral neck retractor. The axillary nerve was visualized. The capsule was released inferiorly and along the deep surface of the subscapularis into its fossa. The coracohumeral ligament was released from the coracoid base. The subscapularis was retracted into its fossa, and the anterior glenoid rim exposed. Remaining articular cartilage was removed from the glenoid face with a Cobb elevator. The central guidewire was placed in the desired position and its position confirmed. The central drill was advanced over the guidewire. The glenoid was reamed, followed by the clearance reamer and then the impacting reamer. The central guide pin was removed and the baseplate was impacted into position. Screws were placed into the scapular body and the base of the coracoid' + (v('rtsa-screw-periph1') !== 'N/A' || v('rtsa-screw-periph2') !== 'N/A' ? ', and additional peripheral screws were placed' : '') + '. Set screws were secured, and the glenosphere was impacted and confirmed seated uniformly with a right-angle clamp.\n\n' +
 'FINAL IMPLANTATION AND SUBSCAPULARIS REPAIR:\n' +
 'The humeral metaphysis was dislocated anteriorly. Trial components were inserted, and stability and range of motion confirmed. The trial was removed. Four BroadBand tape sutures were passed through bone tunnels in the proximal humeral metaphysis lateral to the lesser tuberosity at the bicipital groove. The final stem was inserted in ' + v('rtsa-retro') + '° of retroversion after irrigation. ' + subscapClosure + '\n\n' +
 'RANGE OF MOTION ASSESSMENT:\n' +
@@ -2120,9 +1848,7 @@ v('rtsa-findings') + '\n\n' +
 'PAIN MANAGEMENT PLAN:\n' +
 'Multimodal regimen: interscalene block, cryotherapy, sling, ' + painMeds('rtsa') + ', and oral analgesics.\n\n' +
 'POSTOPERATIVE THERAPY PROTOCOL:\n' +
-(v('rtsa-sex') === 'female' && parseInt(v('rtsa-age'), 10) > 70
-  ? 'Shoulder immobilizer for up to 4 weeks. Home exercise program provided at two-week follow-up. Second phase home exercise program provided at six-week follow-up. No formal physical therapy.'
-  : 'Shoulder immobilizer for up to 4 weeks\nBegin gentle passive and active-assist ER < ' + v('rtsa-pt-er') + '° and FF < ' + v('rtsa-pt-ff') + '° at first follow-up\nActive ROM at 6 weeks');
+'Shoulder immobilizer for up to 4 weeks\nBegin gentle passive and active-assist ER < ' + v('rtsa-pt-er') + '° and FF < ' + v('rtsa-pt-ff') + '° at first follow-up\nActive ROM at 6 weeks';
 
   showReport(report);
 }
@@ -2146,11 +1872,7 @@ function generateArthroscopy() {
   // Anchors are only listed for procedures that actually place them.
   function arthImplants() {
     var parts = [];
-    if (ck('arth-proc-rcr')) {
-      var rcrImplant = v('arth-medial-num') + ' ' + v('arth-medial-type');
-      if (ck('arth-lateral-row')) rcrImplant += ', ' + v('arth-lateral-num') + ' ' + v('arth-lateral-type');
-      parts.push(rcrImplant);
-    }
+    if (ck('arth-proc-rcr')) parts.push(v('arth-medial-num') + ' ' + v('arth-medial-type') + ', ' + v('arth-lateral-num') + ' ' + v('arth-lateral-type'));
     if (ck('arth-proc-slap') && String(v('arth-slap-anchors')).trim()) parts.push(v('arth-slap-anchors') + ' ' + v('arth-slap-anchor-type') + ' (SLAP)');
     if (ck('arth-proc-labral') && String(v('arth-lab-anchors')).trim()) parts.push(v('arth-lab-anchors') + ' ' + v('arth-lab-anchor-type') + ' (anterior labrum)');
     if (ck('arth-proc-postlabral') && String(v('arth-plab-anchors')).trim()) parts.push(v('arth-plab-anchors') + ' ' + v('arth-plab-anchor-type') + ' (posterior labrum)');
@@ -2191,9 +1913,9 @@ function generateArthroscopy() {
   if (ck('arth-proc-arthroscopy')) procs.push(s + ' Arthroscopy');
   if (ck('arth-proc-rcr')) procs.push(s + ' Arthroscopic Rotator Cuff Repair');
   if (ck('arth-proc-decompression')) procs.push(s + ' Arthroscopic Subacromial Decompression');
-  if (ck('arth-proc-acromioplasty') && !ck('arth-proc-decompression')) procs.push(s + ' Acromioplasty');
+  if (ck('arth-proc-acromioplasty')) procs.push(s + ' Acromioplasty');
   if (ck('arth-proc-debridement')) procs.push(s + ' Arthroscopic Extensive Glenohumeral Debridement');
-  if (ck('arth-proc-tenotomy') && !ck('arth-proc-tenodesis')) procs.push(s + ' Arthroscopic Biceps Tenotomy');
+  if (ck('arth-proc-tenotomy')) procs.push(s + ' Arthroscopic Biceps Tenotomy');
   if (ck('arth-proc-dcr')) procs.push(s + ' Arthroscopic Distal Clavicle Resection');
   if (ck('arth-proc-tenodesis')) procs.push(s + ' Open Subpectoral Biceps Tenodesis');
   if (ck('arth-proc-labral')) procs.push(s + ' Arthroscopic Anterior Labral (Bankart) Repair with Capsulorrhaphy');
@@ -2249,23 +1971,8 @@ function generateArthroscopy() {
   if (ck('arth-proc-slap')) descSections.push('SLAP REPAIR:\nThe superior labrum was detached from the glenoid rim at the biceps anchor. The superior glenoid neck was prepared with a shaver and burr to a bleeding bony bed. ' + v('arth-slap-anchors') + ' ' + v('arth-slap-anchor-type') + ' suture anchors were placed at the superior glenoid rim and the labrum secured, restoring a stable biceps anchor. The repair was probed and found to be secure.');
   if (ck('arth-proc-decompression')) descSections.push('ARTHROSCOPIC SUBACROMIAL DECOMPRESSION:\nThe subacromial space was entered. There were massive amounts of hyperemia, erythema, and bursitis with adhesions in the subdeltoid and subacromial regions. There was significant narrowing of the acromiohumeral interval and a thick, fibrotic coracoacromial ligament contributing to outlet impingement. Using a motorized shaver and a side-effect radiofrequency device, the bursa was removed from lateral to medial and anterior to posterior. A perihumeral debridement was performed along with decompression of the subdeltoid adhesions.');
   if (ck('arth-proc-acromioplasty')) descSections.push('ACROMIOPLASTY:\nThe acromion was flattened in the same sequence of steps as the arthroscopic subacromial decompression. It was converted from a type ' + v('arth-acromion-type') + ' to a type I acromion.');
-  if (ck('arth-proc-rcr')) {
-    var rcrText = 'ARTHROSCOPIC ROTATOR CUFF REPAIR:\nThe rotator cuff tear was full thickness in its extent. An arthroscopic shaver device was introduced and the greater tuberosity was abraded down to a gently bleeding bone bed in order to facilitate healing of soft tissue back to bone. ' + v('arth-medial-num') + ' ' + v('arth-medial-type') + ' were placed at a 45-degree angle adjacent to the articular cartilage in the greater tuberosity. ';
-    if (ck('arth-luggage')) { rcrText += (v('arth-luggage-num') ? v('arth-luggage-num') + ' ' : '') + 'luggage tag sutures were placed to secure the tendon edge. '; }
-    var technique = v('arth-repair-technique');
-    if (technique === 'knotless') {
-      rcrText += 'The sutures were passed through the rotator cuff and secured in a completely knotless fashion with excellent compression onto the tuberosity.';
-    } else if (technique === 'additional-lateral') {
-      rcrText += 'Both limbs of each suture were passed through the rotator cuff. One set of sutures was tied down to compress the tendon to the articular margin. The remaining suture limbs were passed into lateral row anchors. The previously tied medial row sutures were also passed into an additional lateral anchor, completing the construct.';
-    } else {
-      rcrText += 'The sutures were passed through the rotator cuff in a ' + v('arth-suture-config') + ' configuration. Using arthroscopic knot-tying techniques, the rotator cuff was repaired back to the greater tuberosity with excellent compression onto the tuberosity.';
-    }
-    if (ck('arth-lateral-row')) {
-      rcrText += '\n\nThe lateral part of the rotator cuff remained in poor contact with bone; therefore, a second row of anchors was placed. The first-row suture limbs were passed through ' + v('arth-lateral-num') + ' ' + v('arth-lateral-type') + ' lateral row anchors inserted in the greater tuberosity. As they were inserted, they exerted a compression effect onto the underlying rotator cuff, restoring the rotator cuff footprint in an anatomic fashion. Care was taken not to overtension the rotator cuff during its repair.';
-    }
-    descSections.push(rcrText);
-  }
-  if (ck('arth-proc-dcr')) descSections.push('ARTHROSCOPIC DISTAL CLAVICLE RESECTION:\nUnder direct visualization, the acromioclavicular joint was arthritic. The tissue along with the thickened, fibrotic acromioclavicular joint meniscus was debrided. A high-speed burr was introduced and approximately 8 to 10 mm of the distal clavicle was resected to decompress the acromioclavicular joint such that there was no impingement with the acromion. This was a smooth, symmetric resection confirmed by arthroscopic visualization from multiple viewing portals. The acromioclavicular joint ligaments were left intact superiorly, anteriorly, and posteriorly to maintain acromioclavicular joint stability.');
+  if (ck('arth-proc-rcr')) descSections.push('ARTHROSCOPIC ROTATOR CUFF REPAIR:\nThe rotator cuff tear was full thickness in its extent. An arthroscopic shaver device was introduced and the greater tuberosity was abraded down to a gently bleeding bone bed in order to facilitate healing of soft tissue back to bone. ' + v('arth-medial-num') + ' ' + v('arth-medial-type') + ' were placed at a 45-degree angle adjacent to the articular cartilage in the greater tuberosity. The sutures were passed through the rotator cuff in a ' + v('arth-suture-config') + ' configuration. ' + (ck('arth-luggage') ? (v('arth-luggage-num') ? v('arth-luggage-num') + ' ' : '') + 'luggage tag sutures were placed to secure the tendon edge. ' : '') + 'Using arthroscopic knot-tying techniques, the rotator cuff was repaired back to the greater tuberosity with excellent compression onto the tuberosity.\n\nThe lateral part of the rotator cuff remained in poor contact with bone; therefore, a second row of anchors was placed. The first-row suture limbs were passed through ' + v('arth-lateral-num') + ' ' + v('arth-lateral-type') + ' lateral row anchors inserted in the greater tuberosity. As they were inserted, they exerted a compression effect onto the underlying rotator cuff, restoring the rotator cuff footprint in an anatomic fashion. Care was taken not to overtension the rotator cuff during its repair.');
+  if (ck('arth-proc-dcr')) descSections.push('ARTHROSCOPIC DISTAL CLAVICLE RESECTION:\nUnder direct visualization, the acromioclavicular joint was arthritic. The tissue along with the thickened, fibrotic acromioclavicular joint meniscus was debrided. A high-speed burr was introduced and the distal clavicle was resected to decompress the acromioclavicular joint such that there was no impingement with the acromion. This was a smooth, symmetric resection confirmed by arthroscopic visualization from multiple viewing portals. The acromioclavicular joint ligaments were left intact superiorly, anteriorly, and posteriorly to maintain acromioclavicular joint stability.');
   if (ck('arth-proc-tenodesis')) descSections.push('OPEN SUBPECTORAL BICEPS TENODESIS:\nInstruments were removed and an approximately 3 cm incision was made at the anterior/inferior axillary fold. Sharp dissection was employed through subcutaneous tissue down to the fascia overlying the pectoralis major. The subpectoral interval was defined and the arm internally rotated. Retractors were used to elevate the pectoralis major, and the biceps tendon was delivered in a retrograde fashion out of the bicipital groove. The adjacent bone was cleared with electrocautery and roughened with an osteotome. A single 1.8 mm Arthrex FiberTak anchor double loaded with #2 suture tape was placed at that point, and the biceps tendon was tenodesed against the bone in an onlay fashion using alternating simple sutures and lasso loop technique with the aid of a penetrating device. The excess tendon was removed with scissors.');
   if (ck('arth-proc-subscap')) descSections.push('ARTHROSCOPIC SUBSCAPULARIS REPAIR:\nThe subscapularis was inspected and found to have a ' + v('arth-subscap-extent') + ' tear. The tendon was mobilized and the lesser tuberosity footprint was prepared to a bleeding bone bed with a shaver and burr. ' + v('arth-subscap-anchors') + ' ' + v('arth-subscap-anchor-type') + ' anchors were placed in the lesser tuberosity, and the subscapularis was secured to its footprint under appropriate tension. The repair was probed and found to be secure. The comma tissue and the medial sling of the biceps were respected throughout.');
   if (ck('arth-proc-remplissage')) descSections.push('REMPLISSAGE:\nThe arthroscope was placed anteriorly and ' + v('arth-hillsachs-desc') + ' was visualized. ' + v('arth-remp-anchors') + ' anchors were placed into the defect and sutures passed through the infraspinatus and posterior capsule, which were tied in the subacromial space, completing the remplissage.');
@@ -2307,7 +2014,6 @@ function updateArthSections() {
   document.getElementById('arth-remp-section').style.display = ck('arth-proc-remplissage') ? 'block' : 'none';
   document.getElementById('arth-mua-section').style.display = ck('arth-proc-mua') ? 'block' : 'none';
   document.getElementById('arth-acjrecon-section').style.display = ck('arth-proc-acjrecon') ? 'block' : 'none';
-  document.getElementById('arth-lateral-row-section').style.display = ck('arth-lateral-row') ? 'block' : 'none';
   document.getElementById('arth-dx-other-text').style.display = ck('arth-dx-other') ? 'inline-block' : 'none';
   document.getElementById('arth-proc-other-text').style.display = ck('arth-proc-other') ? 'inline-block' : 'none';
 }
@@ -2606,191 +2312,7 @@ function generateDistalTriceps() {
 
   showReport(report);
 }
-document.addEventListener('DOMContentLoaded', function() { dtriFixToggle(); dtriRowToggle(); buildFindings('stsa'); });
-
-// ---- Knee dx sync: mirror pre to post ----
-function kneeDxSync(cb) {
-  var post = document.getElementById(cb.id.replace('-dx-', '-postdx-'));
-  if (post) post.checked = cb.checked;
-}
-
-// ---- Stemless TSA head string helper ----
-function stsaHeadStr() {
-  var val = (document.getElementById('stsa-head') || {}).value || '';
-  return val.replace('x', ' x ');
-}
-
-// ========================================
-// KNEE SCOPE GENERATOR
-// ========================================
-function generateKneeScope() {
-  var s = v('knee-side');
-  var preDx = [];
-  if (ck('knee-dx-mm')) preDx.push(s + ' Medial Meniscus Tear');
-  if (ck('knee-dx-lm')) preDx.push(s + ' Lateral Meniscus Tear');
-  if (ck('knee-dx-chondral')) preDx.push(s + ' Chondromalacia / Chondral Defect');
-  if (ck('knee-dx-synovitis')) preDx.push(s + ' Synovitis');
-  if (ck('knee-dx-loose')) preDx.push(s + ' Loose Body');
-  if (ck('knee-dx-plica')) preDx.push(s + ' Plica');
-  if (ck('knee-dx-oa')) preDx.push(s + ' Osteoarthritis');
-  if (ck('knee-dx-other') && v('knee-dx-other-text').trim()) preDx.push(s + ' ' + v('knee-dx-other-text'));
-
-  var postDx = [];
-  if (ck('knee-postdx-mm')) postDx.push(s + ' Medial Meniscus Tear');
-  if (ck('knee-postdx-lm')) postDx.push(s + ' Lateral Meniscus Tear');
-  if (ck('knee-postdx-chondral')) postDx.push(s + ' Chondromalacia / Chondral Defect');
-  if (ck('knee-postdx-synovitis')) postDx.push(s + ' Synovitis');
-  if (ck('knee-postdx-loose')) postDx.push(s + ' Loose Body');
-  if (ck('knee-postdx-plica')) postDx.push(s + ' Plica');
-  if (ck('knee-postdx-oa')) postDx.push(s + ' Osteoarthritis');
-  if (ck('knee-postdx-other') && v('knee-postdx-other-text').trim()) postDx.push(s + ' ' + v('knee-postdx-other-text'));
-
-  var procs = [];
-  if (ck('knee-proc-diag')) procs.push(s + ' Diagnostic Knee Arthroscopy');
-  if (ck('knee-proc-pmm')) procs.push(s + ' Partial Medial Meniscectomy');
-  if (ck('knee-proc-plm')) procs.push(s + ' Partial Lateral Meniscectomy');
-  if (ck('knee-proc-chondro')) procs.push(s + ' Chondroplasty');
-  if (ck('knee-proc-synov')) procs.push(s + ' Synovectomy');
-  if (ck('knee-proc-loose')) procs.push(s + ' Loose Body Removal');
-  if (ck('knee-proc-plica')) procs.push(s + ' Plica Resection');
-  if (ck('knee-proc-other') && v('knee-proc-other-text').trim()) procs.push(s + ' ' + v('knee-proc-other-text'));
-
-  // Findings
-  var fn = 1;
-  var findings = [];
-  findings.push(fn++ + '. Exam under anesthesia revealed ' + v('knee-eua') + '.');
-  if (v('knee-f-mm') !== 'intact') findings.push(fn++ + '. The medial meniscus demonstrated a ' + v('knee-f-mm') + '.');
-  else findings.push(fn++ + '. The medial meniscus was intact.');
-  if (v('knee-f-lm') !== 'intact') findings.push(fn++ + '. The lateral meniscus demonstrated a ' + v('knee-f-lm') + '.');
-  else findings.push(fn++ + '. The lateral meniscus was intact.');
-
-  // Cartilage grading
-  var cartSurfaces = [
-    ['knee-cart-mfc', 'medial femoral condyle'],
-    ['knee-cart-mtp', 'medial tibial plateau'],
-    ['knee-cart-lfc', 'lateral femoral condyle'],
-    ['knee-cart-ltp', 'lateral tibial plateau'],
-    ['knee-cart-troch', 'trochlea'],
-    ['knee-cart-pat', 'patella']
-  ];
-  cartSurfaces.forEach(function(pair) {
-    var val = v(pair[0]);
-    if (val === 'intact') findings.push(fn++ + '. The articular cartilage of the ' + pair[1] + ' was intact.');
-    else findings.push(fn++ + '. The ' + pair[1] + ' demonstrated ' + val + '.');
-  });
-
-  findings.push(fn++ + '. The ACL was ' + v('knee-f-acl') + '.');
-  findings.push(fn++ + '. The PCL was ' + v('knee-f-pcl') + '.');
-
-  // Description sections
-  var descSections = [];
-  descSections.push('POSITIONING AND PREPARATION:\nThe patient was taken to the operating room and placed on the operating table in the supine position. A lateral post was placed. A tourniquet was placed on the proximal thigh but not inflated. After adequate anesthesia was obtained, all bony prominences were well padded. The leg was prepped and draped in the usual sterile fashion. Preoperative antibiotics were administered intravenously as noted above.');
-
-  descSections.push('DIAGNOSTIC ARTHROSCOPY:\nStandard anterolateral and anteromedial portals were established. A diagnostic arthroscopy was performed with findings as noted above.');
-
-  if (ck('knee-proc-pmm')) descSections.push('PARTIAL MEDIAL MENISCECTOMY:\nThe medial meniscus tear was identified and probed. Using a combination of arthroscopic biters and a motorized shaver, the unstable portion of the medial meniscus was resected back to a stable, balanced rim. The remaining meniscus was probed and confirmed to be stable.');
-  if (ck('knee-proc-plm')) descSections.push('PARTIAL LATERAL MENISCECTOMY:\nThe lateral meniscus tear was identified and probed. Using a combination of arthroscopic biters and a motorized shaver, the unstable portion of the lateral meniscus was resected back to a stable, balanced rim. The remaining meniscus was probed and confirmed to be stable.');
-  if (ck('knee-proc-chondro')) descSections.push('CHONDROPLASTY:\nAreas of damaged articular cartilage were identified. Using an arthroscopic shaver, the unstable cartilage flaps were debrided and the chondral surfaces smoothened and stabilized.');
-  if (ck('knee-proc-synov')) descSections.push('SYNOVECTOMY:\nAn extensive synovectomy was performed using a motorized shaver, removing all pathologic synovial tissue from the knee joint.');
-  if (ck('knee-proc-loose')) descSections.push('LOOSE BODY REMOVAL:\nLoose bodies were identified within the knee joint and removed with an arthroscopic grasper. The joint was thoroughly irrigated and inspected to confirm complete removal of all loose bodies.');
-  if (ck('knee-proc-plica')) descSections.push('PLICA RESECTION:\nThe pathologic plica was identified and resected using an arthroscopic shaver and radiofrequency device until a smooth surface was achieved.');
-
-  descSections.push('CLOSURE:\nThe knee joint was irrigated thoroughly. Portal sites were closed with interrupted 3-0 Monocryl, reinforced with Steri-Strips. Sterile dressings were applied. The patient was placed in a Cryocuff and transferred to the recovery room in satisfactory condition having tolerated the procedure well. All counts were correct.');
-
-  var braceText = v('knee-brace') === 'none' ? '' : ' The patient was placed in a ' + v('knee-brace') + '.';
-
-  var report = patientHeader('knee') +
-    'PREOPERATIVE DIAGNOSIS:\n' + preDx.join('\n') + '\n\n' +
-    'POSTOPERATIVE DIAGNOSIS:\n' + postDx.join('\n') + '\n\n' +
-    'PROCEDURE(S) PERFORMED: ' + s + ' Knee:\n' + procs.join('\n') + '\n\n' +
-    'SURGEON: Robert H. Rolf, MD\n' +
-    'ASSISTANT: ' + asstText('knee') + '\n' +
-    'ANESTHESIA: General\n' +
-    'POSITION: Supine with lateral post\n' +
-    'TOURNIQUET: Placed, not inflated\n' +
-    'IV FLUIDS: ' + v('knee-ivf') + ' mL\n' +
-    'ESTIMATED BLOOD LOSS: ' + v('knee-ebl') + '\n' +
-    'COMPLICATIONS: ' + complicationText('knee') + '\n' +
-    'ANTIBIOTICS: ' + v('knee-abx') + '\n' +
-    'IMPLANTS: None\n\n' +
-    'PHYSICIAN ASSISTANT STATEMENT:\nThe use of a Physician Assistant was essential in this procedure in order to facilitate the knee surgery, minimize risks of poor wound healing and wound infection, and improve safety and efficiency. The Physician Assistant assisted with leg positioning, retraction, and hemostasis.\n\n' +
-    'INDICATIONS:\nThis is a ' + v('knee-age') + '-year-old ' + v('knee-sex') + ' who presents for knee arthroscopy. The patient\'s preoperative exam and imaging studies were consistent with the above noted diagnoses. I discussed in detail with the patient the nature of the procedure including risks, benefits, prognosis, and alternatives. Informed consent was obtained. Prior to surgery the appropriate site was identified by the patient and marked with my initials. A time-out was taken to verify the correct patient, the correct site, and the correct procedure.\n\n' +
-    'OPERATIVE FINDINGS:\n' + findings.join('\n') + '\n\n' +
-    'DESCRIPTION OF PROCEDURE:\n\n' + descSections.join('\n\n') + '\n\n' +
-    'DISPOSITION:\nThe patient is ' + v('knee-wb') + '.' + braceText + ' Follow-up in ' + v('knee-followup') + '.\n\n' +
-    'PAIN MANAGEMENT PLAN:\nMultimodal regimen with cryotherapy, ' + painMeds('knee') + ', and oral analgesics.\n\n' +
-    'PROGNOSIS:\nThe patient has a ' + v('knee-prognosis') + ' prognosis for pain-free return to active function.';
-
-  showReport(report);
-}
-
-// ========================================
-// STEMLESS TSA GENERATOR
-// ========================================
-function generateStemlessTSA() {
-  var s = v('stsa-side');
-  var headVal = stsaHeadStr();
-  var implantSize = v('stsa-implant-size');
-  var config = v('stsa-config').toLowerCase();
-
-  var report = patientHeader('stsa') +
-'PREOPERATIVE DIAGNOSIS:\n' + s + ' Shoulder Osteoarthritis\n\n' +
-'POSTOPERATIVE DIAGNOSIS:\n' + s + ' Shoulder Osteoarthritis\n\n' +
-'PROCEDURE(S) PERFORMED:\n' + s + ' Stemless Total Shoulder Arthroplasty\n' + (bicepsRuptured('stsa') ? '' : s + ' Biceps Tenodesis\n') + '\n' +
-'SURGEON: Robert H. Rolf, MD\n' +
-'ASSISTANT: ' + asstText('stsa') + '\n' +
-'ANESTHESIA: General with interscalene block using Exparel (133 mg)\n' +
-'ESTIMATED BLOOD LOSS: ' + v('stsa-ebl') + '\n' +
-'IV FLUIDS: ' + v('stsa-ivf') + ' mL\n' +
-'COMPLICATIONS: ' + complicationText('stsa') + '\n' +
-'ANTIBIOTICS: ' + v('stsa-abx') + '\n' +
-'TRANEXAMIC ACID: 1000 mg IV\n' +
-'IMPLANTS: Zimmer Biomet OsseoFit size ' + implantSize + ' ' + config + ' stemless implant, Identity ' + headVal + ' mm humeral head, and size ' + v('stsa-glenoid-size') + ' ' + v('stsa-glenoid-type') + '\n\n' +
-'PHYSICIAN ASSISTANT STATEMENT:\n' +
-'The use of a Physician Assistant was essential in this procedure to facilitate preparation of the humerus and glenoid, implant placement, ' + (bicepsRuptured('stsa') ? '' : 'biceps tenodesis, ') + 'arm positioning, and hemostasis. This minimized risk of poor wound healing or infection and improved operative efficiency and patient safety.\n\n' +
-'INDICATIONS:\n' +
-'This is a ' + v('stsa-age') + '-year-old ' + v('stsa-sex') + ' with chronic ' + s.toLowerCase() + ' shoulder pain, nonresponsive to conservative management. Preoperative exam and imaging confirmed advanced osteoarthritis. The risks, benefits, prognosis, and alternatives were discussed in detail. Informed consent was obtained. The site was identified and marked; a time-out confirmed the correct patient, site, and procedure.\n\n' +
-'EXAM UNDER ANESTHESIA:\n' +
-'External rotation at side: ' + v('stsa-eua-er') + '°\n' +
-'Abduction: ' + v('stsa-eua-abd') + '° with ' + v('stsa-eua-ir') + '° internal rotation / ' + v('stsa-eua-er-abd') + '° external rotation\n' +
-'Forward flexion: ' + v('stsa-eua-ff') + '°\n' +
-'Biceps tendon: ' + v('stsa-biceps') + '\n\n' +
-'INTRAOPERATIVE FINDINGS:\n' +
-v('stsa-findings') + '\n\n' +
-'DESCRIPTION OF PROCEDURE:\n\n' +
-'POSITIONING AND PREPARATION:\n' +
-'The patient was taken to the operating room and placed on the operating table in the beach chair position. After induction of anesthesia, all bony prominences were padded. The arm was prepped with soap wash and ChloraPrep and draped with occlusive drapes. Preoperative antibiotics were administered intravenously as noted above, and TXA was administered. Throughout the procedure, the wound was irrigated periodically with pulsatile lavage.\n\n' +
-'SURGICAL APPROACH:\n' +
-'An extended deltopectoral incision was made. The cephalic vein was preserved and mobilized laterally with the deltoid. The subdeltoid plane was released and retractors placed. The clavipectoral fascia was divided. The circumflex vessels were ligated and divided.\n\n' +
-(bicepsRuptured('stsa')
-  ? 'BICEPS ASSESSMENT:\nThe biceps tendon was found to be ruptured with distal retraction; no biceps tenodesis was performed.\n\n'
-  : 'BICEPS TENODESIS:\nThe biceps tendon was elevated from the groove, tenotomized, and tenodesed to the upper border of the pectoralis major with #2 Ethibond sutures.\n\n') +
-'LESSER TUBEROSITY OSTEOTOMY:\n' +
-'The axillary nerve was identified and protected. The lesser tuberosity was osteotomized with the attached subscapularis and tagged with #2 Ethibond sutures for later repair.\n\n' +
-'HUMERAL HEAD RESECTION:\n' +
-'The humeral head was dislocated anteriorly and marginal osteophytes were removed. The extramedullary resection guide was placed along the anatomic neck and stabilized with two pins. The humeral head was resected along the anatomic neck line. A humeral resection cover was placed to protect the resection surface.\n\n' +
-'GLENOID PREPARATION AND IMPLANTATION:\n' +
-(ck('stsa-psi')
-  ? 'The labrum was excised. Remaining articular cartilage was removed from the glenoid face with a Cobb elevator. The PSI guide was placed and two pins were placed into the glenoid. The glenoid was reamed to the depth according to the PSI planning. Peripheral peg holes were drilled. The trial component was inserted and confirmed for fit. Phenylephrine soaked sponge was used to assist with hemostasis and the pedicles. Palacos-G cement was pressurized into the peripheral peg holes; the final glenoid component was seated and fixed with excellent stability. Excess cement was removed.\n\n'
-  : 'The labrum was excised. Remaining articular cartilage was removed from the glenoid face with a Cobb elevator. The glenoid guide was placed and a central pin was placed. The glenoid was reamed, the central hole drilled, and the peripheral peg holes were drilled. The trial component was inserted and confirmed for fit. Phenylephrine soaked sponge was used to assist with hemostasis and the pedicles. Palacos-G cement was pressurized into the peripheral peg holes; the final glenoid component was seated and fixed with excellent stability. Excess cement was removed.\n\n') +
-'HUMERAL PREPARATION:\n' +
-'The humeral resection cover was removed. A bone quality test was performed and confirmed adequate bone stock for stemless fixation. The humeral sizer was placed on the resection surface and oriented so the bicipital groove bisected the superior and anterior fins. The appropriate implant size was determined. A central Steinmann pin was placed. The boss reamer was used to ream over the central pin until flush with the resection surface. The reference foot was assembled to the broach inserter, and the appropriately sized broach was impacted until flush with the resection surface. Broach stability was confirmed.\n\n' +
-'FINAL IMPLANT:\n' +
-'The broach was removed. The final OsseoFit size ' + implantSize + ' ' + config + ' stemless implant was assembled to the inserter and reference foot. The implant was aligned with the superior fin marking and impacted until flush with the resection surface. Implant stability was confirmed. The Identity humeral head adapter was assembled to the humeral head and rotated to match the anatomy of the proximal humerus. The head construct was placed into the implant taper and impacted until flush with the resection surface, and uniform seating was confirmed.\n\n' +
-'LESSER TUBEROSITY OSTEOTOMY REPAIR:\n' +
-'The lesser tuberosity osteotomy was anatomically reduced and repaired with ' + v('stsa-bb') + ' BroadBand tape sutures passed individually around the lesser tuberosity fragment and through bone tunnels lateral to the lesser tuberosity, then sequentially tied, achieving anatomic reduction and compression of the osteotomy. The rotator interval was closed.\n\n' +
-'RANGE OF MOTION ASSESSMENT:\n' +
-'Shoulder stability was confirmed and safe limits for postoperative physical therapy were defined: external rotation ' + v('stsa-rom-er') + '° at the side, forward flexion ' + v('stsa-rom-ff') + '°, abduction ' + v('stsa-rom-abd') + '° with ' + v('stsa-rom-er-abd') + '° external rotation and ' + v('stsa-rom-ir') + '° internal rotation, with the osteotomy repair remaining stable and tension-free throughout.\n\n' +
-'CLOSURE:\n' +
-'The wound was irrigated. ' + v('stsa-vanco') + ' Vancomycin was sprinkled in layers during closure. The deltopectoral interval was closed with #2 Ethibond. Ancef was injected deep to the deltopectoral interval using a spinal needle after the interval was closed. The dermis was closed with 2-0 Vicryl and the skin with 3-0 Monocryl, reinforced with Steri-Strips. Sterile dressing, sling, and Cryocuff were applied. The patient was transferred to the PACU in stable condition.\n\n' +
-'DISPOSITION:\nStable to PACU\n\n' +
-'PAIN MANAGEMENT PLAN:\n' +
-'Multimodal regimen with nerve block, sling, cryotherapy, ' + painMeds('stsa') + ', and oral analgesics.\n\n' +
-'POSTOPERATIVE THERAPY PROTOCOL:\n' +
-'Immobilizer for 2-4 weeks\nBaby cradle pendulum exercises POD #1\nPassive ROM: Forward flexion < ' + v('stsa-pt-ff') + '°, External rotation < ' + v('stsa-pt-er') + '°\nActive ROM: Begin at 4-6 weeks';
-
-  showReport(report);
-}
+document.addEventListener('DOMContentLoaded', function() { dtriFixToggle(); dtriRowToggle(); });
 
 </script>
 
