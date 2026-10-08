@@ -169,6 +169,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <option value="latarjet">Latarjet</option>
 <option value="distal-biceps">Distal Biceps Repair</option>
 <option value="distal-triceps">Distal Triceps Repair</option>
+<option value="knee-scope">Knee Arthroscopy</option>
 <option value="tka">Total Knee Arthroplasty</option>
 <option value="other">Other / Custom Procedure</option>
 </select>
@@ -770,6 +771,35 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 </div>
 
+<!-- Knee Arthroscopy -->
+<div class="procedure-section" id="sec-knee-scope">
+<div class="section-title">Knee Arthroscopy</div>
+<div class="section-title">Preoperative Diagnosis (check all that apply)</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="ks-dx-medmenisc"><label for="ks-dx-medmenisc">Medial Meniscus Tear (M23.211/212)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="ks-dx-latmenisc"><label for="ks-dx-latmenisc">Lateral Meniscus Tear (M23.311/312)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="ks-dx-chondro"><label for="ks-dx-chondro">Chondromalacia / Chondral Defect (M94.261/262)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="ks-dx-loosebody"><label for="ks-dx-loosebody">Loose Body (M23.41/42)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="ks-dx-plica"><label for="ks-dx-plica">Plica Syndrome (M67.51/52)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="ks-dx-synovitis"><label for="ks-dx-synovitis">Synovitis (M65.861/862)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="ks-dx-oa"><label for="ks-dx-oa">Knee Osteoarthritis (M17.11/12)</label></div>
+</div>
+<p class="icd-info">CPT: 29881 Partial meniscectomy; 29880 Meniscectomy with chondroplasty; 29877 Chondroplasty; 29874 Loose body removal; 29875/29876 Synovectomy; 29873 Plica resection</p>
+<div class="section-title">Procedures (check all)</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="ks-proc-diagnostic" checked><label for="ks-proc-diagnostic">Diagnostic Arthroscopy</label></div>
+<div class="checkbox-item"><input type="checkbox" id="ks-proc-medmenisc"><label for="ks-proc-medmenisc">Partial Medial Meniscectomy (29881)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="ks-proc-latmenisc"><label for="ks-proc-latmenisc">Partial Lateral Meniscectomy (29881)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="ks-proc-chondro"><label for="ks-proc-chondro">Chondroplasty (29877)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="ks-proc-synovectomy"><label for="ks-proc-synovectomy">Synovectomy (29875/29876)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="ks-proc-loosebody"><label for="ks-proc-loosebody">Loose Body Removal (29874)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="ks-proc-plica"><label for="ks-proc-plica">Plica Resection (29873)</label></div>
+</div>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="ks-equip"></textarea></div>
+</div>
+</div>
+
 <!-- Total Knee Arthroplasty -->
 <div class="procedure-section" id="sec-tka">
 <div class="section-title">Total Knee Arthroplasty</div>
@@ -950,7 +980,7 @@ function todayStr() {
 }
 
 // section id -> the field id prefix used inside that panel
-var PROC_PREFIX = {'tsa': 'tsa', 'hemi': 'hemi', 'rtsa': 'rtsa', 'rev-tsa': 'rev-tsa', 'rev-rtsa': 'rev-rtsa', 'arth': 'arth', 'acj': 'acj', 'mua': 'mua', 'orif-clav': 'clav', 'orif-phum': 'phum', 'hw-removal': 'hw', 'other': 'other', 'biceps-tenodesis': 'bten', 'latarjet': 'latarjet', 'distal-biceps': 'distal-biceps', 'distal-triceps': 'distal-triceps', 'tka': 'tka'};
+var PROC_PREFIX = {'tsa': 'tsa', 'hemi': 'hemi', 'rtsa': 'rtsa', 'rev-tsa': 'rev-tsa', 'rev-rtsa': 'rev-rtsa', 'arth': 'arth', 'acj': 'acj', 'mua': 'mua', 'orif-clav': 'clav', 'orif-phum': 'phum', 'hw-removal': 'hw', 'other': 'other', 'biceps-tenodesis': 'bten', 'latarjet': 'latarjet', 'distal-biceps': 'distal-biceps', 'distal-triceps': 'distal-triceps', 'knee-scope': 'ks', 'tka': 'tka'};
 /* "Other" on a Follow Up dropdown reveals a free-text box, and the typed text is
    what prints - the literal word "Other" is never sent to the office. */
 function onFollowupChange(pfx){
@@ -1075,6 +1105,7 @@ function getProcedureName(val) {
     'latarjet': 'Latarjet',
     'distal-biceps': 'Distal Biceps Repair',
     'distal-triceps': 'Distal Triceps Repair',
+    'knee-scope': 'Knee Arthroscopy',
     'tka': 'Total Knee Arthroplasty',
     'other': 'Other / Custom Procedure'
   };
@@ -1402,6 +1433,18 @@ function getDiagnosisLines(proc, side) {
       if (ck('dtriceps-dx-tear')) { if (dtR) dx.push('S46.311A - Distal triceps tear, right arm'); if (dtL) dx.push('S46.312A - Distal triceps tear, left arm'); }
       if (dx.length === 0) dx.push('(No diagnosis selected)');
       break;
+    case 'knee-scope':
+      var ksR = (side === 'Right' || side === 'Bilateral');
+      var ksL = (side === 'Left' || side === 'Bilateral');
+      if (ck('ks-dx-medmenisc')) { if (ksR) dx.push('M23.211 - Medial meniscus tear, right knee'); if (ksL) dx.push('M23.212 - Medial meniscus tear, left knee'); }
+      if (ck('ks-dx-latmenisc')) { if (ksR) dx.push('M23.311 - Lateral meniscus tear, right knee'); if (ksL) dx.push('M23.312 - Lateral meniscus tear, left knee'); }
+      if (ck('ks-dx-chondro')) { if (ksR) dx.push('M94.261 - Chondromalacia, right knee'); if (ksL) dx.push('M94.262 - Chondromalacia, left knee'); }
+      if (ck('ks-dx-loosebody')) { if (ksR) dx.push('M23.41 - Loose body, right knee'); if (ksL) dx.push('M23.42 - Loose body, left knee'); }
+      if (ck('ks-dx-plica')) { if (ksR) dx.push('M67.51 - Plica syndrome, right knee'); if (ksL) dx.push('M67.52 - Plica syndrome, left knee'); }
+      if (ck('ks-dx-synovitis')) { if (ksR) dx.push('M65.861 - Synovitis, right knee'); if (ksL) dx.push('M65.862 - Synovitis, left knee'); }
+      if (ck('ks-dx-oa')) { if (ksR) dx.push('M17.11 - Knee osteoarthritis, right knee'); if (ksL) dx.push('M17.12 - Knee osteoarthritis, left knee'); }
+      if (dx.length === 0) dx.push('(No diagnosis selected)');
+      break;
     case 'tka':
       var tkaR = (side === 'Right' || side === 'Bilateral');
       var tkaL = (side === 'Left' || side === 'Bilateral');
@@ -1548,6 +1591,14 @@ function getCPTLines(proc) {
     case 'distal-triceps':
       cpt.push('24341 - Repair of tendon or muscle, upper arm or elbow');
       break;
+    case 'knee-scope':
+      if (ck('ks-proc-medmenisc') || ck('ks-proc-latmenisc')) cpt.push('29881 - Arthroscopic meniscectomy');
+      if (ck('ks-proc-chondro')) cpt.push('29877 - Arthroscopic chondroplasty');
+      if (ck('ks-proc-loosebody')) cpt.push('29874 - Arthroscopic removal of loose body');
+      if (ck('ks-proc-synovectomy')) cpt.push('29875/29876 - Arthroscopic synovectomy');
+      if (ck('ks-proc-plica')) cpt.push('29873 - Arthroscopic plica resection');
+      if (cpt.length === 0) cpt.push('29870 - Diagnostic knee arthroscopy');
+      break;
     case 'tka':
       cpt.push('27447 - Total knee arthroplasty');
       break;
@@ -1689,6 +1740,18 @@ function getProcedureDetails(proc, side) {
     case 'distal-triceps':
       details.push('Fixation: ' + v('distal-triceps-fixation'));
       if (v('distal-triceps-equip').trim()) details.push('Additional Equipment: ' + v('distal-triceps-equip').trim());
+      break;
+    case 'knee-scope':
+      var ksProcs = [];
+      if (ck('ks-proc-diagnostic')) ksProcs.push('Diagnostic Arthroscopy');
+      if (ck('ks-proc-medmenisc')) ksProcs.push('Partial Medial Meniscectomy');
+      if (ck('ks-proc-latmenisc')) ksProcs.push('Partial Lateral Meniscectomy');
+      if (ck('ks-proc-chondro')) ksProcs.push('Chondroplasty');
+      if (ck('ks-proc-synovectomy')) ksProcs.push('Synovectomy');
+      if (ck('ks-proc-loosebody')) ksProcs.push('Loose Body Removal');
+      if (ck('ks-proc-plica')) ksProcs.push('Plica Resection');
+      if (ksProcs.length > 0) details.push('Procedures: ' + ksProcs.join(', '));
+      if (v('ks-equip').trim()) details.push('Additional Equipment: ' + v('ks-equip').trim());
       break;
     case 'tka':
       details.push('Anesthesia: ' + v('tka-anesthesia'));
