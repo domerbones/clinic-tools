@@ -95,6 +95,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="tab" data-tab="dtri" onclick="switchTab('dtri')">Distal Triceps</div>
 <div class="tab" data-tab="knee" onclick="switchTab('knee')">Knee Scope</div>
 <div class="tab" data-tab="stsa" onclick="switchTab('stsa')">Stemless TSA</div>
+<div class="tab" data-tab="tka" onclick="switchTab('tka')">TKA</div>
 </div>
 
 <!-- TSA FORM -->
@@ -1317,6 +1318,87 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 </div>
 
+<!-- TKA FORM -->
+<div class="form-panel" id="panel-tka">
+<p class="defaults-note">Fields pre-filled with defaults. Edit as needed.</p>
+
+<div class="section-title" style="margin-top:0">Patient Information</div>
+<div class="row">
+<div class="field field-med"><label>Date of Surgery</label><input type="date" id="tka-dos"></div>
+</div>
+
+<div class="section-title">Patient &amp; Procedure</div>
+<div class="row">
+<div class="field field-small"><label>Side</label><select id="tka-side"><option>Right</option><option>Left</option></select></div>
+<div class="field field-small"><label>Age</label><input type="number" id="tka-age"></div>
+<div class="field field-small"><label>Sex</label><select id="tka-sex"><option>male</option><option>female</option></select></div>
+<div class="field"><label>Assistant</label><input id="tka-assistant" value="Russel Lee Reynolds, PA-C"></div>
+</div>
+
+<div class="section-title">Anesthesia &amp; Meds</div>
+<div class="row">
+<div class="field field-med"><label>Anesthesia</label><select id="tka-anesthesia"><option value="Spinal with IPACK and adductor canal block" selected>Spinal with IPACK and adductor canal block</option><option value="General">General</option></select></div>
+<div class="field field-med"><label>Antibiotics</label><input id="tka-abx" value="Ancef"></div>
+<div class="field field-med"><label>EBL</label><select id="tka-ebl"><option value="Minimal" selected>Minimal</option><option value="&lt;50 mL">&lt;50 mL</option><option value="50-100 mL">50-100 mL</option><option value="100-200 mL">100-200 mL</option><option value="&gt;200 mL">&gt;200 mL</option></select></div>
+<div class="field field-small"><label>IV Fluids (mL)</label><input type="number" id="tka-ivf"></div>
+<div class="field field-med"><label>Complications</label><select id="tka-complications" onchange="document.getElementById('tka-complications-other-text').style.display=this.value==='Other'?'inline-block':'none';"><option value="None" selected>None</option><option value="Superficial wound drainage">Superficial wound drainage</option><option value="Intraoperative fracture">Intraoperative fracture</option><option value="Nerve injury">Nerve injury</option><option value="Excessive bleeding">Excessive bleeding</option><option value="Other">Other</option></select><input type="text" id="tka-complications-other-text" class="other-text" style="display:none"></div>
+</div>
+
+<div class="section-title">Implants (Zimmer Biomet Persona)</div>
+<div class="row">
+<div class="field field-small"><label>Femoral Size</label><select id="tka-femoral-size"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select></div>
+<div class="field field-med"><label>Femoral Type</label><select id="tka-femoral-type"><option value="Standard" selected>Standard</option><option value="Narrow">Narrow</option></select></div>
+<div class="field field-small"><label>Tibial Size</label><select id="tka-tibial-size"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></div>
+<div class="field field-small"><label>Bearing (mm)</label><input type="number" id="tka-bearing-thickness"></div>
+<div class="field field-small"><label>Bearing Type</label><select id="tka-bearing-type"><option value="PS" selected>PS</option><option value="CR">CR</option></select></div>
+<div class="field field-small"><label>Patella (mm)</label><input type="number" id="tka-patella-size"></div>
+</div>
+
+<div class="section-title">Preoperative Diagnosis</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="tka-predx-oa" checked><label for="tka-predx-oa">Knee Osteoarthritis (M17.11/M17.12)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="tka-predx-posttrauma"><label for="tka-predx-posttrauma">Post-traumatic Arthritis</label></div>
+<div class="checkbox-item"><input type="checkbox" id="tka-predx-varus"><label for="tka-predx-varus">Varus Deformity</label></div>
+<div class="checkbox-item"><input type="checkbox" id="tka-predx-valgus"><label for="tka-predx-valgus">Valgus Deformity</label></div>
+<div class="checkbox-item"><input type="checkbox" id="tka-predx-flexion"><label for="tka-predx-flexion">Flexion Contracture</label></div>
+</div>
+
+<div class="section-title">Postoperative Diagnosis</div>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="tka-postdx-oa" checked><label for="tka-postdx-oa">Knee Osteoarthritis (M17.11/M17.12)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="tka-postdx-posttrauma"><label for="tka-postdx-posttrauma">Post-traumatic Arthritis</label></div>
+<div class="checkbox-item"><input type="checkbox" id="tka-postdx-varus"><label for="tka-postdx-varus">Varus Deformity</label></div>
+<div class="checkbox-item"><input type="checkbox" id="tka-postdx-valgus"><label for="tka-postdx-valgus">Valgus Deformity</label></div>
+<div class="checkbox-item"><input type="checkbox" id="tka-postdx-flexion"><label for="tka-postdx-flexion">Flexion Contracture</label></div>
+</div>
+
+<div class="section-title">Operative Findings</div>
+<div class="row">
+<div class="field" style="min-width:100%"><label>Findings</label><textarea id="tka-findings" rows="4"></textarea></div>
+</div>
+
+<div class="section-title">Pain Management</div>
+<div class="row">
+<div class="field" style="min-width:100%"><label>Additional meds</label>
+<div class="checkbox-group">
+<div class="checkbox-item"><input type="checkbox" id="tka-pain-journavx" checked><label for="tka-pain-journavx">Journavx</label></div>
+<div class="checkbox-item"><input type="checkbox" id="tka-pain-tylenol" checked><label for="tka-pain-tylenol">Tylenol</label></div>
+<div class="checkbox-item"><input type="checkbox" id="tka-pain-meloxicam" checked><label for="tka-pain-meloxicam">Meloxicam</label></div>
+<div class="checkbox-item"><input type="checkbox" id="tka-pain-neurontin"><label for="tka-pain-neurontin">Neurontin</label></div>
+<div class="checkbox-item"><input type="checkbox" id="tka-pain-oxycodone"><label for="tka-pain-oxycodone">Oxycodone</label></div>
+<div class="checkbox-item"><input type="checkbox" id="tka-pain-aspirin"><label for="tka-pain-aspirin">Aspirin 81 mg</label></div>
+<div class="checkbox-item"><input type="checkbox" id="tka-pain-other" onchange="document.getElementById('tka-pain-other-text').style.display=this.checked?'inline-block':'none';"><label for="tka-pain-other">Other:</label><input type="text" id="tka-pain-other-text" class="other-text" style="display:none"></div>
+</div></div>
+</div>
+
+<div class="btn-row">
+<button class="btn btn-primary" onclick="markFields('panel-tka'); var m=checkIncomplete('panel-tka'); if(m>0){document.getElementById('tka-incomplete').textContent=m+' field(s) still empty';document.getElementById('tka-incomplete').style.display='inline';} else {document.getElementById('tka-incomplete').style.display='none';} generateTKA();">Generate Report</button>
+<button class="btn btn-outline" onclick="clearForm('tka'); markFields('panel-tka');">Clear Form</button>
+<span class="copied-msg" id="tka-copied">Copied to clipboard!</span>
+<span class="incomplete-msg" id="tka-incomplete"></span>
+</div>
+</div>
+
 <!-- RECALL LAST REPORT BUTTON (always visible) -->
 <div class="recall-row">
 <button class="btn btn-outline" id="recall-btn" style="display:none;" onclick="recallLastReport()">Recall Last Report</button>
@@ -1707,6 +1789,7 @@ var ICD_MAP = [
   [/Clavicle Fracture/i, 'S42.021A', 'S42.022A', 'Displaced fracture shaft of clavicle (adjust site/displacement)'],
   [/Proximal Humerus Fracture/i, 'S42.211A', 'S42.212A', 'Displaced fracture surgical neck of humerus (adjust pattern)'],
   [/Distal Biceps/i, 'S46.111A', 'S46.112A', 'Distal biceps tear'],
+  [/Knee Osteoarthritis/i, 'M17.11', 'M17.12', 'Primary osteoarthritis, knee'],
   [/Hardware|Implant/i, 'Z47.2', 'Z47.2', 'Encounter for removal of implant']
 ];
 function icdBlock(report) {
@@ -1751,6 +1834,7 @@ var CPT_MAP = [
   [/Internal Fixation.*Proximal Humerus/i, '23615 — ORIF proximal humerus'],
   [/Manipulation Under Anesthesia/i, '23700 — Manipulation under anesthesia'],
   [/Capsular Release|Lysis of Adhesions/i, '29825 — Arthroscopic lysis of adhesions / capsular release'],
+  [/Total Knee Arthroplasty/i, '27447 — Total knee arthroplasty'],
   [/Hardware Removal/i, '20680 — Removal of deep implant']
 ];
 function cptBlock(report) {
@@ -1893,7 +1977,7 @@ document.addEventListener('DOMContentLoaded', function() {
     el.addEventListener('click', function() { confirmField(this); });
   });
 
-  var panels = ['arth','tsa','rtsa','clav','phum','hwrem','dtri','knee','stsa'];
+  var panels = ['arth','tsa','rtsa','clav','phum','hwrem','dtri','knee','stsa','tka'];
   panels.forEach(function(p) { markFields('panel-' + p); });
 
   // Sync the findings boxes with their dropdown defaults on load
@@ -1961,6 +2045,7 @@ var PROTOCOL_OPTIONS = [
   ['rotator cuff repair',          'Rotator Cuff Repair'],
   ['shoulder stabilization',       'Shoulder Stabilization'],
   ['open biceps tenodesis',        'Open Biceps Tenodesis'],
+  ['total knee replacement',       'Total Knee Replacement'],
   ['__other__',                    'Other']
 ];
 // sensible starting protocol per template; everything else starts on Other
@@ -1976,7 +2061,8 @@ var PROTOCOL_DEFAULT = {
   scr:  'rotator cuff repair',
   inst: 'shoulder stabilization',
   bten: 'open biceps tenodesis',
-  stsa: 'total shoulder replacement'
+  stsa: 'total shoulder replacement',
+  tka:  'total knee replacement'
 };
 var DVT_OPTIONS = [
   'Aspirin 81 mg PO BID for 4 weeks',
@@ -2789,6 +2875,89 @@ v('stsa-findings') + '\n\n' +
 'Multimodal regimen with nerve block, sling, cryotherapy, ' + painMeds('stsa') + ', and oral analgesics.\n\n' +
 'POSTOPERATIVE THERAPY PROTOCOL:\n' +
 'Immobilizer for 2-4 weeks\nBaby cradle pendulum exercises POD #1\nPassive ROM: Forward flexion < ' + v('stsa-pt-ff') + '°, External rotation < ' + v('stsa-pt-er') + '°\nActive ROM: Begin at 4-6 weeks';
+
+  showReport(report);
+}
+
+function tkaPreDx(side) {
+  var dx = [];
+  var s = side;
+  if (ck('tka-predx-oa')) dx.push(s + ' Knee Osteoarthritis' + (s === 'Right' ? ' (M17.11)' : ' (M17.12)'));
+  if (ck('tka-predx-posttrauma')) dx.push(s + ' Post-traumatic Arthritis');
+  if (ck('tka-predx-varus')) dx.push(s + ' Varus Deformity');
+  if (ck('tka-predx-valgus')) dx.push(s + ' Valgus Deformity');
+  if (ck('tka-predx-flexion')) dx.push(s + ' Flexion Contracture');
+  return dx.join('\n');
+}
+function tkaPostDx(side) {
+  var dx = [];
+  var s = side;
+  if (ck('tka-postdx-oa')) dx.push(s + ' Knee Osteoarthritis' + (s === 'Right' ? ' (M17.11)' : ' (M17.12)'));
+  if (ck('tka-postdx-posttrauma')) dx.push(s + ' Post-traumatic Arthritis');
+  if (ck('tka-postdx-varus')) dx.push(s + ' Varus Deformity');
+  if (ck('tka-postdx-valgus')) dx.push(s + ' Valgus Deformity');
+  if (ck('tka-postdx-flexion')) dx.push(s + ' Flexion Contracture');
+  return dx.join('\n');
+}
+function tkaDxNarrative(side) {
+  var parts = [];
+  if (ck('tka-predx-oa')) parts.push('knee osteoarthritis');
+  if (ck('tka-predx-posttrauma')) parts.push('post-traumatic arthritis');
+  if (ck('tka-predx-varus')) parts.push('varus deformity');
+  if (ck('tka-predx-valgus')) parts.push('valgus deformity');
+  if (ck('tka-predx-flexion')) parts.push('flexion contracture');
+  return parts.length ? parts.join(' with ') : 'knee osteoarthritis';
+}
+
+function generateTKA() {
+  var s = v('tka-side');
+  var anesthesia = v('tka-anesthesia');
+  var anesthesiaShort = (anesthesia === 'General') ? 'general anesthesia' : 'spinal/IPACK/adductor canal block';
+  var bearingType = v('tka-bearing-type');
+  var femoralTypeStr = v('tka-femoral-type').toLowerCase();
+  var report = patientHeader('tka') +
+'PREOPERATIVE DIAGNOSIS:\n' + tkaPreDx(s) + '\n\n' +
+'POSTOPERATIVE DIAGNOSIS:\n' + tkaPostDx(s) + '\n\n' +
+'PROCEDURE(S) PERFORMED:\n' + s + ' Total Knee Arthroplasty\n\n' +
+'SURGEON: Robert H. Rolf, MD\n' +
+'ASSISTANT: ' + asstText('tka') + '\n' +
+'ANESTHESIA: ' + anesthesia + '\n' +
+'ESTIMATED BLOOD LOSS: ' + v('tka-ebl') + '\n' +
+'IV FLUIDS: ' + v('tka-ivf') + ' mL\n' +
+'COMPLICATIONS: ' + complicationText('tka') + '\n' +
+'ANTIBIOTICS: ' + v('tka-abx') + '\n' +
+'TRANEXAMIC ACID: 1000 mg IV at induction and repeated after tourniquet deflation\n' +
+'IMPLANTS: Zimmer Biomet Persona ' + femoralTypeStr + ' size ' + v('tka-femoral-size') + ' femoral component, size ' + v('tka-tibial-size') + ' tibial baseplate, ' + v('tka-bearing-thickness') + ' mm ' + bearingType + ' polyethylene bearing, ' + v('tka-patella-size') + ' mm patella component; all cemented with Palacos-G\n\n' +
+'PHYSICIAN ASSISTANT STATEMENT:\n' +
+'The use of a Physician Assistant was essential in this procedure to facilitate knee surgery, leg positioning, retraction, and hemostasis. This minimized risk of poor wound healing or infection and improved operative efficiency and patient safety.\n\n' +
+'INDICATIONS:\n' +
+'This is a ' + v('tka-age') + '-year-old ' + v('tka-sex') + ' with chronic ' + s.toLowerCase() + ' knee pain due to ' + tkaDxNarrative(s) + ', nonresponsive to conservative management. Preoperative exam and imaging confirmed advanced ' + tkaDxNarrative(s) + '. The risks, benefits, prognosis, and alternatives were discussed in detail. Informed consent was obtained. The site was identified and marked; a time-out confirmed the correct patient, site, and procedure.\n\n' +
+'OPERATIVE FINDINGS:\n' +
+v('tka-findings') + '\n\n' +
+'DESCRIPTION OF PROCEDURE:\n\n' +
+'POSITIONING AND PREPARATION:\n' +
+'The patient was taken to the operating room and placed supine on the operating table. A tourniquet was placed on the ' + s.toLowerCase() + ' upper thigh. After adequate anesthesia was obtained, all bony prominences were well padded. The leg was prepped and draped in the usual sterile fashion. Preoperative antibiotics were administered intravenously as noted above. TXA 1000 mg IV was administered at induction.\n\n' +
+'SURGICAL APPROACH:\n' +
+'A standard midline skin incision was made over the ' + s.toLowerCase() + ' knee. A medial parapatellar arthrotomy was performed. The patella was everted and the knee flexed. The articular surfaces were inspected and findings were as noted above.\n\n' +
+'FEMORAL PREPARATION:\n' +
+'The ACL was excised. The distal femoral intramedullary guide was placed and the distal femur was resected in appropriate valgus alignment. The anterior and posterior femoral cuts were made using the appropriately sized cutting guide. The chamfer cuts were completed. The femoral trial was placed and confirmed for appropriate rotation, sizing, and fit.\n\n' +
+'TIBIAL PREPARATION:\n' +
+'The extramedullary tibial guide was placed and aligned. The proximal tibial cut was made with appropriate posterior slope. The tibial sizing template was placed and the appropriate size was selected. The tibial keel was punched. The tibial trial was placed and confirmed for coverage and rotation.\n\n' +
+'PATELLAR PREPARATION:\n' +
+'The patella was measured, everted, and resurfaced. The patellar component trial was placed and tracking was assessed. The patella tracked centrally without lateral tilt or subluxation.\n\n' +
+'TRIAL REDUCTION:\n' +
+'Trial components were assembled and the knee was taken through a full range of motion. Ligament balance was assessed in flexion and extension. The knee was stable in all planes with appropriate alignment and ligament tension. The appropriate bearing thickness was selected.\n\n' +
+'FINAL IMPLANTATION:\n' +
+'The tourniquet was inflated. The bony surfaces were irrigated with pulsatile lavage and dried. Palacos-G cement was mixed and applied to the tibial surface. The final tibial baseplate was impacted and excess cement removed. Cement was applied to the distal femur and the final femoral component was impacted and excess cement removed. The final ' + bearingType + ' polyethylene bearing was snapped into place. Cement was applied to the patellar surface and the final patellar component was placed and held with a clamp until cured. All excess cement was removed.\n\n' +
+'TOURNIQUET DEFLATION AND HEMOSTASIS:\n' +
+'The tourniquet was deflated. TXA 1000 mg IV was administered. Hemostasis was achieved with electrocautery. The knee was irrigated thoroughly.\n\n' +
+'CLOSURE:\n' +
+'The arthrotomy was closed with #2 Ethibond and Stratafix suture in a layered fashion. The deep tissues were closed with Stratafix. The subcutaneous layer was closed with Stratafix. The skin was closed with running 3-0 Monocryl reinforced with Steri-Strips. Sterile dressing and Cryocuff were applied. The patient was transferred to the PACU in stable condition.\n\n' +
+'DISPOSITION:\nStable to PACU. Weight bearing as tolerated. Physical therapy initiated immediately in PACU.\n\n' +
+'PAIN MANAGEMENT PLAN:\n' +
+'Multimodal regimen with ' + anesthesiaShort + ', cryotherapy, ' + painMeds('tka') + ', and oral analgesics.\n\n' +
+'POSTOPERATIVE THERAPY PROTOCOL:\n' +
+'Weight bearing as tolerated immediately\nPhysical therapy initiated in PACU\nROM exercises and ambulation training\nDVT prophylaxis per protocol\nTKA rehab protocol available at doctorrolf.com';
 
   showReport(report);
 }
