@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
 
-<title>Plan Sheet - Lee Reynolds, PA-C</title>
+<title>Plan Sheet - Dr. Rolf</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
@@ -84,7 +84,6 @@ input.cin.ok { background: #E8F5E9; border: 1px solid #66BB6A; }
 .chip .x { cursor: pointer; font-weight: bold; color: #C62828; font-size: 14px; line-height: 1; }
 .chip .sbadge { background: #1B3A6B; color: #fff; border-radius: 9px; padding: 0 6px; font-weight: bold; cursor: pointer; font-size: 11px; }
 .moretoggle { margin-top: 12px; padding: 8px 10px; background: #f0f4f8; border: 1px dashed #1B3A6B; border-radius: 6px; color: #1B3A6B; font-weight: bold; font-size: 13px; cursor: pointer; }
-.freebox { width: 100%; padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; resize: vertical; min-height: 40px; }
 .custom-dx-row { display: flex; align-items: center; gap: 6px; margin: 4px 0; flex-wrap: wrap; }
 .custom-dx-row input[type=text] { flex: 1; min-width: 140px; padding: 5px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
 .custom-dx-row .lat-toggle { display: inline-flex; gap: 2px; }
@@ -93,6 +92,7 @@ input.cin.ok { background: #E8F5E9; border: 1px solid #66BB6A; }
 .custom-dx-row .x-btn { cursor: pointer; font-weight: bold; color: #C62828; font-size: 16px; line-height: 1; border: none; background: none; padding: 0 4px; }
 #custom-dx-container { margin-top: 8px; }
 .add-dx-btn { margin-top: 6px; padding: 7px 14px; background: #f0f4f8; border: 1px dashed #1B3A6B; border-radius: 6px; color: #1B3A6B; font-weight: bold; font-size: 13px; cursor: pointer; }
+.freebox { width: 100%; padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; resize: vertical; min-height: 40px; }
 .btn-row { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 .btn { padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer; }
 .btn-primary { background: #1B3A6B; color: #fff; }
@@ -206,7 +206,7 @@ input.cin.ok { background: #E8F5E9; border: 1px solid #66BB6A; }
 
 <script>
 var SECTIONS = [
-  { key:'dx', title:'Diagnosis', drop:true, lat:true, nSided:45,
+  { key:'dx', title:'Diagnosis', drop:true, lat:true, nSided:30,
     /* Mirrors the visit-type diagnosis dropdown: same categories, same order (most common first) */
     groups:[
       {label:'Rotator cuff / impingement', tokens:['RCI','RCT','pRCT','IrrRTC','?RCT']},
@@ -219,16 +219,13 @@ var SECTIONS = [
       {label:'Calcific tendinitis', tokens:['CT']},
       {label:'Cervical spine', tokens:['Cradic','Neck']},
       {label:'Status post', tokens:['S/P','hxTSA','hxRSA','hxPHORIF']},
-      {label:'Knee', tokens:['KneePx','MedMenisc','LatMenisc','KneeOA','Chondro','ACLtear','PFS','Plica','Baker','ITBS']},
-      {label:'Hip', tokens:['HipPx','HipOA','HipBursitis','HipLabral','SnappingHip']}
     ], items:[
     ['Px','pain'],['Shoulder pain','shoulder pain'],['sprain','shoulder sprain'],['strain','shoulder strain'],['Periscap strain','periscapular strain'],['RCI','rotator cuff impingement'],['RCT','rotator cuff tear'],['pRCT','partial-thickness rotator cuff tear'],
     ['RCA','rotator cuff arthropathy'],['GHoa','glenohumeral osteoarthritis'],['ACoa','AC joint osteoarthritis'],['Adcap','adhesive capsulitis'],['SLAP','SLAP tear'],
     ['ALT','anterior labral tear'],['PLT','posterior labral tear'],['PHfx','proximal humerus fracture'],['BT','biceps tendinitis'],['Brupture','biceps rupture'],
     ['CT','calcific tendinitis'],['D/L','dislocation / instability'],['ClavicleFX','clavicle fracture'],['GTfx','greater tuberosity fracture'],['IrrRTC','irreparable rotator cuff tear'],['GHBL','glenohumeral bone loss'],
     ['?RCT','possible rotator cuff tear'],['?SLAP','possible SLAP tear'],['S/P','status post'],['DBrupture','distal biceps rupture'],['hxTSA','status post total shoulder arthroplasty'],['hxRSA','status post reverse total shoulder arthroplasty'],
-    ['KneePx','knee pain'],['MedMenisc','medial meniscus tear'],['LatMenisc','lateral meniscus tear'],['KneeOA','knee osteoarthritis'],['Chondro','chondromalacia / chondral defect'],['ACLtear','ACL tear'],['PFS','patellofemoral syndrome'],['Plica','plica syndrome'],['Baker','Baker cyst'],['ITBS','IT band syndrome'],
-    ['HipPx','hip pain'],['HipOA','hip osteoarthritis'],['HipBursitis','trochanteric bursitis'],['HipLabral','hip labral tear'],['SnappingHip','snapping hip syndrome'],
+
     ['hxPHORIF','status post proximal humerus fixation'],['Cradic','cervical radiculopathy'],['Neck','neck pain']
   ]},
   { key:'postop', title:'Post-op', grid2:true, items:[
@@ -237,8 +234,6 @@ var SECTIONS = [
   ]},
   { key:'inj', title:'Injection', printLabel:'Injections', drop:true, lat:true, items:[
     ['suba','subacromial'],['AC','AC joint'],['GH','glenohumeral'],['GH2','glenohumeral injection in 2 weeks'],['GH2INB','glenohumeral injection in 2 weeks if no better'],['BT','biceps'],['SSN','suprascapular nerve'],['STB','STB (?)'],['ASP','with aspiration'],['visco','viscosupplementation'],['PRP','PRP'],
-    ['kneeInj','knee injection'],['kneeInjUS','knee injection (US-guided)'],
-    ['hipInj','hip injection'],['hipInjUS','hip injection (US-guided)'],['trochInj','trochanteric bursa injection']
   ]},
   { key:'imgrev', title:'Imaging reviewed', grid2:true, items:[
     ['X-ray','X-rays in the office'],['C-spine X-ray','cervical spine X-rays in the office'],['MRI reviewed','MRI'],['CT reviewed','CT'],['Outside imaging','outside imaging']
@@ -249,8 +244,6 @@ var SECTIONS = [
   { key:'pt', title:'Physical therapy', grid2:true, items:[
     ['PT 1x4','physical therapy 1×/week for 4 weeks'],['PT 2x6','physical therapy 2×/week for 6 weeks'],['Continue PT','continue physical therapy'],['PT->HEP','transition from physical therapy to a home program'],['HEP','home exercise program'],['Continue HEP','continue home program'],
     ['Sleeper stretch','sleeper stretch handout given'],['1st set (RSA)','1st set of exercises handout given (reverse arthroplasty)'],['2nd set (RSA)','2nd set of exercises handout given (reverse arthroplasty)'],['Iontophoresis','iontophoresis'],
-    ['KneePT','knee PT 1-2x/wk x 4-6 weeks'],
-    ['HipPT','hip PT 1-2x/wk x 4-6 weeks']
   ]},
   /* contPer: every med row gets its own "cont." box - continue vs new prescription */
   { key:'meds', title:'Medications / treatment', grid2:true, contPer:true,
@@ -261,29 +254,25 @@ var SECTIONS = [
     ['Medrol dose pack','Medrol dose pack'],['Prednisone','prednisone'],
     ['Aspirin','aspirin 81 mg PO BID'],['Xarelto','Xarelto (rivaroxaban) 10 mg by mouth once a day'],['Cyclobenzaprine','cyclobenzaprine {}','dose'],['Gabapentin','gabapentin {}','dose'],['Ice','ice']
   ]},
-  { key:'dme', title:'DME', grid2:true, items:[ ['Cuff and collar','cuff and collar'],['Post-op sling','post-op sling'],['Simple sling','simple sling'],['hingeBrace','hinged knee brace'],['unloaderBrace','unloader brace'],['kneeSleeve','knee sleeve'],['Other','{}','specify'] ]},
+  { key:'dme', title:'DME', grid2:true, items:[ ['Cuff and collar','cuff and collar'],['Post-op sling','post-op sling'],['Simple sling','simple sling'],['Other','{}','specify'] ]},
   /* 'Surgical handouts' section removed — handouts are now implied by the
      surgeries picked under 'Surgeries discussed' (RECSURG_HO) and by the
      pre-op flow (extraHandouts). */
   { key:'condition', title:'Condition handouts (info guides)', grid2:true, items:[
     ['Rotator cuff','rotator cuff information guide'],['Glenohumeral arthritis','glenohumeral arthritis information guide'],['Rotator cuff arthropathy','rotator cuff arthropathy information guide'],
     ['Impingement','impingement information guide'],['AC arthritis','AC arthritis information guide'],['Biceps tendinitis','biceps tendinitis information guide'],['SLAP','SLAP tear information guide'],['Adhesive capsulitis','adhesive capsulitis information guide'],['Instability','instability information guide'],['Calcific tendinitis','calcific tendinitis information guide'],['Fracture','fracture information guide'],['Distal biceps','distal biceps information guide'],['PSI/CT planning','3D CT surgical planning handout'],['FAQ','frequently asked questions handout'],
-    ['Knee osteoarthritis','knee osteoarthritis information guide'],['Meniscus tear','meniscus tear information guide'],['Patellofemoral','patellofemoral syndrome information guide'],
-    ['Hip osteoarthritis','hip osteoarthritis information guide'],['Trochanteric bursitis','trochanteric bursitis information guide']
   ]},
   { key:'restrict', title:'Restrictions', grid2:true, weightDrop:5, items:[
     ['5 lb','no lifting greater than 5 lb'],['10 lb','no lifting greater than 10 lb'],['15 lb','no lifting greater than 15 lb'],['30 lb','no lifting greater than 30 lb'],['no limit','no lifting restrictions'],['Activity as tolerated','activity as tolerated'],['No pushing, pulling or lifting','no pushing, pulling, or lifting'],['No overhead use','no overhead use'],['No repetitive use','no repetitive use'],['No driving','no driving'],['Work note','work note provided'],['School note','school note provided'],['ATC note','note for athletic trainer'],['RTW','return to work {}','date']
   ]},
-  { key:'surg', title:'Surgery', drop:true, lat:true, nSided:17, items:[
+  { key:'surg', title:'Surgery', drop:true, lat:true, nSided:13, items:[
     ['TSA','total shoulder arthroplasty'],['Hemi','shoulder hemiarthroplasty'],['RSA','reverse total shoulder arthroplasty'],['RCR','rotator cuff repair'],['Scope','shoulder arthroscopy'],['SAD','subacromial decompression'],['DCR','distal clavicle resection'],['BT','open subpectoral biceps tenodesis'],['Labrum','labral repair / instability'],['SLAP','SLAP repair'],['SCR','superior capsular reconstruction'],['ORIF','ORIF'],['Distal biceps','distal biceps repair'],
-    ['kneeScope','knee arthroscopy'],['partialMedMenisc','partial medial meniscectomy'],['partialLatMenisc','partial lateral meniscectomy'],['kneeChondro','knee chondroplasty'],
     ['ready','ready for surgery'],['thinking','considering surgery'],['heart','cardiac clearance needed'],['PCP','PCP clearance needed']
   ]},
   /* Merged section: each discussed surgery is listed as a sided procedure on the
      summary AND automatically brings its surgical handouts (see RECSURG_HO). */
-  { key:'recsurg', title:'Surgeries discussed', printLabel:'We discussed surgery', drop:true, lat:true, nSided:17, items:[
-    ['TSA','total shoulder arthroplasty'],['Hemi','shoulder hemiarthroplasty'],['RSA','reverse total shoulder arthroplasty'],['RCR','rotator cuff repair'],['Scope','shoulder arthroscopy'],['SAD','subacromial decompression'],['DCR','distal clavicle resection'],['BT','open subpectoral biceps tenodesis'],['Labrum','labral repair / instability'],['SLAP','SLAP repair'],['SCR','superior capsular reconstruction'],['ORIF','ORIF'],['Distal biceps','distal biceps repair'],
-    ['kneeScope','knee arthroscopy'],['partialMedMenisc','partial medial meniscectomy'],['partialLatMenisc','partial lateral meniscectomy'],['kneeChondro','knee chondroplasty']
+  { key:'recsurg', title:'Surgeries discussed', printLabel:'We discussed surgery', drop:true, lat:true, nSided:13, items:[
+    ['TSA','total shoulder arthroplasty'],['Hemi','shoulder hemiarthroplasty'],['RSA','reverse total shoulder arthroplasty'],['RCR','rotator cuff repair'],['Scope','shoulder arthroscopy'],['SAD','subacromial decompression'],['DCR','distal clavicle resection'],['BT','open subpectoral biceps tenodesis'],['Labrum','labral repair / instability'],['SLAP','SLAP repair'],['SCR','superior capsular reconstruction'],['ORIF','ORIF'],['Distal biceps','distal biceps repair']
   ]},
   { key:'fu', title:'Follow-up', grid2:true,
     subheads:{ 0:'Timed return', 10:'Conditional', 15:'Referrals & other' }, items:[
@@ -319,14 +308,6 @@ var PRESETS = [
   { label:'Fracture, clavicle — surgical', group:'New visit', picks:[['dx','ClavicleFX'],['dme','Post-op sling'],['meds','Tylenol'],['surg','thinking'],['condition','Fracture']], note:'Set up for surgery (ORIF clavicle).' },
   { label:'Fracture, prox humerus — surgical', group:'New visit', picks:[['dx','PHfx'],['img','CT'],['dme','Post-op sling'],['meds','Tylenol'],['surg','thinking'],['condition','Fracture']], note:'CT to evaluate fracture alignment; set up for surgery.' },
   { label:'Pre-op discussion', group:'New visit', picks:[['ho','FAQ']] },
-  // ---- New-visit knee ----
-  { label:'Meniscus tear', group:'New visit', picks:[['dx','MedMenisc'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['pt','KneePT'],['condition','Meniscus tear'],['fu','in ___','6 weeks']] },
-  { label:'Knee osteoarthritis', group:'New visit', picks:[['dx','KneeOA'],['inj','kneeInj'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['pt','KneePT'],['condition','Knee osteoarthritis'],['fu','in ___','6 weeks']] },
-  { label:'Patellofemoral syndrome', group:'New visit', picks:[['dx','PFS'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['pt','KneePT'],['condition','Patellofemoral'],['fu','in ___','6 weeks']] },
-  { label:'ACL tear', group:'New visit', picks:[['dx','ACLtear'],['img','MRI'],['surg','thinking'],['fu','in ___','2 weeks']], note:'Acute ACL tear — expedite MRI and surgical discussion.' },
-  // ---- New-visit hip ----
-  { label:'Hip osteoarthritis', group:'New visit', picks:[['dx','HipOA'],['inj','hipInj'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['pt','HipPT'],['condition','Hip osteoarthritis'],['fu','in ___','6 weeks']] },
-  { label:'Trochanteric bursitis', group:'New visit', picks:[['dx','HipBursitis'],['inj','trochInj'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['condition','Trochanteric bursitis'],['fu','in ___','6 weeks']] },
   // ---- Follow-up (per diagnosis) ----
   { label:'Follow-up (generic)', group:'Follow-up', picks:[['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess response to treatment; continue/adjust PT; repeat injection if the last one helped; escalate to MRI or surgical discussion if failing.' },
   { label:'Impingement / bursitis — follow-up', group:'Follow-up', picks:[['dx','RCI'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; repeat subacromial injection if it helped; if not better in ~6 wks or injection failed → MRI; surgical discussion if failing.' },
@@ -339,12 +320,6 @@ var PRESETS = [
   { label:'Calcific tendinitis — follow-up', group:'Follow-up', picks:[['dx','CT'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; repeat subacromial injection if it helped; consider US-guided barbotage or surgery if persistent.' },
   { label:'Instability / dislocation — follow-up', group:'Follow-up', picks:[['dx','D/L'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess stability; if recurrent → MR arthrogram and surgical stabilization discussion (Bankart / Latarjet).' },
   { label:'Rotator cuff arthropathy — follow-up', group:'Follow-up', picks:[['dx','RCA'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; GH injection if symptomatic; reverse arthroplasty discussion when failing.' },
-  // ---- Follow-up knee ----
-  { label:'Meniscus tear — follow-up', group:'Follow-up', picks:[['dx','MedMenisc'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; if not improving → MRI → surgical discussion for arthroscopy.' },
-  { label:'Knee osteoarthritis — follow-up', group:'Follow-up', picks:[['dx','KneeOA'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; repeat injection if it helped; discuss unloader brace.' },
-  // ---- Follow-up hip ----
-  { label:'Hip osteoarthritis — follow-up', group:'Follow-up', picks:[['dx','HipOA'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; repeat injection if it helped; discuss arthroplasty referral if failing.' },
-  { label:'Trochanteric bursitis — follow-up', group:'Follow-up', picks:[['dx','HipBursitis'],['fu','in ___','6 weeks']], note:'Reassess; repeat injection if it helped.' },
   // ---- Post-op is handled by the Surgery + post-op-visit auto-fill row ----
 ];
 
@@ -405,6 +380,8 @@ var TRACK_PLANS_PS = {
 };
 
 var chips={};
+var customDx = [];
+var customDxCounter = 0;
 var SABBR={right:'R',left:'L',bilateral:'B'}, SIDE_ORDER=['right','left','bilateral'];
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function cleanX(x){ return x.replace('(?)','').trim(); }
@@ -413,6 +390,62 @@ function val(id){ var e=document.getElementById(id); return e?e.value.trim():'';
 function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
 function isSided(sec,i){ return !!sec.lat && (sec.nSided===undefined || i<sec.nSided); }
 function tokenIndex(sec,token){ for(var k=0;k<sec.items.length;k++){ if(sec.items[k][0]===token) return k; } return -1; }
+
+function addCustomDx() {
+  var id = ++customDxCounter;
+  customDx.push({ id: id, text: '', side: '' });
+  renderCustomDx();
+}
+
+function removeCustomDx(id) {
+  customDx = customDx.filter(function(d) { return d.id !== id; });
+  renderCustomDx();
+  paintSections();
+}
+
+function setCustomDxText(id, text) {
+  customDx.forEach(function(d) { if (d.id === id) d.text = text; });
+  paintSections();
+}
+
+function toggleCustomDxSide(id, side) {
+  customDx.forEach(function(d) {
+    if (d.id === id) {
+      d.side = (d.side === side) ? '' : side;
+    }
+  });
+  renderCustomDx();
+}
+
+function renderCustomDx() {
+  var container = document.getElementById('custom-dx-container');
+  if (!container) return;
+  var h = '';
+  customDx.forEach(function(d) {
+    h += '<div class="custom-dx-row">';
+    h += '<input type="text" value="' + esc(d.text) + '" placeholder="Custom diagnosis" oninput="setCustomDxText(' + d.id + ',this.value)">';
+    h += '<span class="lat-toggle">';
+    h += '<span class="lat-btn' + (d.side === 'right' ? ' active' : '') + '" onclick="toggleCustomDxSide(' + d.id + ',\'right\')">R</span>';
+    h += '<span class="lat-btn' + (d.side === 'left' ? ' active' : '') + '" onclick="toggleCustomDxSide(' + d.id + ',\'left\')">L</span>';
+    h += '<span class="lat-btn' + (d.side === 'bilateral' ? ' active' : '') + '" onclick="toggleCustomDxSide(' + d.id + ',\'bilateral\')">B</span>';
+    h += '</span>';
+    h += '<button class="x-btn" onclick="removeCustomDx(' + d.id + ')">x</button>';
+    h += '</div>';
+  });
+  container.innerHTML = h;
+}
+
+function getCustomDxText() {
+  var parts = [];
+  customDx.forEach(function(d) {
+    if (d.text.trim()) {
+      var t = d.text.trim();
+      if (d.side) t = cap(d.side) + ' ' + t;
+      parts.push(t);
+    }
+  });
+  return parts.join(', ');
+}
 
 function renderSection(sec){
   var h='<div class="sec" id="sec_'+sec.key+'"><div class="sec-head"><span class="sec-title">'+esc(sec.title)+(sec.lat?' <small style="font-weight:normal;color:#888">(R/L/B per tag)</small>':'')+(sec.latRows?' <small style="font-weight:normal;color:#888">(check R / L / B)</small>':'')+'</span>';
@@ -472,65 +505,6 @@ function renderSection(sec){
   }
   return h;
 }
-var customDx = [];
-var customDxCounter = 0;
-
-function addCustomDx() {
-  var id = ++customDxCounter;
-  customDx.push({ id: id, text: '', side: '' });
-  renderCustomDx();
-}
-
-function removeCustomDx(id) {
-  customDx = customDx.filter(function(d) { return d.id !== id; });
-  renderCustomDx();
-  paintSections();
-}
-
-function setCustomDxText(id, text) {
-  customDx.forEach(function(d) { if (d.id === id) d.text = text; });
-  paintSections();
-}
-
-function toggleCustomDxSide(id, side) {
-  customDx.forEach(function(d) {
-    if (d.id === id) {
-      d.side = (d.side === side) ? '' : side;
-    }
-  });
-  renderCustomDx();
-}
-
-function renderCustomDx() {
-  var container = document.getElementById('custom-dx-container');
-  if (!container) return;
-  var h = '';
-  customDx.forEach(function(d) {
-    h += '<div class="custom-dx-row">';
-    h += '<input type="text" value="' + esc(d.text) + '" placeholder="Custom diagnosis" oninput="setCustomDxText(' + d.id + ',this.value)">';
-    h += '<span class="lat-toggle">';
-    h += '<span class="lat-btn' + (d.side === 'right' ? ' active' : '') + '" onclick="toggleCustomDxSide(' + d.id + ',\'right\')">R</span>';
-    h += '<span class="lat-btn' + (d.side === 'left' ? ' active' : '') + '" onclick="toggleCustomDxSide(' + d.id + ',\'left\')">L</span>';
-    h += '<span class="lat-btn' + (d.side === 'bilateral' ? ' active' : '') + '" onclick="toggleCustomDxSide(' + d.id + ',\'bilateral\')">B</span>';
-    h += '</span>';
-    h += '<button class="x-btn" onclick="removeCustomDx(' + d.id + ')">x</button>';
-    h += '</div>';
-  });
-  container.innerHTML = h;
-}
-
-function getCustomDxText() {
-  var parts = [];
-  customDx.forEach(function(d) {
-    if (d.text.trim()) {
-      var t = d.text.trim();
-      if (d.side) t = cap(d.side) + ' ' + t;
-      parts.push(t);
-    }
-  });
-  return parts.join(', ');
-}
-
 function renderForm(){
   // fixed column assignment: workup on the left, treatment on the right
   var RIGHTCOL = { pt:1, meds:1, restrict:1, fu:1 };
@@ -541,7 +515,7 @@ function renderForm(){
   });
   document.getElementById('form-root').innerHTML =
     '<div class="cols"><div class="colx">'+L+'</div><div class="colx">'+R+'</div></div>';
-  renderAllChips();
+  // Add custom diagnosis container after the dx section
   var dxSec = document.getElementById('sec_dx');
   if (dxSec) {
     var cdiv = document.createElement('div');
@@ -554,6 +528,7 @@ function renderForm(){
     dxSec.appendChild(btn);
   }
   renderCustomDx();
+  renderAllChips();
 }
 
 function addChip(key, sel){
@@ -801,7 +776,7 @@ function populateDx(group){
      future diagnosis can never silently vanish from this dropdown. */
   var CAT_ORDER=['Rotator cuff / impingement','Arthritis','Adhesive capsulitis',
                  'Biceps','Instability / labrum','Pain / strain','Fracture',
-                 'Calcific tendinitis','Cervical spine','Status post','Knee','Hip','Other'];
+                 'Calcific tendinitis','Cervical spine','Status post','Other'];
   var PRESET_IN={'Impingement / bursitis':'Rotator cuff / impingement',
     'Rotator cuff tear':'Rotator cuff / impingement',
     'Acute rotator cuff tear':'Rotator cuff / impingement',
@@ -811,9 +786,7 @@ function populateDx(group){
     'Instability / dislocation':'Instability / labrum','SLAP tear':'Instability / labrum',
     'Calcific tendinitis':'Calcific tendinitis',
     'Fracture, clavicle — non-op':'Fracture','Fracture, prox humerus — non-op':'Fracture',
-    'Fracture, clavicle — surgical':'Fracture','Fracture, prox humerus — surgical':'Fracture',
-    'Meniscus tear':'Knee','Knee osteoarthritis':'Knee','Patellofemoral syndrome':'Knee','ACL tear':'Knee',
-    'Hip osteoarthritis':'Hip','Trochanteric bursitis':'Hip'};
+    'Fracture, clavicle — surgical':'Fracture','Fracture, prox humerus — surgical':'Fracture'};
   var DX_IN={'RCI':'Rotator cuff / impingement','RCT':'Rotator cuff / impingement',
     'pRCT':'Rotator cuff / impingement','?RCT':'Rotator cuff / impingement',
     'IrrRTC':'Rotator cuff / impingement',
@@ -827,9 +800,7 @@ function populateDx(group){
     'PHfx':'Fracture','GTfx':'Fracture','ClavicleFX':'Fracture',
     'CT':'Calcific tendinitis',
     'Cradic':'Cervical spine','Neck':'Cervical spine',
-    'S/P':'Status post','hxTSA':'Status post','hxRSA':'Status post','hxPHORIF':'Status post',
-    'KneePx':'Knee','MedMenisc':'Knee','LatMenisc':'Knee','KneeOA':'Knee','Chondro':'Knee','ACLtear':'Knee','PFS':'Knee','Plica':'Knee','Baker':'Knee','ITBS':'Knee',
-    'HipPx':'Hip','HipOA':'Hip','HipBursitis':'Hip','HipLabral':'Hip','SnappingHip':'Hip'};
+    'S/P':'Status post','hxTSA':'Status post','hxRSA':'Status post','hxPHORIF':'Status post'};
   var dsec=SEC_BY_KEY['dx'];
   CAT_ORDER.forEach(function(cat){
     var opts='';
@@ -926,12 +897,6 @@ function generate(){
       if(ho.length) lines.push({label:'Surgical handouts provided', text: ho.map(function(l){ return HO_FULL[l]||l; }).join(', ')});
     }
   });
-  // "Considering surgery" is a decision the patient takes home - give them the
-  // number to call when they are ready, not just the fact that we discussed it.
-  var sgSec=SEC_BY_KEY['surg'];
-  if((chips['surg']||[]).some(function(e){ return (sgSec.items[e.i]||[])[0]==='thinking'; })){
-    lines.push({label:'When you are ready', text:'Call to schedule surgery when ready at 513-813-1639.'});
-  }
   var cdText = getCustomDxText();
   if (cdText) {
     var hasDx = false;
@@ -942,9 +907,15 @@ function generate(){
       lines.push({ label: 'Diagnosis', text: cdText });
     }
   }
+  // "Considering surgery" is a decision the patient takes home - give them the
+  // number to call when they are ready, not just the fact that we discussed it.
+  var sgSec=SEC_BY_KEY['surg'];
+  if((chips['surg']||[]).some(function(e){ return (sgSec.items[e.i]||[])[0]==='thinking'; })){
+    lines.push({label:'When you are ready', text:'Call to schedule surgery when ready at 513-813-1639.'});
+  }
   var other=val('p-other');
   var h='<div class="plan-header"><div class="t">Plan / Visit Summary — '+esc(val('p-name')||'[patient]')+'</div>';
-  h+='<div class="s">'+esc(val('p-mrn')?'DOB: '+val('p-mrn')+'   ':'')+esc(val('p-date')?'Date: '+val('p-date'):'')+'   Lee Reynolds, PA-C, Beacon Orthopaedics</div></div>';
+  h+='<div class="s">'+esc(val('p-mrn')?'DOB: '+val('p-mrn')+'   ':'')+esc(val('p-date')?'Date: '+val('p-date'):'')+'   Robert H. Rolf, MD, Beacon Orthopaedics</div></div>';
   lines.forEach(function(l){ h+='<div class="plan-line"><b>'+esc(l.label)+':</b> '+esc(l.text)+'</div>'; });
   if(other){ h+='<div class="plan-line"><b>Other:</b> '+esc(other)+'</div>'; }
   if(!lines.length && !other){ h+='<div class="plan-line">No items selected.</div>'; }
