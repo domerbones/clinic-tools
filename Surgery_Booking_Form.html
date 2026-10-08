@@ -168,6 +168,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <option value="biceps-tenodesis">Biceps Tenodesis (Standalone)</option>
 <option value="latarjet">Latarjet</option>
 <option value="distal-biceps">Distal Biceps Repair</option>
+<option value="distal-triceps">Distal Triceps Repair</option>
 <option value="other">Other / Custom Procedure</option>
 </select>
 </div>
@@ -661,6 +662,29 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 </div>
 
+<!-- Distal Triceps Repair -->
+<div class="procedure-section" id="sec-distal-triceps">
+<div class="section-title">Distal Triceps Repair</div>
+<p class="icd-info">ICD-10: S46.311A Strain of muscle, fascia and tendon of triceps, right arm / S46.312A Strain of muscle, fascia and tendon of triceps, left arm</p>
+<p class="icd-info">CPT: 24341 Repair of tendon or muscle, upper arm or elbow</p>
+<div class="row">
+<div class="field field-med"><label>Fixation Method</label><select id="distal-triceps-fixation"><option value="Bone tunnels" selected>Bone tunnels (default)</option><option value="Arthrex suture anchor">Arthrex suture anchor</option><option value="Zimmer Biomet suture anchor">Zimmer Biomet suture anchor</option></select></div>
+</div>
+<div class="row">
+<div class="field"><label>Additional Equipment</label><textarea id="distal-triceps-equip"></textarea></div>
+</div>
+<div class="section-title">Reps</div>
+<div class="row">
+<div class="field field-med"><label>Rep 1 Company</label><select id="distal-triceps-rep1-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 2 Company</label><select id="distal-triceps-rep2-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Rep 3 Company</label><select id="distal-triceps-rep3-co"><option value="">-- None --</option><option value="Zimmer Biomet">Zimmer Biomet</option><option value="Arthrex">Arthrex</option><option value="Stryker">Stryker</option><option value="Other">Other</option></select></div>
+</div>
+</div>
+
 <div class="btn-row">
 <button class="btn btn-primary" onclick="generateBooking()">Generate Booking Form</button>
 <button class="btn btn-outline" onclick="resetForm()">Clear Form</button>
@@ -803,7 +827,7 @@ function todayStr() {
 }
 
 // section id -> the field id prefix used inside that panel
-var PROC_PREFIX = {'tsa': 'tsa', 'hemi': 'hemi', 'rtsa': 'rtsa', 'rev-tsa': 'rev-tsa', 'rev-rtsa': 'rev-rtsa', 'arth': 'arth', 'acj': 'acj', 'mua': 'mua', 'orif-clav': 'clav', 'orif-phum': 'phum', 'hw-removal': 'hw', 'other': 'other', 'biceps-tenodesis': 'bten', 'latarjet': 'latarjet', 'distal-biceps': 'distal-biceps'};
+var PROC_PREFIX = {'tsa': 'tsa', 'hemi': 'hemi', 'rtsa': 'rtsa', 'rev-tsa': 'rev-tsa', 'rev-rtsa': 'rev-rtsa', 'arth': 'arth', 'acj': 'acj', 'mua': 'mua', 'orif-clav': 'clav', 'orif-phum': 'phum', 'hw-removal': 'hw', 'other': 'other', 'biceps-tenodesis': 'bten', 'latarjet': 'latarjet', 'distal-biceps': 'distal-biceps', 'distal-triceps': 'distal-triceps'};
 /* "Other" on a Follow Up dropdown reveals a free-text box, and the typed text is
    what prints - the literal word "Other" is never sent to the office. */
 function onFollowupChange(pfx){
@@ -927,6 +951,7 @@ function getProcedureName(val) {
     'biceps-tenodesis': 'Biceps Tenodesis (Standalone)',
     'latarjet': 'Latarjet',
     'distal-biceps': 'Distal Biceps Repair',
+    'distal-triceps': 'Distal Triceps Repair',
     'other': 'Other / Custom Procedure'
   };
   var nm = names[val] || '';
@@ -1266,6 +1291,14 @@ function getDiagnosisLines(proc, side) {
         dx.push('S56.112A - Strain of flexor muscle at forearm level, left');
       }
       break;
+    case 'distal-triceps':
+      if (side === 'Right' || side === 'Bilateral') {
+        dx.push('S46.311A - Strain of muscle, fascia and tendon of triceps, right arm');
+      }
+      if (side === 'Left' || side === 'Bilateral') {
+        dx.push('S46.312A - Strain of muscle, fascia and tendon of triceps, left arm');
+      }
+      break;
   }
   return dx;
 }
@@ -1398,6 +1431,9 @@ function getCPTLines(proc) {
       break;
     case 'distal-biceps':
       cpt.push('24342 - Reinsertion of ruptured biceps tendon, distal');
+      break;
+    case 'distal-triceps':
+      cpt.push('24341 - Repair of tendon or muscle, upper arm or elbow');
       break;
   }
   if (proc === 'arth') {
@@ -1533,6 +1569,10 @@ function getProcedureDetails(proc, side) {
     case 'distal-biceps':
       details.push('Implant: ' + v('distal-biceps-implant'));
       if (v('distal-biceps-equip').trim()) details.push('Additional Equipment: ' + v('distal-biceps-equip').trim());
+      break;
+    case 'distal-triceps':
+      details.push('Fixation: ' + v('distal-triceps-fixation'));
+      if (v('distal-triceps-equip').trim()) details.push('Additional Equipment: ' + v('distal-triceps-equip').trim());
       break;
   }
   // Every panel carries its own rep slots, so the reps line is emitted once here

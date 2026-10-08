@@ -198,7 +198,7 @@ input.cin.ok { background: #E8F5E9; border: 1px solid #66BB6A; }
 
 <script>
 var SECTIONS = [
-  { key:'dx', title:'Diagnosis', drop:true, lat:true, nSided:30,
+  { key:'dx', title:'Diagnosis', drop:true, lat:true, nSided:40,
     /* Mirrors the visit-type diagnosis dropdown: same categories, same order (most common first) */
     groups:[
       {label:'Rotator cuff / impingement', tokens:['RCI','RCT','pRCT','IrrRTC','?RCT']},
@@ -210,21 +210,24 @@ var SECTIONS = [
       {label:'Fracture', tokens:['PHfx','GTfx','ClavicleFX']},
       {label:'Calcific tendinitis', tokens:['CT']},
       {label:'Cervical spine', tokens:['Cradic','Neck']},
-      {label:'Status post', tokens:['S/P','hxTSA','hxRSA','hxPHORIF']}
+      {label:'Status post', tokens:['S/P','hxTSA','hxRSA','hxPHORIF']},
+      {label:'Knee', tokens:['KneePx','MedMenisc','LatMenisc','KneeOA','Chondro','ACLtear','PFS','Plica','Baker','ITBS']}
     ], items:[
     ['Px','pain'],['Shoulder pain','shoulder pain'],['sprain','shoulder sprain'],['strain','shoulder strain'],['Periscap strain','periscapular strain'],['RCI','rotator cuff impingement'],['RCT','rotator cuff tear'],['pRCT','partial-thickness rotator cuff tear'],
     ['RCA','rotator cuff arthropathy'],['GHoa','glenohumeral osteoarthritis'],['ACoa','AC joint osteoarthritis'],['Adcap','adhesive capsulitis'],['SLAP','SLAP tear'],
     ['ALT','anterior labral tear'],['PLT','posterior labral tear'],['PHfx','proximal humerus fracture'],['BT','biceps tendinitis'],['Brupture','biceps rupture'],
     ['CT','calcific tendinitis'],['D/L','dislocation / instability'],['ClavicleFX','clavicle fracture'],['GTfx','greater tuberosity fracture'],['IrrRTC','irreparable rotator cuff tear'],['GHBL','glenohumeral bone loss'],
-    ['?RCT','possible rotator cuff tear'],['?SLAP','possible SLAP tear'],['S/P','status post'],['DBrupture','distal biceps rupture'],['hxTSA','status post total shoulder arthroplasty'],['hxRSA','status post reverse total shoulder arthroplasty'],['hxPHORIF','status post proximal humerus fixation'],
-    ['Cradic','cervical radiculopathy'],['Neck','neck pain']
+    ['?RCT','possible rotator cuff tear'],['?SLAP','possible SLAP tear'],['S/P','status post'],['DBrupture','distal biceps rupture'],['hxTSA','status post total shoulder arthroplasty'],['hxRSA','status post reverse total shoulder arthroplasty'],
+    ['KneePx','knee pain'],['MedMenisc','medial meniscus tear'],['LatMenisc','lateral meniscus tear'],['KneeOA','knee osteoarthritis'],['Chondro','chondromalacia / chondral defect'],['ACLtear','ACL tear'],['PFS','patellofemoral syndrome'],['Plica','plica syndrome'],['Baker','Baker cyst'],['ITBS','IT band syndrome'],
+    ['hxPHORIF','status post proximal humerus fixation'],['Cradic','cervical radiculopathy'],['Neck','neck pain']
   ]},
   { key:'postop', title:'Post-op', grid2:true, items:[
     ['Reviewed images','reviewed operative / arthroscopy images with the patient'],['Wound check','wound checked, healing appropriately'],
     ['Steri-Strips','remove Steri-Strips next week if they are still on'],['Strength testing','began strength testing'],['Discharge','discharged from care']
   ]},
   { key:'inj', title:'Injection', printLabel:'Injections', drop:true, lat:true, items:[
-    ['suba','subacromial'],['AC','AC joint'],['GH','glenohumeral'],['GH2','glenohumeral injection in 2 weeks'],['GH2INB','glenohumeral injection in 2 weeks if no better'],['BT','biceps'],['SSN','suprascapular nerve'],['STB','STB (?)'],['ASP','with aspiration'],['visco','viscosupplementation'],['PRP','PRP']
+    ['suba','subacromial'],['AC','AC joint'],['GH','glenohumeral'],['GH2','glenohumeral injection in 2 weeks'],['GH2INB','glenohumeral injection in 2 weeks if no better'],['BT','biceps'],['SSN','suprascapular nerve'],['STB','STB (?)'],['ASP','with aspiration'],['visco','viscosupplementation'],['PRP','PRP'],
+    ['kneeInj','knee injection'],['kneeInjUS','knee injection (US-guided)']
   ]},
   { key:'imgrev', title:'Imaging reviewed', grid2:true, items:[
     ['X-ray','X-rays in the office'],['C-spine X-ray','cervical spine X-rays in the office'],['MRI reviewed','MRI'],['CT reviewed','CT'],['Outside imaging','outside imaging']
@@ -234,7 +237,8 @@ var SECTIONS = [
   ]},
   { key:'pt', title:'Physical therapy', grid2:true, items:[
     ['PT 1x4','physical therapy 1×/week for 4 weeks'],['PT 2x6','physical therapy 2×/week for 6 weeks'],['Continue PT','continue physical therapy'],['PT->HEP','transition from physical therapy to a home program'],['HEP','home exercise program'],['Continue HEP','continue home program'],
-    ['Sleeper stretch','sleeper stretch handout given'],['1st set (RSA)','1st set of exercises handout given (reverse arthroplasty)'],['2nd set (RSA)','2nd set of exercises handout given (reverse arthroplasty)'],['Iontophoresis','iontophoresis']
+    ['Sleeper stretch','sleeper stretch handout given'],['1st set (RSA)','1st set of exercises handout given (reverse arthroplasty)'],['2nd set (RSA)','2nd set of exercises handout given (reverse arthroplasty)'],['Iontophoresis','iontophoresis'],
+    ['KneePT','knee PT 1-2x/wk x 4-6 weeks']
   ]},
   /* contPer: every med row gets its own "cont." box - continue vs new prescription */
   { key:'meds', title:'Medications / treatment', grid2:true, contPer:true,
@@ -245,25 +249,28 @@ var SECTIONS = [
     ['Medrol dose pack','Medrol dose pack'],['Prednisone','prednisone'],
     ['Aspirin','aspirin 81 mg PO BID'],['Xarelto','Xarelto (rivaroxaban) 10 mg by mouth once a day'],['Cyclobenzaprine','cyclobenzaprine {}','dose'],['Gabapentin','gabapentin {}','dose'],['Ice','ice']
   ]},
-  { key:'dme', title:'DME', grid2:true, items:[ ['Cuff and collar','cuff and collar'],['Post-op sling','post-op sling'],['Simple sling','simple sling'],['Other','{}','specify'] ]},
+  { key:'dme', title:'DME', grid2:true, items:[ ['Cuff and collar','cuff and collar'],['Post-op sling','post-op sling'],['Simple sling','simple sling'],['hingeBrace','hinged knee brace'],['unloaderBrace','unloader brace'],['kneeSleeve','knee sleeve'],['Other','{}','specify'] ]},
   /* 'Surgical handouts' section removed — handouts are now implied by the
      surgeries picked under 'Surgeries discussed' (RECSURG_HO) and by the
      pre-op flow (extraHandouts). */
   { key:'condition', title:'Condition handouts (info guides)', grid2:true, items:[
     ['Rotator cuff','rotator cuff information guide'],['Glenohumeral arthritis','glenohumeral arthritis information guide'],['Rotator cuff arthropathy','rotator cuff arthropathy information guide'],
-    ['Impingement','impingement information guide'],['AC arthritis','AC arthritis information guide'],['Biceps tendinitis','biceps tendinitis information guide'],['SLAP','SLAP tear information guide'],['Adhesive capsulitis','adhesive capsulitis information guide'],['Instability','instability information guide'],['Calcific tendinitis','calcific tendinitis information guide'],['Fracture','fracture information guide'],['Distal biceps','distal biceps information guide'],['PSI/CT planning','3D CT surgical planning handout'],['FAQ','frequently asked questions handout']
+    ['Impingement','impingement information guide'],['AC arthritis','AC arthritis information guide'],['Biceps tendinitis','biceps tendinitis information guide'],['SLAP','SLAP tear information guide'],['Adhesive capsulitis','adhesive capsulitis information guide'],['Instability','instability information guide'],['Calcific tendinitis','calcific tendinitis information guide'],['Fracture','fracture information guide'],['Distal biceps','distal biceps information guide'],['PSI/CT planning','3D CT surgical planning handout'],['FAQ','frequently asked questions handout'],
+    ['Knee osteoarthritis','knee osteoarthritis information guide'],['Meniscus tear','meniscus tear information guide'],['Patellofemoral','patellofemoral syndrome information guide']
   ]},
   { key:'restrict', title:'Restrictions', grid2:true, weightDrop:5, items:[
     ['5 lb','no lifting greater than 5 lb'],['10 lb','no lifting greater than 10 lb'],['15 lb','no lifting greater than 15 lb'],['30 lb','no lifting greater than 30 lb'],['no limit','no lifting restrictions'],['Activity as tolerated','activity as tolerated'],['No pushing, pulling or lifting','no pushing, pulling, or lifting'],['No overhead use','no overhead use'],['No repetitive use','no repetitive use'],['No driving','no driving'],['Work note','work note provided'],['School note','school note provided'],['ATC note','note for athletic trainer'],['RTW','return to work {}','date']
   ]},
-  { key:'surg', title:'Surgery', drop:true, lat:true, nSided:13, items:[
+  { key:'surg', title:'Surgery', drop:true, lat:true, nSided:17, items:[
     ['TSA','total shoulder arthroplasty'],['Hemi','shoulder hemiarthroplasty'],['RSA','reverse total shoulder arthroplasty'],['RCR','rotator cuff repair'],['Scope','shoulder arthroscopy'],['SAD','subacromial decompression'],['DCR','distal clavicle resection'],['BT','open subpectoral biceps tenodesis'],['Labrum','labral repair / instability'],['SLAP','SLAP repair'],['SCR','superior capsular reconstruction'],['ORIF','ORIF'],['Distal biceps','distal biceps repair'],
+    ['kneeScope','knee arthroscopy'],['partialMedMenisc','partial medial meniscectomy'],['partialLatMenisc','partial lateral meniscectomy'],['kneeChondro','knee chondroplasty'],
     ['ready','ready for surgery'],['thinking','considering surgery'],['heart','cardiac clearance needed'],['PCP','PCP clearance needed']
   ]},
   /* Merged section: each discussed surgery is listed as a sided procedure on the
      summary AND automatically brings its surgical handouts (see RECSURG_HO). */
-  { key:'recsurg', title:'Surgeries discussed', printLabel:'We discussed surgery', drop:true, lat:true, nSided:13, items:[
-    ['TSA','total shoulder arthroplasty'],['Hemi','shoulder hemiarthroplasty'],['RSA','reverse total shoulder arthroplasty'],['RCR','rotator cuff repair'],['Scope','shoulder arthroscopy'],['SAD','subacromial decompression'],['DCR','distal clavicle resection'],['BT','open subpectoral biceps tenodesis'],['Labrum','labral repair / instability'],['SLAP','SLAP repair'],['SCR','superior capsular reconstruction'],['ORIF','ORIF'],['Distal biceps','distal biceps repair']
+  { key:'recsurg', title:'Surgeries discussed', printLabel:'We discussed surgery', drop:true, lat:true, nSided:17, items:[
+    ['TSA','total shoulder arthroplasty'],['Hemi','shoulder hemiarthroplasty'],['RSA','reverse total shoulder arthroplasty'],['RCR','rotator cuff repair'],['Scope','shoulder arthroscopy'],['SAD','subacromial decompression'],['DCR','distal clavicle resection'],['BT','open subpectoral biceps tenodesis'],['Labrum','labral repair / instability'],['SLAP','SLAP repair'],['SCR','superior capsular reconstruction'],['ORIF','ORIF'],['Distal biceps','distal biceps repair'],
+    ['kneeScope','knee arthroscopy'],['partialMedMenisc','partial medial meniscectomy'],['partialLatMenisc','partial lateral meniscectomy'],['kneeChondro','knee chondroplasty']
   ]},
   { key:'fu', title:'Follow-up', grid2:true,
     subheads:{ 0:'Timed return', 10:'Conditional', 15:'Referrals & other' }, items:[
@@ -299,6 +306,11 @@ var PRESETS = [
   { label:'Fracture, clavicle — surgical', group:'New visit', picks:[['dx','ClavicleFX'],['dme','Post-op sling'],['meds','Tylenol'],['surg','thinking'],['condition','Fracture']], note:'Set up for surgery (ORIF clavicle).' },
   { label:'Fracture, prox humerus — surgical', group:'New visit', picks:[['dx','PHfx'],['img','CT'],['dme','Post-op sling'],['meds','Tylenol'],['surg','thinking'],['condition','Fracture']], note:'CT to evaluate fracture alignment; set up for surgery.' },
   { label:'Pre-op discussion', group:'New visit', picks:[['ho','FAQ']] },
+  // ---- New-visit knee ----
+  { label:'Meniscus tear', group:'New visit', picks:[['dx','MedMenisc'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['pt','KneePT'],['condition','Meniscus tear'],['fu','in ___','6 weeks']] },
+  { label:'Knee osteoarthritis', group:'New visit', picks:[['dx','KneeOA'],['inj','kneeInj'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['pt','KneePT'],['condition','Knee osteoarthritis'],['fu','in ___','6 weeks']] },
+  { label:'Patellofemoral syndrome', group:'New visit', picks:[['dx','PFS'],['meds','meloxicam'],['meds','Tylenol'],['meds','Ice'],['pt','KneePT'],['condition','Patellofemoral'],['fu','in ___','6 weeks']] },
+  { label:'ACL tear', group:'New visit', picks:[['dx','ACLtear'],['img','MRI'],['surg','thinking'],['fu','in ___','2 weeks']], note:'Acute ACL tear — expedite MRI and surgical discussion.' },
   // ---- Follow-up (per diagnosis) ----
   { label:'Follow-up (generic)', group:'Follow-up', picks:[['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess response to treatment; continue/adjust PT; repeat injection if the last one helped; escalate to MRI or surgical discussion if failing.' },
   { label:'Impingement / bursitis — follow-up', group:'Follow-up', picks:[['dx','RCI'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; repeat subacromial injection if it helped; if not better in ~6 wks or injection failed → MRI; surgical discussion if failing.' },
@@ -311,6 +323,9 @@ var PRESETS = [
   { label:'Calcific tendinitis — follow-up', group:'Follow-up', picks:[['dx','CT'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; repeat subacromial injection if it helped; consider US-guided barbotage or surgery if persistent.' },
   { label:'Instability / dislocation — follow-up', group:'Follow-up', picks:[['dx','D/L'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess stability; if recurrent → MR arthrogram and surgical stabilization discussion (Bankart / Latarjet).' },
   { label:'Rotator cuff arthropathy — follow-up', group:'Follow-up', picks:[['dx','RCA'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; GH injection if symptomatic; reverse arthroplasty discussion when failing.' },
+  // ---- Follow-up knee ----
+  { label:'Meniscus tear — follow-up', group:'Follow-up', picks:[['dx','MedMenisc'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; if not improving → MRI → surgical discussion for arthroscopy.' },
+  { label:'Knee osteoarthritis — follow-up', group:'Follow-up', picks:[['dx','KneeOA'],['pt','Continue PT'],['fu','in ___','6 weeks']], note:'Reassess; repeat injection if it helped; discuss unloader brace.' },
   // ---- Post-op is handled by the Surgery + post-op-visit auto-fill row ----
 ];
 
