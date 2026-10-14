@@ -2373,11 +2373,10 @@ function generateArthroscopy() {
   if (ck('arth-proc-decompression')) descSections.push('ARTHROSCOPIC SUBACROMIAL DECOMPRESSION:\nThe arthroscope was redirected into the subacromial space. There was extensive bursitis with hyperemia and erythema throughout the subacromial and subdeltoid regions, along with dense adhesions. The acromiohumeral interval was narrowed and the coracoacromial ligament was thickened and fibrotic, consistent with outlet impingement. Using a motorized shaver and radiofrequency device, a thorough bursectomy was performed from lateral to medial and anterior to posterior. The subdeltoid adhesions were released and a perihumeral debridement was completed to restore the normal subacromial gliding space.');
   if (ck('arth-proc-acromioplasty')) descSections.push('ACROMIOPLASTY:\nAttention was then turned to the undersurface of the acromion, which demonstrated a type ' + v('arth-acromion-type') + ' morphology. Using a high-speed burr, the anterior and inferior acromion was systematically flattened and contoured to a type I configuration, ensuring adequate clearance of the supraspinatus tendon with shoulder elevation.');
   if (ck('arth-proc-rcr')) {
-    // Build tendon list
+    // Build tendon list (subscap is handled in its own separate repair section)
     var tendons = [];
     if (ck('arth-tendon-supra')) tendons.push('supraspinatus');
     if (ck('arth-tendon-infra')) tendons.push('infraspinatus');
-    if (ck('arth-tendon-subscap')) tendons.push('subscapularis');
     var tendonStr = tendons.length ? tendons.join(' and ') : 'supraspinatus';
     var tearType = v('arth-tear-type');
     var rcrText = 'ARTHROSCOPIC ROTATOR CUFF REPAIR:\n';
@@ -2413,7 +2412,8 @@ function generateArthroscopy() {
   if (ck('arth-proc-dcr')) descSections.push('ARTHROSCOPIC DISTAL CLAVICLE RESECTION:\nThe acromioclavicular joint was inspected and found to be arthritic with a thickened, fibrotic meniscus. The joint was debrided with a motorized shaver. A high-speed burr was then used to resect approximately 8 to 10 mm of the distal clavicle, creating a smooth, symmetric resection. The adequacy of the resection was confirmed arthroscopically from multiple portals, ensuring no residual impingement with the acromion. The superior, anterior, and posterior acromioclavicular ligaments were preserved to maintain joint stability.');
   if (ck('arth-proc-tenodesis')) descSections.push('OPEN SUBPECTORAL BICEPS TENODESIS:\nInstruments were removed and an approximately 3 cm incision was made at the anterior/inferior axillary fold. Sharp dissection was employed through subcutaneous tissue down to the fascia overlying the pectoralis major. The subpectoral interval was defined and the arm internally rotated. Retractors were used to elevate the pectoralis major, and the biceps tendon was delivered in a retrograde fashion out of the bicipital groove. The adjacent bone was cleared with electrocautery and roughened with an osteotome. A single 1.8 mm Arthrex FiberTak anchor double loaded with #2 suture tape was placed at that point, and the biceps tendon was tenodesed against the bone in an onlay fashion using alternating simple sutures and lasso loop technique with the aid of a penetrating device. The excess tendon was removed with scissors.');
   if (ck('arth-proc-subscap')) {
-    var subscapText = 'ARTHROSCOPIC SUBSCAPULARIS REPAIR:\nAttention was turned to the subscapularis, which demonstrated a ' + v('arth-subscap-extent') + ' tear. The tendon was carefully mobilized to restore excursion, and the lesser tuberosity footprint was freshened with a shaver to a bleeding bony bed. ';
+    var subscapTearDesc = 'Attention was turned to the subscapularis, which demonstrated a ' + v('arth-subscap-extent') + ' tear.';
+    var subscapText = 'ARTHROSCOPIC SUBSCAPULARIS REPAIR:\n' + subscapTearDesc + ' The tendon was carefully mobilized to restore excursion, and the lesser tuberosity footprint was freshened with a shaver to a bleeding bony bed. ';
     if (v('arth-subscap-technique') === 'luggage-tag') {
       subscapText += 'Sutures were passed through the subscapularis tendon using a luggage tag technique. The suture limbs were then docked into ' + v('arth-subscap-anchors') + ' ' + v('arth-subscap-anchor-type') + ' knotless anchors placed in the lesser tuberosity, compressing the tendon back to its anatomic footprint under appropriate tension.';
     } else {
