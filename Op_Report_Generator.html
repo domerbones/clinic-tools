@@ -575,20 +575,14 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="section-title">Rotator Cuff Repair Details</div>
 <div class="row">
 <div class="field field-small"><label>Medial Anchor #</label><input type="number" id="arth-medial-num"></div>
-<div class="field"><label>Medial Anchor Type</label><select id="arth-medial-type"><option value="Zimmer Biomet 4.5 mm double-loaded anchors">Zimmer Biomet 4.5 mm Double-Loaded</option><option value="Stryker Iconix 4.5 mm double-loaded anchors">Stryker Iconix 4.5 mm Double-Loaded</option><option value="Stryker Iconix 4.5 mm triple-loaded anchors">Stryker Iconix 4.5 mm Triple-Loaded</option><option value="Arthrex 4.75 mm Corkscrew FT triple-loaded anchors">Arthrex 4.75 mm Corkscrew FT Triple-Loaded</option></select></div>
+<div class="field"><label>Medial Anchor Type</label><select id="arth-medial-type"><option value="Zimmer Biomet 4.5 mm double-loaded anchors">Zimmer Biomet 4.5 mm Double-Loaded</option><option value="Zimmer Biomet 2.9 mm Juggernaut double-loaded anchors">Zimmer Biomet 2.9 mm Juggernaut Double-Loaded</option><option value="Zimmer Biomet 2.9 mm Juggernaut triple-loaded anchors">Zimmer Biomet 2.9 mm Juggernaut Triple-Loaded</option><option value="Stryker Iconix 4.5 mm double-loaded anchors">Stryker Iconix 4.5 mm Double-Loaded</option><option value="Stryker Iconix 4.5 mm triple-loaded anchors">Stryker Iconix 4.5 mm Triple-Loaded</option><option value="Arthrex 4.75 mm Corkscrew FT triple-loaded anchors">Arthrex 4.75 mm Corkscrew FT Triple-Loaded</option></select></div>
 </div>
 <div class="row">
-<div class="field field-med"><label>Suture Configuration</label><select id="arth-suture-config"><option value="simple">Simple</option><option value="mattress" selected>Mattress</option></select></div>
+<div class="field"><label>Repair Technique</label><select id="arth-repair-technique" onchange="updateArthSections()"><option value="single-row">Single-row</option><option value="double-row-toe" selected>Double-row (transosseous equivalent)</option><option value="double-row-mattress">Double-row with horizontal mattress</option><option value="luggage-tag">Luggage tag technique</option></select></div>
 </div>
-<div class="row">
-<div class="field"><label>Repair Technique</label><select id="arth-repair-technique"><option value="standard" selected>Standard double-row</option><option value="additional-lateral">Standard + additional lateral</option><option value="knotless">Completely knotless</option></select></div>
-</div>
-<div class="row">
+<div class="row" id="arth-luggage-row">
 <div class="checkbox-item"><input type="checkbox" id="arth-luggage"><label for="arth-luggage">Luggage tags placed</label></div>
 <div class="field field-small"><label>Luggage Tag #</label><input type="number" id="arth-luggage-num"></div>
-</div>
-<div class="row">
-<div class="checkbox-item"><input type="checkbox" id="arth-lateral-row" checked onchange="updateArthSections()"><label for="arth-lateral-row">Double-row repair (lateral anchors)</label></div>
 </div>
 <div id="arth-lateral-row-section" class="conditional-section">
 <div class="row">
@@ -2388,18 +2382,18 @@ function generateArthroscopy() {
     var tearType = v('arth-tear-type');
     var rcrText = 'ARTHROSCOPIC ROTATOR CUFF REPAIR:\n';
     if (tearType === 'full-thickness') {
-      rcrText += 'The rotator cuff was inspected and a full-thickness, ' + v('arth-tear-size') + ', ' + v('arth-tear-shape-type') + '-shaped tear of the ' + tendonStr + ' was identified. The quality of tissue was ' + v('arth-tissue-quality') + '. An arthroscopic shaver device was introduced and the greater tuberosity was abraded down to a gently bleeding bone bed in order to facilitate healing of soft tissue back to bone. ' + v('arth-medial-num') + ' ' + v('arth-medial-type') + ' were placed at a 45-degree angle adjacent to the articular cartilage in the greater tuberosity. ';
-      if (ck('arth-luggage')) { rcrText += (v('arth-luggage-num') ? v('arth-luggage-num') + ' ' : '') + 'luggage tag sutures were placed to secure the tendon edge. '; }
+      rcrText += 'The rotator cuff was inspected and a full-thickness, ' + v('arth-tear-size') + ', ' + v('arth-tear-shape-type') + '-shaped tear of the ' + tendonStr + ' was identified. The quality of tissue was ' + v('arth-tissue-quality') + '. An arthroscopic shaver was used to prepare the greater tuberosity footprint to a bleeding bony bed. ';
       var technique = v('arth-repair-technique');
-      if (technique === 'knotless') {
-        rcrText += 'The sutures were passed through the rotator cuff and secured in a completely knotless fashion with excellent compression onto the tuberosity.';
-      } else if (technique === 'additional-lateral') {
-        rcrText += 'Both limbs of each suture were passed through the rotator cuff. One set of sutures was tied down to compress the tendon to the articular margin. The remaining suture limbs were passed into lateral row anchors. The previously tied medial row sutures were also passed into an additional lateral anchor, completing the construct.';
-      } else {
-        rcrText += 'The sutures were passed through the rotator cuff in a ' + v('arth-suture-config') + ' configuration. Using arthroscopic knot-tying techniques, the rotator cuff was repaired back to the greater tuberosity with excellent compression onto the tuberosity.';
-      }
-      if (ck('arth-lateral-row')) {
-        rcrText += '\n\nThe lateral part of the rotator cuff remained in poor contact with bone; therefore, a second row of anchors was placed. The first-row suture limbs were passed through ' + v('arth-lateral-num') + ' ' + v('arth-lateral-type') + ' lateral row anchors inserted in the greater tuberosity. As they were inserted, they exerted a compression effect onto the underlying rotator cuff, restoring the rotator cuff footprint in an anatomic fashion. Care was taken not to overtension the rotator cuff during its repair.';
+      if (technique === 'single-row') {
+        rcrText += v('arth-medial-num') + ' ' + v('arth-medial-type') + ' were placed in the greater tuberosity at a 45-degree angle adjacent to the articular cartilage. The sutures were passed through the rotator cuff and tied down, compressing the tendon to the tuberosity with excellent footprint coverage.';
+      } else if (technique === 'double-row-toe') {
+        rcrText += v('arth-medial-num') + ' ' + v('arth-medial-type') + ' were placed in the greater tuberosity at a 45-degree angle adjacent to the articular cartilage. The sutures were passed through the rotator cuff. ';
+        if (ck('arth-luggage')) { rcrText += (v('arth-luggage-num') ? v('arth-luggage-num') + ' ' : '') + 'luggage tag sutures were placed to secure the tendon edge. '; }
+        rcrText += 'The suture limbs were then passed into ' + v('arth-lateral-num') + ' ' + v('arth-lateral-type') + ' knotless lateral row anchors inserted in the greater tuberosity, exerting a compression effect onto the underlying rotator cuff and restoring the footprint in an anatomic transosseous equivalent fashion. Care was taken not to overtension the repair.';
+      } else if (technique === 'double-row-mattress') {
+        rcrText += v('arth-medial-num') + ' ' + v('arth-medial-type') + ' were placed in the greater tuberosity at a 45-degree angle adjacent to the articular cartilage. Each suture was passed through the rotator cuff in a horizontal mattress configuration and individually tied down, compressing the tendon to the tuberosity. The suture limbs were then passed into ' + v('arth-lateral-num') + ' ' + v('arth-lateral-type') + ' knotless lateral row anchors inserted in the greater tuberosity, completing the double-row construct and restoring the rotator cuff footprint in an anatomic fashion. Care was taken not to overtension the repair.';
+      } else if (technique === 'luggage-tag') {
+        rcrText += v('arth-luggage-num') + ' luggage tag sutures were placed through the rotator cuff tendon to secure the tendon edge. The suture limbs were then docked into ' + v('arth-lateral-num') + ' ' + v('arth-lateral-type') + ' knotless lateral row anchors inserted in the greater tuberosity, compressing the tendon to the footprint in an anatomic fashion. Care was taken not to overtension the repair.';
       }
     } else {
       // Partial-thickness (articular or bursal)
@@ -2466,7 +2460,11 @@ function updateArthSections() {
   document.getElementById('arth-remp-section').style.display = ck('arth-proc-remplissage') ? 'block' : 'none';
   document.getElementById('arth-mua-section').style.display = ck('arth-proc-mua') ? 'block' : 'none';
   document.getElementById('arth-acjrecon-section').style.display = ck('arth-proc-acjrecon') ? 'block' : 'none';
-  document.getElementById('arth-lateral-row-section').style.display = ck('arth-lateral-row') ? 'block' : 'none';
+  var repairTech = v('arth-repair-technique');
+  var showLateral = (repairTech === 'double-row-toe' || repairTech === 'double-row-mattress' || repairTech === 'luggage-tag');
+  document.getElementById('arth-lateral-row-section').style.display = (ck('arth-proc-rcr') && showLateral) ? 'block' : 'none';
+  var lugRow = document.getElementById('arth-luggage-row');
+  if (lugRow) lugRow.style.display = (repairTech === 'double-row-toe') ? 'flex' : 'none';
   document.getElementById('arth-loosebody-section').style.display = ck('arth-proc-loosebody') ? 'block' : 'none';
   document.getElementById('arth-dx-other-text').style.display = ck('arth-dx-other') ? 'inline-block' : 'none';
   document.getElementById('arth-proc-other-text').style.display = ck('arth-proc-other') ? 'inline-block' : 'none';
