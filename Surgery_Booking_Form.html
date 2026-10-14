@@ -422,6 +422,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="arth-dx-oa"><label for="arth-dx-oa">Glenohumeral Osteoarthritis (M19.011/012)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="arth-dx-synovitis"><label for="arth-dx-synovitis">Synovitis (M67.311/312)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="arth-dx-rca"><label for="arth-dx-rca">Rotator Cuff Arthropathy (M19.011/012)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-dx-other" onchange="document.getElementById('arth-dx-other-text').style.display=this.checked?'inline-block':'none';"><label for="arth-dx-other">Other:</label><input type="text" id="arth-dx-other-text" class="other-text" style="display:none" placeholder="Diagnosis / ICD-10"></div>
 </div>
 <p class="icd-info">CPT: taken from the procedures checked below and listed on the generated form.</p>
 <div class="section-title">Procedures This Case (check all)</div>
@@ -1463,28 +1464,29 @@ function getDiagnosisLines(proc, side) {
    Add a procedure here and it appears on all of them. Anterior and posterior
    labral repair share 29806; getCPTLines already collapses duplicate codes. */
 var SCOPE_ADDONS = [
-  ['diagnostic','Diagnostic Arthroscopy','29805'],
   ['rcrepair','Arthroscopic Rotator Cuff Repair','29827'],
-  ['subscap','Subscapularis Repair','29827'],
-  ['scrrecon','Superior Capsular Reconstruction','29827'],
-  ['antlabral','Arthroscopic Anterior Labral (Bankart) Repair','29806'],
-  ['postlabral','Arthroscopic Posterior Labral Repair','29806'],
-  ['slaprep','Arthroscopic SLAP Repair','29807'],
-  ['remplissage','Remplissage',''],
   ['decompression','Subacromial Decompression','29826'],
   ['acromioplasty','Acromioplasty',''],
   ['dcr','Distal Clavicle Resection','29824'],
-  ['tenotomy','Arthroscopic Biceps Tenotomy','29822'],
   ['tenodesis','Open Subpectoral Biceps Tenodesis','23430'],
-  ['debridement','Extensive Glenohumeral Debridement','29823'],
+  ['debridement','Glenohumeral Debridement','29823'],
+  ['tenotomy','Arthroscopic Biceps Tenotomy','29822'],
+  ['slaprep','Arthroscopic SLAP Repair','29807'],
+  ['antlabral','Arthroscopic Anterior Labral (Bankart) Repair','29806'],
+  ['postlabral','Arthroscopic Posterior Labral Repair','29806'],
+  ['diagnostic','Diagnostic Arthroscopy','29805'],
   ['chondroplasty','Chondroplasty',''],
   ['synovectomy','Synovectomy',''],
   ['looseb','Loose Body Removal','29819'],
   ['capsrel','Capsular Release','29825'],
+  ['biopsy','Arthroscopic Biopsy for Culture',''],
+  ['scrrecon','Superior Capsular Reconstruction','29827'],
+  ['subscap','Subscapularis Repair','29827'],
+  ['remplissage','Remplissage',''],
   ['lysis','Lysis of Adhesions','29825'],
   ['muaddon','Manipulation Under Anesthesia','23700'],
   ['acjrecon','AC Joint Reconstruction (open)','23552'],
-  ['biopsy','Arthroscopic Biopsy for Culture','']
+  ['other','Other','']
 ];
 /* A panel never offers its own primary procedure as an add-on. The Bankart
    panel already carries its own SLAP and remplissage boxes, so they are
