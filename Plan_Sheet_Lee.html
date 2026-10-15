@@ -267,14 +267,18 @@ var SECTIONS = [
      pre-op flow (extraHandouts). */
   { key:'condition', title:'Condition handouts (info guides)', grid2:true, items:[
     ['Rotator cuff','rotator cuff information guide'],['Glenohumeral arthritis','glenohumeral arthritis information guide'],['Rotator cuff arthropathy','rotator cuff arthropathy information guide'],
-    ['Impingement','impingement information guide'],['AC arthritis','AC arthritis information guide'],['Biceps tendinitis','biceps tendinitis information guide'],['SLAP','SLAP tear information guide'],['Adhesive capsulitis','adhesive capsulitis information guide'],['Instability','instability information guide'],['Calcific tendinitis','calcific tendinitis information guide'],['Fracture','fracture information guide'],['Distal biceps','distal biceps information guide'],['PSI/CT planning','3D CT surgical planning handout'],['FAQ','frequently asked questions handout'],
+    ['Impingement','impingement information guide'],['AC arthritis','AC arthritis information guide'],['Biceps tendinitis','biceps tendinitis information guide'],['SLAP','SLAP tear information guide'],['Adhesive capsulitis','adhesive capsulitis information guide'],['Instability','instability information guide'],['Calcific tendinitis','calcific tendinitis information guide'],['Fracture','fracture information guide'],['Distal biceps','distal biceps information guide'],
     ['Knee osteoarthritis','knee osteoarthritis information guide'],['Meniscus tear','meniscus tear information guide'],['Patellofemoral','patellofemoral syndrome information guide'],
     ['Hip osteoarthritis','hip osteoarthritis information guide'],['Trochanteric bursitis','trochanteric bursitis information guide']
+  ]},
+  { key:'surgho', title:'Surgical handouts (auto-checked from surgery plan)', grid2:true, items:[
+    ['RCR surgery','rotator cuff repair surgery handout'],['TSA surgery','total shoulder arthroplasty surgery handout'],['Stemless TSA surgery','stemless shoulder arthroplasty surgery handout'],['RSA surgery','reverse shoulder arthroplasty surgery handout'],['SAD surgery','subacromial decompression surgery handout'],['Impingement surgery','impingement surgery handout'],['Biceps tenodesis','biceps tenodesis surgery handout'],['Instability surgery','instability surgery handout'],['SLAP repair','SLAP repair surgery handout'],['Clavicle ORIF','clavicle ORIF surgery handout'],['Proximal humerus ORIF','proximal humerus ORIF surgery handout'],['Knee arthroscopy','knee arthroscopy surgery handout'],['TKA surgery','total knee arthroplasty surgery handout'],['PSI/CT planning','3D CT surgical planning handout'],['FAQ','frequently asked questions handout'],['mymobility','mymobility app handout']
   ]},
   { key:'restrict', title:'Restrictions', grid2:true, weightDrop:5, items:[
     ['5 lb','no lifting greater than 5 lb'],['10 lb','no lifting greater than 10 lb'],['15 lb','no lifting greater than 15 lb'],['30 lb','no lifting greater than 30 lb'],['no limit','no lifting restrictions'],['Activity as tolerated','activity as tolerated'],['No pushing, pulling or lifting','no pushing, pulling, or lifting'],['No overhead use','no overhead use'],['No repetitive use','no repetitive use'],['No driving','no driving'],['Work note','work note provided'],['School note','school note provided'],['ATC note','note for athletic trainer'],['RTW','return to work {}','date']
   ]},
-  { key:'surg', title:'Surgery plan', printLabel:'We discussed surgery', drop:true, lat:true, nSided:17, items:[
+  { key:'surg', title:'Surgery plan', printLabel:'We discussed surgery', grid2:true,
+    subheads:{ 0:'Shoulder', 13:'Knee', 17:'Status' }, items:[
     ['TSA','total shoulder arthroplasty'],['Hemi','shoulder hemiarthroplasty'],['RSA','reverse total shoulder arthroplasty'],['RCR','rotator cuff repair'],['Scope','shoulder arthroscopy'],['SAD','subacromial decompression'],['DCR','distal clavicle resection'],['BT','open subpectoral biceps tenodesis'],['Labrum','labral repair / instability'],['SLAP','SLAP repair'],['SCR','superior capsular reconstruction'],['ORIF','ORIF'],['Distal biceps','distal biceps repair'],
     ['kneeScope','knee arthroscopy'],['partialMedMenisc','partial medial meniscectomy'],['partialLatMenisc','partial lateral meniscectomy'],['kneeChondro','knee chondroplasty'],
     ['ready','ready for surgery'],['thinking','considering surgery'],['heart','cardiac clearance needed'],['PCP','PCP clearance needed']
@@ -457,7 +461,8 @@ function renderSection(sec){
       // optional labeled subheadings inside the checkbox grid (e.g. Follow-up)
       if(sec.subheads && sec.subheads[i]) h+='<div class="subhead">'+esc(sec.subheads[i])+'</div>';
       if(sec.contPer) h+='<div class="medrow">';
-      h+='<label class="chk"><input type="checkbox" id="c_'+sec.key+'_'+i+'"><span>'+esc(item[0])+'</span>';
+      var onchg = (sec.key==='surg') ? ' onchange="autoCheckSurgHandouts()"' : '';
+      h+='<label class="chk"><input type="checkbox" id="c_'+sec.key+'_'+i+'"'+onchg+'><span>'+esc(item[0])+'</span>';
       if(item[2]){ h+=' <input class="cin"'+(item[2]==='date'?' type="date"':'')+' id="ci_'+sec.key+'_'+i+'" placeholder="'+esc(item[2])+'">'; }
       h+='</label>';
       if(sec.contPer){ h+='<label class="contw" title="continue this medication (not a new prescription)"><input type="checkbox" id="cc_'+sec.key+'_'+i+'" onchange="contChg(\''+sec.key+'\','+i+')">cont.</label></div>'; }
@@ -566,9 +571,8 @@ function addChip(key, sel){
   }
   if(isSided(sec,i) && needSide()) return;   // no silent default side
   chips[key].push({i:i, v:'', side: isSided(sec,i)?val('global-side'):null});
-  // picking a planned surgery also records it under "Surgeries discussed",
-  // which lists it as a procedure and carries the matching handouts
-  if(key==='surg' && isSided(sec,i)){
+  // Auto-check surgical handouts when a surgery is selected
+  if(key==='surg') autoCheckSurgHandouts();
   renderChips(key);
   paintSections();
   if(key==='surg'||key==='dx') showAttachInfo();
@@ -904,16 +908,18 @@ function generate(){
   SECTIONS.forEach(function(sec){ var t=sectionText(sec);
     if(t && sec.key==='img') t += ' — our office will call you to schedule';
     if(t) lines.push({label:(sec.printLabel||sec.title), text:t});
-    // surgical handouts now ride along with the surgeries discussed
-    if(sec.key==='surg'){
+    // surgical handouts from the checkbox section
+    if(sec.key==='surgho'){
       var ho=surgHandoutLabels();
-      if(ho.length) lines.push({label:'Surgical handouts provided', text: ho.map(function(l){ return HO_FULL[l]||l; }).join(', ')});
+      if(ho.length) lines.push({label:'Handouts provided', text: ho.map(function(l){ return HO_FULL[l]||l; }).join(', ')});
     }
   });
   // "Considering surgery" is a decision the patient takes home - give them the
   // number to call when they are ready, not just the fact that we discussed it.
   var sgSec=SEC_BY_KEY['surg'];
-  if((chips['surg']||[]).some(function(e){ return (sgSec.items[e.i]||[])[0]==='thinking'; })){
+  var thinkIdx = sgSec ? sgSec.items.findIndex(function(x){ return x[0]==='thinking'; }) : -1;
+  var thinkCb = thinkIdx>=0 ? document.getElementById('c_surg_'+thinkIdx) : null;
+  if(thinkCb && thinkCb.checked){
     lines.push({label:'When you are ready', text:'Call to schedule surgery when ready at 513-813-1639.'});
   }
   var cdText = getCustomDxText();
@@ -968,25 +974,26 @@ function printAs(cls){
 // ---- merged print: embedded handouts (same set as the Clinic Encounter Sheet) ----
 // maps section tokens -> HANDOUT_HTML keys; tokens without an embedded handout are skipped
 var HANDOUT_KEY = {
-  condition: {'Rotator cuff':'c_rc','Impingement':'c_imp','AC arthritis':'c_ac','Biceps tendinitis':'c_bt','SLAP':'c_slap','Glenohumeral arthritis':'c_gh','Adhesive capsulitis':'c_adcap','Instability':'c_instab','Rotator cuff arthropathy':'c_rca','Calcific tendinitis':'c_calc','Fracture':'c_fx','Distal biceps':'c_db','PSI/CT planning':'sh_psi','FAQ':'sh_faq'},
+  condition: {'Rotator cuff':'c_rc','Impingement':'c_imp','AC arthritis':'c_ac','Biceps tendinitis':'c_bt','SLAP':'c_slap','Glenohumeral arthritis':'c_gh','Adhesive capsulitis':'c_adcap','Instability':'c_instab','Rotator cuff arthropathy':'c_rca','Calcific tendinitis':'c_calc','Fracture':'c_fx','Distal biceps':'c_db'},
+  surgho: {'RCR surgery':'sh_rcr','TSA surgery':'sh_tsa','Stemless TSA surgery':'sh_stemless','RSA surgery':'sh_rsa','SAD surgery':'sh_sad','Impingement surgery':'sh_imp','Biceps tenodesis':'sh_bt','Instability surgery':'sh_instab','SLAP repair':'sh_slap_rep','Clavicle ORIF':'sh_clav','Proximal humerus ORIF':'sh_ph','Knee arthroscopy':'sh_knee_arth','TKA surgery':'sh_tka','PSI/CT planning':'sh_psi','FAQ':'sh_faq','mymobility':'sh_mymob'},
   handout: {'TSA':'sh_tsa','RSA':'sh_rsa','RCR':'sh_rcr','FAQ':'sh_faq','Instability':'sh_instab','SLAP repair':'sh_slap_rep','Impingement':'sh_imp','Biceps tenodesis':'sh_bt','Clavicle ORIF':'sh_clav','Proximal humerus ORIF':'sh_ph','PSI/CT planning':'sh_psi','mymobility':'sh_mymob'},
   pt: {'Sleeper stretch':'pt_sleeper','1st set (RSA)':'pt_rsa_set1','2nd set (RSA)':'pt_rsa_set2'}
 };
 // Full printed names for the surgical handout labels (the old checkbox section)
-var HO_FULL = {'TSA':'total shoulder arthroplasty handout','TSA surgery':'total shoulder arthroplasty surgery handout','RSA':'reverse total shoulder arthroplasty handout','RCR':'rotator cuff tear handout','RCR surgery':'rotator cuff repair surgery handout','SAD surgery':'subacromial decompression surgery handout','Knee arthroscopy':'knee arthroscopy surgery handout','Instability':'instability / Bankart handout','SLAP repair':'SLAP repair handout','Impingement':'impingement surgery handout','Biceps tenodesis':'biceps tenodesis handout','Clavicle ORIF':'clavicle ORIF handout','Proximal humerus ORIF':'proximal humerus ORIF handout','FAQ':'frequently asked questions handout','PSI/CT planning':'3D CT surgical planning handout','mymobility':'mymobility app handout'};
-// Which surgical handouts each discussed surgery brings along
+var HO_FULL = {'TSA surgery':'total shoulder arthroplasty surgery handout','Stemless TSA surgery':'stemless shoulder arthroplasty surgery handout','RSA surgery':'reverse shoulder arthroplasty surgery handout','RCR surgery':'rotator cuff repair surgery handout','SAD surgery':'subacromial decompression surgery handout','Impingement surgery':'impingement surgery handout','Instability surgery':'instability surgery handout','SLAP repair':'SLAP repair surgery handout','Biceps tenodesis':'biceps tenodesis surgery handout','Clavicle ORIF':'clavicle ORIF surgery handout','Proximal humerus ORIF':'proximal humerus ORIF surgery handout','Knee arthroscopy':'knee arthroscopy surgery handout','TKA surgery':'total knee arthroplasty surgery handout','FAQ':'frequently asked questions handout','PSI/CT planning':'3D CT surgical planning handout','mymobility':'mymobility app handout'};
+// Maps surgery tokens to surgical-handout checkbox tokens (key:'surgho')
 var RECSURG_HO = {
-  'TSA':['TSA surgery','TSA','PSI/CT planning','mymobility','FAQ'],
-  'Hemi':['TSA surgery','TSA','PSI/CT planning','mymobility','FAQ'],
-  'RSA':['RSA','PSI/CT planning','mymobility','FAQ'],
-  'RCR':['RCR surgery','RCR','FAQ'],
-  'Scope':['SAD surgery','Impingement','FAQ'],
-  'SAD':['SAD surgery','Impingement','FAQ'],
-  'DCR':['Impingement','FAQ'],
+  'TSA':['TSA surgery','PSI/CT planning','mymobility','FAQ'],
+  'Hemi':['TSA surgery','PSI/CT planning','mymobility','FAQ'],
+  'RSA':['RSA surgery','PSI/CT planning','mymobility','FAQ'],
+  'RCR':['RCR surgery','FAQ'],
+  'Scope':['SAD surgery','FAQ'],
+  'SAD':['SAD surgery','FAQ'],
+  'DCR':['Impingement surgery','FAQ'],
   'BT':['Biceps tenodesis','FAQ'],
-  'Labrum':['Instability','FAQ'],
+  'Labrum':['Instability surgery','FAQ'],
   'SLAP':['SLAP repair','FAQ'],
-  'SCR':['RCR surgery','RCR','FAQ'],
+  'SCR':['RCR surgery','FAQ'],
   'ORIF':['FAQ'],
   'Distal biceps':['FAQ'],
   'kneeScope':['Knee arthroscopy','FAQ'],
@@ -995,44 +1002,58 @@ var RECSURG_HO = {
   'kneeChondro':['Knee arthroscopy','FAQ']
 };
 var extraHandouts=[];  // set by the pre-op flow / presets; reset by applyPicks and Clear
-// Surgical handout labels implied by the current selections
-function surgHandoutLabels(){
-  var labels=[], seen={};
-  function add(l){ if(l && !seen[l]){ seen[l]=1; labels.push(l); } }
-  var rsec=SEC_BY_KEY['surg'], dsec=SEC_BY_KEY['dx'];
-  (chips['surg']||[]).forEach(function(e){
-    var tok=(rsec.items[e.i]||[])[0];
-    (RECSURG_HO[tok]||[]).forEach(add);
-    if(tok==='ORIF'){
-      (chips['dx']||[]).forEach(function(d){ var dt=(dsec.items[d.i]||[])[0];
-        if(dt==='ClavicleFX') add('Clavicle ORIF');
-        if(dt==='PHfx') add('Proximal humerus ORIF');
-      });
+
+// Auto-check surgical handout checkboxes based on selected surgeries
+function autoCheckSurgHandouts(){
+  var surgSec=SEC_BY_KEY['surg'], hoSec=SEC_BY_KEY['surgho'];
+  if(!surgSec||!hoSec) return;
+  var wanted={};
+  surgSec.items.forEach(function(item,i){
+    var cb=document.getElementById('c_surg_'+i);
+    if(cb && cb.checked){
+      var tok=item[0];
+      (RECSURG_HO[tok]||[]).forEach(function(h){ wanted[h]=1; });
+      if(tok==='ORIF'){
+        var dsec=SEC_BY_KEY['dx'];
+        if(dsec) dsec.items.forEach(function(ditem,di){
+          var dcb=document.getElementById('c_dx_'+di);
+          if(dcb && dcb.checked){
+            if(ditem[0]==='ClavicleFX') wanted['Clavicle ORIF']=1;
+            if(ditem[0]==='PHfx') wanted['Proximal humerus ORIF']=1;
+          }
+        });
+      }
     }
+  });
+  hoSec.items.forEach(function(item,i){
+    var cb=document.getElementById('c_surgho_'+i);
+    if(cb && wanted[item[0]]) cb.checked=true;
+  });
+  showAttachInfo();
+}
+
+// Read surgical handout labels from the checked checkboxes in the 'surgho' section
+function surgHandoutLabels(){
+  var labels=[];
+  var hoSec=SEC_BY_KEY['surgho']; if(!hoSec) return labels;
+  hoSec.items.forEach(function(item,i){
+    var cb=document.getElementById('c_surgho_'+i);
+    if(cb && cb.checked) labels.push(item[0]);
   });
   // A "return after PSI planning" follow-up means the CT plan is the next step,
   // so the 3D planning handout should go home with them.
   var fsec = SEC_BY_KEY['fu'];
-  if(fsec){
-    var fi = fsec.items.findIndex(function(x){ return x[0]==='afterPSI'; });
-    var fcb = fi>=0 ? document.getElementById('c_fu_'+fi) : null;
-    if(fcb && fcb.checked) add('PSI/CT planning');
-  }
-  extraHandouts.forEach(add);
+  extraHandouts.forEach(function(l){ if(labels.indexOf(l)<0) labels.push(l); });
   return labels;
 }
 function planHandouts(){
   var out=[], seenKey={};
-  ['condition','pt'].forEach(function(k){
+  ['condition','surgho','pt'].forEach(function(k){
     var sec=SEC_BY_KEY[k]; if(!sec) return;
     sec.items.forEach(function(item,i){
       var cb=document.getElementById('c_'+k+'_'+i);
       if(cb&&cb.checked){ var key=(HANDOUT_KEY[k]||{})[item[0]]; if(key&&window.HANDOUT_HTML&&HANDOUT_HTML[key]&&!seenKey[key]){ seenKey[key]=1; out.push({key:key, label:item[0]}); } }
     });
-  });
-  surgHandoutLabels().forEach(function(l){
-    var key=HANDOUT_KEY.handout[l];
-    if(key&&window.HANDOUT_HTML&&HANDOUT_HTML[key]&&!seenKey[key]){ seenKey[key]=1; out.push({key:key, label:l}); }
   });
   return out;
 }
