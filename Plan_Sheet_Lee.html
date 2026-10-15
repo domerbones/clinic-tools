@@ -271,8 +271,8 @@ var SECTIONS = [
     ['Knee osteoarthritis','knee osteoarthritis information guide'],['Meniscus tear','meniscus tear information guide'],['Patellofemoral','patellofemoral syndrome information guide'],
     ['Hip osteoarthritis','hip osteoarthritis information guide'],['Trochanteric bursitis','trochanteric bursitis information guide']
   ]},
-  { key:'surgho', title:'Surgical handouts (auto-checked from surgery plan)', grid2:true, items:[
-    ['TSA surgery','total shoulder arthroplasty surgery handout'],['Stemless TSA surgery','stemless shoulder arthroplasty surgery handout'],['RSA surgery','reverse shoulder arthroplasty surgery handout'],['RCR surgery','rotator cuff repair surgery handout'],['SAD surgery','subacromial decompression surgery handout'],['Biceps tenodesis','biceps tenodesis surgery handout'],['Instability surgery','instability surgery handout'],['SLAP repair','SLAP repair surgery handout'],['Clavicle ORIF','clavicle ORIF surgery handout'],['Proximal humerus ORIF','proximal humerus ORIF surgery handout'],['Knee arthroscopy','knee arthroscopy surgery handout'],['PSI/CT planning','3D CT surgical planning handout'],['FAQ','frequently asked questions handout'],['mymobility','mymobility app handout']
+  { key:'surgho', title:'Handouts (auto-checked from surgery plan)', grid2:true, items:[
+    ['TSA','total shoulder arthroplasty handout'],['Stemless TSA','stemless shoulder arthroplasty handout'],['RSA','reverse shoulder arthroplasty handout'],['RCR','rotator cuff repair handout'],['SAD','subacromial decompression handout'],['Biceps tenodesis','biceps tenodesis handout'],['Instability','instability handout'],['SLAP repair','SLAP repair handout'],['Clavicle ORIF','clavicle ORIF handout'],['Proximal humerus ORIF','proximal humerus ORIF handout'],['Knee arthroscopy','knee arthroscopy handout'],['PSI/CT planning','3D CT surgical planning handout'],['FAQ','frequently asked questions handout'],['mymobility','mymobility app handout']
   ]},
   { key:'restrict', title:'Restrictions', grid2:true, weightDrop:5, items:[
     ['5 lb','no lifting greater than 5 lb'],['10 lb','no lifting greater than 10 lb'],['15 lb','no lifting greater than 15 lb'],['30 lb','no lifting greater than 30 lb'],['no limit','no lifting restrictions'],['Activity as tolerated','activity as tolerated'],['No pushing, pulling or lifting','no pushing, pulling, or lifting'],['No overhead use','no overhead use'],['No repetitive use','no repetitive use'],['No driving','no driving'],['Work note','work note provided'],['School note','school note provided'],['ATC note','note for athletic trainer'],['RTW','return to work {}','date']
@@ -973,27 +973,27 @@ function printAs(cls){
 // maps section tokens -> HANDOUT_HTML keys; tokens without an embedded handout are skipped
 var HANDOUT_KEY = {
   condition: {'Rotator cuff':'c_rc','Impingement':'c_imp','AC arthritis':'c_ac','Biceps tendinitis':'c_bt','SLAP':'c_slap','Glenohumeral arthritis':'c_gh','Adhesive capsulitis':'c_adcap','Instability':'c_instab','Rotator cuff arthropathy':'c_rca','Calcific tendinitis':'c_calc','Fracture':'c_fx','Distal biceps':'c_db'},
-  surgho: {'RCR surgery':'sh_rcr','TSA surgery':'sh_tsa','Stemless TSA surgery':'sh_stemless','RSA surgery':'sh_rsa','SAD surgery':'sh_sad','Impingement surgery':'sh_imp','Biceps tenodesis':'sh_bt','Instability surgery':'sh_instab','SLAP repair':'sh_slap_rep','Clavicle ORIF':'sh_clav','Proximal humerus ORIF':'sh_ph','Knee arthroscopy':'sh_knee_arth','TKA surgery':'sh_tka','PSI/CT planning':'sh_psi','FAQ':'sh_faq','mymobility':'sh_mymob'},
+  surgho: {'RCR':'sh_rcr','TSA':'sh_tsa','Stemless TSA':'sh_stemless','RSA':'sh_rsa','SAD':'sh_sad','Biceps tenodesis':'sh_bt','Instability':'sh_instab','SLAP repair':'sh_slap_rep','Clavicle ORIF':'sh_clav','Proximal humerus ORIF':'sh_ph','Knee arthroscopy':'sh_knee_arth','PSI/CT planning':'sh_psi','FAQ':'sh_faq','mymobility':'sh_mymob'},
   handout: {'TSA':'sh_tsa','RSA':'sh_rsa','RCR':'sh_rcr','FAQ':'sh_faq','Instability':'sh_instab','SLAP repair':'sh_slap_rep','Impingement':'sh_imp','Biceps tenodesis':'sh_bt','Clavicle ORIF':'sh_clav','Proximal humerus ORIF':'sh_ph','PSI/CT planning':'sh_psi','mymobility':'sh_mymob'},
   pt: {'Sleeper stretch':'pt_sleeper','1st set (RSA)':'pt_rsa_set1','2nd set (RSA)':'pt_rsa_set2'}
 };
 // Full printed names for the surgical handout labels (the old checkbox section)
-var HO_FULL = {'TSA surgery':'total shoulder arthroplasty surgery handout','Stemless TSA surgery':'stemless shoulder arthroplasty surgery handout','RSA surgery':'reverse shoulder arthroplasty surgery handout','RCR surgery':'rotator cuff repair surgery handout','SAD surgery':'subacromial decompression surgery handout','Impingement surgery':'impingement surgery handout','Instability surgery':'instability surgery handout','SLAP repair':'SLAP repair surgery handout','Biceps tenodesis':'biceps tenodesis surgery handout','Clavicle ORIF':'clavicle ORIF surgery handout','Proximal humerus ORIF':'proximal humerus ORIF surgery handout','Knee arthroscopy':'knee arthroscopy surgery handout','TKA surgery':'total knee arthroplasty surgery handout','FAQ':'frequently asked questions handout','PSI/CT planning':'3D CT surgical planning handout','mymobility':'mymobility app handout'};
+var HO_FULL = {'TSA':'total shoulder arthroplasty handout','Stemless TSA':'stemless shoulder arthroplasty handout','RSA':'reverse shoulder arthroplasty handout','RCR':'rotator cuff repair handout','SAD':'subacromial decompression handout','Instability':'instability handout','SLAP repair':'SLAP repair handout','Biceps tenodesis':'biceps tenodesis handout','Clavicle ORIF':'clavicle ORIF handout','Proximal humerus ORIF':'proximal humerus ORIF handout','Knee arthroscopy':'knee arthroscopy handout','FAQ':'frequently asked questions handout','PSI/CT planning':'3D CT surgical planning handout','mymobility':'mymobility app handout'};
 // Maps surgery tokens to surgical-handout checkbox tokens (key:'surgho')
 var RECSURG_HO = {
-  'TSA':['TSA surgery','PSI/CT planning','mymobility','FAQ'],
-  'Stemless TSA':['Stemless TSA surgery','PSI/CT planning','mymobility','FAQ'],
-  'RSA':['RSA surgery','PSI/CT planning','mymobility','FAQ'],
-  'RCR':['RCR surgery','FAQ'],
-  'SAD':['SAD surgery','FAQ'],
+  'TSA':['TSA','PSI/CT planning','mymobility','FAQ'],
+  'Stemless TSA':['Stemless TSA','PSI/CT planning','mymobility','FAQ'],
+  'RSA':['RSA','PSI/CT planning','mymobility','FAQ'],
+  'RCR':['RCR','FAQ'],
+  'SAD':['SAD','FAQ'],
   'DCR':['FAQ'],
   'OSBT':['Biceps tenodesis','FAQ'],
-  'Anterior labral':['Instability surgery','FAQ'],
-  'Posterior labral':['Instability surgery','FAQ'],
-  'Latarjet':['Instability surgery','FAQ'],
-  'Remplissage':['Instability surgery','FAQ'],
+  'Anterior labral':['Instability','FAQ'],
+  'Posterior labral':['Instability','FAQ'],
+  'Latarjet':['Instability','FAQ'],
+  'Remplissage':['Instability','FAQ'],
   'SLAP':['SLAP repair','FAQ'],
-  'SCR':['RCR surgery','FAQ'],
+  'SCR':['RCR','FAQ'],
   'ORIF clavicle':['Clavicle ORIF','FAQ'],
   'ORIF prox humerus':['Proximal humerus ORIF','FAQ'],
   'Distal biceps':['FAQ'],
