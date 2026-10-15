@@ -274,16 +274,10 @@ var SECTIONS = [
   { key:'restrict', title:'Restrictions', grid2:true, weightDrop:5, items:[
     ['5 lb','no lifting greater than 5 lb'],['10 lb','no lifting greater than 10 lb'],['15 lb','no lifting greater than 15 lb'],['30 lb','no lifting greater than 30 lb'],['no limit','no lifting restrictions'],['Activity as tolerated','activity as tolerated'],['No pushing, pulling or lifting','no pushing, pulling, or lifting'],['No overhead use','no overhead use'],['No repetitive use','no repetitive use'],['No driving','no driving'],['Work note','work note provided'],['School note','school note provided'],['ATC note','note for athletic trainer'],['RTW','return to work {}','date']
   ]},
-  { key:'surg', title:'Surgery', drop:true, lat:true, nSided:17, items:[
+  { key:'surg', title:'Surgery plan', printLabel:'We discussed surgery', drop:true, lat:true, nSided:17, items:[
     ['TSA','total shoulder arthroplasty'],['Hemi','shoulder hemiarthroplasty'],['RSA','reverse total shoulder arthroplasty'],['RCR','rotator cuff repair'],['Scope','shoulder arthroscopy'],['SAD','subacromial decompression'],['DCR','distal clavicle resection'],['BT','open subpectoral biceps tenodesis'],['Labrum','labral repair / instability'],['SLAP','SLAP repair'],['SCR','superior capsular reconstruction'],['ORIF','ORIF'],['Distal biceps','distal biceps repair'],
     ['kneeScope','knee arthroscopy'],['partialMedMenisc','partial medial meniscectomy'],['partialLatMenisc','partial lateral meniscectomy'],['kneeChondro','knee chondroplasty'],
     ['ready','ready for surgery'],['thinking','considering surgery'],['heart','cardiac clearance needed'],['PCP','PCP clearance needed']
-  ]},
-  /* Merged section: each discussed surgery is listed as a sided procedure on the
-     summary AND automatically brings its surgical handouts (see RECSURG_HO). */
-  { key:'recsurg', title:'Surgeries discussed', printLabel:'We discussed surgery', drop:true, lat:true, nSided:17, items:[
-    ['TSA','total shoulder arthroplasty'],['Hemi','shoulder hemiarthroplasty'],['RSA','reverse total shoulder arthroplasty'],['RCR','rotator cuff repair'],['Scope','shoulder arthroscopy'],['SAD','subacromial decompression'],['DCR','distal clavicle resection'],['BT','open subpectoral biceps tenodesis'],['Labrum','labral repair / instability'],['SLAP','SLAP repair'],['SCR','superior capsular reconstruction'],['ORIF','ORIF'],['Distal biceps','distal biceps repair'],
-    ['kneeScope','knee arthroscopy'],['partialMedMenisc','partial medial meniscectomy'],['partialLatMenisc','partial lateral meniscectomy'],['kneeChondro','knee chondroplasty']
   ]},
   { key:'fu', title:'Follow-up', grid2:true,
     subheads:{ 0:'Timed return', 10:'Conditional', 15:'Referrals & other' }, items:[
@@ -575,20 +569,11 @@ function addChip(key, sel){
   // picking a planned surgery also records it under "Surgeries discussed",
   // which lists it as a procedure and carries the matching handouts
   if(key==='surg' && isSided(sec,i)){
-    var rsec=SEC_BY_KEY['recsurg'], ri=tokenIndex(rsec, sec.items[i][0]);
-    if(ri>=0){
-      if(!chips['recsurg']) chips['recsurg']=[];
-      if(!chips['recsurg'].some(function(e){ return e.i===ri; })){
-        chips['recsurg'].push({i:ri, v:'', side: val('global-side')});
-        renderChips('recsurg');
-      }
-    }
-  }
   renderChips(key);
   paintSections();
-  if(key==='recsurg'||key==='dx'||key==='surg') showAttachInfo();
+  if(key==='surg'||key==='dx') showAttachInfo();
 }
-function removeChip(key,pos){ chips[key].splice(pos,1); renderChips(key); paintSections(); if(key==='recsurg'||key==='dx') showAttachInfo(); }
+function removeChip(key,pos){ chips[key].splice(pos,1); renderChips(key); paintSections(); if(key==='surg'||key==='dx') showAttachInfo(); }
 // B is exclusive: checking B clears R/L, and checking R or L clears B
 function latSide(key,i,w){
   var r=document.getElementById('lr_'+key+'_'+i+'_R'), l=document.getElementById('lr_'+key+'_'+i+'_L'), bi=document.getElementById('lr_'+key+'_'+i+'_B');
@@ -773,7 +758,6 @@ function applyPreop(){
   // the planned operation(s), then "ready for surgery", then the matching handouts
   p.surg.forEach(function(t){ picks.push(['surg',t]); });
   picks.push(['surg','ready']);
-  p.surg.forEach(function(t){ picks.push(['recsurg',t]); });
   // handouts ride along as 'ho' picks (handled specially by applyPicks) so the
   // clavicle-vs-prox-humerus ORIF choice from the dropdown label is kept
   p.handouts.forEach(function(t){ picks.push(['ho',t]); });
@@ -921,7 +905,7 @@ function generate(){
     if(t && sec.key==='img') t += ' — our office will call you to schedule';
     if(t) lines.push({label:(sec.printLabel||sec.title), text:t});
     // surgical handouts now ride along with the surgeries discussed
-    if(sec.key==='recsurg'){
+    if(sec.key==='surg'){
       var ho=surgHandoutLabels();
       if(ho.length) lines.push({label:'Surgical handouts provided', text: ho.map(function(l){ return HO_FULL[l]||l; }).join(', ')});
     }
@@ -989,30 +973,34 @@ var HANDOUT_KEY = {
   pt: {'Sleeper stretch':'pt_sleeper','1st set (RSA)':'pt_rsa_set1','2nd set (RSA)':'pt_rsa_set2'}
 };
 // Full printed names for the surgical handout labels (the old checkbox section)
-var HO_FULL = {'TSA':'total shoulder arthroplasty handout','RSA':'reverse total shoulder arthroplasty handout','RCR':'rotator cuff repair handout','Instability':'instability / Bankart handout','SLAP repair':'SLAP repair handout','Impingement':'impingement surgery handout','Biceps tenodesis':'biceps tenodesis handout','Clavicle ORIF':'clavicle ORIF handout','Proximal humerus ORIF':'proximal humerus ORIF handout','FAQ':'frequently asked questions handout','PSI/CT planning':'3D CT surgical planning handout','mymobility':'mymobility app handout'};
-// Which surgical handouts each discussed surgery brings along (same logic as the pre-op flow)
+var HO_FULL = {'TSA':'total shoulder arthroplasty handout','TSA surgery':'total shoulder arthroplasty surgery handout','RSA':'reverse total shoulder arthroplasty handout','RCR':'rotator cuff tear handout','RCR surgery':'rotator cuff repair surgery handout','SAD surgery':'subacromial decompression surgery handout','Knee arthroscopy':'knee arthroscopy surgery handout','Instability':'instability / Bankart handout','SLAP repair':'SLAP repair handout','Impingement':'impingement surgery handout','Biceps tenodesis':'biceps tenodesis handout','Clavicle ORIF':'clavicle ORIF handout','Proximal humerus ORIF':'proximal humerus ORIF handout','FAQ':'frequently asked questions handout','PSI/CT planning':'3D CT surgical planning handout','mymobility':'mymobility app handout'};
+// Which surgical handouts each discussed surgery brings along
 var RECSURG_HO = {
-  'TSA':['TSA','PSI/CT planning','mymobility','FAQ'],
-  'Hemi':['TSA','PSI/CT planning','mymobility','FAQ'],
+  'TSA':['TSA surgery','TSA','PSI/CT planning','mymobility','FAQ'],
+  'Hemi':['TSA surgery','TSA','PSI/CT planning','mymobility','FAQ'],
   'RSA':['RSA','PSI/CT planning','mymobility','FAQ'],
-  'RCR':['RCR','FAQ'],
-  'Scope':['Impingement','FAQ'],
-  'SAD':['Impingement','FAQ'],
+  'RCR':['RCR surgery','RCR','FAQ'],
+  'Scope':['SAD surgery','Impingement','FAQ'],
+  'SAD':['SAD surgery','Impingement','FAQ'],
   'DCR':['Impingement','FAQ'],
   'BT':['Biceps tenodesis','FAQ'],
   'Labrum':['Instability','FAQ'],
   'SLAP':['SLAP repair','FAQ'],
-  'SCR':['RCR','FAQ'],
-  'ORIF':['FAQ'],            // clavicle vs prox humerus resolved from the diagnosis chips
-  'Distal biceps':['FAQ']
+  'SCR':['RCR surgery','RCR','FAQ'],
+  'ORIF':['FAQ'],
+  'Distal biceps':['FAQ'],
+  'kneeScope':['Knee arthroscopy','FAQ'],
+  'partialMedMenisc':['Knee arthroscopy','FAQ'],
+  'partialLatMenisc':['Knee arthroscopy','FAQ'],
+  'kneeChondro':['Knee arthroscopy','FAQ']
 };
 var extraHandouts=[];  // set by the pre-op flow / presets; reset by applyPicks and Clear
 // Surgical handout labels implied by the current selections
 function surgHandoutLabels(){
   var labels=[], seen={};
   function add(l){ if(l && !seen[l]){ seen[l]=1; labels.push(l); } }
-  var rsec=SEC_BY_KEY['recsurg'], dsec=SEC_BY_KEY['dx'];
-  (chips['recsurg']||[]).forEach(function(e){
+  var rsec=SEC_BY_KEY['surg'], dsec=SEC_BY_KEY['dx'];
+  (chips['surg']||[]).forEach(function(e){
     var tok=(rsec.items[e.i]||[])[0];
     (RECSURG_HO[tok]||[]).forEach(add);
     if(tok==='ORIF'){
