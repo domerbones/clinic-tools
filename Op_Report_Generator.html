@@ -396,6 +396,7 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="arth-proc-remplissage" onchange="updateArthSections()"><label for="arth-proc-remplissage">Remplissage</label></div>
 <div class="checkbox-item"><input type="checkbox" id="arth-proc-mua" onchange="updateArthSections()"><label for="arth-proc-mua">Manipulation Under Anesthesia</label></div>
 <div class="checkbox-item"><input type="checkbox" id="arth-proc-lysis"><label for="arth-proc-lysis">Lysis of Adhesions</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-proc-opensubscap" onchange="updateArthSections()"><label for="arth-proc-opensubscap">Open Subscapularis Repair</label></div>
 <div class="checkbox-item"><input type="checkbox" id="arth-proc-acjrecon" onchange="updateArthSections()"><label for="arth-proc-acjrecon">AC Joint Reconstruction (open)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="arth-proc-other" onchange="updateArthSections()"><label for="arth-proc-other">Other:</label><input type="text" id="arth-proc-other-text" class="other-text" style="display:none"></div>
 </div>
@@ -499,6 +500,18 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 </div>
 <div class="row">
 <div class="field field-med"><label>Repair Technique</label><select id="arth-subscap-technique"><option value="standard" selected>Standard anchor repair</option><option value="luggage-tag">Luggage tag knotless</option></select></div>
+</div>
+</div>
+
+<div id="arth-opensubscap-section" class="conditional-section" style="display:none">
+<div class="section-title">Open Subscapularis Repair Details</div>
+<div class="row">
+<div class="field field-small"><label>Anchors (#)</label><input type="number" id="arth-opensubscap-anchors"></div>
+<div class="field field-med"><label>Anchor Size/Type</label><input id="arth-opensubscap-anchor-type" value="Arthrex 4.75 mm SwiveLock"></div>
+<div class="field field-med"><label>Tear Extent</label><select id="arth-opensubscap-extent"><option value="upper border">Upper border</option><option value="upper one-third">Upper one-third</option><option value="upper one-half">Upper one-half</option><option value="full-thickness">Full-thickness</option></select></div>
+</div>
+<div class="row">
+<div class="field field-med"><label>Repair Technique</label><select id="arth-opensubscap-technique"><option value="standard" selected>Standard anchor repair</option><option value="luggage-tag">Luggage tag knotless</option></select></div>
 </div>
 </div>
 
@@ -2279,6 +2292,7 @@ function generateArthroscopy() {
     if (ck('arth-proc-postlabral') && String(v('arth-plab-anchors')).trim()) parts.push(v('arth-plab-anchors') + ' ' + v('arth-plab-anchor-type') + ' (posterior labrum)');
     if (ck('arth-proc-scr')) parts.push(v('arth-scr-medial-num') + ' ' + v('arth-scr-medial-type') + ' (glenoid), ' + v('arth-scr-lateral-num') + ' ' + v('arth-scr-lateral-type') + ' (greater tuberosity)');
     if (ck('arth-proc-subscap') && String(v('arth-subscap-anchors')).trim()) parts.push(v('arth-subscap-anchors') + ' ' + v('arth-subscap-anchor-type') + ' (subscapularis)');
+    if (ck('arth-proc-opensubscap') && String(v('arth-opensubscap-anchors')).trim()) parts.push(v('arth-opensubscap-anchors') + ' ' + v('arth-opensubscap-anchor-type') + ' (open subscapularis)');
     if (ck('arth-proc-remplissage') && String(v('arth-remp-anchors')).trim()) parts.push(v('arth-remp-anchors') + ' anchors (remplissage)');
     if (ck('arth-proc-tenodesis')) parts.push(BICEPS_ANCHOR);
     return parts.length ? parts.join(', ') : 'None';
@@ -2329,6 +2343,7 @@ function generateArthroscopy() {
   if (ck('arth-proc-biopsy')) procs.push(s + ' Arthroscopic Biopsy for Culture');
   if (ck('arth-proc-scr')) procs.push(s + ' Arthroscopic Superior Capsular Reconstruction');
   if (ck('arth-proc-subscap')) procs.push(s + ' Arthroscopic Subscapularis Repair');
+  if (ck('arth-proc-opensubscap')) procs.push(s + ' Open Subscapularis Repair');
   if (ck('arth-proc-remplissage')) procs.push(s + ' Arthroscopic Remplissage');
   if (ck('arth-proc-mua')) procs.push(s + ' Manipulation Under Anesthesia');
   if (ck('arth-proc-lysis')) procs.push(s + ' Arthroscopic Lysis of Adhesions');
@@ -2422,6 +2437,16 @@ function generateArthroscopy() {
     subscapText += ' The comma tissue and medial sling of the biceps were preserved throughout. The repair was probed and found to be stable and secure.';
     descSections.push(subscapText);
   }
+  if (ck('arth-proc-opensubscap')) {
+    var openSubscapText = 'OPEN SUBSCAPULARIS REPAIR:\nThe arthroscopic portion of the procedure was completed. The decision was made to convert to an open approach for the subscapularis repair. A deltopectoral incision was made. The cephalic vein was preserved and retracted laterally. The conjoint tendon was identified and retracted medially. The subscapularis was identified and found to have a ' + v('arth-opensubscap-extent') + ' tear. Traction sutures were placed in the subscapularis tendon. The tendon was carefully mobilized to restore excursion, and the lesser tuberosity footprint was freshened with a shaver to a bleeding bony bed. ';
+    if (v('arth-opensubscap-technique') === 'luggage-tag') {
+      openSubscapText += 'Sutures were passed through the subscapularis tendon using a luggage tag technique. The suture limbs were then docked into ' + v('arth-opensubscap-anchors') + ' ' + v('arth-opensubscap-anchor-type') + ' knotless anchors placed in the lesser tuberosity, compressing the tendon back to its anatomic footprint under appropriate tension.';
+    } else {
+      openSubscapText += v('arth-opensubscap-anchors') + ' ' + v('arth-opensubscap-anchor-type') + ' anchors were placed in the lesser tuberosity at the articular margin. Sutures were passed through the subscapularis tendon and secured, restoring the tendon to its anatomic footprint under appropriate tension.';
+    }
+    openSubscapText += ' The comma tissue and medial sling of the biceps were preserved throughout. The repair was probed and found to be stable and secure.';
+    descSections.push(openSubscapText);
+  }
   if (ck('arth-proc-remplissage')) descSections.push('REMPLISSAGE:\nThe arthroscope was placed anteriorly and ' + v('arth-hillsachs-desc') + ' was visualized. The base of the defect was roughened with a shaver to promote healing. Sutures were passed through the infraspinatus and posterior capsule in a horizontal mattress configuration. The suture limbs were then docked into ' + v('arth-remp-anchors') + ' knotless anchors placed into the defect, securing the infraspinatus and capsule into the Hill-Sachs lesion and completing the remplissage.');
   if (ck('arth-proc-scr')) descSections.push('SUPERIOR CAPSULAR RECONSTRUCTION:\nThe superior glenoid was prepared with a shaver and burr to create a bleeding bone bed at the superior glenoid neck. The greater tuberosity footprint was similarly prepared. A ' + v('arth-graft-type') + (v('arth-graft-size').trim() ? ' (' + v('arth-graft-size') + ')' : '') + ' was prepared on the back table. ' + v('arth-scr-medial-num') + ' ' + v('arth-scr-medial-type') + ' suture anchors were placed at the superior glenoid. Sutures were passed through the medial edge of the graft in a mattress configuration. The graft was shuttled into the joint and secured to the superior glenoid. ' + v('arth-scr-lateral-num') + ' ' + v('arth-scr-lateral-type') + ' anchors were placed in the greater tuberosity, and the lateral edge of the graft was secured to the tuberosity footprint, restoring the superior capsule. The posterior edge of the graft was then secured to the posterior rotator cuff with side-to-side sutures to complete the construct. The graft was tensioned with the arm in neutral rotation. The repair was probed and found to be secure with excellent superior coverage.');
   if (ck('arth-proc-acjrecon')) descSections.push('AC JOINT RECONSTRUCTION:\nAn incision was made over the AC joint. The deltotrapezial fascia was incised and the AC joint exposed. The distal clavicle was identified and the AC joint was reduced. ' + (v('arth-acj-graft-type').trim() ? 'A ' + v('arth-acj-graft-type') + ' was used for reconstruction. ' : '') + (v('arth-acj-fixation').trim() ? 'Fixation was achieved with ' + v('arth-acj-fixation') + '. ' : '') + 'The AC joint reduction was confirmed clinically and fluoroscopically. The deltotrapezial fascia was repaired.');
@@ -2465,6 +2490,7 @@ function updateArthSections() {
   document.getElementById('arth-lateral-row-section').style.display = (ck('arth-proc-rcr') && showLateral) ? 'block' : 'none';
   var lugRow = document.getElementById('arth-luggage-row');
   if (lugRow) lugRow.style.display = (repairTech === 'double-row-toe') ? 'flex' : 'none';
+  document.getElementById('arth-opensubscap-section').style.display = ck('arth-proc-opensubscap') ? 'block' : 'none';
   document.getElementById('arth-loosebody-section').style.display = ck('arth-proc-loosebody') ? 'block' : 'none';
   document.getElementById('arth-dx-other-text').style.display = ck('arth-dx-other') ? 'inline-block' : 'none';
   document.getElementById('arth-proc-other-text').style.display = ck('arth-proc-other') ? 'inline-block' : 'none';
