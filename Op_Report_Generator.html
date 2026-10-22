@@ -354,6 +354,12 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="arth-dx-synovitis"><label for="arth-dx-synovitis">Synovitis</label></div>
 <div class="checkbox-item"><input type="checkbox" id="arth-dx-bicepsrupture"><label for="arth-dx-bicepsrupture">Biceps Rupture (Long Head)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="arth-dx-partialcuff"><label for="arth-dx-partialcuff">Partial-Thickness Rotator Cuff Tear</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-dx-antinstab"><label for="arth-dx-antinstab">Recurrent Anterior Instability</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-dx-postinstab"><label for="arth-dx-postinstab">Recurrent Posterior Instability</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-dx-mdi"><label for="arth-dx-mdi">Multidirectional Instability (MDI)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-dx-firstdisloc"><label for="arth-dx-firstdisloc">First-time Anterior Dislocation</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-dx-boneloss"><label for="arth-dx-boneloss">Bone Loss (Glenoid)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-dx-hillsachs"><label for="arth-dx-hillsachs">Hill-Sachs Lesion</label></div>
 <div class="checkbox-item"><input type="checkbox" id="arth-dx-other" onchange="updateArthSections()"><label for="arth-dx-other">Other:</label><input type="text" id="arth-dx-other-text" class="other-text" style="display:none"></div>
 </div>
 
@@ -370,6 +376,12 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="checkbox-item"><input type="checkbox" id="arth-postdx-synovitis"><label for="arth-postdx-synovitis">Synovitis</label></div>
 <div class="checkbox-item"><input type="checkbox" id="arth-postdx-bicepsrupture"><label for="arth-postdx-bicepsrupture">Biceps Rupture (Long Head)</label></div>
 <div class="checkbox-item"><input type="checkbox" id="arth-postdx-partialcuff"><label for="arth-postdx-partialcuff">Partial-Thickness Rotator Cuff Tear</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-postdx-antinstab"><label for="arth-postdx-antinstab">Recurrent Anterior Instability</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-postdx-postinstab"><label for="arth-postdx-postinstab">Recurrent Posterior Instability</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-postdx-mdi"><label for="arth-postdx-mdi">Multidirectional Instability (MDI)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-postdx-firstdisloc"><label for="arth-postdx-firstdisloc">First-time Anterior Dislocation</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-postdx-boneloss"><label for="arth-postdx-boneloss">Bone Loss (Glenoid)</label></div>
+<div class="checkbox-item"><input type="checkbox" id="arth-postdx-hillsachs"><label for="arth-postdx-hillsachs">Hill-Sachs Lesion</label></div>
 <div class="checkbox-item"><input type="checkbox" id="arth-postdx-other" onchange="document.getElementById('arth-postdx-other-text').style.display=this.checked?'inline-block':'none';"><label for="arth-postdx-other">Other:</label><input type="text" id="arth-postdx-other-text" class="other-text" style="display:none"></div>
 </div>
 
@@ -2310,6 +2322,12 @@ function generateArthroscopy() {
   if (ck('arth-dx-synovitis')) preDx.push(s + ' Synovitis');
   if (ck('arth-dx-bicepsrupture')) preDx.push(s + ' Long Head Biceps Tendon Rupture');
   if (ck('arth-dx-partialcuff')) preDx.push(s + ' Partial-Thickness Rotator Cuff Tear');
+  if (ck('arth-dx-antinstab')) preDx.push(s + ' Recurrent Anterior Instability');
+  if (ck('arth-dx-postinstab')) preDx.push(s + ' Recurrent Posterior Instability');
+  if (ck('arth-dx-mdi')) preDx.push(s + ' Multidirectional Instability');
+  if (ck('arth-dx-firstdisloc')) preDx.push(s + ' First-time Anterior Dislocation');
+  if (ck('arth-dx-boneloss')) preDx.push(s + ' Glenoid Bone Loss');
+  if (ck('arth-dx-hillsachs')) preDx.push(s + ' Hill-Sachs Lesion');
   if (ck('arth-dx-other') && v('arth-dx-other-text').trim()) preDx.push(s + ' ' + v('arth-dx-other-text'));
   var postDx = [];
   if (ck('arth-postdx-pain')) postDx.push(s + ' Shoulder Pain');
@@ -2323,6 +2341,12 @@ function generateArthroscopy() {
   if (ck('arth-postdx-synovitis')) postDx.push(s + ' Synovitis');
   if (ck('arth-postdx-bicepsrupture')) postDx.push(s + ' Long Head Biceps Tendon Rupture');
   if (ck('arth-postdx-partialcuff')) postDx.push(s + ' Partial-Thickness Rotator Cuff Tear');
+  if (ck('arth-postdx-antinstab')) postDx.push(s + ' Recurrent Anterior Instability');
+  if (ck('arth-postdx-postinstab')) postDx.push(s + ' Recurrent Posterior Instability');
+  if (ck('arth-postdx-mdi')) postDx.push(s + ' Multidirectional Instability');
+  if (ck('arth-postdx-firstdisloc')) postDx.push(s + ' First-time Anterior Dislocation');
+  if (ck('arth-postdx-boneloss')) postDx.push(s + ' Glenoid Bone Loss');
+  if (ck('arth-postdx-hillsachs')) postDx.push(s + ' Hill-Sachs Lesion');
   if (ck('arth-postdx-other') && v('arth-postdx-other-text').trim()) postDx.push(s + ' ' + v('arth-postdx-other-text'));
   var procs = [];
   if (ck('arth-proc-arthroscopy')) procs.push(s + ' Arthroscopy');
