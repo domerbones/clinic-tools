@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Massive Rotator Cuff Tear - Treatment Decision Tool</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f5f5f5;color:#333;max-width:800px;margin:0 auto;padding:16px}
+h1{color:#1B3A6B;font-size:22px;text-align:center;margin-bottom:4px}
+.subtitle{color:#E8A838;text-align:center;font-size:13px;margin-bottom:16px}
+.card{background:#fff;border-radius:8px;padding:16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.card-title{color:#1B3A6B;font-weight:bold;font-size:16px;margin-bottom:10px;border-bottom:2px solid #E8A838;padding-bottom:4px}
+.field{margin-bottom:10px}
+.field label{display:block;font-weight:bold;font-size:13px;margin-bottom:3px;color:#1B3A6B}
+.field select,.field input{width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;font-size:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row .field{flex:1;min-width:140px}
+.result-box{background:#1B3A6B;color:#fff;border-radius:8px;padding:16px;margin-top:12px}
+.result-box h2{color:#E8A838;font-size:18px;margin-bottom:8px}
+.result-box .rec{font-size:16px;font-weight:bold;margin-bottom:8px}
+.result-box .detail{font-size:13px;line-height:1.5;opacity:.9}
+.risk-bar{height:20px;border-radius:10px;margin:8px 0;position:relative;overflow:hidden}
+.risk-fill{height:100%;border-radius:10px;transition:width .3s}
+.risk-label{font-size:12px;margin-top:2px}
+.green{background:#4CAF50}.yellow{background:#FF9800}.orange{background:#FF5722}.red{background:#f44336}
+.badge{display:inline-block;padding:3px 8px;border-radius:12px;font-size:11px;font-weight:bold;margin:2px}
+.badge-green{background:#4CAF50;color:#fff}.badge-yellow{background:#FF9800;color:#fff}
+.badge-orange{background:#FF5722;color:#fff}.badge-red{background:#f44336;color:#fff}
+.badge-blue{background:#1B3A6B;color:#fff}
+.section-note{font-size:11px;color:#888;margin-top:4px}
+.rohi-score{font-size:28px;font-weight:bold;color:#E8A838;text-align:center}
+.rohi-label{text-align:center;font-size:12px;color:#aaa}
+button{background:#1B3A6B;color:#fff;border:none;padding:10px 20px;border-radius:4px;font-size:14px;cursor:pointer;width:100%;margin-top:8px}
+button:hover{background:#2a5a9b}
+.hidden{display:none}
+.alt-options{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.2)}
+.alt-options .alt-title{color:#E8A838;font-size:13px;font-weight:bold;margin-bottom:4px}
+.alt-item{font-size:12px;margin-bottom:4px;padding-left:12px;position:relative}
+.alt-item:before{content:"\2022";position:absolute;left:0}
+.source{font-size:10px;color:#999;text-align:center;margin-top:12px}
+</style>
+</head>
+<body>
+<h1>Massive Rotator Cuff Tear</h1>
+<div class="subtitle">Evidence-Based Treatment Decision Tool</div>
+
+<div class="card">
+<div class="card-title">Node 1: Arthropathy</div>
+<div class="field"><label>Hamada Grade</label>
+<select id="hamada" onchange="evaluate()">
+<option value="">-- Select --</option>
+<option value="1">Grade 1 (AHI ≥6mm)</option>
+<option value="2">Grade 2 (AHI ≤5mm, no acetabularization)</option>
+<option value="3">Grade 3 (Acetabularization)</option>
+<option value="4a">Grade 4a (GH arthritis, no acetabularization)</option>
+<option value="4b">Grade 4b (GH arthritis + acetabularization)</option>
+<option value="5">Grade 5 (Humeral head collapse)</option>
+</select></div>
+</div>
+
+<div class="card">
+<div class="card-title">Node 2: Functional Status</div>
+<div class="row">
+<div class="field"><label>Pseudoparalysis</label>
+<select id="pseudo" onchange="evaluate()">
+<option value="">-- Select --</option>
+<option value="yes">Present (cannot actively elevate)</option>
+<option value="no">Absent (can actively elevate)</option>
+</select></div>
+<div class="field"><label>Dynamic Instability</label>
+<select id="instability" onchange="evaluate()">
+<option value="">-- Select --</option>
+<option value="yes">Present (anterior-superior escape)</option>
+<option value="no">Absent</option>
+</select></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">Node 3: Subscapularis</div>
+<div class="field"><label>Subscapularis Status</label>
+<select id="subscap" onchange="evaluate()">
+<option value="">-- Select --</option>
+<option value="intact">Intact</option>
+<option value="reparable">Torn but reparable</option>
+<option value="irreparable">Irreparable</option>
+</select></div>
+</div>
+
+<div class="card">
+<div class="card-title">Node 4: Patient Factors</div>
+<div class="row">
+<div class="field"><label>Age</label>
+<select id="age" onchange="evaluate()">
+<option value="">-- Select --</option>
+<option value="under50">&lt;50</option>
+<option value="50to65">50-65</option>
+<option value="65to75">65-75</option>
+<option value="over75">&gt;75</option>
+</select></div>
+<div class="field"><label>Activity/Demand</label>
+<select id="demand" onchange="evaluate()">
+<option value="">-- Select --</option>
+<option value="high">High</option>
+<option value="low">Low</option>
+</select></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">RoHI Score Calculator</div>
+<div class="section-note">Predicts healing after repair (Kwon 2019)</div>
+<div class="row">
+<div class="field"><label>Retraction</label>
+<select id="rohi-retract" onchange="calcRohi()">
+<option value="0">&lt;1 cm (0 pts)</option>
+<option value="1">1 to &lt;2 cm (+1)</option>
+<option value="2">2 to &lt;3 cm (+2)</option>
+<option value="4">≥3 cm (+4)</option>
+</select></div>
+<div class="field"><label>ISP Fatty Infiltration</label>
+<select id="rohi-fi" onchange="calcRohi()">
+<option value="0">Goutallier 0-1 (0 pts)</option>
+<option value="3">Goutallier ≥2 (+3)</option>
+</select></div>
+</div>
+<div class="row">
+<div class="field"><label>AP Tear Size</label>
+<select id="rohi-size" onchange="calcRohi()">
+<option value="0">≤2.5 cm (0 pts)</option>
+<option value="2">&gt;2.5 cm (+2)</option>
+</select></div>
+<div class="field"><label>Age</label>
+<select id="rohi-age" onchange="calcRohi()">
+<option value="0">≤70 (0 pts)</option>
+<option value="2">&gt;70 (+2)</option>
+</select></div>
+</div>
+<div class="row">
+<div class="field"><label>BMD (T-score)</label>
+<select id="rohi-bmd" onchange="calcRohi()">
+<option value="0">&gt; −2.5 (0 pts)</option>
+<option value="2">≤ −2.5 (+2)</option>
+</select></div>
+<div class="field"><label>Work/Activity</label>
+<select id="rohi-work" onchange="calcRohi()">
+<option value="0">Low/Medium (0 pts)</option>
+<option value="2">High (+2)</option>
+</select></div>
+</div>
+<div class="rohi-score" id="rohi-display">0</div>
+<div class="rohi-label">RoHI Score (0-15)</div>
+<div class="risk-bar" style="background:#eee">
+<div class="risk-fill" id="rohi-bar" style="width:0%;background:#4CAF50"></div>
+</div>
+<div class="risk-label" id="rohi-risk" style="text-align:center;font-size:12px;color:#666">Enter values above</div>
+</div>
+
+<button onclick="evaluate()">Generate Recommendation</button>
+
+<div id="result" class="hidden">
+<div class="result-box">
+<h2>Recommended Treatment</h2>
+<div class="rec" id="rec-text"></div>
+<div class="detail" id="rec-detail"></div>
+<div class="alt-options" id="alt-options">
+<div class="alt-title">Alternative Options to Consider:</div>
+<div id="alt-list"></div>
+</div>
+</div>
+</div>
+
+<div class="source">
+Based on: St. Pierre et al. JSES 2021 (Neer Circle Consensus), Kwon et al. AJSM 2019 (RoHI),<br>
+Goutallier, Patte, Hamada classifications, and 2015-2025 systematic reviews.<br>
+Robert H. Rolf, MD — Beacon Orthopaedics<br>
+<em>This tool is for clinical decision support only. It does not replace surgical judgment.</em>
+</div>
+
+<script>
+function val(id){return document.getElementById(id).value}
+function calcRohi(){
+  var s=parseInt(val('rohi-retract'))+parseInt(val('rohi-fi'))+parseInt(val('rohi-size'))+parseInt(val('rohi-age'))+parseInt(val('rohi-bmd'))+parseInt(val('rohi-work'));
+  document.getElementById('rohi-display').textContent=s;
+  var pct=Math.round(s/15*100);
+  var bar=document.getElementById('rohi-bar');
+  var risk=document.getElementById('rohi-risk');
+  bar.style.width=pct+'%';
+  if(s<=4){bar.style.background='#4CAF50';risk.textContent='Low risk — 94% healing rate. Repair with confidence.';}
+  else if(s<=6){bar.style.background='#FF9800';risk.textContent='Moderate risk — 68% healing rate. Consider augmentation.';}
+  else if(s<=9){bar.style.background='#FF5722';risk.textContent='High risk — 38% healing rate. Augmentation recommended (RoHI ≥7 threshold).';}
+  else{bar.style.background='#f44336';risk.textContent='Very high risk — 14% healing rate. Consider SCR, tendon transfer, or RSA.';}
+  evaluate();
+}
+function evaluate(){
+  var hamada=val('hamada'),pseudo=val('pseudo'),instab=val('instability'),subscap=val('subscap'),age=val('age'),demand=val('demand');
+  if(!hamada||!pseudo||!subscap||!age) return;
+  var rohi=parseInt(document.getElementById('rohi-display').textContent);
+  var rec='',detail='',alts=[];
+  // Node 1: Arthropathy
+  if(hamada==='4a'||hamada==='4b'||hamada==='5'){
+    rec='Reverse Shoulder Arthroplasty (RSA)';
+    detail='Hamada grade '+hamada+' indicates established glenohumeral arthropathy. RSA is universally recommended regardless of other factors. 10-year survival: 88-94%. Consider lateralized design for better external rotation.';
+    alts=[];
+    showResult(rec,detail,alts);return;
+  }
+  // Node 2: Pseudoparalysis + subscap
+  if(pseudo==='yes'&&subscap==='irreparable'){
+    rec='Reverse Shoulder Arthroplasty (RSA)';
+    detail='Pseudoparalysis with irreparable subscapularis indicates complete loss of force couples. RSA is the preferred treatment (100% Neer Circle consensus for age >70). SCR is contraindicated in this combination.';
+    if(age==='under50'||age==='50to65') detail+=' Note: In younger patients, RSA survivorship is lower (75.7% at 10 years for age <60). Discuss carefully.';
+    alts=[];
+    showResult(rec,detail,alts);return;
+  }
+  if(pseudo==='yes'&&(subscap==='intact'||subscap==='reparable')){
+    if(age==='over75'||age==='65to75'){
+      rec='Reverse Shoulder Arthroplasty (RSA)';
+      detail='Pseudoparalysis in older patient. Despite intact subscapularis, RSA provides the most predictable reversal of pseudoparalysis in this age group.';
+      alts=['Repair + subscapularis repair if tissue quality permits (SIAGASCOT consensus supports attempt)','Lower trapezius transfer if isolated ER deficit'];
+    } else {
+      rec='Attempted Repair ± Augmentation or Joint-Preserving Procedure';
+      detail='Pseudoparalysis with intact subscapularis in a younger patient. The Neer Circle leans toward RSA, but SIAGASCOT consensus supports attempted repair — subscapularis repair reversed pseudoparalysis in 88.8% of cases. If repair is not feasible:';
+      alts=['Lower trapezius transfer (LTT) — 94.7% lag sign reversal, emerging front-runner','Latissimus dorsi transfer (LDT) — longest track record, 8.9% retear','Superior capsular reconstruction (SCR) — if subscap is intact, TFL autograft preferred','RSA — if joint-preserving options fail (does not compromise future RSA)'];
+    }
+    showResult(rec,detail,alts);return;
+  }
+  // Dynamic instability
+  if(instab==='yes'){
+    if(age==='over75'||age==='65to75'){
+      rec='Reverse Shoulder Arthroplasty (RSA)';
+      detail='Dynamic instability (anterior-superior escape) in older patient strongly favors RSA regardless of other factors.';
+      alts=[];
+    } else {
+      rec='RSA Preferred, Joint-Preserving Options Considered';
+      detail='Dynamic instability strongly favors RSA even in younger patients. However, given age, joint-preserving options may be attempted first as they do not compromise future RSA.';
+      alts=['Lower trapezius transfer','Latissimus dorsi transfer','SCR (only if subscap is intact)'];
+    }
+    showResult(rec,detail,alts);return;
+  }
+  // Node 3: Reparability (no arthropathy, no pseudoparalysis, no instability)
+  if(rohi<=4){
+    rec='Primary Repair (Double-Row or TOE)';
+    detail='RoHI ≤4: 94% healing rate. Repair with confidence using DR or TOE technique. No augmentation needed.';
+    alts=['ADM augmentation optional for borderline cases','PRP — short-term benefit only, vanishes by 10 years'];
+    showResult(rec,detail,alts);return;
+  }
+  if(rohi<=6){
+    rec='Repair with Consideration for Augmentation';
+    detail='RoHI 5-6: 68% healing rate. DR/TOE repair recommended. Consider ADM allograft augmentation, especially if approaching RoHI 7 threshold.';
+    alts=['ADM allograft augmentation halves retear rate (RR 0.53)','Avoid porcine xenograft (3x complication rate, no benefit)'];
+    showResult(rec,detail,alts);return;
+  }
+  if(rohi<=9){
+    rec='Repair with ADM Augmentation Strongly Recommended';
+    detail='RoHI 7-9: 38% healing without augmentation. RoHI 7 is the augmentation threshold (Jackson 2022). ADM reduces retear from 36.6% to 21.6% in this group. If intraoperatively irreparable:';
+    alts=['Partial repair with margin convergence (45% retear but good clinical outcomes)','SCR with TFL autograft (if subscap intact, age <65)','Lower trapezius transfer (for ER deficit)','Latissimus dorsi transfer (for elevation deficit)'];
+    showResult(rec,detail,alts);return;
+  }
+  // RoHI >= 10
+  if(age==='under50'||age==='50to65'){
+    rec='Joint-Preserving Procedure';
+    detail='RoHI ≥10: 14% healing with repair. In younger patients, joint-preserving options are preferred over RSA due to poor RSA survivorship under age 60 (75.7% at 10 years).';
+    if(subscap==='intact'||subscap==='reparable'){
+      alts=['Lower trapezius transfer (LTT) — for ER deficit, 94.7% lag sign reversal','Superior capsular reconstruction (SCR) — TFL autograft preferred (5-32% retear vs 20-75% dermal allograft)','Latissimus dorsi transfer (LDT) — 8.9% retear, sustained >10 years','Partial repair + ADM augmentation as a bridge','RSA — only if joint-preserving options fail or are not feasible'];
+    } else {
+      alts=['Lower trapezius transfer — can be done even with subscap tears','Latissimus dorsi transfer — requires intact subscap','Pectoralis major transfer — for isolated subscap deficiency','RSA — if no joint-preserving option is feasible'];
+    }
+  } else {
+    rec='Reverse Shoulder Arthroplasty (RSA)';
+    detail='RoHI ≥10: 14% healing with repair. In older patients ('+age.replace('over','>')+'), RSA provides the most predictable outcome. 10-year survival 88-94%.';
+    alts=['Partial repair if patient prefers to avoid arthroplasty','SCR — only if subscap intact and patient motivated (weaker evidence in older patients)'];
+  }
+  showResult(rec,detail,alts);
+}
+function showResult(rec,detail,alts){
+  document.getElementById('result').classList.remove('hidden');
+  document.getElementById('rec-text').textContent=rec;
+  document.getElementById('rec-detail').textContent=detail;
+  var altDiv=document.getElementById('alt-list');
+  var altSec=document.getElementById('alt-options');
+  if(alts.length){
+    altSec.style.display='block';
+    altDiv.innerHTML=alts.map(function(a){return '<div class="alt-item">'+a+'</div>';}).join('');
+  } else {
+    altSec.style.display='none';
+  }
+  document.getElementById('result').scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>

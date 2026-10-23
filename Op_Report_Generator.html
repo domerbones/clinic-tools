@@ -238,23 +238,42 @@ body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
 <div class="field field-med"><label>Complications</label><select id="rtsa-complications" onchange="document.getElementById('rtsa-complications-other-text').style.display=this.value==='Other'?'inline-block':'none';"><option value="None" selected>None</option><option value="Superficial wound drainage">Superficial wound drainage</option><option value="Intraoperative fracture">Intraoperative fracture</option><option value="Nerve injury">Nerve injury</option><option value="Excessive bleeding">Excessive bleeding</option><option value="Other">Other</option></select><input type="text" id="rtsa-complications-other-text" class="other-text" style="display:none"></div>
 </div>
 
-<div class="section-title">Implants</div>
+<div class="section-title">Implant System</div>
 <div class="row">
+<div class="field field-med"><label>Baseplate System</label><select id="rtsa-system" onchange="updateRTSASystem()"><option value="identity" selected>Zimmer Biomet Identity</option><option value="comprehensive">Zimmer Biomet Comprehensive</option></select></div>
 <div class="field field-small"><label>Stem (mm)</label><select id="rtsa-stem"><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8" selected>8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option></select></div>
+</div>
+<div class="section-title">Glenoid Components</div>
+<div class="row">
 <div class="field field-small"><label>Baseplate (mm)</label><select id="rtsa-baseplate"><option value="15" selected>15</option><option value="20">20</option><option value="25">25</option></select></div>
 <div class="field field-small"><label>Glenosphere (mm)</label><select id="rtsa-glenosphere"><option value="32">32</option><option value="36" selected>36</option><option value="40">40</option></select></div>
-<div class="field field-small"><label>Lateralization</label><select id="rtsa-glen-lat"><option value="+0" selected>+0</option><option value="+3">+3</option><option value="+5">+5</option></select></div>
+<div class="field field-small" id="rtsa-lat-identity"><label>Lateralization</label><select id="rtsa-glen-lat"><option value="+0" selected>+0</option><option value="+3">+3</option><option value="+5">+5</option></select></div>
+<div class="field field-small" id="rtsa-lat-comprehensive" style="display:none"><label>Lateralization</label><select id="rtsa-glen-lat-comp"><option value="+0" selected>+0</option><option value="+3">+3</option><option value="+6">+6</option></select></div>
 </div>
+<div id="rtsa-identity-screws">
+<div class="row">
+<div class="field field-small"><label>Body Screw (mm)</label><input id="rtsa-screw-body"></div>
+<div class="field field-small"><label>Coracoid Screw (mm)</label><input id="rtsa-screw-coracoid"></div>
+<div class="field field-small"><label>Periph Screw 1 (mm)</label><select id="rtsa-screw-periph1"><option value="N/A" selected>N/A</option><option value="16">16</option><option value="20">20</option><option value="24">24</option><option value="30">30</option></select></div>
+<div class="field field-small"><label>Periph Screw 2 (mm)</label><select id="rtsa-screw-periph2"><option value="N/A" selected>N/A</option><option value="16">16</option><option value="20">20</option><option value="24">24</option><option value="30">30</option></select></div>
+</div>
+</div>
+<div id="rtsa-comp-screws" style="display:none">
+<div class="row">
+<div class="field field-small"><label>Central Screw (mm)</label><select id="rtsa-comp-central"><option value="15">15</option><option value="20">20</option><option value="25" selected>25</option><option value="30">30</option><option value="35">35</option><option value="40">40</option><option value="45">45</option><option value="50">50</option></select></div>
+<div class="field field-small"><label>Inferior Screw (mm)</label><input id="rtsa-comp-inferior"></div>
+<div class="field field-small"><label>Superior Screw (mm)</label><input id="rtsa-comp-superior"></div>
+</div>
+<div class="row">
+<div class="field field-small"><label>Periph Screw 1 (mm)</label><select id="rtsa-comp-periph1"><option value="N/A" selected>N/A</option><option value="16">16</option><option value="20">20</option><option value="24">24</option><option value="30">30</option></select></div>
+<div class="field field-small"><label>Periph Screw 2 (mm)</label><select id="rtsa-comp-periph2"><option value="N/A" selected>N/A</option><option value="16">16</option><option value="20">20</option><option value="24">24</option><option value="30">30</option></select></div>
+</div>
+</div>
+<div class="section-title">Humeral Components</div>
 <div class="row">
 <div class="field field-med"><label>Bearing</label><select id="rtsa-liner"><option value="+0 mm Uniform Thickness" selected>+0 mm Uniform Thickness</option><option value="+3 mm Uniform Thickness">+3 mm Uniform Thickness</option><option value="+0 mm 12-degree">+0 mm 12&deg;</option><option value="+3 mm 12-degree">+3 mm 12&deg;</option><option value="+0 mm 12-degree Retentive">+0 mm 12&deg; Retentive</option><option value="+3 mm 12-degree Retentive">+3 mm 12&deg; Retentive</option></select></div>
 <div class="field field-med"><label>Tray Type</label><select id="rtsa-tray-type"><option value="Standard (STD)" selected>Standard (STD)</option><option value="Extended (EXT)">Extended (EXT)</option><option value="Extra Extended (XEXT)">Extra Extended (XEXT)</option></select></div>
 <div class="field field-small"><label>Tray Height</label><select id="rtsa-tray-height"><option value="-6 mm">-6</option><option value="+0 mm" selected>+0</option><option value="+6 mm">+6</option><option value="+12 mm">+12</option></select></div>
-<div class="field field-small"><label>Body Screw (mm)</label><input id="rtsa-screw-body"></div>
-<div class="field field-small"><label>Coracoid Screw (mm)</label><input id="rtsa-screw-coracoid"></div>
-</div>
-<div class="row">
-<div class="field field-small"><label>Periph Screw 1 (mm)</label><select id="rtsa-screw-periph1"><option value="N/A" selected>N/A</option><option value="16">16</option><option value="20">20</option><option value="24">24</option><option value="30">30</option></select></div>
-<div class="field field-small"><label>Periph Screw 2 (mm)</label><select id="rtsa-screw-periph2"><option value="N/A" selected>N/A</option><option value="16">16</option><option value="20">20</option><option value="24">24</option><option value="30">30</option></select></div>
 </div>
 
 <div class="section-title">Exam Under Anesthesia</div>
@@ -2206,6 +2225,13 @@ v('tsa-findings') + '\n\n' +
   showReport(report);
 }
 
+function updateRTSASystem() {
+  var sys = v('rtsa-system');
+  document.getElementById('rtsa-identity-screws').style.display = sys === 'identity' ? 'block' : 'none';
+  document.getElementById('rtsa-comp-screws').style.display = sys === 'comprehensive' ? 'block' : 'none';
+  document.getElementById('rtsa-lat-identity').style.display = sys === 'identity' ? 'block' : 'none';
+  document.getElementById('rtsa-lat-comprehensive').style.display = sys === 'comprehensive' ? 'block' : 'none';
+}
 function generateRTSA() {
   var s = v('rtsa-side');
   var subscapText = v('rtsa-subscap') === 'repaired'
@@ -2227,7 +2253,22 @@ function generateRTSA() {
 'COMPLICATIONS: ' + complicationText('rtsa') + '\n' +
 'ANTIBIOTICS: ' + v('rtsa-abx') + '\n' +
 'TRANEXAMIC ACID: 1000 mg IV\n' +
-'IMPLANTS: Zimmer Biomet Identity ' + v('rtsa-stem') + ' mm humeral stem, ' + v('rtsa-baseplate') + ' mm baseplate, ' + v('rtsa-glenosphere') + ' mm ' + v('rtsa-glen-lat') + ' glenosphere, ' + v('rtsa-liner') + ' bearing, ' + v('rtsa-tray-type') + ' ' + v('rtsa-tray-height') + ' tray, ' + v('rtsa-screw-body') + ' mm screw into scapular body, ' + v('rtsa-screw-coracoid') + ' mm screw into base of coracoid' + (v('rtsa-screw-periph1') !== 'N/A' ? ', ' + v('rtsa-screw-periph1') + ' mm peripheral screw' : '') + (v('rtsa-screw-periph2') !== 'N/A' ? ', ' + v('rtsa-screw-periph2') + ' mm peripheral screw' : '') + '\n\n' +
+(function(){
+  var sys = v('rtsa-system');
+  var lat = sys === 'comprehensive' ? v('rtsa-glen-lat-comp') : v('rtsa-glen-lat');
+  var sysName = sys === 'comprehensive' ? 'Zimmer Biomet Comprehensive' : 'Zimmer Biomet Identity';
+  var imp = 'IMPLANTS: ' + sysName + ' ' + v('rtsa-stem') + ' mm humeral stem, ' + v('rtsa-baseplate') + ' mm baseplate, ' + v('rtsa-glenosphere') + ' mm ' + lat + ' glenosphere, ' + v('rtsa-liner') + ' bearing, ' + v('rtsa-tray-type') + ' ' + v('rtsa-tray-height') + ' tray';
+  if (sys === 'comprehensive') {
+    imp += ', ' + v('rtsa-comp-central') + ' mm central screw, ' + v('rtsa-comp-inferior') + ' mm inferior screw, ' + v('rtsa-comp-superior') + ' mm superior screw';
+    if (v('rtsa-comp-periph1') !== 'N/A') imp += ', ' + v('rtsa-comp-periph1') + ' mm peripheral screw';
+    if (v('rtsa-comp-periph2') !== 'N/A') imp += ', ' + v('rtsa-comp-periph2') + ' mm peripheral screw';
+  } else {
+    imp += ', ' + v('rtsa-screw-body') + ' mm screw into scapular body, ' + v('rtsa-screw-coracoid') + ' mm screw into base of coracoid';
+    if (v('rtsa-screw-periph1') !== 'N/A') imp += ', ' + v('rtsa-screw-periph1') + ' mm peripheral screw';
+    if (v('rtsa-screw-periph2') !== 'N/A') imp += ', ' + v('rtsa-screw-periph2') + ' mm peripheral screw';
+  }
+  return imp;
+})() + '\n\n' +
 'PHYSICIAN ASSISTANT STATEMENT:\n' +
 'The Physician Assistant was essential to this procedure, facilitating humeral and glenoid preparation, implant placement, ' + (bicepsRuptured('rtsa') ? '' : 'biceps tenodesis, ') + 'arm positioning, retraction, and hemostasis. Their assistance reduced operative risk and improved safety and efficiency.\n\n' +
 'INDICATIONS:\n' +
@@ -2255,11 +2296,24 @@ v('rtsa-findings') + '\n\n' +
 'With external rotation and extension, the humeral head was dislocated anteriorly. Marginal osteophytes were removed. An opening reamer was placed and sequentially increased until good fit with the diaphysis was achieved. The intramedullary jig was then placed to resect the humeral head at ' + v('rtsa-retro') + ' degrees of retroversion. Sequential broaching was performed. A conical reamer was utilized.\n\n' +
 'GLENOID PREPARATION AND IMPLANTATION:\n' +
 'The humeral head was displaced posteriorly and held with a femoral neck retractor. The axillary nerve was visualized. The capsule was released inferiorly and along the deep surface of the subscapularis into its fossa. The coracohumeral ligament was released from the coracoid base. The subscapularis was retracted into its fossa, and the anterior glenoid rim exposed. Remaining articular cartilage was removed from the glenoid face with a Cobb elevator. ' +
-(ck('rtsa-psi')
-  ? 'The PSI guide was placed and two pins were placed into the glenoid. The glenoid was reamed to the depth according to the PSI planning. An overreamer was used. An impacting reamer was used. The PSI guide was used to place the baseplate. The PSI guide was placed into the baseplate to drill the screws, and the screws were placed. Set screws were secured, and the glenosphere was impacted and confirmed seated uniformly with a right-angle clamp.\n\n'
-  : 'A guidewire was placed, and the glenoid was reamed. An overreamer was used. An impacting reamer was used. The glenoid baseplate was placed. The screws were drilled and placed. Set screws were secured, and the glenosphere was impacted and confirmed seated uniformly with a right-angle clamp.\n\n') +
-'FINAL IMPLANTATION AND SUBSCAPULARIS REPAIR:\n' +
-'The humeral metaphysis was dislocated anteriorly. Trial components were inserted, and stability and range of motion confirmed. The trial was removed. Four BroadBand tape sutures were passed through bone tunnels in the proximal humeral metaphysis lateral to the lesser tuberosity at the bicipital groove. The final stem was inserted in ' + v('rtsa-retro') + '° of retroversion after irrigation. ' + subscapClosure + '\n\n' +
+(function(){
+  var sys = v('rtsa-system');
+  if (sys === 'comprehensive') {
+    var screwDesc = 'The glenoid was reamed according to the preoperative planning. The Comprehensive baseplate was placed. A ' + v('rtsa-comp-central') + ' mm central compression screw was placed. A ' + v('rtsa-comp-inferior') + ' mm inferior screw and ' + v('rtsa-comp-superior') + ' mm superior screw were placed.';
+    if (v('rtsa-comp-periph1') !== 'N/A') screwDesc += ' A ' + v('rtsa-comp-periph1') + ' mm peripheral screw was placed.';
+    if (v('rtsa-comp-periph2') !== 'N/A') screwDesc += ' A ' + v('rtsa-comp-periph2') + ' mm peripheral screw was placed.';
+    var lat = v('rtsa-glen-lat-comp');
+    screwDesc += ' The ' + v('rtsa-glenosphere') + ' mm ' + lat + ' Versa-Dial glenosphere was impacted and confirmed seated uniformly with a right-angle clamp.\n\n';
+    return screwDesc;
+  }
+  if (ck('rtsa-psi')) {
+    return 'The PSI guide was placed and two pins were placed into the glenoid. The glenoid was reamed to the depth according to the PSI planning. An overreamer was used. An impacting reamer was used. The PSI guide was used to place the baseplate. The PSI guide was placed into the baseplate to drill the screws, and the screws were placed. Set screws were secured, and the glenosphere was impacted and confirmed seated uniformly with a right-angle clamp.\n\n';
+  }
+  return 'A guidewire was placed, and the glenoid was reamed. An overreamer was used. An impacting reamer was used. The glenoid baseplate was placed. The screws were drilled and placed. Set screws were secured, and the glenosphere was impacted and confirmed seated uniformly with a right-angle clamp.\n\n';
+})() +
+(v('rtsa-subscap') === 'repaired'
+  ? 'FINAL IMPLANTATION AND SUBSCAPULARIS REPAIR:\nThe humeral metaphysis was dislocated anteriorly. Trial components were inserted, and stability and range of motion confirmed. The trial was removed. Four BroadBand tape sutures were passed through bone tunnels in the proximal humeral metaphysis lateral to the lesser tuberosity at the bicipital groove. The final stem was inserted in ' + v('rtsa-retro') + '° of retroversion after irrigation. ' + subscapClosure + '\n\n'
+  : 'FINAL IMPLANTATION:\nThe humeral metaphysis was dislocated anteriorly. Trial components were inserted, and stability and range of motion confirmed. The trial was removed. The final stem was inserted in ' + v('rtsa-retro') + '° of retroversion after irrigation. The humerus was reduced; the subscapularis was deficient and not repairable.\n\n') +
 'RANGE OF MOTION ASSESSMENT:\n' +
 'Final motion was confirmed and safe limits for postoperative physical therapy were defined: external rotation ' + v('rtsa-rom-er') + '° at the side, forward flexion ' + v('rtsa-rom-ff') + '°, with a stable, concentric reduction maintained throughout.\n\n' +
 'CLOSURE:\n' +
